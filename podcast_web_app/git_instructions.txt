@@ -1,0 +1,68 @@
+###########################
+# MANUAL GIT INSTRUCTIONs #
+########################### 
+
+#################
+# Quick summary #
+################# 
+rm -rf .git # → Wipe old history
+
+git init # → Start tracking
+
+git add . # → Stage files
+
+git commit -m "…" # → Snapshot them
+
+git branch -M main # → Name your main branch
+
+git remote add origin <URL> # → Link GitHub
+
+git push -u origin main --force # → Upload
+
+################
+# Step by Step #
+################ 
+
+# Creates a new branch off main, switches you into it. Make your work there, then:
+git checkout -b feature/add-vscode-gitignore
+
+# 1 Stage a file 
+# 2 Stage all files
+git add .gitignore # 1 
+git add . # 2  
+
+# Commit changes on the feature branch and write a message -m
+git commit -m "Add VSCode workspace, Python Artifacts and Annotations"
+
+# Switch back to main
+git checkout main
+
+# Merge in your feature branch, fast‐forward merge (keeps linear history)
+git merge --no-ff feature/add-vscode-gitignore -m "Merge feature/add-vscode-gitignore"
+
+# Tag this point in history
+git tag -a v1.0.1 -m "PATCH: Add VSCode folders, python artifacts and annotations to .gitignore" 
+
+# Uploads both the new commits on main and your tag up to your GitHub remote.
+git push origin main
+git push origin v1.0.1
+
+# Clean up your feature branch
+git branch -d feature/add-vscode-gitignore
+
+##################################
+# Step by for removing from main #
+##################################
+
+# Remove cached vscode from main
+git rm -r --cached .vscode
+
+# Commit these changes
+git commit -m "Stop tracking VSCode workspace folder"
+
+# Tag and document this change
+git tag -a v1.0.2 -m "Remove VSCode from current github repo"
+
+# Push changes to main and update version
+git push origin main
+git push origin v1.0.2
