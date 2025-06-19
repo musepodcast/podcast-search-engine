@@ -1,6 +1,6 @@
 # Virtual envs
 *.env
-venv/
+podcast_web_app/venv/
 
 # Python artifacts
 __pycache__/
