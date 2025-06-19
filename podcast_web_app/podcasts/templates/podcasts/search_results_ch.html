@@ -1,0 +1,84 @@
+{% extends 'podcasts/base.html' %}
+{% load static i18n custom_filters %}
+
+{% block content %}
+  <h2>{% trans "Channels matching" %} "{{ q }}"</h2>
+
+  {% if did_you_mean %}
+    <p class="text-muted">
+      {% trans "Did you mean" %}
+      {% for suggestion in did_you_mean %}
+        <a href="?q={{ suggestion|urlencode }}&amp;{% for k,v in request.GET.items %}{% if k != 'q' %}{{ k }}={{ v|urlencode }}&amp;{% endif %}{% endfor %}">
+          <em>{{ suggestion }}</em>
+        </a>{% if not forloop.last %}, {% endif %}
+      {% endfor %}
+      ?
+    </p>
+  {% endif %}
+
+  <div id="channel-list" class="list-group mt-4">
+    {% include 'podcasts/search_results_ch_items.html' %}
+  </div>
+
+  <div id="loading-spinner-ch" style="display:none; text-align:center; margin:1rem 0;">
+    <p>{% trans "Loading more channels..." %}</p>
+  </div>
+
+  <script>
+    const endOfListTextCh = "{% trans 'End of list...' %}";
+    const loadMoreTextCh  = "{% trans 'Loading more channels...' %}";
+    document.addEventListener("DOMContentLoaded", function(){
+      let page    = parseInt(new URLSearchParams(window.location.search).get("page")||"1");
+      let loading = false, hasMore = true;
+      const listEl  = document.getElementById("channel-list");
+      const spinner = document.getElementById("loading-spinner-ch");
+
+      window.addEventListener("scroll", ()=>{
+        if(loading||!hasMore) return;
+        if(window.innerHeight+window.scrollY >= document.body.offsetHeight-500){
+          loading = true;
+          spinner.style.display = "block";
+          spinner.innerHTML = `<p>${loadMoreTextCh}</p>`;
+          page++;
+          const params = new URLSearchParams(window.location.search);
+          params.set("page", page);
+          params.set("ajax", 1);
+          fetch("?" + params.toString())
+            .then(r => r.ok ? r.text() : "")
+            .then(html => {
+              if(!html.trim()){
+                hasMore = false;
+                spinner.innerHTML = `<p>${endOfListTextCh}</p>`;
+              } else {
+                const tmp = document.createElement("div");
+                tmp.innerHTML = html;
+                const items = tmp.querySelectorAll(".list-group-item");
+                if(!items.length){
+                  hasMore = false;
+                  spinner.innerHTML = `<p>${endOfListTextCh}</p>`;
+                } else {
+                  items.forEach(i => listEl.appendChild(i));
+                  spinner.style.display = "none";
+                }
+              }
+              loading = false;
+            })
+            .catch(()=>{
+              loading = false;
+              spinner.style.display = "none";
+            });
+        }
+      });
+    });
+  </script>
+
+  <style>
+    .summary-clamp {
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  </style>
+{% endblock %}

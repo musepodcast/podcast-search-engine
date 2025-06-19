@@ -1,0 +1,156 @@
+<!-- podcasts/templates/podcasts/favorites_list.html -->
+{% extends 'podcasts/base.html' %}
+{% load i18n custom_filters %}
+{% block content %}
+  <h2>{% trans "Favorites" %}</h2>
+  
+  <!-- Container for favorite channels -->
+  <div id="favorites-list" class="list-group">
+      {% for channel in channels %}
+          <a 
+              href="{% url 'podcasts:channel_detail' sanitized_channel_title=channel.sanitized_channel_title %}" 
+              class="list-group-item list-group-item-action mb-2"
+              style="text-decoration: none; border-radius: 6px;">
+              <div class="row">
+                  <div class="col-auto">
+                      {% if channel.channel_image_url %}
+                          <img src="{{ channel.channel_image_url }}" alt="Image for {{ channel.channel_title }}" style="width: 150px; height: 150px; border-radius: 6px;">
+                      {% else %}
+                          <p><em>{% trans "No image available" %}</em></p>
+                      {% endif %}
+                  </div>
+                  <div class="col">
+                      <h4 class="fw-bold">{{ channel.channel_title }}</h4>
+                      {% if channel.channel_author %}
+                          <p class="text-muted mb-1">{% trans "by" %} {{ channel.channel_author }}</p>
+                      {% endif %}
+                      {% if channel.channel_summary %}
+                          <p class="summary-clamp mb-0">{{ channel.channel_summary }}</p>
+                      {% endif %}
+                      <!-- New Info Container: Aggregated Data -->
+                      <div class="d-flex align-items-center flex-wrap mt-2">
+                        <!-- Favorites Count -->
+                            <span class="d-flex align-items-center me-3" title="{% trans 'Favorites' %}">
+                                <i class="fa-solid fa-heart" style="font-size: 1rem; margin-right: 0.25rem;"></i>
+                                {{ channel.favorites_count|default:"0"|number_format }}
+                            </span>
+                            <!-- Notifications Count -->
+                            <span class="d-flex align-items-center me-3" title="{% trans 'Notifications' %}">
+                                <i class="fa-solid fa-bell" style="font-size: 1rem; margin-right: 0.25rem;"></i>
+                                {{ channel.notifications_count|default:"0"|number_format }}
+                            </span>
+                            <!-- Rating Info -->
+                            <span class="d-flex align-items-center me-3" title="{% trans 'Channel Rating' %}">
+                                <i class="fa-solid fa-star" style="font-size: 1rem; margin-right: 0.25rem;"></i>
+                                {% if channel.avg_rating %}
+                                    {{ channel.avg_rating|floatformat:1 }} ({{ channel.rating_count|number_format }})
+                                {% else %}
+                                    N/A
+                                {% endif %}
+                            </span>
+                            <!-- Total Views -->
+                            <span class="d-flex align-items-center" title="{% trans 'Total Views' %}">
+                                <i class="fa-solid fa-eye" style="font-size: 1rem; margin-right: 0.25rem;"></i>
+                                {{ channel.total_views|default:"0"|number_format }}
+                            </span>
+                        </div>
+                        <!-- End new info container -->
+
+                  </div>
+              </div>
+          </a>
+      {% empty %}
+          <p>{% trans "No favorite channels found." %}</p>
+      {% endfor %}
+  </div>
+  
+  <!-- Loading spinner/message -->
+  <div id="loading-spinner" style="display: none; text-align: center; margin: 1rem 0;">
+      <p>{% trans "Loading more favorite channels..." %}</p>
+  </div>
+
+  <!-- Define translated strings for JavaScript -->
+  <script>
+    const endOfListText = "{% trans 'End of list...' %}";
+    const loadingMoreText = "{% trans 'Loading more channels...' %}";
+  </script>
+
+  <!-- Infinite Scroll JavaScript -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function(){
+        let page = 1;
+        let loading = false;
+        let hasMore = true;
+        const channelList = document.getElementById("favorites-list");
+        const spinner = document.getElementById("loading-spinner");
+
+        window.addEventListener('scroll', () => {
+            if (loading || !hasMore) return;
+            
+            // When the user scrolls within 500px of the bottom:
+            if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 500) {
+                loading = true;
+                spinner.style.display = 'block';
+                spinner.innerHTML = "<p>" + loadingMoreText + "</p>";
+                page++;
+
+                fetch(`?page=${page}&ajax=1`)
+                    .then(response => {
+                        // If the response status is 404, treat it as end-of-list
+                        if (!response.ok) {
+                            hasMore = false;
+                            return '';
+                        }
+                        if (response.ok) {
+                            return response.text();
+                        }
+                        throw new Error('Network response was not ok.');
+                    })
+                    .then(data => {
+                        // If data is empty (or only whitespace), assume no more items.
+                        if (!data.trim()) {
+                            hasMore = false;
+                            spinner.innerHTML = "<p>" + endOfListText + "</p>";
+                        } else {
+                            // Create a temporary container to parse the HTML
+                            const tempDiv = document.createElement("div");
+                            tempDiv.innerHTML = data;
+                            
+                            // Assume that the AJAX response contains one or more items with class "list-group-item"
+                            const newItems = tempDiv.querySelectorAll(".list-group-item");
+                            if (newItems.length === 0) {
+                                hasMore = false;
+                                spinner.innerHTML = "<p>" + endOfListText + "</p>";
+                            } else {
+                                newItems.forEach(item => {
+                                    channelList.appendChild(item);
+                                });
+                            }
+                        }
+                        loading = false;
+                        // If there are still items, hide the spinner; otherwise leave the "End of list..." message visible.
+                        if (hasMore) {
+                            spinner.style.display = 'none';
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching channels:', error);
+                        loading = false;
+                        spinner.style.display = 'none';
+                    });
+            }
+        });
+    });
+    </script>
+
+  <!-- CSS for summary clamping -->
+  <style>
+    .summary-clamp {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+  </style>
+{% endblock %}

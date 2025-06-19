@@ -1,0 +1,38 @@
+feeds:
+  # Path to the JSON file storing your master RSS list
+  master_file: master_rss.json
+
+  # Country code for Apple top charts (e.g., 'us', 'gb', 'de')
+  country: us
+
+  # How many top charts to fetch from Apple Marketing Tools
+  top_chart_limit: 50
+
+  # Search terms (genres) for iTunes Search API
+  search_terms:
+    - arts
+    - business
+    - comedy
+    - education
+    - fiction
+    - government
+    - health & fitness
+    - history
+    - kids & family
+    - leisure
+    - music
+    - news
+    - religion & spirituality
+    - science
+    - society & culture
+    - sports
+    - technology
+    - true crime
+    - TV & film
+    - daily news
+    - storytelling
+    - business news
+    - entrepreneurship
+
+  # How many results per search term to fetch
+  search_limit: 50

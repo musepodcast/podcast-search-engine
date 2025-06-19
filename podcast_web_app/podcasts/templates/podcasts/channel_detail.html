@@ -1,0 +1,427 @@
+<!-- podcasts/templates/podcasts/channel_detail.html -->
+{% extends 'podcasts/base.html' %}
+{% load static i18n custom_filters %}
+{% static 'podcasts/images/no-image.jpg' as placeholder %}
+{% block content %}
+<!-- Channel Info Section -->
+<div id="channel-header" class="list-group-item mb-4" style="text-decoration: none; border-radius: 6px;">
+    <div class="row">
+        <div class="col-auto">
+            {% if channel.channel_image_url %}
+            <img
+            src="{{ channel.channel_image_url }}"
+            alt="{{ channel.channel_title }}"
+            style="width:325px; height:325px; border-radius:6px;"
+            />
+        {% else %}
+            <img
+            src="{{ placeholder }}"
+            alt="{{ channel.channel_title }}"
+            style="width:325px; height:325px; border-radius:6px;"
+            />
+        {% endif %}
+        </div>
+        <div class="col">
+            <h2>{{ channel.channel_title }}</h2>
+            {% if channel.channel_author %}
+                <p class="text-muted mb-1">
+                    {% trans "by" %} {{ channel.channel_author }}
+                </p>
+            {% endif %}
+            {% if channel.channel_summary %}
+                <p class="mb-0">
+                    {{ channel.channel_summary|clean_html }}
+                </p>
+            {% endif %}
+            {% if user.is_authenticated %}
+            <!-- Buttons Section: Follow, Notification, Rating -->
+            <div class="d-flex gap-2 mt-2 align-items-center flex-wrap">
+                {# Follow (Favorites) button using heart icons #}
+                <button id="follow-btn" 
+                        data-channel-id="{{ channel.id }}"
+                        class="follow-btn {% if has_followed_channel %}btn-following{% else %}btn-follow{% endif %}"
+                        title="{% if has_followed_channel %}{% trans 'Remove from Favorites' %}{% else %}{% trans 'Add to Favorites' %}{% endif %}">
+                    {% if has_followed_channel %}
+                        <i class="fa-solid fa-heart"></i>
+                    {% else %}
+                        <i class="fa-regular fa-heart"></i>
+                    {% endif %}
+                </button>
+                <!-- Favorites Count -->
+                <span class="favorites-count" title="{% trans 'Number of Favorites' %}">
+                    {{ favorites_count|number_format }}
+                </span>
+
+                {# Notification button using Font Awesome icons #}
+                <button id="notify-btn" 
+                        data-channel-id="{{ channel.id }}"
+                        class="notify-btn {% if receive_notifications %}btn-notification-active{% else %}btn-notification{% endif %}"
+                        title="{% if receive_notifications %}{% trans 'Remove from Notifications' %}{% else %}{% trans 'Add to Notifications' %}{% endif %}">
+                    {% if receive_notifications %}
+                        <i class="fa-solid fa-bell"></i>
+                    {% else %}
+                        <i class="fa-regular fa-bell"></i>
+                    {% endif %}
+                </button>
+                <!-- Notifications Count -->
+                <span class="notifications-count" title="{% trans 'Number of Notifications' %}">
+                    {{ notifications_count|number_format }}
+                </span>
+
+
+                <!-- Rating Container with Star Ratings and Aggregated Rating Info -->
+                <div class="d-flex align-items-center gap-2">
+                    <div id="rating-container" data-channel-id="{{ channel.id }}">
+                        {% for star in star_range %}
+                            {% if channel_rating >= star %}
+                                <i class="fa fa-star star-icon star-active" data-star="{{ star }}" title="{% trans 'Update your rating' %}"></i>
+                            {% else %}
+                                <i class="fa fa-star star-icon" data-star="{{ star }}" title="{% trans 'Rate this channel' %}"></i>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    <span class="channel-rating-info" title="{% trans 'Average rating and number of ratings' %}">
+                        {{ avg_rating|floatformat:1 }} ({{ rating_count|number_format }})
+                    </span>
+                </div>
+
+                 <!-- NEW: Total Views with Solid Eye Icon -->
+                <div class="d-flex align-items-center gap-2">
+                    <i class="fa-solid fa-eye" title="{% trans 'Total Views' %}" style="font-size: 1.25rem; color: #e6e3e8;"></i>
+                    <span class="total-views" title="{% trans 'Total Views' %}">
+                        {{ total_views|number_format }}
+                    </span>
+                </div>
+
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- Episodes Section -->
+<h3>{% trans "Episodes" %}</h3>
+<div class="list-group" id="episode-list">
+  {% for episode in episodes %}
+    <a href="{% url 'podcasts:episode_detail' sanitized_channel_title=episode.channel.sanitized_channel_title sanitized_episode_title=episode.sanitized_episode_title %}"        
+       class="list-group-item list-group-item-action mb-2"
+       style="text-decoration: none; border-radius: 6px;">
+      <div class="row">
+        <div class="col-auto">
+            <img
+              src="{% if episode.image_url %}
+                    {{ episode.image_url }}
+                  {% else %}
+                    {{ episode.channel.channel_image_url }}
+                  {% endif %}"
+              alt="{{ episode.episode_title }}"
+              style="width:150px; height:150px; border-radius:6px;"
+              onerror="
+                this.onerror=null;
+                this.src='{{ episode.channel.channel_image_url }}'||'{% static 'podcasts/images/no-image.jpg' %}';
+              "
+            >
+          </div>
+        <div class="col">
+          <strong>{{ episode.episode_title }}</strong>
+          <p class="d-flex flex-wrap align-items-center gap-2 mb-1" style="font-size: 0.9rem;">
+            <span>{{ episode.publication_date|date:"F j, Y" }}</span>
+            {% if episode.duration %}<span>| {{ episode.duration }}</span>{% endif %}
+            {% if episode.categories %}
+              <span>| 
+                {% for cat in episode.categories %}
+                  {{ cat }}{% if not forloop.last %}, {% endif %}
+                {% endfor %}
+              </span>
+            {% endif %}
+            {% if episode.explicit %}<span>| Explicit</span>{% endif %}
+          </p>
+          <!-- Aggregated Episode Info Container (above description) -->
+          <div class="d-flex align-items-center flex-wrap mb-1">
+            <span class="d-flex align-items-center me-3" title="{% trans 'Bookmarks' %}">
+              <i class="fa-solid fa-bookmark" style="font-size: 1rem; margin-right: 0.25rem;"></i>
+              {{ episode.bookmarks_count|default:"0"|number_format }}
+            </span>
+            <!-- Comment Count -->
+            <span class="d-flex align-items-center me-3" title="{% trans 'Comments' %}">
+                <i class="fa-solid fa-comment" style="font-size: 1rem; margin-right: 0.25rem;"></i>
+                {{ episode.comments.count|default:"0"|number_format }} 
+            </span>
+            <span class="d-flex align-items-center me-3" title="{% trans 'Episode Rating' %}">
+              <i class="fa-solid fa-star" style="font-size: 1rem; margin-right: 0.25rem;"></i>
+              {% if episode.ep_avg_rating %}
+                {{ episode.ep_avg_rating|floatformat:1 }} ({{ episode.ep_rating_count|number_format }})
+              {% else %}
+                N/A
+              {% endif %}
+            </span>
+            <span class="d-flex align-items-center" title="{% trans 'Total Views' %}">
+              <i class="fa-solid fa-eye" style="font-size: 1rem; margin-right: 0.25rem;"></i>
+              {{ episode.total_episode_views|default:"0"|number_format }}
+            </span>
+          </div>
+          {% if episode.description %}
+            <p class="description-clamp mb-0">{{ episode.description }}</p>
+          {% endif %}
+        </div>
+      </div>
+    </a>
+  {% empty %}
+    <div class="list-group-item">
+      <p>{% trans "No episodes available for this channel." %}</p>
+    </div>
+  {% endfor %}
+</div>
+
+<!-- Loading spinner/message for episodes -->
+<div id="loading-spinner" style="display: none; text-align: center; margin: 1rem 0;">
+    <p>{% trans "Loading more episodes..." %}</p>
+</div>
+
+<!-- Translated strings for JavaScript -->
+<script>
+  const endOfListText = "{% trans 'End of list...' %}";
+  const loadingMoreText = "{% trans 'Loading more episodes...' %}";
+</script>
+
+<!-- Infinite Scroll JavaScript remains as before -->
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+        window.scrollTo(0, 0);
+        let page = 1;
+        let loading = false;
+        let hasMore = true;
+        const episodeList = document.getElementById("episode-list");
+        const spinner = document.getElementById("loading-spinner");
+    
+        window.addEventListener('scroll', () => {
+            if (loading || !hasMore) return;
+            
+            if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 500) {
+                loading = true;
+                spinner.style.display = 'block';
+                page++;
+    
+                fetch(`?page=${page}&ajax=1`)
+                .then(response => {
+                    if (!response.ok) {
+                        hasMore = false;
+                        return '';  
+                    }
+                    if (response.ok) {
+                        return response.text();
+                    }
+                    throw new Error('Network response was not ok.');
+                })
+                .then(data => {
+                    if (!data.trim()) {
+                        hasMore = false;
+                        spinner.innerHTML = "<p>" + "{% trans 'End of list...' %}" + "</p>";
+                    } else {
+                        const tempDiv = document.createElement("div");
+                        tempDiv.innerHTML = data;
+                        const newItems = tempDiv.querySelectorAll(".list-group-item");
+                        if (newItems.length === 0) {
+                            hasMore = false;
+                            spinner.innerHTML = "<p>" + "{% trans 'End of list...' %}" + "</p>";
+                        } else {
+                            newItems.forEach(item => {
+                                episodeList.appendChild(item);
+                            });
+                        }
+                    }
+                    loading = false;
+                    if (hasMore) {
+                        spinner.style.display = 'none';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching episodes:', error);
+                    loading = false;
+                    spinner.style.display = 'none';
+                });
+            }
+        });
+    });
+</script>
+
+<!-- CSS for clamping the episode description -->
+<style>
+    .description-clamp {
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+</style>
+
+<!-- Custom CSS for the buttons -->
+<style>
+    /* Rating info styling */
+    .total-views,    
+    .favorites-count,
+    .notifications-count,
+    .channel-rating-info {
+        font-size: 1.25rem;
+        color: #e3e6e8;
+        margin-right: 0.5em;
+    }
+
+    /* Common styling */
+    .btn-follow, .btn-notification, .btn-following, .btn-notification-active {
+        border: 1px solid #b3b3b3; /* Gray outline */
+        border-radius: 50px;       /* Oval shape */
+        cursor: pointer;
+        outline: none;
+        padding: 0.4em 0.8em;
+        font-size: 0.9rem;
+        color: #e3e6e8;
+    }
+    /* Inactive state: black background */
+    .btn-follow, .btn-notification {
+        background-color: #1c1e21;
+    }
+    /* Active state: purple background */
+    .btn-following, .btn-notification-active {
+        background-color: #29214d;
+    }
+    /* Star rating styling */
+    #rating-container .star-icon {
+        cursor: pointer;
+        font-size: 1.2rem;
+        margin-right: 0.2em;
+        color: #e3e6e8;
+    }
+    /* Active star */
+    #rating-container .star-active {
+        color: #ffc107; /* A gold-ish color; adjust as needed */
+    }
+</style>
+
+<!-- AJAX & Button Behavior JavaScript -->
+<script>
+// Helper: Get CSRF token from cookie
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (const cookie of cookies) {
+            const c = cookie.trim();
+            if (c.startsWith(name + '=')) {
+                cookieValue = decodeURIComponent(c.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+const csrftoken = getCookie('csrftoken');
+
+// Toggle Follow (Favorites) using heart icon
+document.getElementById("follow-btn").addEventListener("click", function() {
+    const channelId = this.getAttribute('data-channel-id');
+    const btn = this; // cache button reference
+    fetch(`/channel/${channelId}/toggle_follow/`, {
+        method: "POST",
+        headers: {
+          "X-CSRFToken": csrftoken,
+          "Content-Type": "application/json"
+        },
+    })
+    .then(response => response.json())
+    .then(data => {
+        const icon = btn.querySelector("i");
+        if (data.followed) {
+            btn.classList.remove("btn-follow");
+            btn.classList.add("btn-following");
+            // Switch from outline to solid heart icon.
+            icon.classList.remove("fa-regular");
+            icon.classList.add("fa-solid");
+            // Update tooltip.
+            btn.title = "Remove from Favorites";
+        } else {
+            btn.classList.remove("btn-following");
+            btn.classList.add("btn-follow");
+            // Switch from solid to outline heart icon.
+            icon.classList.remove("fa-solid");
+            icon.classList.add("fa-regular");
+            // Update tooltip.
+            btn.title = "Add to Favorites";
+        }
+    })
+    .catch(error => console.error("Error toggling favorites:", error));
+});
+
+// Toggle Notifications button
+document.getElementById("notify-btn").addEventListener("click", function() {
+    const channelId = this.getAttribute('data-channel-id');
+    const btn = this;
+    fetch(`/channel/${channelId}/toggle_notifications/`, {
+        method: "POST",
+        headers: {
+          "X-CSRFToken": csrftoken,
+          "Content-Type": "application/json"
+        },
+    })
+    .then(response => response.json())
+    .then(data => {
+        const icon = btn.querySelector("i");
+        if (data.notifications_enabled) {
+            btn.classList.remove("btn-notification");
+            btn.classList.add("btn-notification-active");
+            // Update icon: switch from regular (outline) to solid bell.
+            icon.classList.remove("fa-regular");
+            icon.classList.add("fa-solid");
+            // Update tooltip text.
+            btn.title = "Remove from Notifications";
+        } else {
+            btn.classList.remove("btn-notification-active");
+            btn.classList.add("btn-notification");
+            // Update icon: switch from solid to regular (outline) bell.
+            icon.classList.remove("fa-solid");
+            icon.classList.add("fa-regular");
+            // Update tooltip text.
+            btn.title = "Add to Notifications";
+        }
+    })
+    .catch(error => console.error("Error toggling notifications:", error));
+});
+
+// Event: Set Rating via Star Clicks (remains unchanged)
+document.querySelectorAll("#rating-container .star-icon").forEach(function(starElem) {
+    starElem.addEventListener("click", function() {
+        const rating = this.getAttribute("data-star");
+        const channelId = document.getElementById("rating-container").getAttribute("data-channel-id");
+        const formData = new FormData();
+        formData.append('rating', rating);
+        
+        fetch(`/channel/${channelId}/update_rating/`, {
+            method: "POST",
+            headers: {
+              "X-CSRFToken": csrftoken,
+            },
+            body: formData,
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.rating) {
+                document.querySelectorAll("#rating-container .star-icon").forEach(function(el) {
+                    if (parseInt(el.getAttribute("data-star")) <= data.rating) {
+                        el.classList.add("star-active");
+                    } else {
+                        el.classList.remove("star-active");
+                    }
+                });
+            } else if (data.error) {
+                console.error("Rating error:", data.error);
+            }
+        })
+        .catch(error => console.error("Error updating rating:", error));
+    });
+});
+
+</script>
+
+{% endblock %}

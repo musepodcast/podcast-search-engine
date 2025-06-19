@@ -1,0 +1,9 @@
+summarizer:
+  model: "Falconsai/text_summarization"    # Summarization model
+  max_length: 15                  # Increased maximum number of words in the title
+  min_length: 4                   # Increased minimum number of words in the title
+
+chapter_generation:
+  similarity_threshold: 0.3       # Maintained to allow up to 50 chapters - 
+  max_chapters: 60                # Maintained as per user preference - 50 chapters seems to be sufficient but 60 is better for 4 hours.
+  aggregation_window_size: 15     # Maintained to ensure comprehensive coverage - lower numbers = more frequent chapters 

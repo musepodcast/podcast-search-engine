@@ -1,0 +1,11 @@
+{% extends "two_factor/_base.html" %}
+{% load i18n %}
+
+{% block two_factor_content %}
+  <h2>{% trans "Enter OTP" %}</h2>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">{% trans "Submit OTP" %}</button>
+  </form>
+{% endblock %}

@@ -1,0 +1,171 @@
+<!--podcasts/templates/podcasts/notifications_list.html-->
+{% extends 'podcasts/base.html' %}
+{% load static i18n custom_filters %}
+{% static 'podcasts/images/no-image.jpg' as placeholder %}
+{% block content %}
+  <h2>{% trans "Notifications" %}</h2>
+
+  <!-- Container for the notifications (episodes) -->
+  <div id="notifications-list" class="list-group">
+    {% for episode in episodes %}
+      <a 
+          href="{% url 'podcasts:episode_detail' sanitized_channel_title=episode.channel.sanitized_channel_title sanitized_episode_title=episode.sanitized_episode_title %}"       
+          class="list-group-item list-group-item-action mb-2"
+          style="text-decoration: none; border-radius: 6px;">
+          <div class="row flex-nowrap">
+              <!-- Left: Episode or channel image -->
+              <div class="col-auto">
+                <img
+                  src="{% if episode.image_url %}
+                        {{ episode.image_url }}
+                      {% else %}
+                        {{ episode.channel.channel_image_url }}
+                      {% endif %}"
+                  alt="{{ episode.episode_title }}"
+                  style="width:150px; height:150px; border-radius:6px;"
+                  onerror="
+                    this.onerror=null;
+                    this.src='{{ episode.channel.channel_image_url }}'||'{% static 'podcasts/images/no-image.jpg' %}';
+                  "
+                >
+              </div>
+              
+              
+              <!-- Right: Episode details -->
+              <div class="col">
+                  <strong>{{ episode.episode_title }}</strong>
+                  <p class="d-flex flex-wrap align-items-center gap-2 mb-1" style="font-size: 0.9rem;">
+                      <span class="text-muted">{% trans "from" %} {{ episode.channel.channel_title }}</span>
+                      {% if episode.publication_date %}
+                          <span>| {{ episode.publication_date|date:"F j, Y, g:i a" }}</span>
+                      {% endif %}
+                      {% if episode.duration %}
+                          <span>| {{ episode.duration }}</span>
+                      {% endif %}
+                      {% if episode.categories %}
+                          <span>
+                              | 
+                              {% for cat in episode.categories %}
+                                  {{ cat }}{% if not forloop.last %}, {% endif %}
+                              {% endfor %}
+                          </span>
+                      {% endif %}
+                      {% if episode.explicit %}
+                          <span>| {% trans "Explicit" %}</span>
+                      {% endif %}
+                  </p>
+
+                  <!-- Aggregated Info Container (above description) -->
+                  <div class="d-flex align-items-center flex-wrap mb-1">
+                    <!-- Bookmarks Count -->
+                    <span class="d-flex align-items-center me-3" title="{% trans 'Bookmarks' %}">
+                    <i class="fa-solid fa-bookmark" style="font-size: 1rem; margin-right: 0.25rem;"></i>
+                    {{ episode.bookmarks_count|default:"0"|number_format }}
+                    </span>
+                    <!-- Comment Count -->
+                    <span class="d-flex align-items-center me-3" title="{% trans 'Comments' %}">
+                        <i class="fa-solid fa-comment" style="font-size: 1rem; margin-right: 0.25rem;"></i>
+                        {{ episode.comments.count|default:"0"|number_format }} 
+                    </span>
+                    <!-- Rating Info -->
+                    <span class="d-flex align-items-center me-3" title="{% trans 'Episode Rating' %}">
+                    <i class="fa-solid fa-star" style="font-size: 1rem; margin-right: 0.25rem;"></i>
+                    {% if episode.ep_avg_rating %}
+                        {{ episode.ep_avg_rating|floatformat:1 }} ({{ episode.ep_rating_count|number_format }})
+                    {% else %}
+                        N/A
+                    {% endif %}
+                    </span>
+                    <!-- Total Views -->
+                    <span class="d-flex align-items-center" title="{% trans 'Total Views' %}">
+                    <i class="fa-solid fa-eye" style="font-size: 1rem; margin-right: 0.25rem;"></i>
+                    {{ episode.total_episode_views|default:"0"|number_format }}
+                    </span>
+                  </div>
+                  <!-- End Aggregated Info Container -->
+
+                  {% if episode.description %}
+                      <p class="description-clamp mb-0">{{ episode.description }}</p>
+                  {% endif %}
+              </div>
+          </div>
+      </a>
+    {% empty %}
+      <div class="list-group-item">
+          <p>{% trans "No notifications available." %}</p>
+      </div>
+    {% endfor %}
+  </div>
+
+  <!-- Loading spinner/message for infinite scroll -->
+  <div id="loading-spinner" style="display: none; text-align: center; margin: 1rem 0;">
+      <p>{% trans "Loading more notifications..." %}</p>
+  </div>
+
+  <!-- Infinite Scroll JavaScript -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function(){
+        let page = 1;
+        let loading = false;
+        let hasMore = true;
+        const notificationsList = document.getElementById("notifications-list");
+        const spinner = document.getElementById("loading-spinner");
+
+        window.addEventListener('scroll', () => {
+            if (loading || !hasMore) return;
+            if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 500) {
+                loading = true;
+                spinner.style.display = 'block';
+                page++;
+
+                fetch(`?page=${page}&ajax=1`)
+                    .then(response => {
+                        if (!response.ok) {
+                            hasMore = false;
+                            return '';
+                        }
+                        return response.text();
+                    })
+                    .then(data => {
+                        if (!data.trim()) {
+                            hasMore = false;
+                            spinner.innerHTML = "<p>{% trans 'End of list...' %}</p>";
+                        } else {
+                            const tempDiv = document.createElement("div");
+                            tempDiv.innerHTML = data;
+                            const newItems = tempDiv.querySelectorAll(".list-group-item");
+                            if (newItems.length === 0) {
+                                hasMore = false;
+                                spinner.innerHTML = "<p>{% trans 'End of list...' %}</p>";
+                            } else {
+                                newItems.forEach(item => {
+                                    notificationsList.appendChild(item);
+                                });
+                            }
+                        }
+                        loading = false;
+                        if (hasMore) {
+                            spinner.style.display = 'none';
+                        }
+                    })
+                    .catch(error => {
+                        console.error("Error fetching notifications:", error);
+                        loading = false;
+                        spinner.style.display = 'none';
+                    });
+            }
+        });
+    });
+  </script>
+
+  <!-- Optional CSS for clamping episode descriptions -->
+  <style>
+    .description-clamp {
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  </style>
+{% endblock %}

@@ -1,0 +1,267 @@
+{% extends "podcasts/base.html" %}
+{% load i18n %}
+
+{% block content %}
+<div class="container mt-5">
+  <h2>{% trans "Create Account" %}</h2>
+  <form method="post" action="{% url 'podcasts:signup' %}">
+    {% csrf_token %}
+    
+    <!-- Render non-password fields -->
+    <div class="mb-3">
+      {{ form.username.label_tag }}
+      {{ form.username }}
+      {{ form.username.errors }}
+    </div>
+    <div class="mb-3">
+      {{ form.email.label_tag }}
+      {{ form.email }}
+      {{ form.email.errors }}
+    </div>
+    <div class="mb-3">
+      {{ form.first_name.label_tag }}
+      {{ form.first_name }}
+      {{ form.first_name.errors }}
+    </div>
+    <div class="mb-3">
+      {{ form.last_name.label_tag }}
+      {{ form.last_name }}
+      {{ form.last_name.errors }}
+    </div>
+    <div class="mb-3">
+      {{ form.birthdate.label_tag }}
+      {{ form.birthdate }}
+      {{ form.birthdate.errors }}
+    </div>
+    <div class="mb-3">
+      {{ form.country.label_tag }}
+      {{ form.country }}
+      {{ form.country.errors }}
+    </div>
+    <div class="mb-3">
+      {{ form.phone_number.label_tag }}
+      {{ form.phone_number }}
+      {{ form.phone_number.errors }}
+    </div>
+    <div class="mb-3">
+      {{ form.gender.label_tag }}
+      {{ form.gender }}
+      {{ form.gender.errors }}
+    </div>
+
+    <!-- Password fields with toggle button -->
+    <div class="mb-3">
+      <label for="id_password1">{% trans "Password" %}</label>
+      <div class="input-group">
+        {{ form.password1 }}
+        <span class="input-group-text">
+          <i class="fa fa-eye toggle-password" data-target="id_password1" style="cursor:pointer;"></i>
+        </span>
+      </div>
+      {{ form.password1.errors }}
+    </div>
+    <div class="mb-3">
+      <label for="id_password2">{% trans "Confirm Password" %}</label>
+      <div class="input-group">
+        {{ form.password2 }}
+        <span class="input-group-text">
+          <i class="fa fa-eye toggle-password" data-target="id_password2" style="cursor:pointer;"></i>
+        </span>
+      </div>
+      {{ form.password2.errors }}
+      <div id="password-match-indicator" style="margin-top: 5px;"></div>
+    </div>
+    
+    <!-- Password Requirements -->
+    <div class="mb-3">
+      <h5>{% trans "Password Requirements:" %}</h5>
+      <ul>
+        <li>{% trans "Must be at least 8 characters long." %}</li>
+        <li>{% trans "Cannot be a common password." %}</li>
+        <li>{% trans "Cannot be entirely numeric." %}</li>
+        <li>{% trans "Should not be too similar to your personal information." %}</li>
+      </ul>
+    </div>
+    
+    <!-- Privacy Consent Checkbox -->
+    <div class="mb-3 form-check">
+      <input type="checkbox" class="form-check-input" id="privacyCheck" required>
+      <label class="form-check-label" for="privacyCheck">
+        By checking this box, I acknowledge that I have read and agree to 
+        <a href="#" data-bs-toggle="modal" data-bs-target="#privacyModal">
+          Muse LLC's Privacy Notice
+        </a>, and consent to the collection, anonymized sharing, and sale of data as described.
+      </label>
+    </div>
+    
+    <button type="submit" class="btn btn-primary">{% trans "Sign Up" %}</button>
+  </form>
+</div>
+
+<!-- Include Font Awesome (if not already in your base template) -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+<!-- Privacy Notice Modal -->
+<div class="modal fade" id="privacyModal" tabindex="-1" aria-labelledby="privacyModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="privacyModalLabel">{% trans "Privacy Notice for Muse LLC" %}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{% trans 'Close' %}"></button>
+      </div>
+      <div class="modal-body">
+        <p><strong>{% trans "Last updated:" %}</strong> 03/29/2025</p>
+        <p>Muse LLC ("Muse", "we", "our", or "us") is committed to protecting your privacy. This Privacy Notice explains how we collect, use, share, and safeguard your information when you visit our website and register an account.</p>
+        <h6>{% trans "Information We Collect" %}</h6>
+        <p>{% trans "We collect the following information when you create an account or use our website:" %}</p>
+        <ul>
+          <li><strong>{% trans "Personal Information:" %}</strong>
+            <ul>
+              <li>{% trans "First Name" %}</li>
+              <li>{% trans "Last Name" %}</li>
+              <li>{% trans "Email Address" %}</li>
+              <li>{% trans "Birthdate" %}</li>
+              <li>{% trans "Country" %}</li>
+              <li>{% trans "Phone Number" %}</li>
+              <li>{% trans "Gender" %}</li>
+            </ul>
+          </li>
+          <li><strong>{% trans "Technical Information:" %}</strong>
+            <ul>
+              <li>{% trans "Geolocation" %}</li>
+              <li>{% trans "IP Addresses" %}</li>
+            </ul>
+          </li>
+          <li><strong>{% trans "Usage Information:" %}</strong>
+            <ul>
+              <li>{% trans "Data on what you search, view, or click within our website." %}</li>
+            </ul>
+          </li>
+        </ul>
+        <h6>{% trans "Purpose of Data Collection" %}</h6>
+        <p>{% trans "Muse LLC collects this data to:" %}</p>
+        <ul>
+          <li>{% trans "Provide, maintain, and improve our website services." %}</li>
+          <li>{% trans "Protect our website and users against fraudulent activities and scams." %}</li>
+          <li>{% trans "Generate analytics to enhance user experience." %}</li>
+        </ul>
+        <h6>{% trans "Data Sharing and Selling" %}</h6>
+        <p>{% trans "To keep our services free and advertisement-free, Muse LLC may sell aggregated, anonymized data analytics to podcast creators, business partners, or other third parties. We ensure your privacy by anonymizing data, meaning your personal identifiable information (like your name or exact contact details) will never be sold or shared. Your identity is replaced by a unique, randomized number to maintain your anonymity." %}</p>
+        <h6>{% trans "Data Security" %}</h6>
+        <p>{% trans "Muse LLC employs industry-standard practices and technologies to safeguard your personal information. However, no method of transmission over the internet or electronic storage is 100% secure, so while we strive to protect your personal information, we cannot guarantee absolute security." %}</p>
+        <h6>{% trans "Consent" %}</h6>
+        <p>{% trans "By clicking the checkbox when creating an account, you consent to the collection, use, and sharing practices described in this Privacy Notice." %}</p>
+        <h6>{% trans "Your Rights and Choices" %}</h6>
+        <p>{% trans "You have the right to access, correct, or request deletion of your personal data at any time. To exercise these rights or if you have questions about this Privacy Notice, contact us at:" %}</p>
+        <p>
+          Muse LLC<br>
+          Email: musepodcast@protonmail.com
+        </p>
+        <h6>{% trans "Changes to This Privacy Notice" %}</h6>
+        <p>{% trans "Muse LLC reserves the right to modify this Privacy Notice at any time. Changes will be posted on our website and are effective immediately upon posting." %}</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{% trans "Close" %}</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Dark Mode Overrides for Modal when using your dark theme -->
+<style>
+  :root[data-theme="dark"] .modal-content {
+    background-color: var(--background-color) !important;
+    color: var(--text-color) !important;
+  }
+  :root[data-theme="dark"] .modal-header {
+    background-color: var(--header-bg-color) !important;
+    color: var(--header-text-color) !important;
+  }
+  :root[data-theme="dark"] .modal-body {
+    background-color: var(--background-color) !important;
+    color: var(--text-color) !important;
+  }
+  :root[data-theme="dark"] .modal-footer {
+    background-color: var(--background-color) !important;
+    color: var(--text-color) !important;
+  }
+  :root[data-theme="dark"] .btn-secondary {
+    background-color: var(--list-bg) !important;
+    border-color: var(--list-hover-bg) !important;
+    color: var(--text-color) !important;
+  }
+  :root[data-theme="dark"] a {
+    color: var(--header-text-color) !important;
+  }
+  :root:not([data-theme="dark"]) .modal-content {
+  background-color: var(--background-color) !important;
+  color: var(--text-color) !important;
+  }
+  :root:not([data-theme="dark"]) .modal-header {
+    background-color: var(--header-bg-color) !important;
+    color: var(--header-text-color) !important;
+  }
+  :root:not([data-theme="dark"]) .modal-body {
+    background-color: var(--background-color) !important;
+    color: var(--text-color) !important;
+  }
+  :root:not([data-theme="dark"]) .modal-footer {
+    background-color: var(--background-color) !important;
+    color: var(--text-color) !important;
+  }
+  :root:not([data-theme="dark"]) .btn-secondary {
+    background-color: var(--list-bg) !important;
+    border-color: var(--list-hover-bg) !important;
+    color: var(--text-color) !important;
+  }
+  :root:not([data-theme="dark"]) a {
+    color: var(--header-text-color) !important;
+  }
+
+</style>
+
+<!-- Include Bootstrap's JS Bundle if not already included in your base template -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-..." crossorigin="anonymous"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    // Toggle password visibility
+    const toggleButtons = document.querySelectorAll('.toggle-password');
+    toggleButtons.forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            const targetId = btn.getAttribute('data-target');
+            const input = document.getElementById(targetId);
+            if (input.type === 'password') {
+                input.type = 'text';
+                btn.classList.remove('fa-eye');
+                btn.classList.add('fa-eye-slash');
+            } else {
+                input.type = 'password';
+                btn.classList.remove('fa-eye-slash');
+                btn.classList.add('fa-eye');
+            }
+        });
+    });
+    
+    // Check if passwords match
+    const password1 = document.getElementById('id_password1');
+    const password2 = document.getElementById('id_password2');
+    const indicator = document.getElementById('password-match-indicator');
+    
+    function checkPasswordMatch() {
+        if (password1.value && password2.value) {
+            if (password1.value === password2.value) {
+                indicator.innerHTML = '<span style="color:green;">&#10004; {% trans "Passwords match" %}</span>';
+            } else {
+                indicator.innerHTML = '<span style="color:red;">&#10006; {% trans "Passwords do not match" %}</span>';
+            }
+        } else {
+            indicator.innerHTML = '';
+        }
+    }
+    
+    password1.addEventListener('input', checkPasswordMatch);
+    password2.addEventListener('input', checkPasswordMatch);
+});
+</script>
+{% endblock %}

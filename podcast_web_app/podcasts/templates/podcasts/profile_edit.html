@@ -1,0 +1,22 @@
+<!--podcasts/templates/podcasts/profile_edit.html-->
+{% extends "podcasts/base.html" %}
+{% load i18n %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>{% trans "Edit Profile" %}</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">{% trans "Save Changes" %}</button>
+    </form>
+    
+    <hr>
+    
+    <h3>{% trans "Change Password" %}</h3>
+    <p>
+      {% trans "Want to change your password?" %}
+      <a href="{% url 'password_change' %}">{% trans "Click here" %}</a>.
+    </p>
+</div>
+{% endblock %}

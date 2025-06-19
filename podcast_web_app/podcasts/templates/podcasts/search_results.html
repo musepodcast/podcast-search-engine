@@ -1,0 +1,23 @@
+{# podcasts/templates/podcasts/search_results.html #}
+{% extends 'podcasts/base.html' %}
+{% load static i18n custom_filters %}
+
+{% block content %}
+  <h2>{% trans "Results for" %} "{{ q }}"</h2>
+
+  {# Spelling suggestions #}
+  {% if did_you_mean %}
+    <p class="text-muted">
+      {% trans "Did you mean" %} 
+      {% for suggestion in did_you_mean %}
+        <a href="?q={{ suggestion|urlencode }}&amp;{% for k,v in request.GET.items %}{% if k != 'q' %}{{ k }}={{ v|urlencode }}&amp;{% endif %}{% endfor %}">
+          <em>{{ suggestion }}</em>
+        </a>{% if not forloop.last %}, {% endif %}
+      {% endfor %}
+      ?
+    </p>
+  {% endif %}
+
+  {# Include the episode‐items partial #}
+  {% include 'podcasts/search_results_items.html' %}
+{% endblock %}

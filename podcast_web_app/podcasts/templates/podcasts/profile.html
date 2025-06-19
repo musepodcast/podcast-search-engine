@@ -1,0 +1,49 @@
+<!--podcasts/templates/podcasts/profile.html-->
+{% extends "podcasts/base.html" %}
+{% load i18n %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>{% trans "User Profile" %}</h2>
+    <p>{% trans "Username:" %} {{ request.user.username }}</p>
+    <p>{% trans "Email:" %} {{ request.user.email }}</p>
+    <p>{% trans "First Name:" %} {{ request.user.first_name }}</p>
+    <p>{% trans "Last Name:" %} {{ request.user.last_name }}</p>
+    <p>{% trans "Birthdate:" %} {{ request.user.birthdate }}</p>
+    <p>{% trans "Country:" %} {{ request.user.country }}</p>
+    <p>{% trans "Phone Number:" %} {{ request.user.phone_number }}</p>
+    <p>{% trans "Gender:" %} {{ request.user.get_gender_display }}</p>
+    
+    <a href="{% url 'podcasts:profile_edit' %}" class="btn btn-primary">{% trans "Edit Profile" %}</a>
+    
+    <!-- Two-Factor Authentication Section -->
+    <div class="mt-4">
+      <h3>{% trans "Two‑Factor Authentication" %}</h3>
+      {% if request.user.totpdevice_set.all %}
+         <p>{% trans "Two‑Factor Authentication is enabled on your account." %}</p>
+         <p>
+           <a href="{% url 'podcasts:disable_2fa' %}" class="btn btn-secondary">
+             {% trans "Disable Two‑Factor Authentication" %}
+           </a>
+         </p>
+      {% else %}
+         <p>
+           <a href="{% url 'two_factor:setup' %}" class="btn btn-secondary">
+             {% trans "Enable Two‑Factor Authentication" %}
+           </a>
+         </p>
+      {% endif %}
+    </div>
+
+    <!-- Admin Portal Link (visible only for admin users) -->
+    {% if request.user.is_staff or request.user.is_superuser %}
+      <div class="mt-4">
+          <h3>{% trans "Admin Access" %}</h3>
+          <a href="/admin/" class="btn btn-warning">
+              {% trans "Enter Admin Portal" %}
+          </a>
+      </div>
+    {% endif %}
+</div>
+{% endblock %}
+

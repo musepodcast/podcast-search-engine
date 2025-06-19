@@ -1,0 +1,655 @@
+{% extends 'podcasts/base.html' %}
+{% load static i18n custom_filters %}
+{% block content %}
+
+<!-- TOP-CENTERED IMAGE SECTION WITHOUT A CONTAINER, with a gradient background -->
+<div style="background: linear-gradient(to bottom, #29214d, var(--background-color)); 
+            padding: 2rem 0; text-align: center;">
+  {% if episode.image_url %}
+    <img
+      src="{{ episode.image_url }}"
+      alt="{{ episode.episode_title }}"
+      style="display:block; margin:0 auto; max-width:85%; max-height:40vh; 
+             width:auto; height:auto; border-radius:10px;"
+    />
+  {% elif episode.channel.channel_image_url %}
+    <img
+      src="{{ episode.channel.channel_image_url }}"
+      alt="{{ episode.episode_title }}"
+      style="display:block; margin:0 auto; max-width:85%; max-height:40vh; 
+             width:auto; height:auto; border-radius:10px;"
+    />
+  {% else %}
+    <img
+      src="{{ placeholder }}"
+      alt="{{ episode.episode_title }}"
+      style="display:block; margin:0 auto; max-width:85%; max-height:40vh; 
+             width:auto; height:auto; border-radius:10px;"
+    />
+  {% endif %}
+</div>   
+
+<!-- CONNECTED EPISODE DETAILS & DESCRIPTION/AUDIO SECTION -->
+<div class="section-container mb-4">
+    <!-- Row 1: Episode Info (Modified) -->
+    <div class="row">
+      <!-- Left Column: Channel Image -->
+      <div class="col-auto">
+        {% if episode.channel.channel_image_url %}
+          <img src="{{ episode.channel.channel_image_url }}" alt="{{ episode.channel.channel_title }}" style="width: 175px; height: 175px; border-radius: 6px;">
+        {% else %}
+          <p><em>No channel image</em></p>
+        {% endif %}
+      </div>
+      <!-- Right Column: Episode Details and Controls -->
+      <div class="col">
+        <h2>{{ episode.episode_title }}</h2>
+        <p class="text-muted mb-1">{% trans "from" %} {{ episode.channel.channel_title }}</p>
+        <p class="d-flex flex-wrap align-items-center gap-2 mb-2" style="font-size: 0.9rem;">
+          {% if episode.publication_date %}
+            <span>{{ episode.publication_date|date:"F j, Y" }}</span>
+          {% endif %}
+          {% if episode.duration %}
+            <span>| {{ episode.duration }}</span>
+          {% endif %}
+          {% if episode.categories %}
+            <span>| 
+              {% for cat in episode.categories %}
+                {{ cat }}{% if not forloop.last %}, {% endif %}
+              {% endfor %}
+            </span>
+          {% endif %}
+          {% if episode.explicit %}
+            <span>| {% trans "Explicit" %}</span>
+          {% endif %}
+        </p>
+        
+        <!-- Controls Container: Bookmark, Star Rating, and Rating Info -->
+        <div class="d-flex align-items-center gap-3 flex-wrap">
+          <!-- Bookmark Button -->
+          <button id="bookmark-btn" data-episode-id="{{ episode.id }}" 
+                  class="bookmark-btn {% if is_bookmarked %}btn-bookmarked{% else %}btn-bookmark{% endif %}"
+                  title="{% if is_bookmarked %}{% trans 'Remove from Bookmarks' %}{% else %}{% trans 'Add to Bookmarks' %}{% endif %}">
+            {% if is_bookmarked %}
+              <i class="fa-solid fa-bookmark"></i>
+            {% else %}
+              <i class="fa-regular fa-bookmark"></i>
+            {% endif %}
+          </button>
+          <!-- Bookmarks Count -->
+          <span class="bookmarks-count" title="{% trans 'Number of Bookmarks' %}">
+            {{ bookmarks_count|number_format }}
+          </span>
+          
+          <!-- NEW: Comment Button -->
+          <button id="comment-btn" data-episode-id="{{ post_episode_id }}" title="{% trans 'Comment' %}" class="btn-comment">
+            <i class="fa-solid fa-comment"></i>
+          </button>
+          <span class="comments-count" title="{% trans 'Number of Comments' %}">
+            {{ comments_count|number_format }}
+          </span>
+
+          <!-- Episode Rating Container -->
+          <div id="episode-rating-container" data-episode-id="{{ episode.id }}">
+            {% for star in star_range %}
+              {% if episode_rating >= star %}
+                <i class="fa fa-star star-icon star-active" data-star="{{ star }}" title="{% trans 'Update your rating' %}"></i>
+              {% else %}
+                <i class="fa fa-star star-icon" data-star="{{ star }}" title="{% trans 'Rate this episode' %}"></i>
+              {% endif %}
+            {% endfor %}
+          </div>
+  
+          <!-- Average Rating Info -->
+          <span class="episode-rating-info" title="{% trans 'Average rating and total ratings' %}">
+            {{ ep_avg_rating|floatformat:1 }} ({{ ep_rating_count|number_format }})
+          </span>
+
+          <!-- NEW: Total Views Container -->
+          <div class="d-flex align-items-center gap-2">
+            <i class="fa-solid fa-eye" title="{% trans 'Total Views' %}" style="font-size: 1.25rem; color: #e3e6e8;"></i>
+            <span class="total-views" title="{% trans 'Total Views' %}">{{ total_episode_views|number_format }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Row 2: Episode Description and Audio -->
+    <div class="row mt-3">
+      <div class="col">
+        {% if episode.description %}
+          <p>{{ episode.description|clean_html }}</p>
+        {% endif %}
+        {% if episode.audio_url %}
+          <div>
+            <audio controls style="width:100%;">
+              <source src="{{ episode.audio_url }}" type="audio/mpeg">
+              Your browser does not support the audio element.
+            </audio>
+          </div>
+        {% else %}
+          <p><strong>{% trans "Audio:" %}</strong> <em>No audio available</em></p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+  
+  
+  
+  
+
+
+<!-- CHAPTERS SECTION -->
+<div class="section-container mb-4">
+  <h3>{% trans "Chapters" %}</h3>
+  <ul class="list-group">
+    {% for chapter in chapters %}
+      <li class="list-group-item">
+        <strong>{{ chapter.chapter_time }}:</strong> {{ chapter.chapter_title }}
+      </li>
+    {% empty %}
+      <li class="list-group-item">{% trans "No chapters available for this episode." %}</li>
+    {% endfor %}
+  </ul>
+</div>
+
+<!-- Separator Line Between Chapters and Transcript -->
+<hr style="border-top: 2px solid var(--list-hover-bg); margin: 2rem 0;">
+
+<!-- TRANSCRIPT SECTION -->
+<div class="section-container mb-4">
+  <h3>{% trans "Transcript" %}</h3>
+  <div class="transcript">
+      {% if merged_segments %}
+          {% for segment in merged_segments %}
+              <div class="segment mb-3">
+                  <div class="segment-header mb-1">
+                      <span class="time">{{ segment.combined_time }}</span>
+                      {% if segment.speaker %}
+                          <span class="separator">|</span>
+                          <span class="speaker">{{ segment.speaker }}:</span>
+                      {% endif %}
+                  </div>
+                  <div class="segment-text">
+                      <p>{{ segment.combined_text }}</p>
+                  </div>
+              </div>
+          {% endfor %}
+      {% else %}
+          <p>No transcript available for this episode.</p>
+      {% endif %}
+  </div>
+</div>
+
+<!-- Comment Modal -->
+<div id="comment-modal" class="modal" style="display: none;">
+  <div class="modal-content" style="display: flex; flex-direction: column; max-height: 80vh; position: relative;">
+    <!-- Close Button -->
+    <span id="close-comment-modal" class="close" style="position: absolute; right: 10px; top: 10px; cursor: pointer; color: #aaa;">&times;</span>
+    <h3 style="color: #e3e6e8; margin-bottom: 10px;">{% trans "Comments" %}</h3>
+    
+    <!-- Scrollable Comments Container -->
+    <div id="comments-container" style="flex: 1; overflow-y: auto; margin-bottom: 10px; min-height: 300px;">
+      <!-- AJAX-loaded comments will be injected here -->
+    </div>
+    
+    <!-- Comment Input Area -->
+    <div id="new-comment" style="position: relative; margin-bottom: 10px;">
+      <!-- Auto-expanding Textarea -->
+      <textarea id="new-comment-text" maxlength="500" rows="1"
+          placeholder="{% trans 'Write a comment...' %}"
+          style="width: 100%; box-sizing: border-box; background-color: #2f3337; border: none; border-radius: 8px; color: #e3e6e8; padding: 10px 60px 10px 10px; font-size: 1rem; resize: none; overflow: hidden;"></textarea>
+      <!-- Up arrow submit button -->
+      <button id="post-comment-btn" title="{% trans 'Submit Comment' %}"
+          style="position: absolute; right: 8px; bottom: 7px; background-color: #29214d; border: none; border-radius: 50%; padding: 8px; cursor: pointer;">
+        <i class="fa-solid fa-arrow-up" style="color: #e3e6e8; font-size: 1.25rem;"></i>
+      </button>
+    </div>
+    
+    <!-- Suggestions Dropdown (absolute positioned within modal) -->
+    <div id="mention-suggestions"></div>
+</div>
+
+
+
+
+
+
+<style>
+    /*Counting info*/
+    .comments-count,
+    .total-views,
+    .bookmarks-count,
+    .episode-rating-info {
+        font-size: 1.25rem;
+        color: #e3e6e8;
+        margin-right: .5rem;
+    }
+
+    /* Bookmark Button Styles */
+    .btn-bookmark, .btn-bookmarked, .btn-comment {
+        border: 1px solid #b3b3b3;       /* Gray outline */
+        border-radius: 50px;             /* Oval shape */
+        cursor: pointer;
+        padding: 0.4em 0.8em;
+        font-size: 0.9rem;
+        color: #e3e6e8;
+        background-color: #1c1e21;       /* Inactive state (black) */
+    }
+    .btn-bookmarked, .btn-comment {
+        background-color: #29214d;       /* Active state (purple) */
+    }
+    .btn-bookmark:hover, .btn-bookmarked:hover, .btn-comment:hover {
+        opacity: 0.85;
+    }
+    /* Episode Star Rating Styles */
+    #episode-rating-container .star-icon {
+        cursor: pointer;
+        font-size: 1.2rem;
+        margin-right: 0.2em;
+        color: #e3e6e8;
+    }
+    #episode-rating-container .star-active {
+        color: #ffc107;  /* Gold-ish color for active stars */
+    }
+
+    
+
+    /* Modal overlay */
+    .modal {
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0, 0, 0, 0.4);
+    }
+    /* Modal Content */
+    .modal-content {
+      background-color: #093145;
+      margin: 5% auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%;
+      max-width: 600px;
+      border-radius: 8px;
+    }
+    /* Close Button */
+    .close {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    /* Comment container */
+    .comment {   
+      border-bottom: 1px solid #444;
+      padding: 8px 0;
+    }
+    .comment-meta {
+      font-size: 0.85rem;
+    }
+    /* Username styling: white (#e3e6e8) */
+    .comment-meta .username {
+      font-size: 1rem;
+      color: #e3e6e8;
+      font-weight: bold;
+    }
+    /* Time styling: #b3b3b3 */
+    .comment-meta .time {
+      color: #b3b3b3;
+    }
+    /* Comment text styling: slightly smaller than username */
+    .comment-text {
+      font-size: 0.9rem;
+      color: #e3e6e8;
+      margin-top: 4px;
+    }
+    /* Reaction buttons styling */
+    .comment-reactions button {
+      background: none;
+      border: none;
+      border-radius: none;
+      padding: none; 
+      cursor: pointer;
+      color: #e3e6e8; /* Icon color for reactions */
+      margin-right: 10px;
+      font-size: 1rem;
+    }
+    /* Reaction count styling */
+    .comment-reactions span {
+      color: #e3e6e8;
+      font-size: 1rem;
+      margin-left: 4px;
+    }
+   
+    /* make the parent relative so absolute children align under the textarea */
+    #new-comment {
+      position: relative;
+    }
+
+    /* the suggestion box itself */
+    #mention-suggestions {
+      display: none;                  /* hidden until needed */
+      position: absolute;
+      top: calc(100% + 4px);          /* just below the textarea */
+      left: 10px;
+      width: 30%;
+      max-height: 150px;
+      overflow-y: auto;
+      background-color: #093145;      /* your dark purple/blue */
+      border: 1px solid #888;         /* gray border */
+      border-radius: 4px;
+      z-index: 100;                   /* above other elements */
+      color: #0b5ed7;                 /* suggestion text color */
+    }
+
+    /* each suggestion row */
+    #mention-suggestions .suggestion-item {
+      padding: 8px 12px;
+      cursor: pointer;
+      color: #0b5ed7;      /* ensure the text is your highlight color */
+    }
+
+    /* hover state */
+    #mention-suggestions .suggestion-item:hover {
+      background-color: rgba(255,255,255,0.1);
+    }
+    
+    .mention-highlight {
+      color: #0b5ed7;
+      font-weight: bold;
+    }
+
+
+
+</style>
+
+
+
+
+<script>
+    // Helper: Get CSRF token from cookie (if not already defined)
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (const cookie of cookies) {
+                const c = cookie.trim();
+                // Does this cookie string begin with the name we want?
+                if (c.startsWith(name + '=')) {
+                    cookieValue = decodeURIComponent(c.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    
+    const csrftoken = getCookie('csrftoken');
+
+    //Start
+    
+    document.addEventListener("DOMContentLoaded", function(){
+      const commentTextarea = document.getElementById("new-comment-text");
+      const suggestionsBox = document.getElementById("mention-suggestions");
+
+      // Auto-resize the textarea as the user types.
+      commentTextarea.addEventListener("input", function() {
+          this.style.height = "auto";         // Reset height to auto
+          this.style.height = this.scrollHeight + "px"; // Set new height
+      });
+
+      // Debounce function to limit AJAX calls.
+      let debounceTimer;
+      function debounce(func, delay) {
+          return function(...args) {
+              clearTimeout(debounceTimer);
+              debounceTimer = setTimeout(() => func.apply(this, args), delay);
+          };
+      }
+
+      commentTextarea.addEventListener("input", debounce(function(e) {
+  const mentionMatch = this.value
+            .substring(0, this.selectionStart)
+            .match(/@(\w+)$/);
+  if (!mentionMatch) {
+    suggestionsBox.style.display = "none";
+    return;
+  }
+  const query = mentionMatch[1];
+  if (query.length < 1) {
+    suggestionsBox.style.display = "none";
+    return;
+  }
+
+  // fetch your suggestions…
+  fetch(`/search_users/?q=${encodeURIComponent(query)}`)
+    .then(res => res.json())
+    .then(data => {
+      if (!data.usernames.length) {
+        suggestionsBox.style.display = "none";
+        return;
+      }
+      suggestionsBox.innerHTML = "";
+      data.usernames.forEach(username => {
+        const item = document.createElement("div");
+        item.className = "suggestion-item";
+        item.textContent = username;
+        item.addEventListener("click", () => {
+          this.value =
+            this.value.replace(/@(\w+)$/, "@" + username);
+          suggestionsBox.style.display = "none";
+          this.focus();
+        });
+        suggestionsBox.appendChild(item);
+      });
+      suggestionsBox.style.display = "block";
+    });
+}, 300));
+
+//End of debounce
+
+  // Hide suggestions if clicking outside
+  document.addEventListener("click", function(e) {
+      if (!suggestionsBox.contains(e.target) && e.target !== commentTextarea) {
+          suggestionsBox.style.display = "none";
+      }
+  });
+});
+
+
+    
+    // Toggle bookmark
+    document.getElementById("bookmark-btn").addEventListener("click", function() {
+        const episodeId = this.getAttribute('data-episode-id');
+        fetch(`/episode/${episodeId}/toggle_bookmark/`, {
+            method: "POST",
+            headers: {
+                "X-CSRFToken": csrftoken,
+                "Content-Type": "application/json"
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            const icon = this.querySelector("i");
+            if (data.bookmarked) {
+                this.classList.remove("btn-bookmark");
+                this.classList.add("btn-bookmarked");
+                // Change the icon from regular to solid.
+                icon.classList.remove("fa-regular");
+                icon.classList.add("fa-solid");
+                // Update title attribute.
+                this.title = "Remove episode from Bookmarks";
+            } else {
+                this.classList.remove("btn-bookmarked");
+                this.classList.add("btn-bookmark");
+                // Change the icon from solid to regular.
+                icon.classList.remove("fa-solid");
+                icon.classList.add("fa-regular");
+                // Update title attribute.
+                this.title = "Add episode to Bookmarks";
+            }
+        })
+        .catch(error => console.error("Error toggling bookmark:", error));
+    });
+    
+    // Episode star rating
+    document.querySelectorAll("#episode-rating-container .star-icon").forEach(function(starElem) {
+        starElem.addEventListener("click", function() {
+            const rating = this.getAttribute("data-star");
+            const episodeId = document.getElementById("episode-rating-container").getAttribute("data-episode-id");
+            const formData = new FormData();
+            formData.append('rating', rating);
+            
+            fetch(`/episode/${episodeId}/update_episode_rating/`, {
+                method: "POST",
+                headers: {
+                  "X-CSRFToken": csrftoken,
+                },
+                body: formData,
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.rating) {
+                    // Update the star icons based on returned rating.
+                    document.querySelectorAll("#episode-rating-container .star-icon").forEach(function(el) {
+                        if (parseInt(el.getAttribute("data-star")) <= data.rating) {
+                            el.classList.add("star-active");
+                        } else {
+                            el.classList.remove("star-active");
+                        }
+                    });
+                } else if (data.error) {
+                    console.error("Rating error:", data.error);
+                }
+            })
+            .catch(error => console.error("Error updating rating:", error));
+        });
+    });
+
+    // Open the comment modal when the comment button is clicked.
+  document.getElementById("comment-btn").addEventListener("click", function() {
+      document.getElementById("comment-modal").style.display = "block";
+      loadComments();
+  });
+
+  // Close modal when clicking on the close button.
+  document.getElementById("close-comment-modal").addEventListener("click", function() {
+      document.getElementById("comment-modal").style.display = "none";
+  });
+
+  // Function to load comments via AJAX
+  function loadComments() {
+  const episodeId = document
+    .getElementById('comment-btn')
+    ?.getAttribute('data-episode-id');
+
+    fetch(`/episode/${episodeId}/comments/`)
+    .then(r => r.json())
+    .then(data => {
+      const container = document.getElementById("comments-container");
+      if (!data.comments || data.comments.length === 0) {
+        container.innerHTML = `<p>No comments yet.</p>`;
+        return;
+      }
+      container.innerHTML = data.comments.map(c => {
+        // c.text already contains only valid @username wrapped in <span>
+        const buttons = Object.entries(c.reactions).map(([type, count]) => {
+          const icon = {
+            like: "thumbs-up",
+            dislike: "thumbs-down",
+            heart: "heart",
+            laugh: "face-grin-tears"
+          }[type];
+          return `
+            <button class="reaction-btn"
+                    data-comment-id="${c.comment_id}"
+                    data-reaction="${type}">
+              <i class="fa-solid fa-${icon}"></i>
+              <span>${count}</span>
+            </button>
+          `;
+        }).join("");
+
+        return `
+          <div class="comment">
+            <div class="comment-meta">
+              <span class="username">${c.username}</span> – 
+              <span class="time">${c.created_at}</span>
+            </div>
+            <div class="comment-text">${c.text}</div>
+            <div class="comment-reactions">${buttons}</div>
+          </div>
+        `;
+      }).join("");
+    })
+    .catch(console.error);
+}
+
+// call it initially (and after posting a comment)
+loadComments();
+
+
+  // Handle posting a comment when the up arrow button is clicked
+  document.getElementById("post-comment-btn")?.addEventListener("click", function() {
+      const episodeId = document.getElementById("comment-btn")?.getAttribute("data-episode-id");
+      const commentText = document.getElementById("new-comment-text").value.trim();
+      if (!commentText) {
+          return alert("{% trans 'Please enter a comment' %}");
+      }
+      fetch(`/episode/${episodeId}/post_comment/`, {
+          method: "POST",
+          headers: {
+              "X-CSRFToken": csrftoken,
+              "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ text: commentText })
+      })
+      .then(response => response.json())
+      .then(data => {
+          if (data.error) {
+              alert(data.error);
+          } else {
+              document.getElementById("new-comment-text").value = "";
+              loadComments();
+          }
+      })
+      .catch(error => console.error("Error posting comment:", error));
+  });
+
+  // Use event delegation for handling reactions on comments.
+  document.getElementById("comments-container")?.addEventListener("click", function(e) {
+      const reactionBtn = e.target.closest(".reaction-btn");
+      if (reactionBtn) {
+          const commentId = reactionBtn.getAttribute("data-comment-id");
+          const reaction = reactionBtn.getAttribute("data-reaction");
+          fetch(`/comment/${commentId}/reaction/`, {
+              method: "POST",
+              headers: {
+                  "X-CSRFToken": csrftoken,
+                  "Content-Type": "application/json"
+              },
+              body: JSON.stringify({ reaction: reaction })
+          })
+          .then(response => response.json())
+          .then(data => {
+              if (data.reactions) {
+                  const reactionButtons = reactionBtn.parentElement.querySelectorAll(".reaction-btn");
+                  reactionButtons.forEach(btn => {
+                      const type = btn.getAttribute("data-reaction");
+                      btn.querySelector("span").innerText = data.reactions[type];
+                  });
+              }
+          })
+          .catch(error => console.error("Error posting reaction:", error));
+      }
+  });
+</script>
+    
+
+
+{% endblock %}

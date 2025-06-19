@@ -1,0 +1,14 @@
+{% extends "podcasts/base.html" %}
+{% load i18n %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>{% trans "Disable Two‑Factor Authentication" %}</h2>
+    <p>{% trans "Please enter your OTP token to confirm disabling two‑factor authentication." %}</p>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-danger">{% trans "Disable 2FA" %}</button>
+    </form>
+</div>
+{% endblock %}

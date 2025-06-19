@@ -1,0 +1,15 @@
+- Create two versions one for production and one for new development
+- Apply this to github
+- add nordvpn back into the mix
+- add support
+- check email retreival
+- check text message retrieval
+- check forgot password
+- add a section for the user for new channels and possibly new episode requests
+- add a section for donations
+- check to see if messages are encrypted for replies and posts
+- create a way to clear ram so that main.py does not fill
+- add the docker to the mix of images at startup.
+- add a script that sends an email if one fails and maybe create a failover script.
+- episode_list.html is repeating some episodes reandomly but in episode table there is no duplicates so must be on html side.
+

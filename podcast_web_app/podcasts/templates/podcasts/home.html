@@ -1,0 +1,13 @@
+{% extends "podcasts/base.html" %}
+{% load i18n %}
+
+{% block content %}
+<div class="container text-center mt-5">
+    <h2>{% trans "Welcome to the Podcast Web App" %}</h2>
+    <p>{% trans "Please log in or create an account to access the site features." %}</p>
+    <div class="mt-4">
+        <a href="{% url 'podcasts:login' %}" class="btn btn-primary me-2">{% trans "Login" %}</a>
+        <a href="{% url 'podcasts:signup' %}" class="btn btn-success">{% trans "Create Account" %}</a>
+    </div>
+</div>
+{% endblock %}

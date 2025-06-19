@@ -1,0 +1,347 @@
+<!-- podcasts/templates/podcasts/base.html -->
+{% load static i18n custom_filters %}
+
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE }}" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <title>{% trans "Podcast Web App" %}</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="{% static 'podcasts/styles.css' %}">
+  <!-- Favicon -->
+  <link rel="shortcut icon" href="{% static 'podcasts/favicon.ico' %}" type="image/x-icon">
+  <!-- Font Awesome (if not already in your base template) -->
+  <link rel="stylesheet" href="{% static 'podcasts/fontawesome/css/all.min.css' %}">
+  
+  
+  <style>
+    /* Insert a favicon (PNG or SVG) to the left of the site title */
+    .site-title {
+      position: relative; /* Ensure positioning context */
+      padding-left: 2rem; /* Adjust to create space for the icon */
+    }
+    .site-title::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      display: inline-block;
+      width: 1.75rem;  /* adjust size as needed */
+      height: 1.75rem; /* adjust size as needed */
+      background-image: url("{% static 'podcasts/images/favicon-mini.png' %}"); /* PNG or SVG version */
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: cover;
+      border-radius: 50%; /* makes it a circle */
+    }
+  </style>
+
+  <!-- Additional CSS for Language Dropdown Styling -->
+  <style>
+    /* Ensure the dropdown-menu for language filter has the same colors as the language button */
+    .lang-dropdown {
+      background-color: var(--lang-btn-bg) !important;
+      color: var(--lang-option-text) !important;
+    }
+    .lang-dropdown .form-check-label {
+      color: var(--lang-option-text) !important;
+    }
+    /* Optionally, adjust checkbox styling inside the dropdown if needed */
+    .lang-dropdown .form-check-input {
+      accent-color: var(--lang-btn-text); /* For modern browsers */
+    }
+    
+  </style>
+</head>
+<body class="d-flex flex-column min-vh-100">
+  <header class="p-3">
+    <div class="container">
+      <!-- Top Row: Two Groups, Left and Right -->
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <!-- Left Group: Site Title and Navigation -->
+        <div>
+          <h1 class="mb-0">
+            <a href="{% url 'podcasts:home' %}" class="text-decoration-none site-title">{% trans "Muse" %}</a>
+          </h1>
+          <nav class="mt-2">
+            <a href="{% url 'podcasts:favorites' %}" class="nav-link d-inline me-3">{% trans "Favorites" %}</a>
+            <a href="{% url 'podcasts:notifications' %}" class="nav-link d-inline me-3">{% trans "Notifications" %}</a>
+            <a href="{% url 'podcasts:bookmarks' %}" class="nav-link d-inline me-3">{% trans "Bookmarks" %}</a>
+            <a href="{% url 'podcasts:channel_list' %}" class="nav-link d-inline me-3">{% trans "Channels" %}</a>
+            <a href="{% url 'podcasts:episode_list' %}" class="nav-link d-inline me-3">{% trans "Episodes" %}</a>
+          </nav>
+        </div>
+        <!-- Right Group: Language Dropdown and Theme Toggle -->
+        <div class="d-flex align-items-center">
+          <!-- Language Dropdown with a right margin -->
+          <select id="languageSelect" class="lang-select-btn me-2">
+            <option value="en" {% if LANGUAGE_CODE == "en" %}selected{% endif %}>English</option>
+            <option value="pt" {% if LANGUAGE_CODE == "pt" %}selected{% endif %}>Português</option>
+            <option value="es" {% if LANGUAGE_CODE == "es" %}selected{% endif %}>Español</option>
+            <option value="it" {% if LANGUAGE_CODE == "it" %}selected{% endif %}>Italiano</option>
+            <option value="fr" {% if LANGUAGE_CODE == "fr" %}selected{% endif %}>Français</option>
+            <option value="ru" {% if LANGUAGE_CODE == "ru" %}selected{% endif %}>Русский</option>
+            <option value="uk" {% if LANGUAGE_CODE == "uk" %}selected{% endif %}>українська</option>
+            <option value="cn" {% if LANGUAGE_CODE == "cn" %}selected{% endif %}>中文 (简体)</option>
+            <option value="tw" {% if LANGUAGE_CODE == "tw" %}selected{% endif %}>中文 (繁體)</option>
+            <option value="ko" {% if LANGUAGE_CODE == "ko" %}selected{% endif %}>한국어</option>
+            <option value="ja" {% if LANGUAGE_CODE == "ja" %}selected{% endif %}>日本語</option>
+            <option value="tr" {% if LANGUAGE_CODE == "tr" %}selected{% endif %}>Türkçe</option>
+            <option value="de" {% if LANGUAGE_CODE == "de" %}selected{% endif %}>Deutsch</option>
+            <option value="ar" {% if LANGUAGE_CODE == "ar" %}selected{% endif %}>العربية</option>
+            <option value="hi" {% if LANGUAGE_CODE == "hi" %}selected{% endif %}>हिन्दी</option>
+            <option value="vi" {% if LANGUAGE_CODE == "vi" %}selected{% endif %}>Tiếng Việt</option>
+            <option value="tl" {% if LANGUAGE_CODE == "tl" %}selected{% endif %}>Tagalog</option>
+                       
+            <!-- Add additional languages as needed -->
+          </select>
+          <!-- Theme Toggle Button -->
+          <button id="themeToggleBtn" class="btn btn-link p-0" title="{% trans 'Toggle Theme' %}" aria-label="{% trans 'Toggle Theme' %}">
+            <img src="{% static 'podcasts/images/yin-yang.png' %}" alt="{% trans 'Toggle Theme' %}" class="theme-toggle-icon"/>
+          </button>
+          <!-- Profile Dropdown -->
+          <div class="dropdown">
+            <button class="btn btn-outline-secondary dropdown-toggle profile-btn" type="button" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+              {% if request.user.is_authenticated %}
+                {{ request.user.username }}
+              {% else %}
+                {% trans "Profile" %}
+              {% endif %}
+            </button>
+            <ul class="dropdown-menu profile-dropdown-menu text-start" aria-labelledby="profileDropdown">
+              {% if request.user.is_authenticated %}
+                <li><a class="dropdown-item text-start" href="{% url 'podcasts:profile' %}">{% trans "See Profile" %}</a></li>
+                <li>
+                  <a class="dropdown-item text-start" href="{% url 'podcasts:replies' %}">
+                    {% trans "See Replies" %}
+                    <span class="badge bg-secondary">
+                      {{ unseen_replies_count|default:"0" }}
+                    </span>
+                  </a>
+                </li>
+                <li>
+                  <form id="logout-form" action="{% url 'logout' %}" method="post" style="display: inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="dropdown-item text-start">{% trans "Sign Out" %}</button>
+                  </form>
+                </li>
+              {% else %}
+                <li><a class="dropdown-item text-start" href="{% url 'podcasts:login' %}">{% trans "Sign In" %}</a></li>
+              {% endif %}
+            </ul>
+          </div>
+        </div>
+      </div>
+      <!-- Bottom Row: Search Form and Advanced Filters -->
+      <div class="search-form mb-4">
+        <form method="get" action="{% url 'podcasts:search_results' %}" class="d-flex flex-column">
+          <div class="input-group mb-3">
+            <input type="text" name="q" class="form-control" placeholder="{% trans 'Search episodes or channels...' %}" value="{{ request.GET.q|default:'' }}" required>
+            <button class="btn btn-primary" type="submit">{% trans "Search" %}</button>
+          </div>
+          <div class="d-flex align-items-center flex-wrap">
+            <!-- Search In Checkboxes -->
+            <div class="form-check me-3">
+              <input type="checkbox" class="form-check-input" name="search_in" value="channel_title" id="channel_title" {% if 'channel_title' in selected_fields or not selected_fields %}checked{% endif %}>
+              <label class="form-check-label" for="channel_title">{% trans "Channel Title" %}</label>
+            </div>
+            <div class="form-check me-3">
+              <input type="checkbox" class="form-check-input" name="search_in" value="episode_title" id="episode_title" {% if 'episode_title' in selected_fields or not selected_fields %}checked{% endif %}>
+              <label class="form-check-label" for="episode_title">{% trans "Episode Title" %}</label>
+            </div>
+            <div class="form-check me-3">
+              <input type="checkbox" class="form-check-input" name="search_in" value="description" id="description" {% if 'description' in selected_fields %}checked{% endif %}>
+              <label class="form-check-label" for="description">{% trans "Episode Description" %}</label>
+            </div>
+            <div class="form-check me-3">
+              <input type="checkbox" class="form-check-input" name="search_in" value="segment_text" id="segment_text" {% if 'segment_text' in selected_fields %}checked{% endif %}>
+              <label class="form-check-label" for="segment_text">{% trans "Transcript Text" %}</label>
+            </div>
+
+            <!-- New Language Filter Dropdown (placed to the left among the filters) -->
+            <div class="dropdown ms-3">
+              {% with selected_langs=request.GET|get_list:"search_language" %}
+                <button class="btn lang-select-btn dropdown-toggle" type="button" id="languageDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                  {% trans "Language" %}
+                </button>
+                <div class="dropdown-menu lang-dropdown p-3" aria-labelledby="languageDropdown">
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="search_language" id="lang-en" value="en" {% if selected_langs|default_if_none:""|length == 0 or 'en' in selected_langs %}checked{% endif %}>
+                    <label class="form-check-label" for="lang-en">English</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="search_language" id="lang-pt" value="pt" {% if selected_langs and 'pt' in selected_langs %}checked{% endif %}>
+                    <label class="form-check-label" for="lang-pt">Português</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="search_language" id="lang-es" value="es" {% if selected_langs and 'es' in selected_langs %}checked{% endif %}>
+                    <label class="form-check-label" for="lang-es">Español</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="search_language" id="lang-it" value="it" {% if selected_langs and 'it' in selected_langs %}checked{% endif %}>
+                    <label class="form-check-label" for="lang-it">Italiano</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="search_language" id="lang-fr" value="fr" {% if selected_langs and 'fr' in selected_langs %}checked{% endif %}>
+                    <label class="form-check-label" for="lang-fr">Français</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="search_language" id="lang-ru" value="ru" {% if selected_langs and 'ru' in selected_langs %}checked{% endif %}>
+                    <label class="form-check-label" for="lang-ru">Русский</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="search_language" id="lang-uk" value="uk" {% if selected_langs and 'uk' in selected_langs %}checked{% endif %}>
+                    <label class="form-check-label" for="lang-uk">українська</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="search_language" id="lang-cn" value="cn" {% if selected_langs and 'cn' in selected_langs %}checked{% endif %}>
+                    <label class="form-check-label" for="lang-cn">中文 (简体)</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="search_language" id="lang-tw" value="tw" {% if selected_langs and 'tw' in selected_langs %}checked{% endif %}>
+                    <label class="form-check-label" for="lang-tw">中文 (繁體)</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="search_language" id="lang-ko" value="ko" {% if selected_langs and 'ko' in selected_langs %}checked{% endif %}>
+                    <label class="form-check-label" for="lang-ko">한국어</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="search_language" id="lang-ja" value="ja" {% if selected_langs and 'ja' in selected_langs %}checked{% endif %}>
+                    <label class="form-check-label" for="lang-ja">日本語</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="search_language" id="lang-tr" value="tr" {% if selected_langs and 'tr' in selected_langs %}checked{% endif %}>
+                    <label class="form-check-label" for="lang-tr">Türkçe</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="search_language" id="lang-de" value="de" {% if selected_langs and 'de' in selected_langs %}checked{% endif %}>
+                    <label class="form-check-label" for="lang-de">Deutsch</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="search_language" id="lang-ar" value="ar" {% if selected_langs and 'ar' in selected_langs %}checked{% endif %}>
+                    <label class="form-check-label" for="lang-ar">العربية</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="search_language" id="lang-hi" value="hi" {% if selected_langs and 'hi' in selected_langs %}checked{% endif %}>
+                    <label class="form-check-label" for="lang-hi">हिन्दी</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="search_language" id="lang-vi" value="vi" {% if selected_langs and 'vi' in selected_langs %}checked{% endif %}>
+                    <label class="form-check-label" for="lang-vi">Tiếng Việt</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="search_language" id="lang-tl" value="tl" {% if selected_langs and 'tl' in selected_langs %}checked{% endif %}>
+                    <label class="form-check-label" for="lang-tl">Tagalog</label>
+                  </div>
+                </div>
+              {% endwith %}
+            </div>
+            <!-- New Date Filter Dropdown -->
+            <div class="dropdown ms-3">
+              {% with selected_date=request.GET.search_date %}
+                <button class="btn lang-select-btn dropdown-toggle" type="button" id="dateDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                  {% trans "Date" %}
+                </button>
+                <div class="dropdown-menu lang-dropdown p-3" aria-labelledby="dateDropdown">
+                  <!-- “Anytime” is the default (no date filtering) -->
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="search_date" id="date-anytime" value="anytime" {% if selected_date == "anytime" or not selected_date %}checked{% endif %}>
+                    <label class="form-check-label" for="date-anytime">{% trans "Anytime" %}</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="search_date" id="date-24" value="24" {% if selected_date == "24" %}checked{% endif %}>
+                    <label class="form-check-label" for="date-24">{% trans "Past Day" %}</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="search_date" id="date-week" value="7" {% if selected_date == "7" %}checked{% endif %}>
+                    <label class="form-check-label" for="date-week">{% trans "Past Week" %}</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="search_date" id="date-month" value="30" {% if selected_date == "30" %}checked{% endif %}>
+                    <label class="form-check-label" for="date-month">{% trans "Past Month" %}</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="search_date" id="date-year" value="365" {% if selected_date == "365" %}checked{% endif %}>
+                    <label class="form-check-label" for="date-year">{% trans "Past Year" %}</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="search_date" id="date-2years" value="730" {% if selected_date == "730" %}checked{% endif %}>
+                    <label class="form-check-label" for="date-2years">{% trans "Past 2 Years" %}</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="search_date" id="date-3years" value="1095" {% if selected_date == "1095" %}checked{% endif %}>
+                    <label class="form-check-label" for="date-3years">{% trans "Past 3 Years" %}</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="search_date" id="date-4years" value="1460" {% if selected_date == "1460" %}checked{% endif %}>
+                    <label class="form-check-label" for="date-4years">{% trans "Past 4 Years" %}</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="search_date" id="date-5years" value="1825" {% if selected_date == "1825" %}checked{% endif %}>
+                    <label class="form-check-label" for="date-5years">{% trans "Past 5 Years" %}</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="search_date" id="date-10years" value="3650" {% if selected_date == "3650" %}checked{% endif %}>
+                    <label class="form-check-label" for="date-10years">{% trans "Past 10 Years" %}</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="search_date" id="date-15years" value="5475" {% if selected_date == "5475" %}checked{% endif %}>
+                    <label class="form-check-label" for="date-15years">{% trans "Past 15 Years" %}</label>
+                  </div>
+                </div>
+              {% endwith %}
+            </div>
+
+          </div>
+        </form>
+      </div>
+    </div>
+  </header>
+  
+  <main class="container my-4 flex-grow-1">
+    {% block content %}{% endblock %}
+  </main>
+  
+  <footer class="py-3 text-center">
+    <p class="mb-0">&copy; 2025 Muse Podcast LLC </p>
+  </footer>
+
+  
+  <!-- Bootstrap JS Bundle -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  
+  <!-- Language Selection Script -->
+  <script>
+    (function() {
+        const languageSelect = document.getElementById('languageSelect');
+        languageSelect.addEventListener('change', function() {
+            var lang = this.value;
+            // Set the django_language cookie
+            document.cookie = "django_language=" + lang + "; path=/";
+            // Optionally, also store in localStorage if needed
+            localStorage.setItem('selectedLanguage', lang);
+            location.reload();
+        });
+    })();
+  </script>
+  
+  <!-- THEME TOGGLE SCRIPT -->
+  <script>
+    (function() {
+      const htmlEl = document.documentElement;
+      const toggleBtn = document.getElementById('themeToggleBtn');
+      const savedTheme = localStorage.getItem('theme') || 'dark';
+      htmlEl.setAttribute('data-theme', savedTheme);
+      toggleBtn.addEventListener('click', () => {
+        const currentTheme = htmlEl.getAttribute('data-theme');
+        const targetTheme = (currentTheme === 'light') ? 'dark' : 'light';
+        htmlEl.setAttribute('data-theme', targetTheme);
+        localStorage.setItem('theme', targetTheme);
+      });
+    })();
+  </script>
+</body>
+</html>

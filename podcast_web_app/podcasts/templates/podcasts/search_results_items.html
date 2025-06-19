@@ -1,0 +1,203 @@
+{# podcasts/templates/podcasts/search_results_items.html #}
+{% load static i18n custom_filters %}
+<div id="episode-list" class="list-group mt-4">
+  {% for item in episodes %}
+    {% if item.episode %}
+      {% with base=item.episode channel=base.channel %}
+      <a href="{% url 'podcasts:episode_detail' sanitized_channel_title=item.channel.sanitized_channel_title sanitized_episode_title=item.sanitized_episode_title %}"
+          class="list-group-item list-group-item-action mb-2"
+          style="text-decoration: none;">
+
+          <div class="row">
+            <div class="col-auto">
+              <img
+                src="{{ item.image_url|default:channel.channel_image_url }}"
+                alt="{{ item.episode_title }}"
+                style="width:150px; height:150px; border-radius:6px;"
+                onerror="
+                  this.onerror=null;
+                  this.src='{{ channel.channel_image_url }}'||'{% static 'podcasts/images/no-image.jpg' %}';
+                "
+              >
+            </div>
+            <div class="col">
+              <strong>
+                {% with highlighted_title=item.episode_title|highlight_sentence:q %}
+                  {% if highlighted_title %}
+                    {{ highlighted_title|safe }}
+                  {% else %}
+                    <em>No Title Available</em>
+                  {% endif %}
+                {% endwith %}
+              </strong>
+              <p class="d-flex flex-wrap align-items-center gap-2 mb-1" style="font-size:0.9rem;">
+                <span class="text-muted">
+                  {% trans "from" %} 
+                  {% with ch=channel.channel_title|highlight_sentence:q %}
+                    {{ ch|default:channel.channel_title|safe }}
+                  {% endwith %}
+                </span>
+                {% if base.publication_date %}<span>| {{ base.publication_date|date:"F j, Y, g:i a" }}</span>{% endif %}
+                {% if base.duration %}<span>| {{ base.duration }}</span>{% endif %}
+                {% if base.categories %}
+                  <span>|
+                    {% for cat in base.categories %}
+                      {{ cat }}{% if not forloop.last %}, {% endif %}
+                    {% endfor %}
+                  </span>
+                {% endif %}
+                {% if base.explicit %}<span>| {% trans "Explicit" %}</span>{% endif %}
+              </p>
+              {% if item.transcripts.all or item.transcriptstranslations.all %}
+                <p class="description-clamp mb-0">
+                  {% with ts=item.transcriptstranslations.all|default:item.transcripts.all %}
+                    {% for t in ts %}
+                      {% if t.segment_text|contains:q %}
+                        {{ t.segment_text|highlight_sentence:q|safe }}
+                        {% if not forloop.last %} … {% endif %}
+                      {% endif %}
+                    {% endfor %}
+                  {% endwith %}
+                  {% if item.transcriptstranslations.all|length > 3 or item.transcripts.all|length > 3 %}…{% endif %}
+                </p>
+              {% elif base.description %}
+                <p class="description-clamp mb-0">
+                  {{ base.description|highlight_sentence:q|safe }}
+                </p>
+              {% endif %}
+            </div>
+          </div>
+        </a>
+      {% endwith %}
+    {% else %}
+      {# non-translation Episode #}
+      {% with channel=item.channel %}
+        <a href="{% url 'podcasts:episode_detail' sanitized_channel_title=item.channel.sanitized_channel_title sanitized_episode_title=item.sanitized_episode_title %}"
+           class="list-group-item list-group-item-action mb-2"
+           style="text-decoration: none;">
+          <div class="row">
+            <div class="col-auto">
+              <img
+                src="{{ item.image_url|default:channel.channel_image_url }}"
+                alt="{{ item.episode_title }}"
+                style="width:150px; height:150px; border-radius:6px;"
+                onerror="
+                  this.onerror=null;
+                  this.src='{{ channel.channel_image_url }}'||'{% static 'podcasts/images/no-image.jpg' %}';
+                "
+              >
+            </div>
+            <div class="col">
+              <strong>
+                {% with ht=item.episode_title|highlight_sentence:q %}
+                  {{ ht|default:item.episode_title|safe }}
+                {% endwith %}
+              </strong>
+              <p class="d-flex flex-wrap align-items-center gap-2 mb-1" style="font-size:0.9rem;">
+                <span class="text-muted">
+                  {% trans "from" %}  
+                  {% with ch=channel.channel_title|highlight_sentence:q %}
+                    {{ ch|default:channel.channel_title|safe }}
+                  {% endwith %}
+                </span>
+                {% if item.publication_date %}<span>| {{ item.publication_date|date:"F j, Y, g:i a" }}</span>{% endif %}
+                {% if item.duration %}<span>| {{ item.duration }}</span>{% endif %}
+                {% if item.categories %}
+                  <span>|
+                    {% for cat in item.categories %}
+                      {{ cat }}{% if not forloop.last %}, {% endif %}
+                    {% endfor %}
+                  </span>
+                {% endif %}
+                {% if item.explicit %}<span>| {% trans "Explicit" %}</span>{% endif %}
+              </p>
+              {% if item.transcripts.all %}
+                <p class="description-clamp mb-0">
+                  {% for t in item.transcripts.all %}
+                    {% if t.segment_text|contains:q %}
+                      {{ t.segment_text|highlight_sentence:q|safe }}
+                      {% if not forloop.last %} … {% endif %}
+                    {% endif %}
+                  {% endfor %}
+                  {% if item.transcripts.all|length > 3 %}…{% endif %}
+                </p>
+              {% elif item.description %}
+                <p class="description-clamp mb-0">
+                  {{ item.description|highlight_sentence:q|safe }}
+                </p>
+              {% endif %}
+            </div>
+          </div>
+        </a>
+      {% endwith %}
+    {% endif %}
+  {% empty %}
+    <div class="list-group-item">
+      <p>{% trans "No episodes found matching your search." %}</p>
+      <p>{% trans "Try different keywords or check your spelling." %}</p>
+    </div>
+  {% endfor %}
+</div>
+
+<div id="loading-spinner" style="display: none; text-align: center; margin: 1rem 0;">
+  <p>{% trans "Loading more episodes..." %}</p>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function(){
+    let page = parseInt(new URLSearchParams(window.location.search).get("page")||"1");
+    let loading = false;
+    let hasMore = true;
+    const listEl  = document.getElementById("episode-list");
+    const spinner = document.getElementById("loading-spinner");
+    const endText = "{% trans 'End of list...' %}";
+    const loadText= "{% trans 'Loading more episodes...' %}";
+
+    window.addEventListener("scroll", ()=>{
+      if(loading||!hasMore) return;
+      if(window.innerHeight+window.scrollY >= document.body.offsetHeight-500){
+        loading=true;
+        spinner.style.display="block";
+        spinner.innerHTML="<p>"+loadText+"</p>";
+        page++;
+        const params=new URLSearchParams(window.location.search);
+        params.set("page", page);
+        params.set("ajax", 1);
+        fetch("?"+params.toString())
+          .then(r=> r.ok? r.text() : "")
+          .then(html=>{
+            if(!html.trim()){
+              hasMore=false;
+              spinner.innerHTML="<p>"+endText+"</p>";
+            } else {
+              const tmp=document.createElement("div");
+              tmp.innerHTML=html;
+              const items=tmp.querySelectorAll(".list-group-item");
+              if(items.length===0){
+                hasMore=false;
+                spinner.innerHTML="<p>"+endText+"</p>";
+              } else {
+                items.forEach(i=> listEl.appendChild(i));
+                spinner.style.display="none";
+              }
+            }
+            loading=false;
+          })
+          .catch(()=>{
+            loading=false;
+            spinner.style.display="none";
+          });
+      }
+    });
+  });
+</script>
+
+<style>
+  .description-clamp {
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+</style>

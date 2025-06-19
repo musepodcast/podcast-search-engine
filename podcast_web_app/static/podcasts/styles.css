@@ -1,0 +1,374 @@
+/* Default Light Mode (Explicitly Applied) */
+:root {
+    --lang-btn-bg: #3C6478;
+    --lang-btn-text: #131516;
+    --lang-option-text: #131516; /* Light mode dropdown text */
+}
+
+/* Dark Mode Language */
+:root[data-theme="dark"] {
+    --lang-btn-bg: #093145;
+    --lang-btn-text: #e3e6e8;
+    --lang-option-text: #e3e6e8; /* Dark mode dropdown text */
+} 
+
+
+
+
+/* Apply colors to the language button */
+.lang-select-btn {
+    background-color: var(--lang-btn-bg) !important;
+    color: var(--lang-btn-text) !important;
+}
+
+/* Apply colors to dropdown options */
+.lang-select-btn option {
+    color: var(--lang-option-text) !important;
+    background-color: var(--lang-btn-bg) !important; /* Ensures dropdown background matches button */
+}
+.site-title::before {
+    content: "";
+    display: inline-block;
+    width: 1.75rem;         /* adjust as needed */
+    height: 1.75rem;        /* adjust as needed */
+    margin-right: 0.5rem;
+    background-image: url("images/favicon.png"); /* use a PNG or SVG version */
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    border-radius: 50%;
+    vertical-align: middle;
+}
+
+.uniform-image {
+    width: 10px;
+    height: 5px;
+    object-fit: cover;
+    border-radius: 6px; /* Adjust if needed for channel images separately */
+}
+
+
+
+
+:root[data-theme="dark"] .section-container {
+    background-color: #2f3337 !important;
+    border: 1px solid #3a3d41 !important;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    box-shadow: none;
+}
+
+:root:not([data-theme="dark"]) .section-container {
+    background-color: #e8e8e8 !important; /* slightly darker than the page background */
+    border: 1px solid #d0d0d0 !important; /* a visible border */
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Language Button Styling */
+.lang-select-btn {
+    background-color: var(--lang-btn-bg) !important;
+    color: var(--lang-btn-text) !important;
+    border: none !important;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 1rem;
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    appearance: none !important;
+    padding-right: 2.5rem;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    background-image: url("images/language-planet.svg");
+    background-repeat: no-repeat;
+    background-position: right 0.25rem center;
+    background-size: 1.75rem;
+}
+
+/* On hover, add a light blue outline */
+.lang-select-btn:hover {
+    outline: 2px solid #0b5ed7;
+}
+
+
+/* Remove the background icon for dropdown toggle buttons */
+.lang-select-btn.dropdown-toggle {
+    color: var(--lang-option-text) !important;
+    background-color: var(--lang-btn-bg) !important; /* Ensures dropdown background matches button */
+    background-image: none !important;
+    padding-right: 0.5rem !important; /* Adjust right padding as needed */
+}
+
+/* Remove background image for the profile button */
+.profile-btn {
+    background-image: none !important;
+}
+
+/* Ensure the profile button uses the desired background and text colors */
+.profile-btn {
+    display: inline-block;
+    background-color: var(--lang-btn-bg) !important;
+    width: auto !important;
+    color: var(--lang-btn-text) !important;
+    text-align: center;
+    border: none !important;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 1rem;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Profile Dropdown Menu: Add a gray border and right-align its content */
+.profile-dropdown-menu {
+    min-width: .25rem !important;
+    width: auto !important;
+    background-color: var(--lang-btn-bg) !important;
+    border: 2px solid #7C7D7D !important;  /* Gray border */
+    box-shadow: none !important;
+    padding: 0;  /* Remove extra padding if needed */
+    text-align: center;  /* Right-align the text inside the dropdown */
+}
+
+/* Profile Dropdown Items: Ensure they inherit the right alignment and add some padding */
+.profile-dropdown-menu .dropdown-item {
+    background-color: var(--lang-btn-bg) !important;
+    color: var(--lang-option-text) !important;
+    border: none !important;
+    padding: 0.25rem 0.5rem;  /* Adjust right padding for space on the right */
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Hover/Focus States: Keep the gray text and add a blue background */
+.profile-dropdown-menu .dropdown-item:hover,
+.profile-dropdown-menu .dropdown-item:focus {
+    background-color: #7C7D7D !important;
+    color: var(--lang-option-text) !important;
+    
+}
+
+/* On hover, add a light blue outline */
+.profile-btn:hover {
+    outline: 2px solid #0b5ed7;
+}
+
+
+/* make the container a positioning context */
+#filters-container {
+    position: relative;
+    min-height: 3rem; /* or whatever keeps enough room for your filters */
+  }
+  
+  /* absolutely stack both panels in the same spot */
+  #episode-filters,
+  #channel-filters {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+  }
+  
+
+/* ---------------------------------------------------------- */
+/* The rest of your existing CSS remains unchanged below:   */
+/* ---------------------------------------------------------- */
+
+/* 1. Define CSS Variables for Light and Dark Themes */
+
+/* Light Mode Variables */
+:root {
+    --background-color: #f8f9fa;
+    --text-color: #131516;
+    --header-bg-color: #3C6478;
+    --header-text-color: #131516;
+    --footer-bg-color: #f1f1f1;
+    --footer-text-color: #131516;
+    --link-color: #0b5ed7;
+    --list-bg: #ffffff;
+    --list-text: #131516;
+    --list-hover-bg: #e8ebee;
+    --muted-color: #373D3F;
+    --yin-yang-color: #000000;
+    --yin-yang-bg-color: #ffffff;
+    --highlight-bg-color: #093145;
+    --highlight-text-color: #EFD469;
+}
+
+/* Dark Mode Variables */
+:root[data-theme="dark"] {
+    --background-color: #1c1e21;
+    --text-color: #e3e6e8;
+    --header-bg-color: #093145;
+    --header-text-color: #ffffff;
+    --footer-bg-color: #2f3337;
+    --footer-text-color: #e3e6e8;
+    --link-color: #83a7ff;
+    --list-bg: #2f3337;
+    --list-text: #e3e6e8;
+    --list-hover-bg: #3a3d41;
+    --muted-color: #b3b3b3;
+    --yin-yang-color: #ffffff;
+    --yin-yang-bg-color: #000000;
+    --highlight-bg-color: #EFD469;
+    --highlight-text-color: #093145;
+}
+
+.favicon-icon {
+    width: 10px;          /* adjust size as needed */
+    height: 20px;
+    border-radius: 50%;   /* makes it a circle */
+    object-fit: cover;    /* ensures the image covers the circle area */
+  }
+  
+
+
+
+/* Body */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Header */
+header {
+    background-color: var(--header-bg-color);
+    color: var(--header-text-color);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+header .site-title {
+    color: var(--header-text-color);
+}
+header nav a {
+    color: var(--header-text-color);
+    text-decoration: none;
+    font-weight: 500;
+}
+header nav a:hover {
+    text-decoration: underline;
+    color: var(--link-color);
+}
+
+/* Footer */
+footer {
+    background-color: var(--footer-bg-color);
+    color: var(--footer-text-color);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+footer a {
+    color: var(--footer-text-color);
+    text-decoration: none;
+}
+footer a:hover {
+    color: var(--link-color);
+    text-decoration: underline;
+}
+
+/* Links */
+a {
+    color: var(--link-color);
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
+    filter: brightness(80%);
+}
+
+/* List Group Items */
+.list-group-item {
+    background-color: var(--list-bg);
+    color: var(--list-text);
+    border: none;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+.list-group-item:hover {
+    background-color: var(--list-hover-bg);
+}
+
+/* Muted Text */
+.text-muted {
+    color: var(--muted-color) !important;
+}
+
+/* Search Form Inputs */
+input[type="text"], .form-control {
+    background-color: var(--list-bg);
+    color: var(--text-color);
+    border: 1px solid #ced4da;
+}
+input[type="text"]::placeholder {
+    color: #6c757d;
+}
+.form-check-label {
+    color: var(--text-color);
+}
+
+/* Yin-Yang Icon Styling */
+.theme-toggle-icon {
+    width: 30px;
+    height: 30px;
+    transition: color 0.3s ease, fill 0.3s ease;
+    color: var(--yin-yang-color);
+}
+
+/* Toggle Button */
+#themeToggleBtn {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 50%;
+    transition: background-color 0.3s ease;
+}
+#themeToggleBtn:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+:root[data-theme="dark"] #themeToggleBtn:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Channel and Episode Image Styling */
+.channel-image, .episode-image {
+    max-width: 150px;
+    height: auto;
+    border-radius: 10px;
+}
+
+/* Summary Clamp Styling */
+.summary-clamp {
+    display: -webkit-box;
+    -webkit-line-clamp: 4; 
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Highlighted Text Styling */
+.highlight {
+    background-color: var(--highlight-bg-color);
+    color: var(--highlight-text-color);
+    font-weight: bold;
+    padding: 0.2em;
+    border-radius: 3px;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .d-flex.justify-content-between.align-items-center.mb-3 {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .search-form form {
+        width: 100%;
+    }
+    .input-group {
+        width: 100%;
+    }
+    .form-check.form-check-inline {
+        width: 100%;
+    }
+}

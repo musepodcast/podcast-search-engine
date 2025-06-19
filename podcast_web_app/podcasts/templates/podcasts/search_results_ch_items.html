@@ -1,0 +1,125 @@
+{# podcasts/templates/podcasts/search_results_ch_items.html #}
+{% load static i18n custom_filters %}
+
+<div id="channel-list" class="list-group mt-4">
+  {% for channel in channels %}
+    <a
+      href="{% url 'podcasts:channel_detail' sanitized_channel_title=channel.sanitized_channel_title %}"
+      class="list-group-item list-group-item-action mb-2 px-3 py-2"
+      style="text-decoration:none; border-radius:6px;"
+    >
+      <div class="row gx-3 align-items-start">
+        <!-- Image column -->
+        <div class="col-auto">
+          {% if channel.channel_image_url %}
+            <img
+              src="{{ channel.channel_image_url }}"
+              alt="{{ channel.channel_title }}"
+              class="rounded"
+              style="width:150px; height:150px; object-fit:cover;"
+            >
+          {% else %}
+            <div
+              class="rounded bg-secondary d-flex align-items-center justify-content-center"
+              style="width:150px; height:150px;"
+            >
+              <em class="text-muted">{% trans "No image" %}</em>
+            </div>
+          {% endif %}
+        </div>
+
+        <!-- Text column -->
+        <div class="col" style="min-width:0;">
+          <h5 class="fw-bold mb-1">
+            {% with ht=channel.channel_title|highlight_sentence:q %}
+              {{ ht|default:channel.channel_title|safe }}
+            {% endwith %}
+          </h5>
+
+          {% if channel.channel_author %}
+            <p class="text-muted mb-1">
+              {% trans "by" %}
+              {% with ha=channel.channel_author|highlight_sentence:q %}
+                {{ ha|default:channel.channel_author|safe }}
+              {% endwith %}
+            </p>
+          {% endif %}
+
+          {% if channel.channel_summary|highlight_sentence:q %}
+          <p class="summary-clamp mb-0">
+            {{ channel.channel_summary  }}   
+          </p>
+        {% endif %}
+        </div>
+      </div>
+    </a>
+  {% empty %}
+    <div class="list-group-item">
+      <p>{% trans "No channels found matching your search." %}</p>
+    </div>
+  {% endfor %}
+</div>
+
+<div id="loading-spinner-ch" style="display:none; text-align:center; margin:1rem 0;">
+  <p>{% trans "Loading more channels..." %}</p>
+</div>
+
+<script>
+  const endOfListTextCh = "{% trans 'End of list...' %}";
+  const loadMoreTextCh  = "{% trans 'Loading more channels...' %}";
+
+  document.addEventListener("DOMContentLoaded", function(){
+    let page = parseInt(new URLSearchParams(window.location.search).get("page")||"1");
+    let loading = false, hasMore = true;
+    const listEl = document.getElementById("channel-list");
+    const spinner = document.getElementById("loading-spinner-ch");
+
+    window.addEventListener("scroll", () => {
+      if (loading || !hasMore) return;
+      if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 500) {
+        loading = true;
+        spinner.style.display = "block";
+        spinner.innerHTML = `<p>${loadMoreTextCh}</p>`;
+        page++;
+        const params = new URLSearchParams(window.location.search);
+        params.set("page", page);
+        params.set("ajax", 1);
+
+        fetch("?" + params.toString())
+          .then(r => r.ok ? r.text() : "")
+          .then(html => {
+            if (!html.trim()) {
+              hasMore = false;
+              spinner.innerHTML = `<p>${endOfListTextCh}</p>`;
+            } else {
+              const tmp = document.createElement("div");
+              tmp.innerHTML = html;
+              const items = tmp.querySelectorAll(".list-group-item");
+              if (!items.length) {
+                hasMore = false;
+                spinner.innerHTML = `<p>${endOfListTextCh}</p>`;
+              } else {
+                items.forEach(i => listEl.appendChild(i));
+                spinner.style.display = "none";
+              }
+            }
+            loading = false;
+          })
+          .catch(() => {
+            loading = false;
+            spinner.style.display = "none";
+          });
+      }
+    });
+  });
+</script>
+
+<style>
+  .summary-clamp {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+</style>

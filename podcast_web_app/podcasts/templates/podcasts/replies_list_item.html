@@ -1,0 +1,38 @@
+{# podcasts/templates/podcasts/replies_list_item.html #}
+{% load i18n custom_filters %}
+<a href="{% url 'podcasts:episode_detail' sanitized_channel_title=reply.episode.channel.sanitized_channel_title sanitized_episode_title=reply.episode.sanitized_episode_title %}?reply={{ reply.id }}" 
+   class="list-group-item list-group-item-action mb-2" style="text-decoration: none; border-radius: 6px;">
+    <div class="row">
+        <div class="col-auto">
+            {% if reply.episode.image_url %}
+                <img src="{{ reply.episode.image_url }}" alt="{{ reply.episode.episode_title }}" style="max-width: 100px; height: 100px; border-radius: 6px;">
+            {% elif reply.episode.channel.channel_image_url %}
+                <img src="{{ reply.episode.channel.channel_image_url }}" alt="{{ reply.episode.channel.channel_title }}" style="max-width: 100px; height: 100px; border-radius: 6px;">
+            {% else %}
+                <p><em>{% trans "No image available" %}</em></p>
+            {% endif %}
+        </div>
+        <div class="col">
+            <strong>{{ reply.episode.episode_title }}</strong>
+            <p style="font-size: 0.85rem;">
+                <span>{% trans "Time:" %} {{ reply.created_at|date:"M d, Y, g:i a" }}</span>
+            </p>
+            <p class="mb-0" style="font-size: 0.9rem;">
+                {% if reply.text|length > 100 %}
+                    {{ reply.text|truncatechars:100|highlight_mentions }}
+                {% else %}
+                    {{ reply.text|highlight_mentions }}
+                {% endif %}
+            </p>
+        </div>
+    </div>
+</a>
+
+<Style>
+    /* (Optional) Highlight style for processed @mentions in the comments */
+    .mention-highlight {
+        color: #0b5ed7;
+        font-weight: bold;
+        }
+</Style>
+
