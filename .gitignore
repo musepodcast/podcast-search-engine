@@ -1,3 +1,13 @@
+# Virtual envs
 *.env
+
+# Python artifacts
 __pycache__/
+*.py[cod]
+*.swp
+
+# Data, logs, chunks
 *.log
+
+# IDE files
+.vscode/
