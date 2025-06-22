@@ -25,6 +25,19 @@ warnings.filterwarnings("ignore", category=SecurityWarning)
 # And also silence urllib3’s InsecureRequestWarning
 warnings.filterwarnings("ignore", category=InsecureRequestWarning)
 
+
+# Test for email 
+#EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND        = 'django.core.mail.backends.smtp.EmailBackend' 
+EMAIL_HOST           = 'in-v3.mailjet.com'
+EMAIL_PORT           = 587
+EMAIL_USE_TLS        = True
+
+EMAIL_HOST_USER      = os.environ['MAILJET_SMTP_USER']     
+EMAIL_HOST_PASSWORD  = os.environ['MAILJET_SMTP_PASS']     
+DEFAULT_FROM_EMAIL   = 'Muse Podcast <support@musepodcast.com>'
+
+
 DEBUG = False
 ALLOWED_HOSTS = [
     "musepodcast.com",
@@ -72,3 +85,4 @@ USE_X_FORWARDED_HOST = True
 SECURE_SSL_REDIRECT = True
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
+
