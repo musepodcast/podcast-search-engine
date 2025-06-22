@@ -870,6 +870,11 @@ class EpisodeListView(LoginRequiredMixin, ListView):
 class SearchResultsView(LoginRequiredMixin, ListView):
     login_url = 'podcasts:home'
    
+       #––– Make these match your <input value="…"> in the form –––
+    SEGMENT_FIELD        = 'segment_text'
+    SEGMENT_ALIAS_FIELD  = 'transcript_text'
+    TRANSCRIPTS_FIELD    = 'transcripts'
+
     context_object_name = 'episodes'
     paginate_by = 10
     STOP_WORDS = {'the','a','an','of','in','and','or','to','so','for','on','at','by'}
@@ -881,70 +886,81 @@ class SearchResultsView(LoginRequiredMixin, ListView):
 
     def paginate_queryset(self, qs, page_size):
         """
-        Branch on channels vs episodes.
+        1. If no `q`, fall back to default ListView pagination.
+        2. If `search_type=='channels'`, do a pure-ORM filter on Channel.
+        3. If `search_type=='episodes'` and any episode-fields are checked,
+           mirror the channel logic with Q-filters on Episode (including channel title).
+        4. Otherwise (full-text search), branch:
+           a) Transcript-only ES query if only transcript fields checked.
+           b) Multi-match ES query across EpisodeDocument.
         """
-        q = (self.request.GET.get('q','') or '').strip()
-        search_type = self.request.GET.get('search_type','episodes')
-        logger.debug("→ Paginate: q=%r, search_type=%r, page=%r",
-                    q, search_type, self.request.GET.get('page'))
-        
+ 
+        q           = (self.request.GET.get('q', '') or '').strip()
+        search_type = self.request.GET.get('search_type', 'episodes')
+
+        # 1) No query → default ListView pagination
         if not q:
-            logger.debug("  no query → falling back to empty")
             return super().paginate_queryset(qs, page_size)
-        
+
+        # 2) CHANNELS branch (unchanged)
         if search_type == 'channels':
-            from .models import Channel
-            chans = Channel.objects.all()
-            logger.debug("  [channels] initial count: %d", chans.count())
-
             wants = self.request.GET.getlist('search_in')
-            logger.debug("  [channels] search_in fields: %s", wants)
-
             filters = []
-            # CHANNEL mode
-            if 'channel_title' in wants:
+            if 'channel_title'  in wants:
                 filters.append(Q(channel_title__icontains=q))
             if 'channel_author' in wants:
                 filters.append(Q(channel_author__icontains=q))
-            if 'channel_summary' in wants:
+            if 'channel_summary'in wants:
                 filters.append(Q(channel_summary__icontains=q))
 
+            chans = Channel.objects.all()
             if filters:
                 combined = filters.pop()
                 for f in filters:
                     combined |= f
                 chans = chans.filter(combined)
-                logger.debug("  [channels] after text‐filter count: %d", chans.count())
             else:
                 chans = chans.filter(channel_title__icontains=q)
-                logger.debug("  [channels] default title‐filter count: %d", chans.count())
 
-
-            # language (optional)
-            """langs = self.request.GET.getlist('search_language')
-            logger.debug("  channel language filter values: %r", langs)
-            if langs:
-                valid = ChannelTranslations.objects.filter(
-                    translated=True,
-                    language__in=langs
-                ).values_list('sanitized_channel_title', flat=True)
-                logger.debug("    ChannelTranslations matching languages: %r", list(valid))
-                chans = chans.filter(sanitized_channel_title__in=valid)
-                logger.debug("  after language‐filter count=%d", chans.count())"""
-
-            # paginate
             paginator = Paginator(chans, page_size)
-            page_num = int(self.request.GET.get('page',1))
+            page_num  = int(self.request.GET.get('page', 1))
             page_obj  = paginator.get_page(page_num)
-            logger.debug("  [channels] returning %d items on page %d/%d",
-                        page_obj.end_index() - page_obj.start_index() + 1,
-                        page_obj.number, paginator.num_pages)
             return paginator, page_obj, list(page_obj.object_list), page_obj.has_other_pages()
-             
-        # --- EXISTING EPISODE / ES branch ---
 
-        # 1) compute optional date‐filter window
-        date_filter = self.request.GET.get('search_date','anytime')
+        # 3) EPISODES pure-ORM branch
+        if search_type == 'episodes':
+            wants = self.request.GET.getlist('search_in')
+            filters = []
+
+            # mirror your channel logic on episode fields:
+            if 'episode_title'     in wants:
+                filters.append(Q(episode_title__icontains=q))
+            if 'description'       in wants:
+                filters.append(Q(description__icontains=q))
+            # now include channel title too:
+            if 'channel_title'     in wants:
+                filters.append(Q(channel__channel_title__icontains=q))
+            # transcripts checkbox:
+            if 'transcripts'       in wants or 'segment_text' in wants:
+                filters.append(Q(transcripts__segment_text__icontains=q))
+
+            if filters:
+                combined = filters.pop()
+                for f in filters:
+                    combined |= f
+                episodes_qs = Episode.objects.filter(combined).distinct()
+            else:
+                episodes_qs = Episode.objects.filter(episode_title__icontains=q)
+
+            paginator = Paginator(episodes_qs, page_size)
+            page_num  = int(self.request.GET.get('page', 1))
+            page_obj  = paginator.get_page(page_num)
+            return paginator, page_obj, list(page_obj.object_list), page_obj.has_other_pages()
+
+        # 4) FULL-TEXT / ELASTICSEARCH branch
+
+        # 4a) Optional date window
+        date_filter = self.request.GET.get('search_date', 'anytime')
         window = None
         if date_filter != 'anytime':
             days = int(date_filter)
@@ -954,54 +970,46 @@ class SearchResultsView(LoginRequiredMixin, ListView):
                 else timezone.timedelta(days=days)
             )
 
-        # 2) which ES‐branch?
-        search_in = set(self.request.GET.getlist('search_in'))
-
-        # --- transcript‐only branch ---
-        if search_in == {'segment_text'}:
-            # a) build transcript search
+        # 4b) Transcript-only ES query
+        selected = set(self.request.GET.getlist('search_in'))
+        transcript_only = {
+            {self.SEGMENT_FIELD},
+            {self.SEGMENT_ALIAS_FIELD},
+            {self.TRANSCRIPTS_FIELD},
+        }
+        if selected in transcript_only:
             tsearch = TranscriptDocument.search().query(
                 'match',
                 segment_text={'query': q}
             )
             if window:
-                # filter by parent episode date
                 tsearch = tsearch.filter(
                     'nested',
                     path='episode',
-                    query={
-                        'range': {
-                            'episode.publication_date': {
-                                'gte': (timezone.now() - window).isoformat()
-                            }
+                    query={'range': {
+                        'episode.publication_date': {
+                            'gte': (timezone.now() - window).isoformat()
                         }
-                    }
+                    }}
                 )
-            # total hits
-            total = tsearch.count()
-            # slice
-            page = int(self.request.GET.get('page', 1))
-            start = (page - 1) * page_size
-            end = start + page_size
 
-            tresp = tsearch.sort({'_score':'desc'})[start:end].execute()
+            total = tsearch.count()
+            page  = int(self.request.GET.get('page', 1))
+            start = (page - 1) * page_size
+            end   = start + page_size
+
+            tresp  = tsearch.sort({'_score': 'desc'})[start:end].execute()
             ep_ids = [hit.episode_id for hit in tresp]
 
-            # pull episodes & reorder
             episodes = list(
                 Episode.objects
                        .filter(id__in=ep_ids)
                        .select_related('channel')
-                       .prefetch_related(
-                           'transcripts',
-                           'episode_translations',
-                           'episode_translations__transcriptstranslations',
-                       )
+                       .prefetch_related('transcripts')
             )
-            id_map = {e.id: e for e in episodes}
+            id_map    = {e.id: e for e in episodes}
             page_list = [id_map[i] for i in ep_ids if i in id_map]
 
-            # dummy paginator
             paginator = Paginator(range(total), page_size)
             try:
                 page_obj = paginator.page(page)
@@ -1010,7 +1018,7 @@ class SearchResultsView(LoginRequiredMixin, ListView):
 
             return paginator, page_obj, page_list, page_obj.has_other_pages()
 
-        # --- default multi‐match branch on EpisodeDocument ---
+        # 4c) Default multi-match ES query
         es = EpisodeDocument.search()
         if window:
             es = es.filter('range', publication_date={'gte': timezone.now() - window})
@@ -1024,12 +1032,12 @@ class SearchResultsView(LoginRequiredMixin, ListView):
             'transcripts.segment_text',
         ]
         es = es.query('multi_match', query=q, fields=fields)
-        es = es.sort({'_score':'desc'}, {'publication_date':'desc'})
+        es = es.sort({'_score': 'desc'}, {'publication_date': 'desc'})
 
         total = es.count()
-        page = int(self.request.GET.get('page', 1))
+        page  = int(self.request.GET.get('page', 1))
         start = (page - 1) * page_size
-        end = start + page_size
+        end   = start + page_size
 
         resp = es[start:end].execute()
         ids  = [int(hit.meta.id) for hit in resp]
@@ -1038,11 +1046,7 @@ class SearchResultsView(LoginRequiredMixin, ListView):
             Episode.objects
                    .filter(id__in=ids)
                    .select_related('channel')
-                   .prefetch_related(
-                       'transcripts',
-                       'episode_translations',
-                       'episode_translations__transcriptstranslations',
-                   )
+                   .prefetch_related('transcripts')
         )
         id_map    = {e.id: e for e in episodes}
         page_list = [id_map[i] for i in ids if i in id_map]
@@ -1054,6 +1058,7 @@ class SearchResultsView(LoginRequiredMixin, ListView):
             page_obj = paginator.page(1)
 
         return paginator, page_obj, page_list, page_obj.has_other_pages()
+
 
     def _compute_suggestions(self, q, limit=10):
         # your existing episode‐based trigram code
