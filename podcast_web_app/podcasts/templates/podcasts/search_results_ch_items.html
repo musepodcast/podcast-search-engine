@@ -45,11 +45,15 @@
             </p>
           {% endif %}
 
-          {% if channel.channel_summary|highlight_sentence:q %}
-          <p class="summary-clamp mb-0">
-            {{ channel.channel_summary  }}   
-          </p>
-        {% endif %}
+           {% with hs=channel.channel_summary|highlight_sentence:q %}
+            <p class="summary-clamp mb-0">
+              {% if hs %}
+                {{ hs|safe }}
+              {% else %}
+                {{ channel.channel_summary }}
+              {% endif %}
+            </p>
+          {% endwith %}
         </div>
       </div>
     </a>
