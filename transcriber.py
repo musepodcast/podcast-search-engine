@@ -39,6 +39,7 @@ def cached_get_embeddings(pipeline_instance, file, *args, **kwargs):
     """
     Wrapper that caches the embeddings to avoid re-computation.
     """
+    
     step = kwargs.get('step', 0.5)
     key = f"{file['audio']}_step{step}"
 
@@ -130,11 +131,11 @@ def initialize_diarization_pipeline(
             pipeline.config['max_speakers'] = max_speakers
 
         # Override get_embeddings with cache
-        if not hasattr(pipeline, '_original_get_embeddings'):
-            pipeline._original_get_embeddings = pipeline.get_embeddings
-            pipeline.get_embeddings = lambda file, *args, **kwargs: cached_get_embeddings(
-                pipeline, file, *args, **kwargs
-            )
+#        if not hasattr(pipeline, '_original_get_embeddings'):
+#            pipeline._original_get_embeddings = pipeline.get_embeddings
+#            pipeline.get_embeddings = lambda file, *args, **kwargs: cached_get_embeddings(
+#                pipeline, file, *args, **kwargs
+#            )
 
         return pipeline
 
@@ -155,9 +156,7 @@ def perform_speaker_diarization(pipeline, audio_file_path):
         return None
 
     try:
-        extra_parameters = {
-            "step": 1.0,     # embedding step for caching logic
-        }
+       
         # If we stored min_speakers / max_speakers in pipeline.config, pass them:
         min_spk = pipeline.config.get('min_speakers', None) if hasattr(pipeline, 'config') else None
         max_spk = pipeline.config.get('max_speakers', None) if hasattr(pipeline, 'config') else None
@@ -167,9 +166,7 @@ def perform_speaker_diarization(pipeline, audio_file_path):
             diarization = pipeline(
                 {
                     "uri": "audio",
-                    "audio": audio_file_path,
-                    # This "extra_parameters" part is for the get_embeddings override
-                    **extra_parameters
+                    "audio": audio_file_path
                 },
                 min_speakers=min_spk,
                 max_speakers=max_spk,
