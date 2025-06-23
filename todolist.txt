@@ -5,5 +5,4 @@
 - add a section for donations
 - check to see if messages are encrypted for replies and posts
 - add a script that sends an email if one fails and maybe create a failover script.
-- remove extra segmentation, speaker_counting, and discrete_diarization
 - fix light mode color pallete
