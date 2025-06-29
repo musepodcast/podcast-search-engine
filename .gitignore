@@ -7,8 +7,10 @@ __pycache__/
 *.py[cod]
 *.swp
 
-# Data, logs, chunks
+# Data, logs, chunks, text files
 *.log
-
+podcast_web_app/git_instructions.txt
+todolist.txt
 # IDE files
 .vscode/
+

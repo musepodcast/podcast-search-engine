@@ -6,3 +6,6 @@
 - check to see if messages are encrypted for replies and posts
 - add a script that sends an email if one fails and maybe create a failover script.
 - fix light mode color pallete
+- add SEO.
+- Add language updates
+- FIx UI for size of long episode names and metata data for episodes.
