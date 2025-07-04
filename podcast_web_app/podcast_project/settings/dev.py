@@ -16,7 +16,8 @@ environ.Env.read_env()   # reads the .env file
 
 
 DEBUG = True
-ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
+ALLOWED_HOSTS = ["localhost", "127.0.0.1", "[::1]"]
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 ELASTICSEARCH_DSL = {
     "default": {
