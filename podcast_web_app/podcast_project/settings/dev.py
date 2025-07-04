@@ -6,6 +6,17 @@ from urllib3.exceptions import InsecureRequestWarning
 import os
 import environ    # if you installed django-environ
 
+# BASE_DIR should point to the folder containing manage.py
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
+
+# Tell django-environ where to find your .env
+env = environ.Env(
+    # you can declare casting/defaults here if you like:
+    DEBUG=(bool, False),
+)
+environ.Env.read_env(env_file=BASE_DIR / ".env")
+
+
 # Silence ES’s SecurityWarning about TLS+verify_certs=False
 warnings.filterwarnings("ignore", category=SecurityWarning)
 
@@ -16,7 +27,7 @@ environ.Env.read_env()   # reads the .env file
 
 
 DEBUG = True
-ALLOWED_HOSTS = ["localhost", "127.0.0.1", "[::1]"]
+ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 ELASTICSEARCH_DSL = {
@@ -36,7 +47,7 @@ ELASTICSEARCH_DSL = {
 # Configure Postgres via environment variables
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.postgresql",
+        "ENGINE": os.environ.get("DB_ENGINE", "django.db.backends.postgresql"),
         "NAME": os.environ.get("DB_NAME", "podcast_db"),
         "USER": os.environ.get("DB_USER", "postgres"),
         "PASSWORD": os.environ.get("DB_PASSWORD", ""),
