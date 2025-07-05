@@ -51,7 +51,7 @@ from django.views.decorators.http import require_POST, require_GET
 from podcasts.search.documents import EpisodeDocument, TranscriptDocument
 from elasticsearch_dsl import Q as DSLQ
 from django.contrib.postgres.search import TrigramSimilarity
-
+from datetime import datetime, timedelta
 
 User = get_user_model()
 
@@ -787,30 +787,59 @@ class EpisodeDetailView(LoginRequiredMixin, DetailView):
     def merge_consecutive_speakers(self, segments):
         merged = []
         current = None
+        MAX_DURATION = timedelta(minutes=3)
+
         for seg in segments:
             if current is None:
+                # start first segment
                 current = {
                     'combined_time': seg.segment_time,
-                    'speaker': seg.speaker,
-                    'combined_text': seg.segment_text
+                    'speaker':      seg.speaker,
+                    'combined_text': seg.segment_text,
                 }
-            elif seg.speaker == current['speaker']:
+                continue
+
+            # same speaker?
+            if seg.speaker == current['speaker']:
                 try:
-                    start, _   = current['combined_time'].split(' - ',1)
-                    _, new_end = seg.segment_time.split(' - ',1)
-                    current['combined_time'] = f"{start} - {new_end}"
+                    # parse the existing start and the new end
+                    start_str, _      = current['combined_time'].split(' - ', 1)
+                    _, new_end_str   = seg.segment_time.split(' - ', 1)
+
+                    fmt = "%H:%M:%S"
+                    start_dt = datetime.strptime(start_str, fmt)
+                    end_dt   = datetime.strptime(new_end_str, fmt)
+
+                    # if total duration exceeds 5min, close out current and start a new one
+                    if end_dt - start_dt > MAX_DURATION:
+                        merged.append(current)
+                        current = {
+                            'combined_time': seg.segment_time,
+                            'speaker':       seg.speaker,
+                            'combined_text': seg.segment_text,
+                        }
+                    else:
+                        # otherwise extend the current segment
+                        current['combined_time'] = f"{start_str} - {new_end_str}"
+                        current['combined_text'] += " " + seg.segment_text
+
                 except ValueError:
-                    pass
-                current['combined_text'] += ' ' + seg.segment_text
+                    # if the time format was unexpected, just concatenate
+                    current['combined_text'] += " " + seg.segment_text
+
             else:
+                # different speaker → push the old, start fresh
                 merged.append(current)
                 current = {
                     'combined_time': seg.segment_time,
-                    'speaker': seg.speaker,
-                    'combined_text': seg.segment_text
+                    'speaker':       seg.speaker,
+                    'combined_text': seg.segment_text,
                 }
+
+        # don't forget the last one
         if current:
             merged.append(current)
+
         return merged
 
 
