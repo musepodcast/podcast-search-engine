@@ -13,7 +13,7 @@
                 {{ episode.channel.channel_image_url }}
               {% endif %}"
           alt="{{ episode.episode_title }}"
-          style="width:150px; height:150px; border-radius:6px;"
+          style="width:160px; height:160px; border-radius:6px;"
           onerror="
             this.onerror=null;
             this.src='{{ episode.channel.channel_image_url }}'||'{% static 'podcasts/images/no-image.jpg' %}';
@@ -22,7 +22,7 @@
       </div>
       
       <div class="col" style="min-width: 0;">
-        <strong>{{ episode.episode_title }}</strong>
+        <strong class="episode-title-clamp">{{ episode.episode_title }}</strong>
         <p class="d-flex flex-wrap align-items-center gap-2 mb-1" style="font-size: 0.9rem;">
           <span>{{ episode.publication_date|date:"F j, Y" }}</span>
           {% if episode.duration %}
