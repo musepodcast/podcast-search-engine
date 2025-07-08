@@ -21,7 +21,7 @@
                     {{ episode.channel.channel_image_url }}
                   {% endif %}"
               alt="{{ episode.episode_title }}"
-              style="width:150px; height:150px; border-radius:6px;"
+              style="width:160px; height:160px; border-radius:6px;"
               onerror="
                 this.onerror=null;
                 this.src='{{ episode.channel.channel_image_url }}'||'{% static 'podcasts/images/no-image.jpg' %}';
@@ -31,26 +31,29 @@
 
           <!-- Right Column: Episode title, metadata, aggregated info and description -->
           <div class="col" style="min-width: 0;">
-            <strong>{{ episode.episode_title }}</strong>
-            <p class="d-flex flex-wrap align-items-center gap-2 mb-1" style="font-size: 0.9rem;">
-              <span class="text-muted">{% trans "from" %} {{ episode.channel.channel_title }}</span>
-              {% if episode.publication_date %}
-                <span>| {{ episode.publication_date|date:"F j, Y, g:i a" }}</span>
-              {% endif %}
-              {% if episode.duration %}
-                <span>| {{ episode.duration }}</span>
-              {% endif %}
-              {% if episode.categories %}
-                <span>| 
-                  {% for cat in episode.categories %}
-                    {{ cat }}{% if not forloop.last %}, {% endif %}
-                  {% endfor %}
-                </span>
-              {% endif %}
-              {% if episode.explicit %}
-                <span>| {% trans "Explicit" %}</span>
-              {% endif %}
-            </p>
+          <!-- Line 1: Episode title -->
+          <strong class="episode-title-clamp mb-1">{{ episode.episode_title }}</strong>
+
+          <!-- Line 2: Channel title -->
+          <div class="channel-title-clamp text-muted mb-1">
+            {% trans "from" %} {{ episode.channel.channel_title }}
+          </div>
+
+          <!-- Line 3: Metadata -->
+          <div class="metadata-line text-muted mb-2">
+            {% if episode.publication_date %}
+              {{ episode.publication_date|date:"F j, Y, g:i a" }}
+            {% endif %}
+            {% if episode.duration %}
+              | {{ episode.duration }}
+            {% endif %}
+            {% if episode.categories %}
+              | {% for cat in episode.categories %}{{ cat }}{% if not forloop.last %}, {% endif %}{% endfor %}
+            {% endif %}
+            {% if episode.explicit %}
+              | {% trans "Explicit" %}
+            {% endif %}
+          </div>
             
             <!-- Aggregated Info Container (above description) -->
             <div class="d-flex align-items-center flex-wrap mb-1">
@@ -162,11 +165,28 @@
   <!-- Optional line clamp style for the episode description -->
   <style>
   .description-clamp {
-      display: -webkit-box;
-      -webkit-line-clamp: 3;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-      text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* Clamp episode title and channel title to a single line */
+  .episode-title-clamp,
+  .channel-title-clamp {
+    display: block;        /* full-width block */
+    width: 100%;           /* bound the ellipsis to container width */
+    overflow: hidden;      /* hide overflow text */
+    white-space: nowrap;   /* prevent wrapping to next line */
+    text-overflow: ellipsis; /* show “…” when truncated */
+  }
+
+  /* Optional: give metadata a slightly smaller font */
+  .metadata-line {
+    font-size: 0.9rem;
   }
   </style>
+
+    
 {% endblock %}

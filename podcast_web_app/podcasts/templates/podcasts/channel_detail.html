@@ -115,15 +115,15 @@
                     {{ episode.channel.channel_image_url }}
                   {% endif %}"
               alt="{{ episode.episode_title }}"
-              style="width:150px; height:150px; border-radius:6px;"
+              style="width:160px; height:160px; border-radius:6px;"
               onerror="
                 this.onerror=null;
                 this.src='{{ episode.channel.channel_image_url }}'||'{% static 'podcasts/images/no-image.jpg' %}';
               "
             >
           </div>
-        <div class="col">
-          <strong>{{ episode.episode_title }}</strong>
+        <div class="col" style="min-width: 0;">
+          <strong class="episode-title-clamp">{{ episode.episode_title }}</strong>
           <p class="d-flex flex-wrap align-items-center gap-2 mb-1" style="font-size: 0.9rem;">
             <span>{{ episode.publication_date|date:"F j, Y" }}</span>
             {% if episode.duration %}<span>| {{ episode.duration }}</span>{% endif %}
@@ -254,6 +254,17 @@
         overflow: hidden;
         text-overflow: ellipsis;
     }
+
+    /* Clamp episode title and channel title to a single line */
+    .episode-title-clamp {
+        display: block;        /* full-width block */
+        width: 100%;           /* bound the ellipsis to container width */
+        overflow: hidden;      /* hide overflow text */
+        white-space: nowrap;   /* prevent wrapping to next line */
+        text-overflow: ellipsis; /* show “…” when truncated */
+    }
+
+ 
 </style>
 
 <!-- Custom CSS for the buttons -->
@@ -424,4 +435,5 @@ document.querySelectorAll("#rating-container .star-icon").forEach(function(starE
 
 </script>
 
+ 
 {% endblock %}
