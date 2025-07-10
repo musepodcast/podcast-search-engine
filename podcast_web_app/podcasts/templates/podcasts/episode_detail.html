@@ -44,7 +44,14 @@
       <!-- Right Column: Episode Details and Controls -->
       <div class="col">
         <h2>{{ episode.episode_title }}</h2>
-        <p class="text-muted mb-1">{% trans "from" %} {{ episode.channel.channel_title }}</p>
+          <p class="text-muted mb-1">
+          {% trans "from" %} 
+          <a href="{% url 'podcasts:channel_detail' sanitized_channel_title=episode.channel.sanitized_channel_title %}" 
+            class="channel-link">
+            {{ episode.channel.channel_title }}
+          </a>
+        </p>
+
         <p class="d-flex flex-wrap align-items-center gap-2 mb-2" style="font-size: 0.9rem;">
           {% if episode.publication_date %}
             <span>{{ episode.publication_date|date:"F j, Y" }}</span>
@@ -224,6 +231,15 @@
         font-size: 1.25rem;
         color: #e3e6e8;
         margin-right: .5rem;
+    }
+    .channel-link {
+      color: #4e9af1;             /* bright blue for good contrast */
+      font-weight: 600;           /* slightly bolder */
+      text-decoration: none;
+    }
+    .channel-link:hover {
+      color: #1f78d1;             /* darker blue on hover */
+      text-decoration: underline; /* underline on hover for affordance */
     }
 
     /* Bookmark Button Styles */
