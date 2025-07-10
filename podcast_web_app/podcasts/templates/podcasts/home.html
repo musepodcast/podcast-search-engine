@@ -3,11 +3,94 @@
 
 {% block content %}
 <div class="container text-center mt-5">
-    <h2>{% trans "Welcome to the Podcast Web App" %}</h2>
-    <p>{% trans "Please log in or create an account to access the site features." %}</p>
+    <h1>{% trans "Welcome to the Podcast Search Engine" %}</h2>
+    <h4>{% trans "Please log in or create an account to access the site features." %}</h1>
+    <p>{% trans "Your memory is short, the Muse's is not..." %}</p>
+    <p>{% trans "Control + F to find your thoughts!" %}</p>
     <div class="mt-4">
         <a href="{% url 'podcasts:login' %}" class="btn btn-primary me-2">{% trans "Login" %}</a>
         <a href="{% url 'podcasts:signup' %}" class="btn btn-success">{% trans "Create Account" %}</a>
     </div>
 </div>
+
+<!-- Site Explanation Section from README -->
+<div class="container mt-5">
+  <hr>
+  <h2>{% trans "Muse Podcast Search Engine" %}</h2>
+  <p>
+    <a href="https://github.com/musepodcast/podcast-search-engine/blob/main/LICENSE" target="_blank">
+      <img src="https://img.shields.io/badge/License-GPLv3-blue.svg" alt="{% trans "License: GPL v3" %}" />
+    </a>
+    &nbsp;|&nbsp;
+    <a href="https://github.com/musepodcast/podcast-search-engine" target="_blank">{% trans "https://github.com/musepodcast/podcast-search-engine" %}</a>
+  </p>
+
+  <h3>{% trans "🚀 About" %}</h3>
+  <p>{% trans "Muse is a free, GPU-powered podcast search engine. Tired of scouring episode show notes for bits of information, we built a platform where you can:" %}</p>
+  <ul>
+    <li>{% trans "🔍 Search any podcast by keyword (titles, descriptions, or transcript content)" %}</li>
+    <li>{% trans "📄 View full, time-stamped transcripts (speaker-diarized and formatted)" %}</li>
+    <li>{% trans "✍️ Read AI-generated chapter summaries" %}</li>
+    <li>{% trans "🎧 Click through to listen at the exact moment a topic is discussed" %}</li>
+    <li>{% trans "🆕 Discover new channels or episodes based on your interests" %}</li>
+  </ul>
+  <p><em>{% trans "Currently optimized for desktop browsers. Mobile-friendly support and native apps are coming soon!" %}</em></p>
+
+  <h3>{% trans "🌟 Key Features" %}</h3>
+  <ul>
+    <li><strong>{% trans "Account Signup & Management" %}</strong><br>{% trans "Create a free account to save searches, bookmark episodes, and track listening history." %}</li>
+    <li><strong>{% trans "Transcript Generation" %}</strong><br>{% trans "Ingests RSS feeds from any podcast; uses OpenAI Whisper Turbo on an NVIDIA GPU for fast, high-quality transcription; diarizes speakers and formats with timestamps." %}</li>
+    <li><strong>{% trans "Chapter Summaries" %}</strong><br>{% trans "Generates concise summaries of each transcript segment using FalconsAI text-summarization." %}</li>
+    <li><strong>{% trans "Full-Text Search" %}</strong><br>{% trans "Powered by Elasticsearch for lightning-fast, fuzzy-match queries; filters by title, description, channel metadata, or transcript." %}</li>
+    <li><strong>{% trans "Flexible Playback" %}</strong><br>{% trans "Jump directly to the moment a keyword appears in the audio player on the website." %}</li>
+  </ul>
+
+ <h3>{% trans "🏗️ Architecture & Tech Stack" %}</h3>
+  <table class="table table-striped table-dark">
+    <thead>
+      <tr>
+        <th style="color: var(--bs-primary);">{% trans "Layer" %}</th>
+        <th style="color: var(--bs-primary);">{% trans "Technology" %}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr style="background-color: #1c1e21; color: #e3e6e8;">
+        <td>{% trans "Backend" %}</td><td>{% trans "Python, Django" %}</td>
+      </tr>
+      <tr style="background-color: #2a2c30; color: #e3e6e8;">
+        <td>{% trans "Transcription" %}</td><td>{% trans "OpenAI Whisper Turbo (GPU-accelerated)" %}</td>
+      </tr>
+      <tr style="background-color: #1c1e21; color: #e3e6e8;">
+        <td>{% trans "Summarization" %}</td><td>{% trans "FalconsAI / text_summarization" %}</td>
+      </tr>
+      <tr style="background-color: #2a2c30; color: #e3e6e8;">
+        <td>{% trans "Database" %}</td><td>{% trans "PostgreSQL" %}</td>
+      </tr>
+      <tr style="background-color: #1c1e21; color: #e3e6e8;">
+        <td>{% trans "Search Engine" %}</td><td>{% trans "Elasticsearch" %}</td>
+      </tr>
+      <tr style="background-color: #2a2c30; color: #e3e6e8;">
+        <td>{% trans "Frontend" %}</td><td>{% trans "Django templates, HTML, CSS, JavaScript" %}</td>
+      </tr>
+      <tr style="background-color: #1c1e21; color: #e3e6e8;">
+        <td>{% trans "Deployment" %}</td><td>{% trans "Docker, NVIDIA GPU passthrough, Ubuntu VM" %}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Highlight & Dark Table Styles -->
+<style>
+.github-link {
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--bs-primary);
+  border-radius: 6px;
+  transition: background-color 0.2s, color 0.2s;
+}
+.github-link:hover {
+  background-color: var(--bs-primary);
+  color: #fff;
+  text-decoration: none;
+}
+</style>
 {% endblock %}
