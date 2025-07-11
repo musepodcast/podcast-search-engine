@@ -457,9 +457,62 @@
     </div>
   </header>
 
+ 
+
   <main class="container my-4 flex-grow-1">
     {% block content %}{% endblock %}
   </main>
+
+<!-- GLOBAL “Ctrl+F” BAR -->
+<div
+  id="globalSearchBar"
+  class="d-flex align-items-center"
+  style="
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: .25rem 1rem;
+    z-index: 9999;
+    background: var(--background-color);
+    border-top: 1px solid var(--list-hover-bg);
+  "
+>
+  <!-- everything that should hide/show -->
+  <div
+    id="searchControls"
+    class="d-flex align-items-center flex-1 gap-2"
+  >
+    <input
+      id="globalSearchInput"
+      type="text"
+      class="form-control form-control-sm"
+      placeholder="Search this page…"
+      style="flex:1;"
+    >
+    <button id="prevMatch" class="btn btn-outline-secondary btn-sm">▲</button>
+    <button id="nextMatch" class="btn btn-outline-secondary btn-sm">▼</button>
+    <span id="matchCounter" style="min-width:3em;text-align:center;">0/0</span>
+
+    <div class="form-check form-check-inline mb-0">
+      <input class="form-check-input" type="checkbox" id="optHighlightAll" checked>
+      <label class="form-check-label" for="optHighlightAll">All</label>
+    </div>
+    <div class="form-check form-check-inline mb-0">
+      <input class="form-check-input" type="checkbox" id="optMatchCase">
+      <label class="form-check-label" for="optMatchCase">Match case</label>
+    </div>
+    <div class="form-check form-check-inline mb-0">
+      <input class="form-check-input" type="checkbox" id="optWholeWord">
+      <label class="form-check-label" for="optWholeWord">Whole word</label>
+    </div>
+  </div>
+
+  <!-- toggle button always visible -->
+  <button id="toggleBarBtn" class="btn btn-outline-secondary btn-sm ms-2">
+    Hide search
+  </button>
+</div>
 
   <footer class="py-3 text-center">
     <p class="mb-0">&copy; 2025 Muse Podcast LLC</p>
@@ -467,6 +520,9 @@
 
   <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- after bootstrap.bundle.min.js -->
+  <script src="https://cdn.jsdelivr.net/npm/mark.js/dist/mark.min.js"></script>
 
   <script>
     // language selector
@@ -513,6 +569,110 @@
       ch.addEventListener('change', refresh);
       refresh();
     });
+document.addEventListener('DOMContentLoaded', () => {
+  const toggleBtn = document.getElementById('toggleBarBtn');
+  const searchBar      = document.getElementById('globalSearchBar');
+  const searchControls = document.getElementById('searchControls');
+  const input       = document.getElementById('globalSearchInput');
+  const prevBtn     = document.getElementById('prevMatch');
+  const nextBtn     = document.getElementById('nextMatch');
+  const counter     = document.getElementById('matchCounter');
+  const chkAll      = document.getElementById('optHighlightAll');
+  const chkCase     = document.getElementById('optMatchCase');
+  const chkWhole    = document.getElementById('optWholeWord');
+  const context     = document.body;  // or document.querySelector('main')
+  const marker      = new Mark(context);
+
+  let marks = [], current = -1;
+
+  function updateCounter() {
+    counter.textContent = marks.length
+      ? `${current+1}/${marks.length}` : '0/0';
+  }
+
+  function updateStyles() {
+    marks.forEach((m,i) => {
+      // highlight-all: yellow for non-current when checked
+      if (chkAll.checked && i !== current) {
+        m.classList.add('highlight');
+      } else {
+        m.classList.remove('highlight');
+      }
+      // current: orange
+      m.classList.toggle('current', i === current);
+    });
+  }
+
+  function scrollToMatch(idx) {
+    if (!marks.length) return;
+    current = ((idx % marks.length) + marks.length) % marks.length;
+    marks[current].scrollIntoView({ behavior:'smooth', block:'center' });
+    updateStyles();
+    updateCounter();
+  }
+
+  function doSearch() {
+    // remove old highlights
+    marker.unmark({
+      done: () => {
+        const term = input.value.trim();
+        if (!term) {
+          marks = []; current = -1;
+          return updateCounter();
+        }
+        // run new search
+        marker.mark(term, {
+          separateWordSearch: !chkWhole.checked,
+          caseSensitive:       chkCase.checked,
+          acrossElements:      true,
+          done: () => {
+            marks   = Array.from(context.querySelectorAll('mark'));
+            current = marks.length ? 0 : -1;
+            updateStyles();
+            updateCounter();
+          }
+        });
+      }
+    });
+  }
+    toggleBtn.addEventListener('click', () => {
+      // toggle controls visibility
+      searchControls.classList.toggle('d-none');
+      // toggle transparent background & no-border
+      searchBar.classList.toggle('bg-transparent-important');
+      searchBar.classList.toggle('border-0-important');
+      // update button label
+      toggleBtn.textContent = searchControls.classList.contains('d-none')
+        ? 'Show search'
+        : 'Hide search';
+    });
+  // event bindings
+  input.addEventListener('input',  doSearch);
+  chkAll .addEventListener('change', updateStyles);
+  chkCase.addEventListener('change', doSearch);
+  chkWhole.addEventListener('change', doSearch);
+  nextBtn.addEventListener('click', () => scrollToMatch(current+1));
+  prevBtn.addEventListener('click', () => scrollToMatch(current-1));
+});
   </script>
+
+  <!-- GLOBAL SEARCH STYLES -->
+<style>
+  mark { background: yellow; }
+  mark.current { background: orange !important; }
+    /* utility classes for the toggle */
+  .bg-transparent-important {
+    background: transparent !important;
+  }
+  .border-0-important {
+    border-top: none !important;
+  }
+</style>
+
+
+
+
+
+
 </body>
 </html>
