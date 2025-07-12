@@ -106,6 +106,17 @@
                     </span>
                   </a>
                 </li>
+
+                <!-- ← new “Support Me” trigger: opens #supportModal -->
+                <li>
+                  <a class="dropdown-item text-start"
+                    href="#supportModal"
+                    data-bs-toggle="modal"
+                    data-bs-target="#supportModal">
+                    {% trans "Support Me" %}
+                  </a>
+                </li>
+
                 <li>
                   <form id="logout-form" action="{% url 'logout' %}" method="post" style="display: inline;">
                     {% csrf_token %}
@@ -456,8 +467,37 @@
       </div>
     </div>
   </header>
+  
+<!-- Support Modal -->
+<div class="modal fade" id="supportModal" tabindex="-1" aria-labelledby="supportModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <!-- modal-content with custom dark-blue background and light text -->
+    <div
+      class="modal-content text-light"
+      style="background-color: #00bfa5; border:1px solid var(--list-hover-bg);"
+    >
+      <div class="modal-header border-0">
+        <h5 class="modal-title" id="supportModalLabel">{% trans "Support Me" %}</h5>
+        <button
+          type="button"
+          class="btn-close btn-close-white"
+          data-bs-dismiss="modal"
+          aria-label="{% trans 'Close' %}"
+        ></button>
+      </div>
+      <div class="modal-body p-0">
+        <iframe
+          id="kofiframe"
+          src="https://ko-fi.com/musepodcast/?hidefeed=true&widget=true&embed=true&preview=true"
+          style="border:none;width:100%;background:transparent;"
+          height="712"
+          title="musepodcast"
+        ></iframe>
+      </div>
+    </div>
+  </div>
+</div>
 
- 
 
   <main class="container my-4 flex-grow-1">
     {% block content %}{% endblock %}
@@ -523,7 +563,7 @@
 
   <!-- after bootstrap.bundle.min.js -->
   <script src="https://cdn.jsdelivr.net/npm/mark.js/dist/mark.min.js"></script>
-
+  
   <script>
     // language selector
     (function(){

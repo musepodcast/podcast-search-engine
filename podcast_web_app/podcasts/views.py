@@ -1001,11 +1001,12 @@ class SearchResultsView(LoginRequiredMixin, ListView):
 
         # 4b) Transcript-only ES query
         selected = set(self.request.GET.getlist('search_in'))
-        transcript_only = {
+        # ✅ list membership doesn’t require hashing the members
+        transcript_only = [
             {self.SEGMENT_FIELD},
             {self.SEGMENT_ALIAS_FIELD},
             {self.TRANSCRIPTS_FIELD},
-        }
+        ]
         if selected in transcript_only:
             tsearch = TranscriptDocument.search().query(
                 'match',
@@ -1138,7 +1139,7 @@ class SearchResultsView(LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         q           = self.request.GET.get('q','')
-        search_type = self.request.GET.get('search_type','episodes')
+        search_type = self.request.GET.get('search_type', 'episodes').strip()
 
         ctx.update({
             'q':                  q,
