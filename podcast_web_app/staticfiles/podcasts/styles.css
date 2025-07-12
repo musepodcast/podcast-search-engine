@@ -372,3 +372,15 @@ input[type="text"]::placeholder {
         width: 100%;
     }
 }
+
+/* Support modal custom background */
+#supportModal .modal-content.section-container {
+  background-color: #093145 !important;
+  /* keep your light/dark text color or force white text here */
+  color: #e3e6e8 !important;
+}
+
+/* If you want the iframe wrapper to match exactly */
+#supportModal .ko-fi-container {
+  background-color: #093145 !important;
+}
