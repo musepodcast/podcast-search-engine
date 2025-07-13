@@ -6,7 +6,7 @@
     <h1>{% trans "Welcome to the Podcast Search Engine" %}</h2>
     <h4>{% trans "Please log in or create an account to access the site features." %}</h1>
     <p>{% trans "Your memory is short, the Muse's is not..." %}</p>
-    <p>{% trans "Control + F to find your thoughts!" %}</p>
+    <p>{% trans "Search to find your thoughts!" %}</p>
     <div class="mt-4">
         <a href="{% url 'podcasts:login' %}" class="btn btn-primary me-2">{% trans "Login" %}</a>
         <a href="{% url 'podcasts:signup' %}" class="btn btn-success">{% trans "Create Account" %}</a>
@@ -23,6 +23,13 @@
     </a>
     &nbsp;|&nbsp;
     <a href="https://github.com/musepodcast/podcast-search-engine" target="_blank">{% trans "https://github.com/musepodcast/podcast-search-engine" %}</a>
+  </p>
+   <p>
+    <a href="https://ko-fi.com/R6R01HY3FF" target="_blank" rel="noopener">
+      <img src="https://ko-fi.com/img/githubbutton_sm.svg"
+           alt="Support me on Ko-fi"
+           style="vertical-align:middle;">
+    </a>
   </p>
 
   <h3>{% trans "🚀 About" %}</h3>
