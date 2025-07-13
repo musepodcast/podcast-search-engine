@@ -1,5 +1,7 @@
 from django.contrib import admin
 from django.urls import path, include
+from django.contrib.sitemaps.views import sitemap
+from podcasts.sitemaps import StaticViewSitemap
 from django.conf.urls.i18n import i18n_patterns
 from two_factor import urls as two_factor_urls
 from django.http import HttpResponse
@@ -20,6 +22,11 @@ def filter_valid_patterns(patterns):
 
 two_factor_patterns = filter_valid_patterns(two_factor_urls.urlpatterns)
 
+sitemaps = {
+    "static": StaticViewSitemap,
+}
+
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('django.contrib.auth.urls')),
@@ -28,6 +35,7 @@ urlpatterns = [
     path('favicon.ico', favicon_view),
     path('', include((two_factor_patterns, 'two_factor'), namespace='two_factor')),
     path('', include('podcasts.urls', namespace='podcasts')),
+    path("sitemap.xml", sitemap, {"sitemaps": sitemaps}, name="django-sitemap"),
     
 ]
 #path('', include((two_factor_patterns, 'two_factor'), namespace='two_factor')),

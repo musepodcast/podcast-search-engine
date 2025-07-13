@@ -22,6 +22,7 @@ INSTALLED_APPS = [
     "podcasts",
     "phonenumber_field",
     "widget_tweaks",
+    "django.contrib.sitemaps",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
