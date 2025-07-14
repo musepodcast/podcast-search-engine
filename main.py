@@ -11,6 +11,7 @@ from downloader import parse_feed, download_audio
 from transcriber import transcribe_and_diarize, initialize_diarization_pipeline, validate_audio
 from utils import sanitize_filename
 from pydub import AudioSegment
+from pydub.utils import make_chunks
 import logging
 import json
 import re
@@ -86,20 +87,20 @@ except Exception as e:
     logging.critical(f"Failed to load Sentence-BERT model: {e}")
     sentence_model = None
 
-def convert_to_wav(input_path, wav_path):
-    ext = os.path.splitext(input_path)[1].lower()
-    try:
-        # Let pydub auto-detect, or force format for known containers:
-        if ext in ['.mp4', '.m4a', '.aac']:
-            audio = AudioSegment.from_file(input_path, format='mp4')
-        else:
-            audio = AudioSegment.from_file(input_path)  # works for .mp3, .wav, etc.
+def convert_to_5min_wav_chunks(input_path, output_dir, chunk_length_ms=5*60*1000):
+    audio = AudioSegment.from_file(input_path)
+    os.makedirs(output_dir, exist_ok=True)
 
-        audio.export(wav_path, format='wav')
-        return True
-    except Exception as e:
-        logging.error(f"Conversion error for {input_path}: {e}", exc_info=True)
-        return False
+    chunks = make_chunks(audio, chunk_length_ms)
+    base = os.path.splitext(os.path.basename(input_path))[0]
+    wav_paths = []
+
+    for idx, chunk in enumerate(chunks, start=1):
+        out_path = os.path.join(output_dir, f"{base}_chunk{idx}.wav")
+        chunk.export(out_path, format="wav")
+        wav_paths.append(out_path)
+
+    return wav_paths
 
 # A helper function to split long texts and then average the embeddings.
 def get_embedding(model, text, max_tokens=256):
@@ -535,41 +536,6 @@ def clean_html(raw_html):
     soup = BeautifulSoup(raw_html, 'html.parser')
     return soup.get_text(separator=' ', strip=True)
 
-def split_audio(file_path, chunk_length_ms=300000):  # 5 minutes
-    """
-    Split a large audio file into smaller chunks of specified length.
-
-    Parameters:
-    - file_path: str, path to the large audio file.
-    - chunk_length_ms: int, length of each chunk in milliseconds (default is 5 minutes).
-
-    Returns:
-    - List of chunk file paths.
-    """
-    try:
-        audio = AudioSegment.from_wav(file_path)
-    except Exception as e:
-        logging.error(f"Failed to load WAV file {file_path}: {e}", exc_info=True)
-        return []
-
-    total_length = len(audio)
-    num_chunks = math.ceil(total_length / chunk_length_ms)
-    chunks = []
-
-    for i in range(num_chunks):
-        start = i * chunk_length_ms
-        end = min((i + 1) * chunk_length_ms, total_length)
-        chunk = audio[start:end]
-        chunk_filename = f"{os.path.splitext(file_path)[0]}_chunk{i+1}.wav"
-        try:
-            chunk.export(chunk_filename, format="wav")
-            chunks.append(chunk_filename)
-            logging.info(f"Created chunk: {chunk_filename}")
-        except Exception as e:
-            logging.error(f"Failed to export chunk {chunk_filename}: {e}", exc_info=True)
-
-    return chunks
-
 # Global cache for embeddings
 _embedding_cache = {}
 
@@ -927,7 +893,6 @@ def process_chunk(chunk, pipeline):
     - Perform speaker diarization
     - Return transcription data
     """
-    logging.info(f"Processing chunk: {chunk}")
     try:
         transcription_data = transcribe_and_diarize(
             chunk,          # Pass as positional argument
@@ -959,9 +924,7 @@ def process_entry(entry, channel_transcript_dir, download_dir, channel_title, pi
         logging.debug(f"Sanitized Episode Title: {sanitized_title}")
 
         mp3_filename = f"{sanitized_title}.mp3"
-        wav_filename = f"{sanitized_title}.wav"
         mp3_file_path = os.path.join(download_dir, mp3_filename)
-        wav_file_path = os.path.join(download_dir, wav_filename)
         transcript_filename = os.path.join(channel_transcript_dir, f"{sanitized_title}.json")
 
         # Check if transcript already exists
@@ -978,40 +941,17 @@ def process_entry(entry, channel_transcript_dir, download_dir, channel_title, pi
                 return  # Skip to the next entry
         else:
             logging.info(f"MP3 file already exists: {mp3_file_path}")
+                # Create fixed-length WAV chunks directly from the MP3
 
-        # Convert MP3 to WAV
-        if not os.path.exists(wav_file_path):
-            try:
-                logging.info(f"Converting {mp3_file_path} to WAV...")
-                
-                # Added try-except block to handle conversion errors for mp4 files
-                if not convert_to_wav(mp3_file_path, wav_file_path):
-                    logging.error(f"Failed to convert {mp3_file_path} to WAV. Skipping.")
-                    return
-
-                logging.info(f"Successfully converted to {wav_file_path}")
-            except Exception as e:
-                logging.error(f"Failed to convert {mp3_file_path} to WAV: {e}", exc_info=True)
-                return  # Skip to the next entry
-        else:
-            logging.info(f"WAV file already exists: {wav_file_path}")
-
-        # Split WAV into 5-minute chunks
-        try:
-            audio = AudioSegment.from_wav(wav_file_path)
-        except Exception as e:
-            logging.error(f"Failed to load WAV file for splitting: {e}", exc_info=True)
-            return  # Skip to the next entry
-
-        if len(audio) > 300000:  # 5 minutes in ms
-            logging.info(f"Splitting {wav_file_path} into 5-minute chunks...")
-            chunks = split_audio(wav_file_path)
-        else:
-            chunks = [wav_file_path]
-
+        chunks = convert_to_5min_wav_chunks(
+            mp3_file_path,
+            download_dir,
+            chunk_length_ms=5 * 60 * 1000  # 5 minutes
+        )
         if not chunks:
-            logging.error(f"No chunks created for {wav_file_path}. Skipping transcription.")
+            logging.error(f"Failed to split {mp3_file_path} into WAV chunks. Skipping.")
             return
+
 
         combined_data = {
             'transcript': '',
@@ -1215,14 +1155,6 @@ def process_entry(entry, channel_transcript_dir, download_dir, channel_title, pi
             logging.info(f"Deleted MP3 file: {mp3_file_path}")
         except Exception as e:
             logging.warning(f"Could not delete MP3 file: {e}")
-
-        # Delete the main WAV file only if it wasn't part of the chunks
-        if wav_file_path not in chunks:
-            try:
-                os.remove(wav_file_path)
-                logging.info(f"Deleted main WAV file: {wav_file_path}")
-            except Exception as e:
-                logging.warning(f"Could not delete main WAV file: {e}")
 
         return combined_data
     except Exception as e:
