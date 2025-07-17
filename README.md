@@ -9,7 +9,7 @@
 
 ## 🚀 About
 
-Muse is a free, GPU-powered podcast search engine. Tired of scouring episode show notes for bits of information, we built a platform where **you** can:
+Muse is a free, AI-powered podcast search engine. Tired of scouring episode show notes for bits of information, we built a platform where **you** can:
 
 - 🔍 **Search any podcast** by keyword (titles, descriptions, or transcript content)  
 - 📄 View **full, time-stamped transcripts** (speaker-diarized and formatted)  
