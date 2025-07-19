@@ -7,3 +7,7 @@ chapter_generation:
   similarity_threshold: 0.3       # Maintained to allow up to 50 chapters - 
   max_chapters: 60                # Maintained as per user preference - 50 chapters seems to be sufficient but 60 is better for 4 hours.
   aggregation_window_size: 15     # Maintained to ensure comprehensive coverage - lower numbers = more frequent chapters 
+
+gpu:
+  memory_fraction: 1.0     # limit to 90% of GPU RAM
+  precision: fp16          # optional: run models in half‑precision

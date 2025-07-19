@@ -87,10 +87,10 @@
     <div class="mb-3 form-check">
       <input type="checkbox" class="form-check-input" id="privacyCheck" required>
       <label class="form-check-label" for="privacyCheck">
-        By checking this box, I acknowledge that I have read and agree to 
-        <a href="#" data-bs-toggle="modal" data-bs-target="#privacyModal">
-          Muse LLC's Privacy Notice
-        </a>, and consent to the collection, anonymized sharing, and sale of data as described.
+        {% trans "By checking this box, I acknowledge that I have read and agree to" %}
+        <a href="#" class="highlight-link" data-bs-toggle="modal" data-bs-target="#privacyModal">
+          {% trans "Muse Podcast, LLC's Privacy Notice" %}
+        </a>{% trans ", and consent to the collection, anonymized sharing, and sale of data as described." %}
       </label>
     </div>
     
@@ -106,12 +106,12 @@
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="privacyModalLabel">{% trans "Privacy Notice for Muse LLC" %}</h5>
+        <h5 class="modal-title" id="privacyModalLabel">{% trans "Privacy Notice for Muse Podcast, LLC" %}</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{% trans 'Close' %}"></button>
       </div>
       <div class="modal-body">
-        <p><strong>{% trans "Last updated:" %}</strong> 03/29/2025</p>
-        <p>Muse LLC ("Muse", "we", "our", or "us") is committed to protecting your privacy. This Privacy Notice explains how we collect, use, share, and safeguard your information when you visit our website and register an account.</p>
+        <p><strong>{% trans "Last updated:" %}</strong> 07/18/2025</p>
+        <p>{% trans "Muse Podcast, LLC is committed to protecting your privacy. This Privacy Notice explains how we collect, use, share, and safeguard your information when you visit our website and register an account." %}</p>
         <h6>{% trans "Information We Collect" %}</h6>
         <p>{% trans "We collect the following information when you create an account or use our website:" %}</p>
         <ul>
@@ -139,26 +139,26 @@
           </li>
         </ul>
         <h6>{% trans "Purpose of Data Collection" %}</h6>
-        <p>{% trans "Muse LLC collects this data to:" %}</p>
+        <p>{% trans "Muse Podcast, LLC collects this data to:" %}</p>
         <ul>
           <li>{% trans "Provide, maintain, and improve our website services." %}</li>
           <li>{% trans "Protect our website and users against fraudulent activities and scams." %}</li>
           <li>{% trans "Generate analytics to enhance user experience." %}</li>
         </ul>
         <h6>{% trans "Data Sharing and Selling" %}</h6>
-        <p>{% trans "To keep our services free and advertisement-free, Muse LLC may sell aggregated, anonymized data analytics to podcast creators, business partners, or other third parties. We ensure your privacy by anonymizing data, meaning your personal identifiable information (like your name or exact contact details) will never be sold or shared. Your identity is replaced by a unique, randomized number to maintain your anonymity." %}</p>
+        <p>{% trans "To keep our services free and advertisement-free, Muse Podcast, LLC may sell aggregated, anonymized data analytics to podcast creators, business partners, or other third parties. We ensure your privacy by anonymizing data, meaning your personal identifiable information (like your name or exact contact details) will never be sold or shared. Your identity is replaced by a unique, randomized number to maintain your anonymity." %}</p>
         <h6>{% trans "Data Security" %}</h6>
-        <p>{% trans "Muse LLC employs industry-standard practices and technologies to safeguard your personal information. However, no method of transmission over the internet or electronic storage is 100% secure, so while we strive to protect your personal information, we cannot guarantee absolute security." %}</p>
+        <p>{% trans "Muse Podcast, LLC employs industry-standard practices and technologies to safeguard your personal information. However, no method of transmission over the internet or electronic storage is 100% secure, so while we strive to protect your personal information, we cannot guarantee absolute security." %}</p>
         <h6>{% trans "Consent" %}</h6>
         <p>{% trans "By clicking the checkbox when creating an account, you consent to the collection, use, and sharing practices described in this Privacy Notice." %}</p>
         <h6>{% trans "Your Rights and Choices" %}</h6>
         <p>{% trans "You have the right to access, correct, or request deletion of your personal data at any time. To exercise these rights or if you have questions about this Privacy Notice, contact us at:" %}</p>
         <p>
-          Muse LLC<br>
+          Muse Podcast, LLC<br>
           Email: musepodcast@protonmail.com
         </p>
         <h6>{% trans "Changes to This Privacy Notice" %}</h6>
-        <p>{% trans "Muse LLC reserves the right to modify this Privacy Notice at any time. Changes will be posted on our website and are effective immediately upon posting." %}</p>
+        <p>{% trans "Muse Podcast, LLC reserves the right to modify this Privacy Notice at any time. Changes will be posted on our website and are effective immediately upon posting." %}</p>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{% trans "Close" %}</button>
@@ -177,9 +177,8 @@
     background-color: var(--header-bg-color) !important;
     color: var(--header-text-color) !important;
   }
-  :root[data-theme="dark"] .modal-body {
-    background-color: var(--background-color) !important;
-    color: var(--text-color) !important;
+  :root[data-theme="dark"] .modal-body a:not(.highlight-link) {
+    color: var(--header-text-color) !important;
   }
   :root[data-theme="dark"] .modal-footer {
     background-color: var(--background-color) !important;
@@ -190,9 +189,9 @@
     border-color: var(--list-hover-bg) !important;
     color: var(--text-color) !important;
   }
-  :root[data-theme="dark"] a {
-    color: var(--header-text-color) !important;
-  }
+  :root[data-theme="dark"] a:not(.highlight-link) {
+  color: var(--header-text-color) !important;
+}
   :root:not([data-theme="dark"]) .modal-content {
   background-color: var(--background-color) !important;
   color: var(--text-color) !important;
@@ -201,10 +200,9 @@
     background-color: var(--header-bg-color) !important;
     color: var(--header-text-color) !important;
   }
-  :root:not([data-theme="dark"]) .modal-body {
-    background-color: var(--background-color) !important;
-    color: var(--text-color) !important;
-  }
+  :root:not([data-theme="dark"]) .modal-body a:not(.highlight-link) {
+  color: var(--header-text-color) !important;
+}
   :root:not([data-theme="dark"]) .modal-footer {
     background-color: var(--background-color) !important;
     color: var(--text-color) !important;
@@ -214,9 +212,21 @@
     border-color: var(--list-hover-bg) !important;
     color: var(--text-color) !important;
   }
-  :root:not([data-theme="dark"]) a {
-    color: var(--header-text-color) !important;
-  }
+  :root:not([data-theme="dark"]) a:not(.highlight-link) {
+  color: var(--header-text-color) !important;
+}
+
+  a.highlight-link {
+  color: #4e9af1 !important;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+a.highlight-link:hover {
+  color: #1f78d1 !important;
+  text-decoration: underline;
+}
+
 
 </style>
 
