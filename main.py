@@ -222,18 +222,41 @@ def load_config(config_path='config.yaml'):
 # Load the configuration
 config = load_config()
 
-# Initialize Summarization pipeline using config parameters
+# 2) initialize summarizer pipeline
 try:
     summarizer = transformers_pipeline(
         "summarization",
         model=config['summarizer']['model'],
         tokenizer=config['summarizer']['model'],
-        framework="pt"  # Ensure PyTorch framework is used
+        framework="pt"
     )
     logging.info("Summarization pipeline initialized successfully.")
 except Exception as e:
     logging.critical(f"Failed to initialize summarization pipeline: {e}", exc_info=True)
     summarizer = None
+
+# 3) load sentence_model
+try:
+    sentence_model = SentenceTransformer('all-MiniLM-L6-v2', device='cuda')
+    sentence_model.eval()
+    logging.info("Sentence-BERT model loaded successfully on CUDA.")
+except Exception as e:
+    logging.critical(f"Failed to load Sentence-BERT model: {e}", exc_info=True)
+    sentence_model = None
+
+# ─── NOW throttle your GPU and do the FP16 conversion ────────────────────
+if torch.cuda.is_available():
+    frac = config.get('gpu', {}).get('memory_fraction', 1.0)
+    torch.cuda.set_per_process_memory_fraction(frac, device=0)
+    logging.info(f"🔧 GPU memory fraction set to {int(frac*100)}%")
+
+    if config.get('gpu', {}).get('precision') == 'fp16':
+        logging.info("🔧 Converting summarizer & sentence_model to FP16")
+        if summarizer is not None and hasattr(summarizer.model, 'half'):
+            summarizer.model.half()
+        if sentence_model is not None:
+            sentence_model.half()
+# ────────────────────────────────────────────────────────────────────────────
 
 # --------------------------- Integrated Metadata Extraction Functions ---------------------------
 
