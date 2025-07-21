@@ -1,0 +1,1 @@
+SELECT * FROM search_keyword('covid', 'Real AF with Andy Frisella');

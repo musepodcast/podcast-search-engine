@@ -12,6 +12,24 @@ from django_countries.fields import CountryField
 
 
 
+
+
+class Channel(models.Model):
+    channel_title = models.TextField(unique=True)
+    sanitized_channel_title = models.TextField()
+
+    # ADD THESE FIELDS:
+    channel_author = models.TextField(blank=True, null=True)
+    channel_summary = models.TextField(blank=True, null=True)
+    channel_image_url = models.TextField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'channels'
+
+    def __str__(self):
+        return self.channel_title
+
 class CustomUser(AbstractUser):
     email = models.EmailField(unique=True)
     enforce_2fa = models.BooleanField(
@@ -34,26 +52,21 @@ class CustomUser(AbstractUser):
     )
 
     country = CountryField(blank_label='(select country)', default='US')
-    
+    # now that Channel is defined, this will resolve
+        # “Am I currently running the community agent?”
+    is_contributing = models.BooleanField(
+        default=False,
+        help_text="Whether this user is currently running the community agent."
+    )
+
+    # Which channels they’ve opted into
+    contribute_channels = models.ManyToManyField(
+        'podcasts.Channel',
+        blank=True,
+        help_text="Which channels this user has opted to contribute to."
+    )
     def __str__(self):
-        return self.username
-
-class Channel(models.Model):
-    channel_title = models.TextField(unique=True)
-    sanitized_channel_title = models.TextField()
-
-    # ADD THESE FIELDS:
-    channel_author = models.TextField(blank=True, null=True)
-    channel_summary = models.TextField(blank=True, null=True)
-    channel_image_url = models.TextField(blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'channels'
-
-    def __str__(self):
-        return self.channel_title
-        
+        return self.username        
 
 
 class Episode(models.Model):
