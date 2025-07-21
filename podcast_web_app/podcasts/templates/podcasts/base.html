@@ -116,7 +116,10 @@
                     {% trans "Support Me" %}
                   </a>
                 </li>
-
+                 <!-- Contribute link -->
+                <li>
+                  <a class="dropdown-item text-start" href="{% url 'podcasts:contribute' %}">{% trans "Contribute" %}</a>
+                </li>
                 <li>
                   <form id="logout-form" action="{% url 'logout' %}" method="post" style="display: inline;">
                     {% csrf_token %}

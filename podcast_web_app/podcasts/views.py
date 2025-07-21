@@ -47,16 +47,45 @@ from two_factor.views.core import LoginView as TwoFactorLoginView
 from django.contrib.auth.views import LoginView
 from django.contrib.postgres.search import SearchVector, SearchQuery as PgSearchQuery, SearchRank, TrigramSimilarity
 from django.contrib.auth.decorators import login_required
-from django.views.decorators.http import require_POST, require_GET
+from django.views.decorators.http import require_POST, require_GET, require_http_methods
+
 from podcasts.search.documents import EpisodeDocument, TranscriptDocument
 from elasticsearch_dsl import Q as DSLQ
 from django.contrib.postgres.search import TrigramSimilarity
 from datetime import datetime, timedelta
 
+
+
+@require_http_methods(["GET", "POST"])
+@login_required
+def toggle_contribute(request):
+    """
+    GET  → return whether the user is currently contributing
+    POST → flip the flag and set which channels they should support
+    """
+    user = request.user  # your CustomUser
+
+    if request.method == "GET":
+        return JsonResponse({"is_contributing": user.is_contributing})
+
+    # POST: toggle the flag
+    user.is_contributing = not user.is_contributing
+
+    # read the channels query param
+    raw = request.GET.get("channels", "")
+    if "all" in raw or not raw.strip():
+        # subscribe to every channel
+        user.contribute_channels.set(Channel.objects.all())
+    else:
+        # parse comma‑separated IDs
+        ids = [int(pk) for pk in raw.split(",") if pk.isdigit()]
+        user.contribute_channels.set(Channel.objects.filter(pk__in=ids))
+
+    user.save()
+    return JsonResponse({"is_contributing": user.is_contributing})
+
+
 User = get_user_model()
-
-
-
 
 class RepliesListView(LoginRequiredMixin, ListView):
     login_url = reverse_lazy('podcasts:home')
@@ -1363,3 +1392,12 @@ class BookmarksListView(LoginRequiredMixin, ListView):
             return render(self.request, 'podcasts/bookmarks_list_items.html', context)
         return super().render_to_response(context, **response_kwargs)
 
+class ContributeView(LoginRequiredMixin, TemplateView):
+    template_name = 'podcasts/contribute.html'
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        # You can filter here if you only want channels the user created:
+        # ctx['channels'] = Channel.objects.filter(created_by=self.request.user)
+        ctx['channels'] = Channel.objects.all()
+        return ctx

@@ -372,3 +372,37 @@ input[type="text"]::placeholder {
         width: 100%;
     }
 }
+
+/* Scrollable “Select Channels” dropdown */
+.scrollable-dropdown {
+  max-height: 300px;        /* adjust height as needed */
+  overflow-y: auto;
+  overflow-x: hidden;
+  background-color: var(--list-bg) !important;
+}
+
+/* Ensure the checkbox labels inside match your text color */
+.scrollable-dropdown .form-check-label {
+  color: var(--list-text) !important;
+}
+
+/* WebKit scrollbar styling */
+.scrollable-dropdown::-webkit-scrollbar {
+  width: 8px;
+}
+.scrollable-dropdown::-webkit-scrollbar-track {
+  background: var(--background-color);
+}
+.scrollable-dropdown::-webkit-scrollbar-thumb {
+  background-color: var(--lang-btn-bg);
+  border-radius: 4px;
+}
+.scrollable-dropdown::-webkit-scrollbar-thumb:hover {
+  background-color: var(--link-color);
+}
+
+/* Firefox scrollbar styling */
+.scrollable-dropdown {
+  scrollbar-width: thin;
+  scrollbar-color: var(--lang-btn-bg) var(--background-color);
+}

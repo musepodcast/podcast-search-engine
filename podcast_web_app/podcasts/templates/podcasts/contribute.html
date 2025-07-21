@@ -1,0 +1,129 @@
+{% extends "podcasts/base.html" %}
+{% load i18n %}
+
+{% block content %}
+<div class="container text-center mt-5">
+  <h2>🎧 {% trans "Community Podcast Generator" %}</h2>
+
+  <!-- Explanation Section -->
+  <div class="mb-4 text-start">
+    <p>🙏 {% trans "Thank you for volunteering your computer's resources to help generate and process podcast episodes!" %}</p>
+    <p>🚀 {% trans "When you click 'Start Contributing', a lightweight agent running on your machine will fetch new RSS feed entries for your selected channels, transcribe or translate them into usable transcripts, process them locally using your CPU/GPU, and securely return the results. This helps us speed up episode generation and improve quality for the entire community." %}</p>
+    <ul style="text-align:left; list-style: disc; margin-left:1.5rem;">
+      <li>📡 {% trans "Select which channels you'd like to support or choose 'All Channels' to help across the platform." %}</li>
+      <li>⚙️ {% trans "Your contributions run in the background and won't interfere with your normal workflow." %}</li>
+      <li>⏸️ {% trans "You can stop or restart at any time using the button below." %}</li>
+      <li>🏆 {% trans "Soon, we'll introduce a leaderboard to highlight top contributors and a rewards system to thank you for your support." %}</li>
+    </ul>
+  </div>
+
+  <!-- Channel selection dropup -->
+  <div class="dropup mb-3" style="position: relative; margin-bottom: 1rem;">
+    <button
+      id="channelDropdown"
+      class="btn dropdown-toggle"
+      type="button"
+      data-bs-toggle="dropdown"
+      aria-expanded="false"
+      style="background-color: #9e059ec5; color: #FFFFFF; border: none;"
+    >
+      🎲 {% trans "Select Channels" %}
+    </button>
+    <div class="dropdown-menu p-3 scrollable-dropdown dropdown-menu-start" aria-labelledby="channelDropdown">
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" value="all" id="ch_all" checked>
+        <label class="form-check-label" for="ch_all">📦 {% trans "All Channels" %}</label>
+      </div>
+      <div class="dropdown-divider"></div>
+      {% for channel in channels|dictsort:"channel_title" %}
+      <div class="form-check">
+        <input class="form-check-input channel-checkbox" type="checkbox" value="{{ channel.id }}" id="ch_{{ channel.id }}" checked>
+        <label class="form-check-label" for="ch_{{ channel.id }}">🎯 {{ channel.channel_title }}</label>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <button id="toggle-btn" class="btn btn-lg" style="background-color:#28a745; color:#fff;">
+    🚀 {% trans "Start Contributing" %}
+  </button>
+  <p id="status" class="mt-4">{% trans "Status: Idle" %}</p>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const btn = document.getElementById('toggle-btn');
+    const status = document.getElementById('status');
+    const allCheckbox = document.getElementById('ch_all');
+    const channelChecks = document.querySelectorAll('.channel-checkbox');
+    const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+    allCheckbox.addEventListener('change', () => {
+      channelChecks.forEach(ch => (ch.checked = allCheckbox.checked));
+    });
+    channelChecks.forEach(ch => ch.addEventListener('change', () => {
+      allCheckbox.checked = Array.from(channelChecks).every(cb => cb.checked);
+    }));
+
+    function getSelectedChannels() {
+      return allCheckbox.checked ? ['all'] : Array.from(channelChecks).filter(cb => cb.checked).map(cb => cb.value);
+    }
+
+    async function fetchState(method) {
+      const url = new URL("{% url 'podcasts:api-contribute-toggle' %}", window.location.origin);
+      url.searchParams.set('channels', getSelectedChannels().join(','));
+      const resp = await fetch(url, {
+        method,
+        headers: { 'X-Requested-With': 'XMLHttpRequest', 'X-CSRFToken': csrftoken },
+        credentials: 'include'
+      });
+      return resp.json();
+    }
+
+    function updateUI(isOn) {
+      btn.textContent = isOn ? '⏹️ {% trans "Stop Contributing" %}' : '🚀 {% trans "Start Contributing" %}';
+      btn.classList.toggle('btn-success', !isOn);
+      btn.classList.toggle('btn-danger', isOn);
+      status.textContent = isOn ? '{% trans "Status: Contributing" %}' : '{% trans "Status: Idle" %}';
+    }
+
+    fetchState('GET').then(data => updateUI(data.is_contributing));
+    btn.addEventListener('click', async () => updateUI((await fetchState('POST')).is_contributing));
+  });
+</script>
+<style>
+/* dropup menu above button */
+.dropup .dropdown-menu {
+  position: absolute !important;
+  bottom: 100% !important;
+  top: auto !important;
+  left: 0 !important;
+  right: auto !important;
+  transform: none !important;
+}
+/* override caret to point up by changing border */
+.dropup .dropdown-toggle::after {
+  display: inline-block;
+  width: 0;
+  height: 0;
+  margin-left: .255em;
+  vertical-align: .255em;
+  content: "";
+  border-left: .3em solid transparent;
+  border-right: .3em solid transparent;
+  border-top: 0;
+  border-bottom: .3em solid;
+}
+.scrollable-dropdown {
+  max-height: 300px;
+  overflow-y: auto;
+  background-color: var(--list-bg) !important;
+}
+.scrollable-dropdown .form-check-label { color: var(--list-text) !important; }
+.scrollable-dropdown::-webkit-scrollbar { width: 8px; }
+.scrollable-dropdown::-webkit-scrollbar-track { background: var(--background-color); }
+.scrollable-dropdown::-webkit-scrollbar-thumb { background-color: var(--lang-btn-bg); border-radius: 4px; }
+.scrollable-dropdown::-webkit-scrollbar-thumb:hover { background-color: var(--link-color); }
+.scrollable-dropdown { scrollbar-width: thin; scrollbar-color: var(--lang-btn-bg) var(--background-color); }
+</style>
+{% endblock %}

@@ -4,7 +4,7 @@ from django.urls import path
 from . import views
 from .views import (
     SignUpView, ProfileView, ProfileUpdateView, CustomLoginView, 
-    TwoFactorChallengeView, SecureDisable2FAView
+    TwoFactorChallengeView, SecureDisable2FAView, ContributeView, toggle_contribute
 )
 
 from django.contrib.auth import views as auth_views
@@ -28,6 +28,8 @@ urlpatterns = [
     path('signup/', SignUpView.as_view(), name='signup'),
     path("login/", CustomLoginView.as_view(template_name='registration/login.html'), name="login"),
     path("login/2fa/", TwoFactorChallengeView.as_view(template_name='registration/login_2fa.html'), name="two_factor_challenge"),
+    path('contribute/', ContributeView.as_view(), name='contribute'),
+    path("api/contribute/toggle/", views.toggle_contribute, name="api-contribute-toggle"),
     path('replies/', views.RepliesListView.as_view(), name='replies'),
     path('search_users/', views.search_users, name='search_users'),
     path('profile/', ProfileView.as_view(), name='profile'),
