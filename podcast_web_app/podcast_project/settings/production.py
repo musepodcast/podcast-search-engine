@@ -71,6 +71,29 @@ DATABASES = {
     }
 }
 
+SOCIALACCOUNT_PROVIDERS = {
+    "google": {
+        # OpenID Connect scopes:
+        "SCOPE": ["openid", "profile", "email"],
+
+        "APP": {
+            "client_id": os.environ["GOOGLE_CLIENT_ID"],
+            "secret":    os.environ["GOOGLE_CLIENT_SECRET"],
+            "key":       "",
+        },
+
+        "AUTH_PARAMS": {
+            # if you need long‑lived refresh tokens, keep offline; otherwise use "online"
+            "access_type": "offline",
+            # avoid forcing re‑consent every time; use select_account to let them pick an account
+            "prompt": "select_account",
+            # preserve previously granted scopes on future sign‑ins
+            "include_granted_scopes": "true",
+        },
+    }
+}
+
+
 # Tell Django where to collect static to, and configure WhiteNoise
 STATIC_ROOT = BASE_DIR / "staticfiles"
 

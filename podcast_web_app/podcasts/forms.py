@@ -4,6 +4,7 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from phonenumber_field.formfields import SplitPhoneNumberField
 from django.contrib.auth import get_user_model
 from .models import CustomUser
+from allauth.socialaccount.forms import SignupForm
 
 class OTPChallengeForm(forms.Form):
     token = forms.CharField(label="OTP Token", max_length=6, widget=forms.TextInput(attrs={'placeholder': 'Enter OTP token'}))
@@ -14,6 +15,35 @@ class Disable2FAForm(forms.Form):
         max_length=6,
         widget=forms.TextInput(attrs={'placeholder': 'Enter OTP token'})
     )
+
+class CustomSocialSignupForm(SignupForm):
+    # add username (since you REQUIRE it on your CustomUser)
+    username = forms.CharField(required=True, label="Username")
+    
+    # fields Google won’t supply
+    birthdate    = forms.DateField(
+        required=True,
+        widget=forms.DateInput(attrs={"type": "date"})
+    )
+    country      = forms.CharField(required=True)
+    phone_number = SplitPhoneNumberField(region="US", required=True)
+    gender       = forms.ChoiceField(
+        choices=CustomUser.GENDER_CHOICES, required=True
+    )
+
+    def save(self, request):
+        # this will fill in email/first_name/last_name from Google
+        user = super().save(request)
+        cd = self.cleaned_data
+        user.username     = cd["username"]
+        user.birthdate    = cd["birthdate"]
+        user.country      = cd["country"]
+        user.phone_number = cd["phone_number"]
+        user.gender       = cd["gender"]
+        user.save(update_fields=[
+            "username", "birthdate", "country", "phone_number", "gender"
+        ])
+        return user
 
 class CustomUserCreationForm(UserCreationForm):
     email = forms.EmailField(required=True)
