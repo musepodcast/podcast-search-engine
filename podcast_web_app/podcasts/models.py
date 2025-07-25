@@ -9,8 +9,9 @@ from django.conf import settings
 from django.utils import timezone
 from phonenumber_field.modelfields import PhoneNumberField
 from django_countries.fields import CountryField
-
-
+from allauth.socialaccount.models import SocialAccount
+from allauth.account.models import EmailAddress
+from django.contrib.auth.models import AbstractUser
 
 
 
@@ -37,7 +38,7 @@ class CustomUser(AbstractUser):
         help_text="If enabled, you will be required to enter an OTP every time you log in."
     )
 
-    birthdate = models.DateField(null=False, blank=False)
+    birthdate = models.DateField(null=True, blank=True)
     phone_number = PhoneNumberField(null=False, blank=False)
     
     GENDER_CHOICES = [
@@ -68,6 +69,15 @@ class CustomUser(AbstractUser):
     def __str__(self):
         return self.username        
 
+    def delete(self, *args, **kwargs):
+        # Clean up allauth relations
+
+
+        SocialAccount.objects.filter(user=self).delete()
+        EmailAddress.objects.filter(user=self).delete()
+
+        # Then delete the user itself
+        super().delete(*args, **kwargs)
 
 class Episode(models.Model):
     channel = models.ForeignKey(

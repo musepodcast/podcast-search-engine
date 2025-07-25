@@ -29,7 +29,8 @@ sitemaps = {
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('accounts/', include('django.contrib.auth.urls')),
+    path("accounts/", include("allauth.urls")),   
+    path('auth/', include('django.contrib.auth.urls')),
     # Include podcasts URLs at the root (so home page is available at "/")
     path('i18n/', include('django.conf.urls.i18n')),
     path('favicon.ico', favicon_view),

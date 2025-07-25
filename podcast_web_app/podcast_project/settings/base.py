@@ -23,6 +23,7 @@ INSTALLED_APPS = [
     "phonenumber_field",
     "widget_tweaks",
     "django.contrib.sitemaps",
+    "django.contrib.sites",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -36,6 +37,13 @@ INSTALLED_APPS = [
     "two_factor",
     "two_factor.plugins.phonenumber",
     "axes",
+    "allauth",
+    "allauth.account",
+    "allauth.socialaccount",
+    "allauth.socialaccount.providers.google",
+    "allauth.socialaccount.providers.github",
+    "allauth.socialaccount.providers.apple",
+    "allauth.socialaccount.providers.twitter", 
 ]
 
 MIDDLEWARE = [
@@ -45,6 +53,7 @@ MIDDLEWARE = [
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "allauth.account.middleware.AccountMiddleware",
     "podcasts.middleware.PageVisitMiddleware",  # your custom middleware
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
@@ -98,15 +107,41 @@ AXES_LOCK_OUT_AT_FAILURE = True
 AXES_RESET_ON_SUCCESS = True
 AXES_LOCKOUT_PARAMETERS = ['username', 'ip_address']
 
+SITE_ID = 1
+
+# Optional: stop allauth from asking for username if you already have your own form
+ACCOUNT_USERNAME_REQUIRED = True
+SOCIALACCOUNT_QUERY_EMAIL = True
+
 AUTHENTICATION_BACKENDS = [
     'axes.backends.AxesStandaloneBackend',
     'podcasts.authentication.EmailOrUsernameModelBackend',
     'django.contrib.auth.backends.ModelBackend',  # optional fallback
+    'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 DEFAULT_FROM_EMAIL = 'webmaster@localhost'
 # Internationalization, static files, etc.
+
+SOCIALACCOUNT_ADAPTER = "podcasts.adapters.ConditionalSocialAdapter"
+SOCIALACCOUNT_AUTO_SIGNUP = False  # force the “extra data” step
+SOCIALACCOUNT_FORMS = {
+    "signup": "podcasts.forms.CustomSocialSignupForm",
+}
+
+SOCIALACCOUNT_PROVIDERS = {
+    "google": {
+        "APP": {
+            "client_id": os.environ.get("GOOGLE_CLIENT_ID", ""),
+            "secret": os.environ.get("GOOGLE_CLIENT_SECRET", ""),
+            "key": "",
+        },
+        "SCOPE": ["profile", "email"],
+        "AUTH_PARAMS": {"access_type": "offline", "prompt": "consent"},
+    }
+}
+
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -157,6 +192,8 @@ STATIC_URL = "/static/"
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+
 
 # Logging (example)
 LOGGING = {

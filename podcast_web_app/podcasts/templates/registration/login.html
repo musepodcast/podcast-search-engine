@@ -1,21 +1,34 @@
-{# podcasts/templates/registration/login.html #}
+{# templates/podcasts/registration/login.html #}
 {% extends "podcasts/base.html" %}
-{% load i18n %}
+{% load i18n socialaccount %}
 
 {% block content %}
 <div class="container mt-5">
-    <h2>{% trans "Login" %}</h2>
-    <form method="post" action="{% url 'podcasts:login' %}">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="btn btn-primary">{% trans "Log In" %}</button>
-    </form>
-    <p>
-        <a href="{% url 'password_reset' %}">{% trans "Forgot your password?" %}</a>
-    </p>
-    <p>
-        {% trans "Don't have an account?" %}
-        <a href="{% url 'podcasts:signup' %}">{% trans "Sign up" %}</a>
-    </p>
+  <h2>{% trans "Login" %}</h2>
+
+  {# —— SOCIAL LOGIN —— #}
+  <form method="post" action="{% provider_login_url 'google' process='login' %}">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-outline-light w-100 mb-3">
+      <i class="fab fa-google me-2"></i> {% trans "Sign in with Google" %}
+    </button>
+  </form>
+
+  <hr/>
+    <p class="text-center text-muted mb-4">{% trans "or sign in with an account manually" %}</p>
+  {# —— CLASSIC LOGIN —— #}
+  <form method="post" action="{% url 'podcasts:login' %}">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">{% trans "Log In" %}</button>
+  </form>
+
+  <p class="mt-3">
+    <a href="{% url 'password_reset' %}">{% trans "Forgot your password?" %}</a>
+  </p>
+  <p>
+    {% trans "Don't have an account?" %}
+    <a href="{% url 'podcasts:signup' %}">{% trans "Sign up" %}</a>
+  </p>
 </div>
 {% endblock %}

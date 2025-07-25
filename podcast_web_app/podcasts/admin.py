@@ -59,7 +59,10 @@ class CustomUserAdmin(UserAdmin):
             ),
         }),
     )
-
+    def delete_queryset(self, request, queryset):
+        # Call instance.delete() on each to trigger your override
+        for user in queryset:
+            user.delete()
 
 @admin.register(ChannelVisit)
 class ChannelVisitAdmin(admin.ModelAdmin):

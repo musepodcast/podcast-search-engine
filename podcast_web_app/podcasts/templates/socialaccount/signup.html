@@ -1,34 +1,17 @@
 {% extends "podcasts/base.html" %}
-{% load i18n socialaccount %}
+{% load i18n %}
 
 {% block content %}
 <div class="container mt-5">
-  <h2>{% trans "Create Account" %}</h2>
-   <!-- SOCIAL SIGN-IN -->
-  <div class="mb-4">
-    <form method="post" action="{% provider_login_url 'google' process='signup' %}">
-      {% csrf_token %}
-      <button type="submit" class="btn btn-outline-light w-100">
-        <i class="fab fa-google me-2"></i> Sign up with Google
-      </button>
-    </form>
-  </div>
-
-  <hr class="my-4">
-  <p class="text-center text-muted mb-4">{% trans "or create an account manually" %}</p>
-  <form method="post" action="{% url 'podcasts:signup' %}">
+  <h2>{% trans "Finish signing up" %}</h2>
+  <form method="post">
     {% csrf_token %}
-    
-    <!-- Render non-password fields -->
+    {{ form.non_field_errors }}
+
     <div class="mb-3">
       {{ form.username.label_tag }}
       {{ form.username }}
       {{ form.username.errors }}
-    </div>
-    <div class="mb-3">
-      {{ form.email.label_tag }}
-      {{ form.email }}
-      {{ form.email.errors }}
     </div>
     <div class="mb-3">
       {{ form.first_name.label_tag }}
@@ -61,59 +44,24 @@
       {{ form.gender.errors }}
     </div>
 
-    <!-- Password fields with toggle button -->
-    <div class="mb-3">
-      <label for="id_password1">{% trans "Password" %}</label>
-      <div class="input-group">
-        {{ form.password1 }}
-        <span class="input-group-text">
-          <i class="fa fa-eye toggle-password" data-target="id_password1" style="cursor:pointer;"></i>
-        </span>
-      </div>
-      {{ form.password1.errors }}
-    </div>
-    <div class="mb-3">
-      <label for="id_password2">{% trans "Confirm Password" %}</label>
-      <div class="input-group">
-        {{ form.password2 }}
-        <span class="input-group-text">
-          <i class="fa fa-eye toggle-password" data-target="id_password2" style="cursor:pointer;"></i>
-        </span>
-      </div>
-      {{ form.password2.errors }}
-      <div id="password-match-indicator" style="margin-top: 5px;"></div>
-    </div>
-    
-    <!-- Password Requirements -->
-    <div class="mb-3">
-      <h5>{% trans "Password Requirements:" %}</h5>
-      <ul>
-        <li>{% trans "Must be at least 8 characters long." %}</li>
-        <li>{% trans "Cannot be a common password." %}</li>
-        <li>{% trans "Cannot be entirely numeric." %}</li>
-        <li>{% trans "Should not be too similar to your personal information." %}</li>
-      </ul>
-    </div>
-    
     <!-- Privacy Consent Checkbox -->
     <div class="mb-3 form-check">
       <input type="checkbox" class="form-check-input" id="privacyCheck" required>
       <label class="form-check-label" for="privacyCheck">
         {% trans "By checking this box, I acknowledge that I have read and agree to" %}
         <a href="#" class="highlight-link" data-bs-toggle="modal" data-bs-target="#privacyModal">
-          {% trans "Muse Podcast, LLC's Privacy Notice" %}
+          {% trans "Muse Podcast, LLC’s Privacy Notice" %}
         </a>{% trans ", and consent to the collection, anonymized sharing, and sale of data as described." %}
       </label>
     </div>
-    
-    <button type="submit" class="btn btn-primary">{% trans "Sign Up" %}</button>
+
+    <button type="submit" class="btn btn-primary">
+      {% trans "Complete Signup" %}
+    </button>
   </form>
 </div>
 
-<!-- Include Font Awesome (if not already in your base template) -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
-
-<!-- Privacy Notice Modal -->
+<!-- Privacy Notice Modal (same as in your manual template) -->
 <div class="modal fade" id="privacyModal" tabindex="-1" aria-labelledby="privacyModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
@@ -131,7 +79,6 @@
             <ul>
               <li>{% trans "First Name" %}</li>
               <li>{% trans "Last Name" %}</li>
-              <li>{% trans "Email Address" %}</li>
               <li>{% trans "Birthdate" %}</li>
               <li>{% trans "Country" %}</li>
               <li>{% trans "Phone Number" %}</li>
@@ -151,7 +98,6 @@
           </li>
         </ul>
         <h6>{% trans "Purpose of Data Collection" %}</h6>
-        <p>{% trans "Muse Podcast, LLC collects this data to:" %}</p>
         <ul>
           <li>{% trans "Provide, maintain, and improve our website services." %}</li>
           <li>{% trans "Protect our website and users against fraudulent activities and scams." %}</li>
@@ -239,51 +185,5 @@ a.highlight-link:hover {
   text-decoration: underline;
 }
 
-
 </style>
-
-<!-- Include Bootstrap's JS Bundle if not already included in your base template -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-..." crossorigin="anonymous"></script>
-
-<script>
-document.addEventListener("DOMContentLoaded", function() {
-    // Toggle password visibility
-    const toggleButtons = document.querySelectorAll('.toggle-password');
-    toggleButtons.forEach(function(btn) {
-        btn.addEventListener('click', function() {
-            const targetId = btn.getAttribute('data-target');
-            const input = document.getElementById(targetId);
-            if (input.type === 'password') {
-                input.type = 'text';
-                btn.classList.remove('fa-eye');
-                btn.classList.add('fa-eye-slash');
-            } else {
-                input.type = 'password';
-                btn.classList.remove('fa-eye-slash');
-                btn.classList.add('fa-eye');
-            }
-        });
-    });
-    
-    // Check if passwords match
-    const password1 = document.getElementById('id_password1');
-    const password2 = document.getElementById('id_password2');
-    const indicator = document.getElementById('password-match-indicator');
-    
-    function checkPasswordMatch() {
-        if (password1.value && password2.value) {
-            if (password1.value === password2.value) {
-                indicator.innerHTML = '<span style="color:green;">&#10004; {% trans "Passwords match" %}</span>';
-            } else {
-                indicator.innerHTML = '<span style="color:red;">&#10006; {% trans "Passwords do not match" %}</span>';
-            }
-        } else {
-            indicator.innerHTML = '';
-        }
-    }
-    
-    password1.addEventListener('input', checkPasswordMatch);
-    password2.addEventListener('input', checkPasswordMatch);
-});
-</script>
 {% endblock %}
