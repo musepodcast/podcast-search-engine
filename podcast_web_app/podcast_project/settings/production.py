@@ -71,6 +71,7 @@ DATABASES = {
     }
 }
 
+SITE_ID = 2
 SOCIALACCOUNT_PROVIDERS = {
     "google": {
         # OpenID Connect scopes:
