@@ -1,0 +1,15 @@
+{# templates/socialaccount/cancelled.html #}
+{% extends "podcasts/base.html" %}
+{% load i18n %}
+
+{% block content %}
+<div class="container mt-5 text-center">
+  <h2>{% trans "Login Cancelled" %}</h2>
+  <p class="lead">
+    {% trans "You decided not to sign in with that external account." %}
+  </p>
+  <a href="{% url 'podcasts:login' %}" class="btn btn-primary mt-3">
+    {% trans "Back to Login" %}
+  </a>
+</div>
+{% endblock %}

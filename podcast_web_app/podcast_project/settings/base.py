@@ -108,8 +108,14 @@ AXES_RESET_ON_SUCCESS = True
 AXES_LOCKOUT_PARAMETERS = ['username', 'ip_address']
 
 
-# Optional: stop allauth from asking for username if you already have your own form
-ACCOUNT_USERNAME_REQUIRED = True
+
+# Tell allauth exactly which fields to show on signup, and which are required:
+ACCOUNT_SIGNUP_FIELDS = [
+    "email",
+    "username*",
+    "password1*",
+    "password2*",
+]
 SOCIALACCOUNT_QUERY_EMAIL = True
 
 AUTHENTICATION_BACKENDS = [
