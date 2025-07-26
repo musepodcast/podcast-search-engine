@@ -25,7 +25,7 @@ warnings.filterwarnings("ignore", category=InsecureRequestWarning)
 env = environ.Env()
 environ.Env.read_env()   # reads the .env file
 
-
+SITE_ID = 1
 DEBUG = True
 ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"

@@ -107,7 +107,6 @@ AXES_LOCK_OUT_AT_FAILURE = True
 AXES_RESET_ON_SUCCESS = True
 AXES_LOCKOUT_PARAMETERS = ['username', 'ip_address']
 
-SITE_ID = 1
 
 # Optional: stop allauth from asking for username if you already have your own form
 ACCOUNT_USERNAME_REQUIRED = True
@@ -130,17 +129,7 @@ SOCIALACCOUNT_FORMS = {
     "signup": "podcasts.forms.CustomSocialSignupForm",
 }
 
-SOCIALACCOUNT_PROVIDERS = {
-    "google": {
-        "APP": {
-            "client_id": os.environ.get("GOOGLE_CLIENT_ID", ""),
-            "secret": os.environ.get("GOOGLE_CLIENT_SECRET", ""),
-            "key": "",
-        },
-        "SCOPE": ["profile", "email"],
-        "AUTH_PARAMS": {"access_type": "offline", "prompt": "consent"},
-    }
-}
+
 
 
 AUTH_PASSWORD_VALIDATORS = [
