@@ -5,6 +5,7 @@ from podcasts.sitemaps import StaticViewSitemap
 from django.conf.urls.i18n import i18n_patterns
 from two_factor import urls as two_factor_urls
 from django.http import HttpResponse
+from podcasts.adapters import CancelledRedirectView
 
 def favicon_view(request):
     # Return an empty response with the correct content type.
@@ -29,6 +30,7 @@ sitemaps = {
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path("accounts/<str:provider>/login/cancelled/", CancelledRedirectView.as_view(), name="socialaccount_login_cancelled"),
     path("accounts/", include("allauth.urls")),   
     path('auth/', include('django.contrib.auth.urls')),
     # Include podcasts URLs at the root (so home page is available at "/")
