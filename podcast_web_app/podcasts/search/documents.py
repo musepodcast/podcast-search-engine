@@ -59,12 +59,13 @@ class EpisodeDocument(Document):
     episode_title     = fields.TextField()
     publication_date  = fields.DateField()      # will accept your timestamp-without-time-zone
     channel_id        = fields.IntegerField()   # so you can link back to Channels
+    full_transcript   = fields.TextField(attr='full_transcript')
 
     class Django:
         model = Episode
 
     def get_queryset(self):
-        return Episode.objects.all()
+        return Episode.objects.prefetch_related('transcripts').all()
 
 
 # ────── EPISODE TRANSLATIONS ──────

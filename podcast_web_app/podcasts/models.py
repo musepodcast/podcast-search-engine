@@ -112,7 +112,12 @@ class Episode(models.Model):
             GinIndex(fields=['episode_title'], name='episodes_title_trgm_gin', opclasses=['gin_trgm_ops']),
             GinIndex(fields=['description'],    name='episodes_desc_trgm_gin', opclasses=['gin_trgm_ops']),
         ]
-
+        
+    @property
+    def full_transcript(self) -> str:
+        # join all transcript.segment_text for this episode:
+        return " ".join(t.segment_text for t in self.transcripts.all())
+    
     @property
     def thumbnail_url(self):
         """
