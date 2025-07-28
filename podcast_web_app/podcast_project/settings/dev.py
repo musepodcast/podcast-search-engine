@@ -47,12 +47,12 @@ ELASTICSEARCH_DSL = {
 # Configure Postgres via environment variables
 DATABASES = {
     "default": {
-        "ENGINE": os.environ.get("DB_ENGINE", "django.db.backends.postgresql"),
-        "NAME": os.environ.get("DB_NAME", "podcast_db"),
-        "USER": os.environ.get("DB_USER", "postgres"),
-        "PASSWORD": os.environ.get("DB_PASSWORD", ""),
-        "HOST": os.environ.get("DB_HOST", "localhost"),
-        "PORT": os.environ.get("DB_PORT", "5432"),
+        "ENGINE":   env("DB_ENGINE"),
+        "NAME":     env("DB_NAME"),
+        "USER":     env("DB_USER"),
+        "PASSWORD": env("DB_PASSWORD"),
+        "HOST":     env("DB_HOST"),
+        "PORT":     env("DB_PORT"),
     }
 }
 

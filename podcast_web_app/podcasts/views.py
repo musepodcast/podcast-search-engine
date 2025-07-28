@@ -7,7 +7,7 @@ from django.db.models.functions import Coalesce
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 from django.utils.timesince import timesince
-import logging
+import logging, time
 from collections import Counter
 import re, difflib
 import sys
@@ -50,7 +50,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST, require_GET, require_http_methods
 
 from podcasts.search.documents import EpisodeDocument, TranscriptDocument
-from elasticsearch_dsl import Q as DSLQ
+from elasticsearch_dsl import Q as ES_Q
 from django.contrib.postgres.search import TrigramSimilarity
 from datetime import datetime, timedelta
 
@@ -943,6 +943,8 @@ class SearchResultsView(LoginRequiredMixin, ListView):
         return Episode.objects.none()
 
     def paginate_queryset(self, qs, page_size):
+        from .models import Episode
+
         """
         1. If no `q`, fall back to default ListView pagination.
         2. If `search_type=='channels'`, do a pure-ORM filter on Channel.
@@ -985,35 +987,35 @@ class SearchResultsView(LoginRequiredMixin, ListView):
             page_obj  = paginator.get_page(page_num)
             return paginator, page_obj, list(page_obj.object_list), page_obj.has_other_pages()
 
-        # 3) EPISODES pure-ORM branch
+        # 3) EPISODES branch: decide ORM vs ES
         if search_type == 'episodes':
-            wants = self.request.GET.getlist('search_in')
-            filters = []
+            wants     = set(self.request.GET.getlist('search_in'))
+            orm_fields = {'episode_title', 'description', 'channel_title'}
+            transcript_fields = {self.SEGMENT_FIELD, self.SEGMENT_ALIAS_FIELD, self.TRANSCRIPTS_FIELD}
 
-            # mirror your channel logic on episode fields:
-            if 'episode_title'     in wants:
-                filters.append(Q(episode_title__icontains=q))
-            if 'description'       in wants:
-                filters.append(Q(description__icontains=q))
-            # now include channel title too:
-            if 'channel_title'     in wants:
-                filters.append(Q(channel__channel_title__icontains=q))
-            # transcripts checkbox:
-            if 'transcripts'       in wants or 'segment_text' in wants:
-                filters.append(Q(transcripts__segment_text__icontains=q))
+            # a) If the user only wants episode‑level fields (no transcripts), do pure‑ORM
+            if wants & orm_fields and wants.isdisjoint(transcript_fields):
+                filters = []
+                if 'episode_title' in wants:
+                    filters.append(Q(episode_title__icontains=q))
+                if 'description' in wants:
+                    filters.append(Q(description__icontains=q))
+                if 'channel_title' in wants:
+                    filters.append(Q(channel__channel_title__icontains=q))
 
-            if filters:
-                combined = filters.pop()
-                for f in filters:
-                    combined |= f
-                episodes_qs = Episode.objects.filter(combined).distinct()
-            else:
-                episodes_qs = Episode.objects.filter(episode_title__icontains=q)
+                if filters:
+                    combined   = filters.pop()
+                    for f in filters:
+                        combined |= f
+                    episodes_qs = Episode.objects.filter(combined).distinct()
+                else:
+                    episodes_qs = Episode.objects.filter(episode_title__icontains=q)
 
-            paginator = Paginator(episodes_qs, page_size)
-            page_num  = int(self.request.GET.get('page', 1))
-            page_obj  = paginator.get_page(page_num)
-            return paginator, page_obj, list(page_obj.object_list), page_obj.has_other_pages()
+                paginator = Paginator(episodes_qs, page_size)
+                page_num  = int(self.request.GET.get('page', 1))
+                page_obj  = paginator.get_page(page_num)
+                return paginator, page_obj, list(page_obj.object_list), page_obj.has_other_pages()
+
 
         # 4) FULL-TEXT / ELASTICSEARCH branch
 
@@ -1027,20 +1029,50 @@ class SearchResultsView(LoginRequiredMixin, ListView):
                 if days == 24
                 else timezone.timedelta(days=days)
             )
-
-        # 4b) Transcript-only ES query
+        # —— insert this block —— 
         selected = set(self.request.GET.getlist('search_in'))
-        # ✅ list membership doesn’t require hashing the members
         transcript_only = [
             {self.SEGMENT_FIELD},
             {self.SEGMENT_ALIAS_FIELD},
             {self.TRANSCRIPTS_FIELD},
         ]
+
+        # ─── 4b) Transcript‑only ES query with phrase‑boost + recency sort ───
+        # (replace your existing transcript‑only block with this)
+
+        selected = set(self.request.GET.getlist('search_in'))
+        transcript_only = [{self.SEGMENT_FIELD}, {self.SEGMENT_ALIAS_FIELD}, {self.TRANSCRIPTS_FIELD}]
+
         if selected in transcript_only:
-            tsearch = TranscriptDocument.search().query(
-                'match',
-                segment_text={'query': q}
+            # 1) Pagination math
+            page      = int(self.request.GET.get('page', 1))
+            page_size = self.paginate_by
+            start     = (page - 1) * page_size
+            end       = start + page_size
+
+            # 2) Build the function_score: broad match + phrase boost
+            broad_q  = ES_Q('match',        segment_text={'query': q, 'operator': 'or'})
+            phrase_q = ES_Q('match_phrase', segment_text={'query': q})
+
+            tsearch = (
+                TranscriptDocument.search()
+                .query(
+                    'function_score',
+                    query=broad_q,
+                    functions=[{'filter': phrase_q, 'weight': 10}],
+                    boost_mode='sum',
+                    score_mode='sum'
+                )
+                # collapse segments into one hit per episode
+                .params(collapse={
+                    'field': 'episode_id',
+                    'inner_hits': {'name': 'top_segment', 'size': 1}
+                })
+                # sort by ES score only (we’ll tie‑break in Python)
+                .sort({'_score': 'desc'})
             )
+
+            # 3) Optional date window on the nested episode.publication_date
             if window:
                 tsearch = tsearch.filter(
                     'nested',
@@ -1052,47 +1084,105 @@ class SearchResultsView(LoginRequiredMixin, ListView):
                     }}
                 )
 
-            total = tsearch.count()
-            page  = int(self.request.GET.get('page', 1))
-            start = (page - 1) * page_size
-            end   = start + page_size
+            # 4) Execute the collapsed, scored query
+            resp = tsearch[start:end].execute()
 
-            tresp  = tsearch.sort({'_score': 'desc'})[start:end].execute()
-            ep_ids = [hit.episode_id for hit in tresp]
+            # 5) Extract episode IDs + ES‐scores
+            hits      = resp.hits.hits
+            scored_ids = [
+                (hit['_source']['episode_id'], hit['_score'])
+                for hit in hits
+            ]
 
-            episodes = list(
-                Episode.objects
-                       .filter(id__in=ep_ids)
-                       .select_related('channel')
-                       .prefetch_related('transcripts')
+            # 6) Bulk fetch those Episode objects
+            episode_objs = Episode.objects.filter(
+                id__in=[eid for eid, _ in scored_ids]
+            ).select_related('channel').prefetch_related('transcripts')
+            id_map = {e.id: e for e in episode_objs}
+
+            # 7) Sort in Python by (ES score desc, publication_date desc)
+            scored_eps = [
+                (id_map[eid], score)
+                for eid, score in scored_ids
+                if eid in id_map
+            ]
+            scored_eps.sort(
+                key=lambda pair: (
+                    -pair[1],                                 # higher score first
+                    -pair[0].publication_date.timestamp()     # newer date first
+                )
             )
-            id_map    = {e.id: e for e in episodes}
-            page_list = [id_map[i] for i in ep_ids if i in id_map]
+            page_list = [ep for ep, _ in scored_eps]
 
+            # 8) Paginate & return
+            total     = resp.hits.total.value
             paginator = Paginator(range(total), page_size)
             try:
                 page_obj = paginator.page(page)
-            except:
+            except EmptyPage:
                 page_obj = paginator.page(1)
 
             return paginator, page_obj, page_list, page_obj.has_other_pages()
 
-        # 4c) Default multi-match ES query
-        es = EpisodeDocument.search()
-        if window:
-            es = es.filter('range', publication_date={'gte': timezone.now() - window})
 
+
+
+
+        # 4c) Multi‑match ES query with phrase boosting + date sort
+        from podcasts.search.documents import EpisodeDocument
+
+        es = EpisodeDocument.search()
+
+        # date‑window filter
+        if window:
+            es = es.filter(
+                'range',
+                publication_date={'gte': timezone.now() - window}
+            )
+
+        # fields to search
         fields = [
             'episode_title',
             'description',
             'channel.channel_title',
             'translations.episode_title',
             'translations.description',
-            'transcripts.segment_text',
+            'full_transcript',
         ]
-        es = es.query('multi_match', query=q, fields=fields)
+
+        # 1) any-term multi-match
+        broad_q  = ES_Q(
+            'multi_match',
+            query=q,
+            fields=fields,
+            type='best_fields',
+            operator='or'
+        )
+
+        # 2) exact-phrase multi-match
+        phrase_q = ES_Q(
+            'multi_match',
+            query=q,
+            fields=fields,
+            type='phrase'
+        )
+
+        # 3) wrap in function_score to boost phrase hits
+        es = es.query(
+            'function_score',
+            query=broad_q,
+            functions=[{
+                'filter': phrase_q,
+                'weight': 10
+            }],
+            boost_mode='sum',
+            score_mode='sum'
+        )
+
+        # sort: 1) score (phrase first), 2) publication_date
         es = es.sort({'_score': 'desc'}, {'publication_date': 'desc'})
 
+        # count + slice + execute
         total = es.count()
         page  = int(self.request.GET.get('page', 1))
         start = (page - 1) * page_size
@@ -1101,11 +1191,12 @@ class SearchResultsView(LoginRequiredMixin, ListView):
         resp = es[start:end].execute()
         ids  = [int(hit.meta.id) for hit in resp]
 
-        episodes = list(
+        # ORM pull + paginate
+        episodes = (
             Episode.objects
-                   .filter(id__in=ids)
-                   .select_related('channel')
-                   .prefetch_related('transcripts')
+                .filter(id__in=ids)
+                .select_related('channel')
+                .prefetch_related('transcripts')
         )
         id_map    = {e.id: e for e in episodes}
         page_list = [id_map[i] for i in ids if i in id_map]
@@ -1113,7 +1204,7 @@ class SearchResultsView(LoginRequiredMixin, ListView):
         paginator = Paginator(range(total), page_size)
         try:
             page_obj = paginator.page(page)
-        except:
+        except EmptyPage:
             page_obj = paginator.page(1)
 
         return paginator, page_obj, page_list, page_obj.has_other_pages()
@@ -1201,13 +1292,13 @@ class SearchResultsView(LoginRequiredMixin, ListView):
             tpl = ( search_type=='channels'
                     and 'podcasts/search_results_ch_items.html'
                     or 'podcasts/search_results_items.html' )
-            logger.debug("→ Rendering AJAX with template %r", tpl)
+            #logger.debug("→ Rendering AJAX with template %r", tpl)
             return render(self.request, tpl, context)
 
         tpl = ( search_type=='channels'
                 and 'podcasts/search_results_ch.html'
                 or 'podcasts/search_results.html' )
-        logger.debug("→ Rendering non-AJAX with template %r", tpl)
+        #logger.debug("→ Rendering non-AJAX with template %r", tpl)
         return render(self.request, tpl, context)
 
 
