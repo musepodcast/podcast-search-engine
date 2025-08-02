@@ -12,8 +12,20 @@ from django_countries.fields import CountryField
 from allauth.socialaccount.models import SocialAccount
 from allauth.account.models import EmailAddress
 from django.contrib.auth.models import AbstractUser
+from django.core.files.storage import FileSystemStorage
+from pathlib import Path
+import string
+import random
+import os
 
+SUPPORT_ATTACHMENTS_ROOT = Path.home() / 'podcast_data' / 'support_attachments'
+# if you need a string path:
+SUPPORT_ATTACHMENTS_ROOT = str(SUPPORT_ATTACHMENTS_ROOT)
 
+support_attachment_storage = FileSystemStorage(
+    location=str(Path.home() / 'podcast_data' / 'support_attachments'),
+    base_url='/media/support_attachments/',
+)
 
 class Channel(models.Model):
     channel_title = models.TextField(unique=True)
@@ -445,3 +457,68 @@ class CommentReaction(models.Model):
 
     def __str__(self):
         return f"{self.user.username} {self.reaction} on comment {self.comment.id}"    
+    
+
+
+def generate_ticket_number(length=8):
+    chars = string.ascii_uppercase + string.digits
+    while True:
+        code = ''.join(random.choices(chars, k=length))
+        if not SupportTicket.objects.filter(ticket_number=code).exists():
+            return code
+
+# Store attachments under ~/podcast_data/support_attachments
+SUPPORT_ATTACHMENTS_ROOT = str(Path.home() / 'podcast_data' / 'support_attachments')
+SUPPORT_ATTACHMENTS_URL  = '/media/support_attachments/'
+
+support_attachment_storage = FileSystemStorage(
+    location=SUPPORT_ATTACHMENTS_ROOT,
+    base_url=SUPPORT_ATTACHMENTS_URL,
+)
+
+class SupportTicket(models.Model):
+    ticket_number      = models.CharField(
+                             max_length=8,
+                             unique=True,
+                             null=True,
+                             blank=True,
+                             editable=False,
+                         )
+    user               = models.ForeignKey(
+                             settings.AUTH_USER_MODEL,
+                             on_delete=models.CASCADE,
+                             related_name='support_tickets'
+                         )
+    subject            = models.CharField(max_length=255)
+    message            = models.TextField(max_length=3000)
+    submission_date    = models.DateTimeField(auto_now_add=True)
+    last_reviewed_date = models.DateTimeField(null=True, blank=True)
+    status             = models.CharField(
+                             max_length=20,
+                             choices=[
+                                 ('pending',     'Pending'),
+                                 ('in_progress', 'In Progress'),
+                                 ('completed',   'Completed'),
+                                 ('cancelled',   'Cancelled'),
+                             ],
+                             default='pending'
+                         )
+
+    def save(self, *args, **kwargs):
+        if not self.ticket_number:
+            self.ticket_number = generate_ticket_number()
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f"{self.ticket_number} {self.subject}"
+
+class SupportTicketAttachment(models.Model):
+    ticket = models.ForeignKey(
+                 SupportTicket,
+                 on_delete=models.CASCADE,
+                 related_name='attachments'
+             )
+    file   = models.FileField(storage=support_attachment_storage)
+
+    def __str__(self):
+        return os.path.basename(self.file.name)

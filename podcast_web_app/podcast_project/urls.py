@@ -6,6 +6,12 @@ from django.conf.urls.i18n import i18n_patterns
 from two_factor import urls as two_factor_urls
 from django.http import HttpResponse
 from podcasts.adapters import CancelledRedirectView
+from django.conf import settings
+from django.conf.urls.static import static
+from pathlib import Path
+
+# Point at ~/podcast_data/support_attachments
+SUPPORT_ATTACHMENTS_ROOT = Path.home() / 'podcast_data' / 'support_attachments'
 
 def favicon_view(request):
     # Return an empty response with the correct content type.
@@ -28,6 +34,7 @@ sitemaps = {
 }
 
 
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("accounts/<str:provider>/login/cancelled/", CancelledRedirectView.as_view(), name="socialaccount_login_cancelled"),
@@ -42,3 +49,16 @@ urlpatterns = [
     
 ]
 #path('', include((two_factor_patterns, 'two_factor'), namespace='two_factor')),
+
+# ——— Serve media in development (and, if you wish, in production via WhiteNoise) ———
+if settings.DEBUG:
+    # regular MEDIA_URL (if used)
+    urlpatterns += static(
+        settings.MEDIA_URL,
+        document_root=settings.MEDIA_ROOT
+    )
+    # support attachments from ~/podcast_data/support_attachments
+    urlpatterns += static(
+        '/media/support_attachments/',
+        document_root=str(SUPPORT_ATTACHMENTS_ROOT)
+    )

@@ -3,7 +3,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from phonenumber_field.formfields import SplitPhoneNumberField
 from django.contrib.auth import get_user_model
-from .models import CustomUser
+from .models import CustomUser, SupportTicket
 from allauth.socialaccount.forms import SignupForm
 
 class OTPChallengeForm(forms.Form):
@@ -84,3 +84,44 @@ class CustomAuthenticationForm(AuthenticationForm):
         super().__init__(*args, **kwargs)
         # Change the label to "Username or email"
         self.fields['username'].label = "Username or email"
+
+class SupportTicketForm(forms.ModelForm):
+    attachment = forms.FileField(
+        required=False,
+        widget=forms.FileInput(attrs={
+            'accept': '.jpg,.jpeg,.png,.gif',
+        }),
+        help_text="One image (JPG/PNG/GIF), ≤2 MB."
+    )
+
+    class Meta:
+        model  = SupportTicket
+        fields = ['subject', 'message', 'attachment']
+        widgets= {
+            'subject': forms.TextInput(attrs={
+                'class':'form-control',
+                'placeholder':'Subject'
+            }),
+            'message': forms.Textarea(attrs={
+                'class':'form-control',
+                'rows':4,
+                'placeholder':'Describe your request…',
+                'maxlength':'3000',
+            }),
+        }
+
+    def clean_message(self):
+        msg = self.cleaned_data['message']
+        if len(msg) > 3000:
+            raise forms.ValidationError("Message cannot exceed 3000 characters.")
+        return msg
+
+    def clean_attachment(self):
+        f = self.cleaned_data.get('attachment')
+        if f:
+            if f.size > 2 * 1024 * 1024:
+                raise forms.ValidationError("File must be under 2 MB.")
+            ext = f.name.rsplit('.', 1)[-1].lower()
+            if ext not in ['jpg','jpeg','png','gif']:
+                raise forms.ValidationError(f"Unsupported file type: .{ext}")
+        return f

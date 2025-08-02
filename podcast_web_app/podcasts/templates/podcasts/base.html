@@ -106,7 +106,7 @@
                     </span>
                   </a>
                 </li>
-
+              
                 <!-- ← new “Support Me” trigger: opens #supportModal -->
                 <li>
                   <a class="dropdown-item text-start"
@@ -114,6 +114,13 @@
                     data-bs-toggle="modal"
                     data-bs-target="#supportModal">
                     {% trans "Support Me" %}
+                  </a>
+                </li>
+                <!-- Support Ticker link -->
+                <li>
+                  <a class="dropdown-item text-start"
+                    href="{% url 'podcasts:support_ticket' %}">
+                    {% trans "Support Ticket" %}
                   </a>
                 </li>
                  <!-- Contribute link -->

@@ -3,7 +3,8 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.utils.safestring import mark_safe
-from .models import Channel, Episode, Transcript, Chapter, CustomUser, ChannelVisit, EpisodeVisit, SearchQuery, ChannelInteraction, EpisodeInteraction, Comment, Reply
+from .models import Channel, Episode, Transcript, Chapter, CustomUser, ChannelVisit, EpisodeVisit, SearchQuery, ChannelInteraction, EpisodeInteraction, Comment, Reply, SupportTicket, SupportTicketAttachment
+from django.utils import timezone
 
 @admin.register(Channel)
 class ChannelAdmin(admin.ModelAdmin):
@@ -128,3 +129,31 @@ class ReplyAdmin(admin.ModelAdmin):
         tagged = re.findall(r'@(\w+)', obj.text)
         return ", ".join(tagged) if tagged else "-"
     tagged_users.short_description = "Tagged Users"
+
+class SupportTicketAttachmentInline(admin.TabularInline):
+    model = SupportTicketAttachment
+    extra = 0
+
+@admin.register(SupportTicket)
+class SupportTicketAdmin(admin.ModelAdmin):
+    list_display       = (
+        'ticket_number',   # ← use this
+        'user','user_email','subject','status',
+        'submission_date','last_reviewed_date'
+    )
+    list_display_links = ('ticket_number','subject')
+    list_editable      = ('status',)
+    list_filter        = ('status',)
+    search_fields      = ('subject','message','user__username','user__email')
+    inlines            = [SupportTicketAttachmentInline]
+
+    def user_email(self, obj):
+        return obj.user.email
+    user_email.admin_order_field = 'user__email'
+    user_email.short_description = 'Email'
+
+    def save_model(self, request, obj, form, change):
+        # if editing an existing ticket AND status was changed…
+        if change and 'status' in form.changed_data:
+            obj.last_reviewed_date = timezone.now()
+        super().save_model(request, obj, form, change)
