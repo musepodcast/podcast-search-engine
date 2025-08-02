@@ -1,0 +1,118 @@
+{% extends "podcasts/base.html" %}
+{% load i18n %}
+{% block content %}
+<div class="container my-4 flex-grow-1">
+
+  <!-- Submit Ticket Form -->
+  <h1 class="mb-4">{% trans "Submit a Support Ticket" %}</h1>
+  <form method="post" enctype="multipart/form-data" class="mb-5">
+    {% csrf_token %}
+    <div class="mb-3">
+      {{ form.subject.label_tag }}
+      {{ form.subject }}
+    </div>
+    <div class="mb-3">
+      {{ form.message.label_tag }}
+      {{ form.message }}
+    </div>
+    <div class="mb-3">
+      {{ form.attachment.label_tag }}
+      {{ form.attachment }}
+      <small class="form-text text-muted">{{ form.attachment.help_text }}</small>
+    </div>
+    <button type="submit" class="btn btn-primary">
+      {% trans "Submit Ticket" %}
+    </button>
+  </form>
+
+  <!-- Your Tickets -->
+  <h2 class="mb-3">{% trans "Your Tickets" %}</h2>
+
+  <!-- Scoped CSS for Your Tickets table -->
+  <style>
+    /* Bubble look: rounded container and table */
+    .table-responsive.bubble {
+      border-radius: 1rem !important;
+      overflow: hidden !important;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.15) !important;
+    }
+    table.support-table {
+      margin-bottom: 0;
+    }
+
+    /* Header cells: dark-blue bg, white text, blue bottom border */
+    table.support-table thead th {
+      background-color: #093145 !important;
+      color:            #fff     !important;
+      border-bottom:    2px solid #0b5ed7 !important;
+    }
+    /* Force all cells gray and light text */
+    .support-table tbody td {
+      background-color: #2f3337 !important;
+      color:             #e3e6e8 !important;
+    }
+    /* Row bottom border */
+    .support-table tbody tr {
+      border-bottom: 1px solid #7C7D7D !important;
+    }
+    /* Last row: no border */
+    .support-table tbody tr:last-child {
+      border-bottom: none !important;
+    }
+  </style>
+
+  <div class="table-responsive bubble">
+    <table class="table support-table">
+      <thead>
+        <tr>
+          <th>{% trans "Ticket #" %}</th>
+          <th>{% trans "Subject" %}</th>
+          <th>{% trans "Message" %}</th>
+          <th>{% trans "Submitted" %}</th>
+          <th>{% trans "Last Reviewed" %}</th>
+          <th>{% trans "Status" %}</th>
+        </tr>
+      </thead>
+        <tbody>
+        {% for ticket in tickets %}
+            <tr>
+            <td>{{ ticket.ticket_number }}</td>
+            <td style="max-width:25ch;">
+                <span class="d-inline-block text-truncate" style="max-width:25ch;"
+                    data-bs-toggle="tooltip" title="{{ ticket.subject|escape }}">
+                {{ ticket.subject }}
+                </span>
+            </td>
+            <td style="max-width:30ch;">
+                <span class="d-inline-block text-truncate" style="max-width:30ch;"
+                    data-bs-toggle="tooltip" title="{{ ticket.message|escape }}">
+                {{ ticket.message }}
+                </span>
+            </td>
+            <td>{{ ticket.submission_date|date:"Y-m-d H:i" }}</td>
+            <td>{{ ticket.last_reviewed_date|date:"Y-m-d H:i"|default:"—" }}</td>
+            <td>{{ ticket.get_status_display }}</td>
+            </tr>
+        {% empty %}
+            <tr>
+            <td colspan="6" class="text-center">
+                {% trans "You haven’t submitted any tickets yet." %}
+            </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function(){
+    var tooltipTriggerList = [].slice.call(
+      document.querySelectorAll('[data-bs-toggle="tooltip"]')
+    );
+    tooltipTriggerList.forEach(function (el) {
+      new bootstrap.Tooltip(el);
+    });
+  });
+</script>
+{% endblock %}

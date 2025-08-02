@@ -27,6 +27,12 @@ from transformers import AutoTokenizer, AutoModelForSeq2SeqLM, pipeline
 from datasets import Dataset
 
 # -----------------------------
+# Constants
+# -----------------------------
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+DEFAULT_INPUT = os.path.normpath(os.path.join(SCRIPT_DIR, "..", "podcasts_data", "transcripts"))
+
+# -----------------------------
 # Custom Speaker Translator
 # -----------------------------
 def custom_translate_speaker(speaker_text, target_lang_code):
@@ -161,7 +167,11 @@ def main():
     parser = argparse.ArgumentParser(
         description="Translate podcast episode JSON files from English to multiple target languages."
     )
-    parser.add_argument("--input_dir", default="transcripts", help="Path to the transcripts directory")
+    parser.add_argument(
+    "--input_dir",
+    default=DEFAULT_INPUT,
+    help=f"Path to the transcripts directory (default: {DEFAULT_INPUT})"
+)
     args = parser.parse_args()
 
     # List of target languages to process.

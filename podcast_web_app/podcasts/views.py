@@ -7,6 +7,8 @@ from django.db.models.functions import Coalesce
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 from django.utils.timesince import timesince
+from django.utils.translation import gettext as _
+
 import logging, time
 from collections import Counter
 import re, difflib
@@ -20,12 +22,13 @@ from .models import (
     Transcript, TranscriptTranslations,
     Chapter, ChapterTranslations,
     SearchQuery, ChannelInteraction, EpisodeInteraction,
-    Comment, CommentReaction, Reply
+    Comment, CommentReaction, Reply,
+    SupportTicket, SupportTicketAttachment
 
 )
 from .filters import EpisodeFilter
 
-from .forms import CustomAuthenticationForm
+from .forms import CustomAuthenticationForm, SupportTicketForm
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
@@ -1492,3 +1495,28 @@ class ContributeView(LoginRequiredMixin, TemplateView):
         # ctx['channels'] = Channel.objects.filter(created_by=self.request.user)
         ctx['channels'] = Channel.objects.all()
         return ctx
+    
+@login_required
+def support_ticket(request):
+    if request.method == 'POST':
+        form = SupportTicketForm(request.POST, request.FILES)
+        if form.is_valid():
+            ticket       = form.save(commit=False)
+            ticket.user  = request.user
+            ticket.save()
+            # handle one screenshot (if any)
+            f = form.cleaned_data.get('attachment')
+            if f:
+                SupportTicketAttachment.objects.create(ticket=ticket, file=f)
+
+
+            messages.success(request, _("Your support ticket has been submitted."))
+            return redirect('podcasts:support_ticket')
+    else:
+        form = SupportTicketForm()
+
+    tickets = request.user.support_tickets.order_by('-submission_date')
+    return render(request, 'podcasts/support_ticket.html', {
+        'form':    form,
+        'tickets': tickets,
+    })
