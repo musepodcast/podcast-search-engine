@@ -1443,6 +1443,7 @@ class NotificationsListView(LoginRequiredMixin, ListView):
 
 
 class BookmarksListView(LoginRequiredMixin, ListView):
+    login_url = reverse_lazy('podcasts:home')
     template_name = 'podcasts/bookmarks_list.html'
     context_object_name = 'episodes'
     paginate_by = 5
