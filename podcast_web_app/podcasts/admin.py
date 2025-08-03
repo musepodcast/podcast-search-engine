@@ -33,7 +33,7 @@ class ChapterAdmin(admin.ModelAdmin):
 class CustomUserAdmin(UserAdmin):
     list_display = (
         'id', 'username', 'email', 'first_name', 'last_name',
-        'birthdate', 'country', 'phone_number', 'gender', 'is_staff'
+        'birthdate', 'country', 'phone_number', 'gender', 'is_staff', 'support_ticket_limit'
     )
     search_fields = ('username', 'email', 'first_name', 'last_name')
     
@@ -42,7 +42,7 @@ class CustomUserAdmin(UserAdmin):
         ('Personal info', {
             'fields': (
                 'first_name', 'last_name', 'email', 
-                'birthdate', 'country', 'phone_number', 'gender'
+                'birthdate', 'country', 'phone_number', 'gender', 'support_ticket_limit'
             )
         }),
         ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser',

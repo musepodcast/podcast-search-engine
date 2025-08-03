@@ -29,7 +29,7 @@ from .models import (
 from .filters import EpisodeFilter
 
 from .forms import CustomAuthenticationForm, SupportTicketForm
-
+from .models import SupportTicketAttachment
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.views.generic.edit import UpdateView, CreateView
@@ -1499,25 +1499,64 @@ class ContributeView(LoginRequiredMixin, TemplateView):
     
 @login_required
 def support_ticket(request):
+    success     = False
+    error_code  = None
+
+    # 1) Figure out the user’s cap and current open count
+    limit      = getattr(request.user, 'support_ticket_limit', 10)
+    open_count = SupportTicket.objects.filter(
+        user=request.user,
+        status__in=['pending', 'in_progress']
+    ).count()
+
     if request.method == 'POST':
-        form = SupportTicketForm(request.POST, request.FILES)
-        if form.is_valid():
-            ticket       = form.save(commit=False)
-            ticket.user  = request.user
-            ticket.save()
-            # handle one screenshot (if any)
-            f = form.cleaned_data.get('attachment')
-            if f:
-                SupportTicketAttachment.objects.create(ticket=ticket, file=f)
+        # 2) Block new tickets if they have no slots
+        if open_count >= limit:
+            error_code = 'limit'
+            form = SupportTicketForm(request.POST, request.FILES)
+        else:
+            form = SupportTicketForm(request.POST, request.FILES)
+            if form.is_valid():
+                # Save the ticket
+                ticket      = form.save(commit=False)
+                ticket.user = request.user
+                ticket.save()
 
+                # Save the single attachment if present
+                f = form.cleaned_data.get('attachment')
+                if f:
+                    SupportTicketAttachment.objects.create(
+                        ticket=ticket,
+                        file=f
+                    )
 
-            messages.success(request, _("Your support ticket has been submitted."))
-            return redirect('podcasts:support_ticket')
+                success = True
+                form    = SupportTicketForm()  # reset form for next submission
+                # Since we created one, increment open_count so the UI shows updated
+                open_count += 1
+
+            else:
+                # Inspect only the attachment errors
+                errs = form.errors.get('attachment')
+                if errs:
+                    text     = ' '.join(errs)
+                    size_err = '2 MB' in text
+                    type_err = any(ext in text.upper() for ext in ('JPG','PNG','GIF'))
+                    if size_err and type_err:
+                        error_code = 'both'
+                    elif size_err:
+                        error_code = 'size'
+                    else:
+                        error_code = 'type'
     else:
         form = SupportTicketForm()
 
     tickets = request.user.support_tickets.order_by('-submission_date')
     return render(request, 'podcasts/support_ticket.html', {
-        'form':    form,
-        'tickets': tickets,
+        'form':       form,
+        'tickets':    tickets,
+        'success':    success,
+        'error_code': error_code,
+        'open_count': open_count,
+        'limit':      limit,
     })

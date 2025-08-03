@@ -5,6 +5,7 @@ from phonenumber_field.formfields import SplitPhoneNumberField
 from django.contrib.auth import get_user_model
 from .models import CustomUser, SupportTicket
 from allauth.socialaccount.forms import SignupForm
+from django.utils.translation import gettext_lazy as _
 
 class OTPChallengeForm(forms.Form):
     token = forms.CharField(label="OTP Token", max_length=6, widget=forms.TextInput(attrs={'placeholder': 'Enter OTP token'}))
@@ -110,18 +111,17 @@ class SupportTicketForm(forms.ModelForm):
             }),
         }
 
-    def clean_message(self):
-        msg = self.cleaned_data['message']
-        if len(msg) > 3000:
-            raise forms.ValidationError("Message cannot exceed 3000 characters.")
-        return msg
-
     def clean_attachment(self):
         f = self.cleaned_data.get('attachment')
         if f:
+            errors = []
+            # size check
             if f.size > 2 * 1024 * 1024:
-                raise forms.ValidationError("File must be under 2 MB.")
-            ext = f.name.rsplit('.', 1)[-1].lower()
-            if ext not in ['jpg','jpeg','png','gif']:
-                raise forms.ValidationError(f"Unsupported file type: .{ext}")
+                errors.append(_("File size is too large, must be ≤ 2 MB."))
+            # type check
+            if f.content_type not in ('image/jpeg', 'image/png', 'image/gif'):
+                errors.append(_("Only JPG, PNG or GIF files are accepted."))
+            if errors:
+                # raise all errors at once
+                raise forms.ValidationError(errors)
         return f
