@@ -50,15 +50,14 @@ urlpatterns = [
 ]
 #path('', include((two_factor_patterns, 'two_factor'), namespace='two_factor')),
 
-# ——— Serve media in development (and, if you wish, in production via WhiteNoise) ———
 if settings.DEBUG:
-    # regular MEDIA_URL (if used)
-    urlpatterns += static(
-        settings.MEDIA_URL,
-        document_root=settings.MEDIA_ROOT
-    )
-    # support attachments from ~/podcast_data/support_attachments
+    # 1) Serve attachments *first*:
     urlpatterns += static(
         '/media/support_attachments/',
-        document_root=str(SUPPORT_ATTACHMENTS_ROOT)
+        document_root=SUPPORT_ATTACHMENTS_ROOT
+    )
+    # 2) Then fall back to other MEDIA:
+    urlpatterns += static(
+        settings.MEDIA_URL,
+        document_root=settings.MEDIA_ROOT 
     )
