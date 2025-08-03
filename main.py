@@ -1313,10 +1313,14 @@ def main():
             logging.debug(f"Starting processing for entry: {entry.get('title', 'No Title')}")
             process_entry(entry, channel_transcript_dir, download_dir, channel_title, diarization_pipeline, config, feed_data, channel_summary, channel_author)
 
+
+    failed_dir = DATABASE_ROOT / "watcher_json"
+    failed_dir.mkdir(parents=True, exist_ok=True)
     # Print a list of failed feeds
-    with open('failed_feeds.json', 'w', encoding='utf-8') as f:
+    failed_file = failed_dir / "failed_feeds.json"
+    with open(failed_file, 'w', encoding='utf-8') as f:
         json.dump(failed_feeds, f, indent=2, ensure_ascii=False)
-    logging.info(f"Saved {len(failed_feeds)} failed feeds to failed_feeds.json")
+    logging.info(f"Saved {len(failed_feeds)} failed feeds to {failed_file}")
 
     # After processing all feeds, run the translation script.
     logging.info("All feeds processed. Running translation script...")

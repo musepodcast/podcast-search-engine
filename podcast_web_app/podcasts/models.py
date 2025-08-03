@@ -78,6 +78,10 @@ class CustomUser(AbstractUser):
         blank=True,
         help_text="Which channels this user has opted to contribute to."
     )
+    support_ticket_limit = models.PositiveIntegerField(
+        default=5,
+        help_text="Max open (pending/in-progress) tickets this user can have."
+    )
     def __str__(self):
         return self.username        
 
@@ -503,6 +507,7 @@ class SupportTicket(models.Model):
                              ],
                              default='pending'
                          )
+    
 
     def save(self, *args, **kwargs):
         if not self.ticket_number:
