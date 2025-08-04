@@ -7,12 +7,24 @@
   <h2>{% trans "Login" %}</h2>
 
   {# —— SOCIAL LOGIN —— #}
-  <form method="post" action="{% provider_login_url 'google' process='login' %}">
-    {% csrf_token %}
-    <button type="submit" class="btn btn-outline-light w-100 mb-3">
-      <i class="fab fa-google me-2"></i> {% trans "Sign in with Google" %}
-    </button>
-  </form>
+  <div class="row gy-3 mb-4">
+    <div class="col-12">
+      <form method="post" action="{% provider_login_url 'google' process='login' %}">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-outline-light w-100">
+          <i class="fab fa-google me-2"></i> {% trans "Sign in with Google" %}
+        </button>
+      </form>
+    </div>
+    <div class="col-12">
+      <form method="post" action="{% provider_login_url 'twitter' process='login' %}">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-outline-light w-100">
+          <i class="fab fa-x me-2"></i> {% trans "Sign in with X" %}
+        </button>
+      </form>
+    </div>
+  </div>
 
   <hr/>
     <p class="text-center text-muted mb-4">{% trans "or sign in with an account manually" %}</p>

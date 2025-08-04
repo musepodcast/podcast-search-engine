@@ -18,31 +18,34 @@ class Disable2FAForm(forms.Form):
     )
 
 class CustomSocialSignupForm(SignupForm):
-    # add username (since you REQUIRE it on your CustomUser)
-    username = forms.CharField(required=True, label="Username")
-    
-    # fields Google won’t supply
-    birthdate    = forms.DateField(
+    # override the parent’s email field:
+    email = forms.EmailField(
         required=True,
-        widget=forms.DateInput(attrs={"type": "date"})
+        label=_("Email")
     )
+    username     = forms.CharField(required=True, label=_("Username"))
+    birthdate    = forms.DateField(required=True, widget=forms.DateInput(attrs={"type": "date"}))
     country      = forms.CharField(required=True)
     phone_number = SplitPhoneNumberField(region="US", required=True)
-    gender       = forms.ChoiceField(
-        choices=CustomUser.GENDER_CHOICES, required=True
-    )
+    gender       = forms.ChoiceField(choices=CustomUser.GENDER_CHOICES, required=True)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['email'].required = True
+        # Prevent Django from tacking on “(optional)”
+        self.fields['email'].label_suffix = ''
 
     def save(self, request):
-        # this will fill in email/first_name/last_name from Google
         user = super().save(request)
-        cd = self.cleaned_data
+        cd   = self.cleaned_data
+        user.email        = cd["email"]
         user.username     = cd["username"]
         user.birthdate    = cd["birthdate"]
         user.country      = cd["country"]
         user.phone_number = cd["phone_number"]
         user.gender       = cd["gender"]
         user.save(update_fields=[
-            "username", "birthdate", "country", "phone_number", "gender"
+            "email","username","birthdate","country","phone_number","gender"
         ])
         return user
 

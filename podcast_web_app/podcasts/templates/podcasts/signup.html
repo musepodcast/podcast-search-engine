@@ -13,7 +13,14 @@
       </button>
     </form>
   </div>
-
+  <div class="mb-4">
+      <form method="post" action="{% provider_login_url 'twitter' process='signup' %}">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-outline-light w-100">
+          <i class="fab fa-x me-2"></i> Sign up with X
+        </button>
+      </form>
+    </div>
   <hr class="my-4">
   <p class="text-center text-muted mb-4">{% trans "or create an account manually" %}</p>
   <form method="post" action="{% url 'podcasts:signup' %}">
