@@ -91,7 +91,16 @@ SOCIALACCOUNT_PROVIDERS = {
             # preserve previously granted scopes on future sign‑ins
             "include_granted_scopes": "true",
         },
-    }
+    },
+    "twitter": {
+        "APP": {
+            "client_id": os.environ["TWITTER_CLIENT_ID"],
+            "secret":    os.environ["TWITTER_SECRET"],
+            "key":       "",
+        },
+    "SCOPE": ["email"],
+    "AUTH_PARAMS": {"include_email": "true"},
+},
 }
 
 

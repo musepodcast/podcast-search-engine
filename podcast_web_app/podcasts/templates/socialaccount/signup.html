@@ -1,12 +1,19 @@
+{# templates/podcasts/socialaccount/signup.html #}
 {% extends "podcasts/base.html" %}
 {% load i18n %}
 
 {% block content %}
 <div class="container mt-5">
   <h2>{% trans "Finish signing up" %}</h2>
-  <form method="post">
+    <form method="post">
     {% csrf_token %}
     {{ form.non_field_errors }}
+
+    <div class="mb-3">
+      {{ form.email.label_tag }}
+      {{ form.email }}
+      {{ form.email.errors }}
+    </div>
 
     <div class="mb-3">
       {{ form.username.label_tag }}
@@ -186,4 +193,17 @@ a.highlight-link:hover {
 }
 
 </style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  const lbl = document.querySelector('label[for="id_email"]');
+  if (lbl) {
+    // Remove the "(optional)" (and any stray spaces or colon),
+    // then re-add exactly one colon at the end.
+    lbl.textContent = lbl.textContent
+      .replace(/\s*\(optional\)\s*:?\s*$/, '')  // strip "(optional)" + any colon/spaces
+      .trim() + ':';                            // then append single colon
+  }
+});
+</script>
 {% endblock %}

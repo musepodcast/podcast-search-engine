@@ -65,5 +65,14 @@ SOCIALACCOUNT_PROVIDERS = {
         },
         "SCOPE": ["profile", "email"],
         "AUTH_PARAMS": {"access_type": "offline", "prompt": "consent"},
+        },
+    "twitter": {
+    "APP": {
+        "client_id": os.environ["TWITTER_CLIENT_ID"],
+        "secret":    os.environ["TWITTER_SECRET"],
+        "key":       "",
     },
+    "SCOPE": ["email"],
+    "AUTH_PARAMS": {"include_email": "true"},
+},
 }
