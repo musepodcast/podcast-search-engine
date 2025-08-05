@@ -24,6 +24,14 @@
         </button>
       </form>
     </div>
+    <div class="col-12">
+        <form method="post" action="{% provider_login_url 'github' process='login' %}">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-outline-light w-100 mb-3">
+            <i class="fab fa-github me-2"></i> {% trans "Sign in with GitHub" %}
+          </button>
+        </form>
+    </div>
   </div>
 
   <hr/>
