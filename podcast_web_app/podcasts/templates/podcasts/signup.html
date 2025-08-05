@@ -21,6 +21,14 @@
         </button>
       </form>
     </div>
+    <div class="mb-4">
+      <form method="post" action="{% provider_login_url 'github' process='signup' %}">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-outline-light w-100">
+          <i class="fab fa-github me-2"></i> {% trans "Sign up with GitHub" %}
+        </button>
+      </form>
+    </div>
   <hr class="my-4">
   <p class="text-center text-muted mb-4">{% trans "or create an account manually" %}</p>
   <form method="post" action="{% url 'podcasts:signup' %}">

@@ -67,12 +67,22 @@ SOCIALACCOUNT_PROVIDERS = {
         "AUTH_PARAMS": {"access_type": "offline", "prompt": "consent"},
         },
     "twitter": {
-    "APP": {
-        "client_id": os.environ["TWITTER_CLIENT_ID"],
-        "secret":    os.environ["TWITTER_SECRET"],
-        "key":       "",
+        "APP": {
+            "client_id": os.environ["TWITTER_CLIENT_ID"],
+            "secret":    os.environ["TWITTER_SECRET"],
+            "key":       "",
+        },
+        "SCOPE": ["email"],
+        "AUTH_PARAMS": {"include_email": "true"},
     },
-    "SCOPE": ["email"],
-    "AUTH_PARAMS": {"include_email": "true"},
-},
+    "github": {
+        "APP": {
+            "client_id": env("GITHUB_CLIENT_ID_DEV", default=""),
+            "secret":    env("GITHUB_CLIENT_SECRET_DEV", default=""),
+            "key":       "",  
+        },
+        # optional scopes
+        "SCOPE": ["read:user", "user:email"],
+        "AUTH_PARAMS": {"allow_signup": "true"},
+    },
 }
