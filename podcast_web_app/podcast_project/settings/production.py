@@ -98,9 +98,19 @@ SOCIALACCOUNT_PROVIDERS = {
             "secret":    os.environ["TWITTER_SECRET"],
             "key":       "",
         },
-    "SCOPE": ["email"],
-    "AUTH_PARAMS": {"include_email": "true"},
-},
+        "SCOPE": ["email"],
+        "AUTH_PARAMS": {"include_email": "true"},
+    },
+    "github": {
+        "APP": {
+            "client_id": env("GITHUB_CLIENT_ID", default=""),
+            "secret":    env("GITHUB_CLIENT_SECRET", default=""),
+            "key":       "",  
+        },
+        # optional scopes
+        "SCOPE": ["read:user", "user:email"],
+        "AUTH_PARAMS": {"allow_signup": "true"},
+    },
 }
 
 
