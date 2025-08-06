@@ -423,6 +423,13 @@ class SignUpView(CreateView):
     success_url = reverse_lazy('podcasts:login')  # Redirect after successful signup.
     template_name = 'podcasts/signup.html'
 
+def validate_username(request):
+        username = request.GET.get('username', None)
+        is_taken = False
+        if username:
+            is_taken = User.objects.filter(username__iexact=username).exists()
+        return JsonResponse({'is_taken': is_taken})
+    
 logger = logging.getLogger(__name__)
 
 
@@ -1503,7 +1510,7 @@ def support_ticket(request):
     error_code  = None
 
     # 1) Figure out the user’s cap and current open count
-    limit      = getattr(request.user, 'support_ticket_limit', 10)
+    limit      = getattr(request.user, 'support_ticket_limit', 5)
     open_count = SupportTicket.objects.filter(
         user=request.user,
         status__in=['pending', 'in_progress']
@@ -1560,3 +1567,4 @@ def support_ticket(request):
         'open_count': open_count,
         'limit':      limit,
     })
+

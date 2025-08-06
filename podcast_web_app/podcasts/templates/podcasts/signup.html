@@ -38,8 +38,10 @@
     <div class="mb-3">
       {{ form.username.label_tag }}
       {{ form.username }}
+      <div id="username-availability" class="form-text"></div>
       {{ form.username.errors }}
     </div>
+
     <div class="mb-3">
       {{ form.email.label_tag }}
       {{ form.email }}
@@ -300,5 +302,36 @@ document.addEventListener("DOMContentLoaded", function() {
     password1.addEventListener('input', checkPasswordMatch);
     password2.addEventListener('input', checkPasswordMatch);
 });
+
+  const usernameInput = document.getElementById('id_username');
+  const availabilityDiv = document.getElementById('username-availability');
+  let timer = null;
+
+  usernameInput.addEventListener('input', function() {
+    clearTimeout(timer);
+    const val = usernameInput.value.trim();
+    if (!val) {
+      availabilityDiv.textContent = '';
+      return;
+    }
+    // wait 300ms after last keystroke
+    timer = setTimeout(() => {
+      fetch("{% url 'podcasts:validate_username' %}?username=" + encodeURIComponent(val))
+        .then(res => res.json())
+        .then(data => {
+          if (data.is_taken) {
+            availabilityDiv.textContent = "Sorry, that username is taken.";
+            availabilityDiv.style.color = "red";
+          } else {
+            availabilityDiv.textContent = "Good news! That username is available.";
+            availabilityDiv.style.color = "green";
+          }
+        })
+        .catch(() => {
+          availabilityDiv.textContent = "Error checking availability.";
+          availabilityDiv.style.color = "orange";
+        });
+    }, 300);
+  });
 </script>
 {% endblock %}

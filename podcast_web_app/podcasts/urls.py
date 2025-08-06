@@ -26,6 +26,7 @@ urlpatterns = [
     path('episodes/', views.EpisodeListView.as_view(), name='episode_list'),  # Episode list URL
     path('search/', views.SearchResultsView.as_view(), name='search_results'),  # Search URL
     path('signup/', SignUpView.as_view(), name='signup'),
+    path('ajax/validate-username/', views.validate_username, name='validate_username'),
     path("login/", CustomLoginView.as_view(template_name='registration/login.html'), name="login"),
     path("login/2fa/", TwoFactorChallengeView.as_view(template_name='registration/login_2fa.html'), name="two_factor_challenge"),
     path('contribute/', ContributeView.as_view(), name='contribute'),
