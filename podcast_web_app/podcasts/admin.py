@@ -5,8 +5,11 @@ from django.contrib.auth.admin import UserAdmin
 from django.utils.safestring import mark_safe
 from .models import Channel, Episode, Transcript, Chapter, CustomUser, ChannelVisit, EpisodeVisit, SearchQuery, ChannelInteraction, EpisodeInteraction, Comment, Reply, SupportTicket, SupportTicketAttachment
 from django.utils import timezone
-from axes.handlers.proxy import AxesProxyHandler  # NEW
-from axes.models import AccessAttempt
+from axes.handlers.proxy import AxesProxyHandler  
+from django.db.models import OuterRef, Exists
+from datetime import timedelta
+from allauth.account.models import EmailAddress
+from django.utils.html import format_html_join
 
 @admin.register(Channel)
 class ChannelAdmin(admin.ModelAdmin):
@@ -31,8 +34,67 @@ class ChapterAdmin(admin.ModelAdmin):
     search_fields = ('episode__episode_title', 'chapter_title')
     list_filter = ('episode',)
 
+@admin.action(description="Purge unverified, inactive users older than 1 day")
+def purge_unverified_action(modeladmin, request, queryset):
+    cutoff = timezone.now() - timedelta(days=1)
+    qs = (
+        queryset.filter(
+            is_active=False,
+            is_staff=False,
+            is_superuser=False,
+            last_login__isnull=True,
+            date_joined__lt=cutoff,
+        )
+        .annotate(
+            has_verified_email=Exists(
+                EmailAddress.objects.filter(user=OuterRef("pk"), verified=True)
+            )
+        )
+        .filter(has_verified_email=False)
+    )
+    count = qs.count()
+    qs.delete()
+    modeladmin.message_user(request, f"Deleted {count} unverified account(s).")
+
+@admin.action(description="Preview purge: list unverified, inactive users older than 1 day (no delete)")
+def preview_purge_unverified_action(modeladmin, request, queryset):
+    cutoff = timezone.now() - timedelta(days=1)
+    qs = (
+        queryset.filter(
+            is_active=False,
+            is_staff=False,
+            is_superuser=False,
+            last_login__isnull=True,
+            date_joined__lt=cutoff,
+        )
+        .annotate(
+            has_verified_email=Exists(
+                EmailAddress.objects.filter(user=OuterRef("pk"), verified=True)
+            )
+        )
+        .filter(has_verified_email=False)
+    )
+
+    count = qs.count()
+    # Show up to 20 usernames/emails in the admin message, then “+N more…”
+    sample = list(qs.values_list("username", "email")[:20])
+    if sample:
+        lines = format_html_join("", "<li>{} ({})</li>", ((u or "—", e or "—") for u, e in sample))
+        more = "" if count <= 20 else f"<br>…and {count - 20} more."
+        modeladmin.message_user(
+            request,
+            mark_safe(f"<p><strong>{count}</strong> account(s) would be purged:</p><ul>{lines}</ul>{more}"),
+            level="WARNING",
+        )
+    else:
+        modeladmin.message_user(request, "No accounts would be purged.", level="INFO")
+
 @admin.register(CustomUser)
 class CustomUserAdmin(UserAdmin):
+    actions = [preview_purge_unverified_action, purge_unverified_action, "unlock_login_attempts"]
+
+    #actions = [purge_unverified_action, "unlock_login_attempts"]
+
     list_display = (
         'id', 'username', 'email', 'first_name', 'last_name',
         'birthdate', 'country', 'phone_number', 'gender', 'is_staff', 'support_ticket_limit'
@@ -62,7 +124,6 @@ class CustomUserAdmin(UserAdmin):
             ),
         }),
     )
-    actions = ["unlock_login_attempts"]  # NEW
 
     def unlock_login_attempts(self, request, queryset):
         """

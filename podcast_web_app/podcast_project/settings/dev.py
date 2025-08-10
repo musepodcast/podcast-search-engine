@@ -29,6 +29,7 @@ SITE_ID = 1
 DEBUG = True
 ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+ACCOUNT_DEFAULT_HTTP_PROTOCOL = "http"
 
 ELASTICSEARCH_DSL = {
     "default": {

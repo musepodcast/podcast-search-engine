@@ -1,9 +1,9 @@
-{% load i18n %}{% autoescape off %}
-{% blocktrans with site_name=current_site.name %}
-You're almost done! Confirm your {{ site_name }} account by clicking the link below:
-{% endblocktrans %}
+{% load i18n %}
+{% blocktrans %}You're almost done! Confirm your Muse Podcast account by clicking the link below:{% endblocktrans %}
 
 {{ activate_url }}
 
 {% trans "This link expires in 24 hours." %}
-{% endautoescape %}
+
+{% trans "Worm regards," %}
+Muse Podcast Team
