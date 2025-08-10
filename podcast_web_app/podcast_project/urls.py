@@ -38,7 +38,7 @@ sitemaps = {
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("accounts/<str:provider>/login/cancelled/", CancelledRedirectView.as_view(), name="socialaccount_login_cancelled"),
-    path("accounts/", include("allauth.urls")),   
+    path("accounts/", include("allauth.urls")), 
     path('auth/', include('django.contrib.auth.urls')),
     # Include podcasts URLs at the root (so home page is available at "/")
     path('i18n/', include('django.conf.urls.i18n')),

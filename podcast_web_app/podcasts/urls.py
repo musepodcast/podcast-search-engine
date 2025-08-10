@@ -6,7 +6,7 @@ from .views import (
     SignUpView, ProfileView, ProfileUpdateView, CustomLoginView, 
     TwoFactorChallengeView, SecureDisable2FAView, ContributeView, toggle_contribute, support_ticket
 )
-
+from podcasts.views import locked_out_view
 from django.contrib.auth import views as auth_views
 from django.views.generic.base import RedirectView
 from django.contrib.staticfiles.storage import staticfiles_storage
@@ -22,6 +22,7 @@ urlpatterns = [
     path('episode/<int:episode_id>/update_episode_rating/', views.update_episode_rating, name='update_episode_rating'),
     path('bookmarks/', views.BookmarksListView.as_view(), name='bookmarks'),
     path('notifications/', views.NotificationsListView.as_view(), name='notifications'),
+    path("account/locked/", locked_out_view, name="locked_out"),
     path('channels/', views.ChannelListView.as_view(), name='channel_list'),  # Channel list URL
     path('episodes/', views.EpisodeListView.as_view(), name='episode_list'),  # Episode list URL
     path('search/', views.SearchResultsView.as_view(), name='search_results'),  # Search URL

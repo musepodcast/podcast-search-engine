@@ -1,0 +1,31 @@
+{% extends "podcasts/base.html" %}
+{% load i18n %}
+
+{% block content %}
+<div class="container mt-5" style="max-width:680px">
+  <h2 class="mb-3">{% trans "Confirm Your Email" %}</h2>
+
+  {% if confirmation %}
+    <p class="text-muted">
+      {% blocktrans with email=confirmation.email_address.email %}
+      Confirm the email address <strong>{{ email }}</strong> to activate your account.
+      {% endblocktrans %}
+    </p>
+
+    <form method="post" action="{% url 'account_confirm_email' key=confirmation.key %}" class="mt-4">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-primary w-100">
+        {% trans "Confirm Email" %}
+      </button>
+    </form>
+
+  {% else %}
+    <div class="alert alert-warning mt-3">
+      {% trans "This confirmation link is invalid or has expired." %}
+    </div>
+    <a href="{% url 'podcasts:signup' %}" class="btn btn-secondary mt-3">
+      {% trans "Start over" %}
+    </a>
+  {% endif %}
+</div>
+{% endblock %}
