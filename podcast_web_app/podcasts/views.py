@@ -8,6 +8,9 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 from django.utils.timesince import timesince
 from django.utils.translation import gettext as _
+from .forms import CustomUserCreationForm
+from .models import CustomUser
+from allauth.account.models import EmailAddress
 
 import logging, time
 from collections import Counter
@@ -56,7 +59,77 @@ from podcasts.search.documents import EpisodeDocument, TranscriptDocument
 from elasticsearch_dsl import Q as ES_Q
 from django.contrib.postgres.search import TrigramSimilarity
 from datetime import datetime, timedelta
+from axes.models import AccessAttempt
+from axes.conf import settings as axes_settings
+from django.utils import timezone as tz
 
+# podcasts/views.py
+from datetime import timedelta
+from django.shortcuts import render
+from django.utils import timezone
+from axes.models import AccessAttempt
+from axes.conf import settings as axes_settings
+
+def _get_client_ip(request):
+    xff = request.META.get("HTTP_X_FORWARDED_FOR")
+    return xff.split(",")[0].strip() if xff else request.META.get("REMOTE_ADDR", "")
+
+def _cooloff_td():
+    c = axes_settings.AXES_COOLOFF_TIME
+    if isinstance(c, timedelta):
+        return c
+    try:
+        return timedelta(hours=float(c))  # Axes treats int as hours
+    except Exception:
+        return timedelta(hours=1)
+
+def locked_out_view(request):
+    ip = _get_client_ip(request)
+    username = request.POST.get("username") or request.GET.get("username") or ""
+
+    qs = AccessAttempt.objects.all()
+    # Prefer exact matches; fall back progressively
+    candidates = (
+        qs.filter(ip_address=ip, username=username)
+        or qs.filter(ip_address=ip)
+        or qs
+    )
+
+    limit = axes_settings.AXES_FAILURE_LIMIT
+
+    # Pick the attempt that actually triggered lock; fall back to most recent
+    attempt = (
+        candidates.filter(failures_since_start__gte=limit)
+                  .order_by("-attempt_time")
+                  .first()
+        or candidates.order_by("-attempt_time").first()
+    )
+
+    remaining_seconds = 0
+    unlock_at = None
+
+    if attempt:
+        base_time = attempt.attempt_time  # updated on each failure in your version
+        # Make sure it's timezone-aware
+        if timezone.is_naive(base_time):
+            base_time = timezone.make_aware(base_time, timezone.get_current_timezone())
+        unlock_at = base_time + _cooloff_td()
+        diff = int((unlock_at - timezone.now()).total_seconds())
+        if diff > 0:
+            remaining_seconds = diff
+
+    def fmt(seconds: int) -> str:
+        m, s = divmod(max(0, seconds), 60)
+        h, m = divmod(m, 60)
+        return f"{h}h {m:02d}m {s:02d}s" if h else f"{m}m {s:02d}s"
+
+    context = {
+        "remaining_seconds": remaining_seconds,
+        "eta_readable": fmt(remaining_seconds),
+        "unlock_at": timezone.localtime(unlock_at) if unlock_at else None,
+        "support_email": "musepodcasthelp@gmail.com",
+    }
+    return render(request, "security/locked_out.html", context, status=429)
 
 
 @require_http_methods(["GET", "POST"])
@@ -420,8 +493,35 @@ class ProfileView(LoginRequiredMixin, TemplateView):
 
 class SignUpView(CreateView):
     form_class = CustomUserCreationForm
-    success_url = reverse_lazy('podcasts:login')  # Redirect after successful signup.
-    template_name = 'podcasts/signup.html'
+    template_name = "podcasts/signup.html"
+    # Send them to allauth’s “verification sent” page
+    success_url = reverse_lazy("account_email_verification_sent")
+
+    def form_valid(self, form):
+        # Create user INACTIVE until they confirm
+        user = form.save(commit=False)
+        user.is_active = False
+        user.save()
+
+        # make it available if anything later expects self.object
+        self.object = user
+
+        # Ensure EmailAddress row and send confirmation
+        email_address, _ = EmailAddress.objects.get_or_create(
+            user=user,
+            email=user.email,
+            defaults={"primary": True, "verified": False},
+        )
+        try:
+            email_address.send_confirmation(request=self.request, signup=True)
+        except Exception:
+            user.delete()
+            form.add_error(None, "We couldn’t send a confirmation email. Please try again.")
+            return self.form_invalid(form)
+
+        # IMPORTANT: don’t call self.get_success_url(); go straight to the named route
+        return redirect("account_email_verification_sent")
+
 
 def validate_username(request):
         username = request.GET.get('username', None)

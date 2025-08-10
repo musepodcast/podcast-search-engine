@@ -6,6 +6,7 @@ from allauth.socialaccount.adapter import DefaultSocialAccountAdapter
 from allauth.socialaccount.views import LoginCancelledView
 from allauth.socialaccount.models import SocialApp
 from django.contrib.sites.models import Site
+from allauth.account.adapter import DefaultAccountAdapter
 
 class ConditionalSocialAdapter(DefaultSocialAccountAdapter):
     def get_app(self, request, provider, client_id=None):
@@ -44,3 +45,12 @@ class CancelledRedirectView(LoginCancelledView):
     """Redirect to login instead of showing a cancelled page."""
     def get(self, request, *args, **kwargs):
         return redirect(reverse("podcasts:login"))
+
+
+class AccountAdapter(DefaultAccountAdapter):
+    def confirm_email(self, request, email_address):
+        super().confirm_email(request, email_address)
+        user = email_address.user
+        if not user.is_active:
+            user.is_active = True
+            user.save(update_fields=["is_active"])

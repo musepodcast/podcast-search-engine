@@ -1,0 +1,4 @@
+{% load i18n %}
+<p>{% blocktrans with site_name=current_site.name %}You're almost done! Confirm your {{ site_name }} account by clicking the button below:{% endblocktrans %}</p>
+<p><a href="{{ activate_url }}">{{ activate_url }}</a></p>
+<p>{% trans "This link expires in 24 hours." %}</p>

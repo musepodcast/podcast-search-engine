@@ -5,6 +5,8 @@ from django.contrib.auth.admin import UserAdmin
 from django.utils.safestring import mark_safe
 from .models import Channel, Episode, Transcript, Chapter, CustomUser, ChannelVisit, EpisodeVisit, SearchQuery, ChannelInteraction, EpisodeInteraction, Comment, Reply, SupportTicket, SupportTicketAttachment
 from django.utils import timezone
+from axes.handlers.proxy import AxesProxyHandler  # NEW
+from axes.models import AccessAttempt
 
 @admin.register(Channel)
 class ChannelAdmin(admin.ModelAdmin):
@@ -60,10 +62,29 @@ class CustomUserAdmin(UserAdmin):
             ),
         }),
     )
+    actions = ["unlock_login_attempts"]  # NEW
+
+    def unlock_login_attempts(self, request, queryset):
+        """
+        Clear Axes attempts for selected users so they can log in immediately.
+        Works whether they log in by username or email.
+        """
+        count = 0
+        for user in queryset:
+            # Reset by username
+            AxesProxyHandler.reset_attempts(username=user.username)
+            # Reset by email (in case they log in with email)
+            if user.email:
+                AxesProxyHandler.reset_attempts(username=user.email)
+            count += 1
+        self.message_user(request, f"Unlocked Axes attempts for {count} user(s).")
+    unlock_login_attempts.short_description = "Unlock login attempts (Axes)"
+
     def delete_queryset(self, request, queryset):
         # Call instance.delete() on each to trigger your override
         for user in queryset:
             user.delete()
+
 
 @admin.register(ChannelVisit)
 class ChannelVisitAdmin(admin.ModelAdmin):

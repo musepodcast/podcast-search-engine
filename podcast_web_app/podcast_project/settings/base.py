@@ -107,17 +107,42 @@ AXES_COOLOFF_TIME = 1  # in hours
 AXES_LOCK_OUT_AT_FAILURE = True
 AXES_RESET_ON_SUCCESS = True
 AXES_LOCKOUT_PARAMETERS = ['username', 'ip_address']
+#AXES_LOCKOUT_TEMPLATE = "security/locked_out.html"
+AXES_LOCKOUT_URL = "/account/locked/"
 
 
 
-# Tell allauth exactly which fields to show on signup, and which are required:
-ACCOUNT_SIGNUP_FIELDS = [
-    "email",
-    "username*",
-    "password1*",
-    "password2*",
-]
-SOCIALACCOUNT_QUERY_EMAIL = True
+# == Allauth core ==
+ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_LOGIN_METHODS = {"email", "username"}  # both allowed
+ACCOUNT_SIGNUP_FIELDS = ["email*", "username*", "password1*", "password2*"]
+
+
+# Require email verification + 24h expiry
+ACCOUNT_EMAIL_VERIFICATION = "mandatory"
+ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 1  # 24 hours
+# Show a page with a button instead of auto-confirming on GET
+ACCOUNT_CONFIRM_EMAIL_ON_GET = False
+
+# After successful confirmation, send anonymous users to login
+LOGIN_URL = "/login/"
+ACCOUNT_EMAIL_CONFIRMATION_ANONYMOUS_REDIRECT_URL = "/login/"
+
+# If a logged-in user hits a confirm link, send them somewhere sensible:
+ACCOUNT_EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = "/channels"
+
+
+# Use our adapter (activates user on confirm)
+ACCOUNT_ADAPTER = "podcasts.adapters.AccountAdapter"
+
+# Use our custom manual-signup form
+ACCOUNT_FORMS = {
+    "signup": "podcasts.forms.CustomSignupForm",
+}
+
+# Optional: don’t auto-login immediately on confirm (pick your preference)
+ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = False
+
 
 AUTHENTICATION_BACKENDS = [
     'axes.backends.AxesStandaloneBackend',
