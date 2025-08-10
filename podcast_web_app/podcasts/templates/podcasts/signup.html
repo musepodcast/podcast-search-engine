@@ -37,6 +37,21 @@
 
     <form method="post" action="{% url 'podcasts:signup' %}">
       {% csrf_token %}
+      {% if form.errors %}
+      <div class="alert alert-danger mb-3">
+        <strong>{% trans "Please fix the errors below." %}</strong>
+        <ul class="mb-0">
+          {% for field in form %}
+            {% for error in field.errors %}
+              <li><strong>{{ field.label }}:</strong> {{ error }}</li>
+            {% endfor %}
+          {% endfor %}
+          {% for error in form.non_field_errors %}
+            <li>{{ error }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+    {% endif %}
 
       <!-- Render non-password fields -->
       <div class="mb-3">
@@ -254,6 +269,14 @@
 #id_phone_number_1::placeholder {
   color: rgba(255,255,255,0.8);
   opacity: 1; /* Firefox */
+
+.errorlist { 
+  color: #ff6b6b; 
+  margin:.25rem 0 0; 
+  padding-left:0; 
+  list-style:none; 
+  font-size: .95rem;
+  }
 }
 
 </style>

@@ -36,7 +36,7 @@ EMAIL_USE_TLS        = True
 EMAIL_HOST_USER      = os.environ['MAILJET_SMTP_USER']     
 EMAIL_HOST_PASSWORD  = os.environ['MAILJET_SMTP_PASS']     
 DEFAULT_FROM_EMAIL   = 'Muse Podcast <support@musepodcast.com>'
-
+ACCOUNT_EMAIL_SUBJECT_PREFIX = ""  # default is "[Site] "
 
 DEBUG = False
 ALLOWED_HOSTS = [

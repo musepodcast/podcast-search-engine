@@ -11,7 +11,7 @@ from django.utils.translation import gettext as _
 from .forms import CustomUserCreationForm
 from .models import CustomUser
 from allauth.account.models import EmailAddress
-
+from django.conf import settings
 import logging, time
 from collections import Counter
 import re, difflib
@@ -494,33 +494,36 @@ class ProfileView(LoginRequiredMixin, TemplateView):
 class SignUpView(CreateView):
     form_class = CustomUserCreationForm
     template_name = "podcasts/signup.html"
-    # Send them to allauth’s “verification sent” page
+    # Send the user to your customized “verification sent” page
     success_url = reverse_lazy("account_email_verification_sent")
 
     def form_valid(self, form):
-        # Create user INACTIVE until they confirm
+        # Create the user as inactive until email is confirmed
         user = form.save(commit=False)
         user.is_active = False
         user.save()
 
-        # make it available if anything later expects self.object
-        self.object = user
-
-        # Ensure EmailAddress row and send confirmation
-        email_address, _ = EmailAddress.objects.get_or_create(
-            user=user,
-            email=user.email,
-            defaults={"primary": True, "verified": False},
-        )
         try:
-            email_address.send_confirmation(request=self.request, signup=True)
-        except Exception:
+            # Create EmailAddress + send confirmation email
+            EmailAddress.objects.add_email(
+                request=self.request,
+                user=user,
+                email=user.email,
+                confirm=True,  # send email
+                signup=True,   # use the *signup* templates
+            )
+        except Exception as e:
+            # Clean up and show a friendly error
+            log.exception("Signup confirmation email failed")
             user.delete()
-            form.add_error(None, "We couldn’t send a confirmation email. Please try again.")
+            msg = "We couldn’t send a confirmation email. Please try again."
+            if getattr(settings, "DEBUG", False):
+                msg = f"We couldn’t send a confirmation email: {e.__class__.__name__}: {e}"
+            form.add_error(None, msg)
             return self.form_invalid(form)
 
-        # IMPORTANT: don’t call self.get_success_url(); go straight to the named route
-        return redirect("account_email_verification_sent")
+        # Go to the “verification sent” page
+        return redirect(self.success_url)
 
 
 def validate_username(request):
