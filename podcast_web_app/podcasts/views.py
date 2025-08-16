@@ -559,66 +559,120 @@ class ChannelListView(LoginRequiredMixin, ListView):
     login_url = reverse_lazy('podcasts:home')
     template_name = 'podcasts/channel_list.html'
     context_object_name = 'channels'
-    paginate_by = 10      
-    
+    paginate_by = 10
+
+    # Map query params to annotated fields
+    ALLOWED_SORTS = {'views', 'favorites', 'notifications', 'stars', 'title'}
+    ALLOWED_DIRS = {'asc', 'desc'}
+
+    def _parse_sort(self):
+        sort = self.request.GET.get('sort', 'views').lower()
+        direction = self.request.GET.get('dir', 'desc').lower()
+        if sort not in self.ALLOWED_SORTS:
+            sort = 'views'
+        if direction not in self.ALLOWED_DIRS:
+            direction = 'desc'
+        return sort, direction
+
     def get_queryset(self):
-        # Annotate the Channel table with all of your counts.
-        return (
+        sort, direction = self._parse_sort()
+        dir_prefix = '' if direction == 'asc' else '-'
+
+        qs = (
             Channel.objects
-                   .annotate(
-                       favorites_count=Count(
-                           'channel_interactions',
-                           filter=Q(channel_interactions__followed=True),
-                           distinct=True
-                       ),
-                       notifications_count=Count(
-                           'channel_interactions',
-                           filter=Q(channel_interactions__notifications_enabled=True),
-                           distinct=True
-                       ),
-                       avg_rating=Avg('channel_interactions__rating'),
-                       rating_count=Count('channel_interactions__rating'),
-                       total_views=Coalesce(Sum('channelvisit__count'), 0),
-                   )
-                   .order_by('-total_views', 'channel_title')
+            .annotate(
+                favorites_count=Count(
+                    'channel_interactions',
+                    filter=Q(channel_interactions__followed=True),
+                    distinct=True
+                ),
+                notifications_count=Count(
+                    'channel_interactions',
+                    filter=Q(channel_interactions__notifications_enabled=True),
+                    distinct=True
+                ),
+                avg_rating=Avg('channel_interactions__rating'),
+                rating_count=Count(
+                    'channel_interactions__user',
+                    filter=Q(channel_interactions__rating__isnull=False),
+                    distinct=True
+                ),
+                total_views=Coalesce(Sum('channelvisit__count'), 0),
+            )
         )
+
+        # Build ordering with A-Z tiebreaker (except when sorting by title itself)
+        if sort == 'views':
+            ordering = [f'{dir_prefix}total_views', 'channel_title']
+        elif sort == 'favorites':
+            ordering = [f'{dir_prefix}favorites_count', 'channel_title']
+        elif sort == 'notifications':
+            ordering = [f'{dir_prefix}notifications_count', 'channel_title']
+        elif sort == 'stars':
+            if direction == 'desc':
+                ordering = [
+                    F('avg_rating').desc(nulls_last=True),   # highest first
+                    F('rating_count').desc(),                # more ratings wins tie
+                    'channel_title',                         # final tie → A–Z
+                ]
+            else:
+                ordering = [
+                    F('avg_rating').asc(nulls_last=True),    # lowest first
+                    F('rating_count').asc(),                 # fewer ratings wins tie
+                    'channel_title',
+                ]
+        elif sort == 'title':
+            # Alphabetical only. If user picked A-Z vs Z-A, just sort by title; no extra tiebreaker.
+            ordering = [f'{dir_prefix}channel_title']
+        else:
+            ordering = ['-total_views', 'channel_title']  # safe default
+
+        return qs.order_by(*ordering)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         lang = get_selected_language(self.request)
 
+        # expose sort state to template
+        sort, direction = self._parse_sort()
+        context['sort'] = sort
+        context['dir'] = direction
+
+        # human label for the button
+        labels = {
+            ('views', 'desc'): "Most watched",
+            ('views', 'asc'):  "Least watched",
+            ('favorites', 'desc'): "Most favorited",
+            ('favorites', 'asc'):  "Least favorited",
+            ('notifications', 'desc'): "Most notified",
+            ('notifications', 'asc'):  "Least notified",
+            ('stars', 'desc'): "Most stars",
+            ('stars', 'asc'):  "Least stars",
+            ('title', 'asc'):  "A → Z",
+            ('title', 'desc'): "Z → A",
+        }
+        context['current_sort_label'] = labels.get((sort, direction), "Most watched")
+
         if lang not in ('en', 'en-us'):
-            # Grab all the translated rows in one query
             translations = ChannelTranslations.objects.filter(
                 language=lang,
                 translated=True,
-                sanitized_channel_title__in=[
-                    ch.sanitized_channel_title for ch in context['channels']
-                ]
+                sanitized_channel_title__in=[ch.sanitized_channel_title for ch in context['channels']]
             )
-            trans_map = {
-                tr.sanitized_channel_title: tr
-                for tr in translations
-            }
-
-            # Overwrite only the fields you translate
+            trans_map = {tr.sanitized_channel_title: tr for tr in translations}
             for ch in context['channels']:
                 tr = trans_map.get(ch.sanitized_channel_title)
                 if not tr:
                     continue
                 ch.channel_title   = tr.channel_title
                 ch.channel_summary = tr.channel_summary
-                # if you also translate author:
-                # ch.channel_author  = tr.channel_author
 
         context['selected_language'] = lang
         return context
 
     def render_to_response(self, context, **response_kwargs):
         if self.request.GET.get('ajax') == '1':
-            return render(self.request,
-                          'podcasts/channel_list_items.html',
-                          context)
+            return render(self.request, 'podcasts/channel_list_items.html', context)
         return super().render_to_response(context, **response_kwargs)
 
 class ChannelDetailView(LoginRequiredMixin, DetailView):
@@ -986,40 +1040,107 @@ class EpisodeDetailView(LoginRequiredMixin, DetailView):
 
 
 
-
-
-
 class EpisodeListView(LoginRequiredMixin, ListView):
     login_url = reverse_lazy('podcasts:home')
     template_name = 'podcasts/episode_list.html'
     context_object_name = 'episodes'
     paginate_by = 10
 
+    # include "recent"
+    ALLOWED_SORTS = {'recent', 'views', 'bookmarks', 'comments', 'stars', 'title'}
+    ALLOWED_DIRS = {'asc', 'desc'}
+
+    def _parse_sort(self):
+        # default: Most recent
+        sort = (self.request.GET.get('sort') or 'recent').lower()
+        direction = (self.request.GET.get('dir') or 'desc').lower()
+        if sort not in self.ALLOWED_SORTS:
+            sort = 'recent'
+        if direction not in self.ALLOWED_DIRS:
+            direction = 'desc'
+        return sort, direction
+
     def get_queryset(self):
         lang = get_selected_language(self.request)
+        sort, direction = self._parse_sort()
+        dir_prefix = '' if direction == 'asc' else '-'
+
         if lang in ('en', 'en-us'):
-            qs = Episode.objects.select_related('channel') \
-                    .prefetch_related('transcripts', 'chapters') \
-                    .order_by('-publication_date')
-            # Annotate with aggregated fields:
-            qs = qs.annotate(
-                bookmarks_count=Count('episode_interactions', filter=Q(episode_interactions__bookmarked=True)),
-                ep_avg_rating=Avg('episode_interactions__rating'),
-                ep_rating_count=Count('episode_interactions__rating'),
-                total_episode_views=Sum('episodevisit__count')
+            qs = (
+                Episode.objects
+                .select_related('channel')
+                .prefetch_related('transcripts', 'chapters')
+                .annotate(
+                    bookmarks_count=Count(
+                        'episode_interactions',
+                        filter=Q(episode_interactions__bookmarked=True),
+                        distinct=True
+                    ),
+                    comments_count=Count('comments', distinct=True),
+                    ep_avg_rating=Avg('episode_interactions__rating'),
+                    ep_rating_count=Count(
+                        'episode_interactions__user',
+                        filter=Q(episode_interactions__rating__isnull=False),
+                        distinct=True
+                    ),
+                    total_episode_views=Coalesce(Sum('episodevisit__count'), 0),
+                )
             )
-            return qs
-        else:
-            # For translated episodes, annotations may not be available (unless you define them there)
-            qs = EpisodeTranslations.objects.filter(language=lang, translated=True) \
-                    .select_related('episode__channel') \
-                    .prefetch_related('transcriptstranslations', 'chapterstranslations') \
-                    .order_by('-publication_date')
-            return qs
+
+            if sort == 'recent':
+                # publication_date with A–Z tie-break; unrated/NULL dates go last either way
+                if direction == 'desc':
+                    ordering = [F('publication_date').desc(nulls_last=True), 'episode_title']
+                else:
+                    ordering = [F('publication_date').asc(nulls_last=True), 'episode_title']
+
+            elif sort == 'views':
+                ordering = [f'{dir_prefix}total_episode_views', 'episode_title']
+
+            elif sort == 'bookmarks':
+                ordering = [f'{dir_prefix}bookmarks_count', 'episode_title']
+
+            elif sort == 'comments':
+                ordering = [f'{dir_prefix}comments_count', 'episode_title']
+
+            elif sort == 'stars':
+                if direction == 'desc':
+                    ordering = [
+                        F('ep_avg_rating').desc(nulls_last=True),
+                        F('ep_rating_count').desc(),
+                        'episode_title',
+                    ]
+                else:
+                    ordering = [
+                        F('ep_avg_rating').asc(nulls_last=True),
+                        F('ep_rating_count').asc(),
+                        'episode_title',
+                    ]
+
+            elif sort == 'title':
+                # pure alphabetical
+                ordering = [f'{dir_prefix}episode_title']
+
+            else:
+                # safety default
+                ordering = [F('publication_date').desc(nulls_last=True), 'episode_title']
+
+            return qs.order_by(*ordering)
+
+        # Non-English path (kept as-is, already ordered by publication_date desc)
+        qs = (
+            EpisodeTranslations.objects
+            .filter(language=lang, translated=True)
+            .select_related('episode__channel')
+            .prefetch_related('transcriptstranslations', 'chapterstranslations')
+            .order_by('-publication_date')
+        )
+        return qs
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         lang = get_selected_language(self.request)
+
         if lang not in ('en', 'en-us'):
             patched = []
             for ep in context['episodes']:
@@ -1028,15 +1149,35 @@ class EpisodeListView(LoginRequiredMixin, ListView):
                     ep.channel = ep.episode.channel
                 patched.append(ep)
             context['episodes'] = patched
+
+        sort, direction = self._parse_sort()
+        context['sort'] = sort
+        context['dir'] = direction
+
+        labels = {
+            ('recent', 'desc'): "Most recent",
+            ('recent', 'asc'):  "Least recent",
+            ('views', 'desc'): "Most watched",
+            ('views', 'asc'):  "Least watched",
+            ('bookmarks', 'desc'): "Most bookmarked",
+            ('bookmarks', 'asc'):  "Least bookmarked",
+            ('comments', 'desc'): "Most commented",
+            ('comments', 'asc'):  "Least commented",
+            ('stars', 'desc'): "Most stars",
+            ('stars', 'asc'):  "Least stars",
+            ('title', 'asc'):  "A → Z",
+            ('title', 'desc'): "Z → A",
+        }
+        context['current_sort_label'] = labels.get((sort, direction), "Most recent")
         context['selected_language'] = lang
         return context
-    
+
     def render_to_response(self, context, **response_kwargs):
         if self.request.GET.get('ajax') == '1':
-            return render(self.request,
-                          'podcasts/episode_list_items.html',
-                          context)
+            return render(self.request, 'podcasts/episode_list_items.html', context)
         return super().render_to_response(context, **response_kwargs)
+
+
 
 class SearchResultsView(LoginRequiredMixin, ListView):
     login_url = 'podcasts:home'

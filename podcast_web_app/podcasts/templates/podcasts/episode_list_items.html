@@ -58,7 +58,7 @@
           <!-- Comments -->
           <span class="d-flex align-items-center me-3" title="{% trans 'Comments' %}">
             <i class="fa-solid fa-comment" style="font-size:1rem;margin-right:0.25rem;"></i>
-            {{ episode.comments.count|default:"0"|number_format }}
+            {{ episode.comments_count|default:"0"|number_format }}
           </span>
           <!-- Rating -->
           <span class="d-flex align-items-center me-3" title="{% trans 'Episode Rating' %}">
