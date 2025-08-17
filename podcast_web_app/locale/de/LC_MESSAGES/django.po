@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-17 11:16-0600\n"
+"POT-Creation-Date: 2025-08-17 15:09-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,1398 +18,1695 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: .\podcasts\templates\podcasts\base.html:7
-msgid "Podcast Web App"
-msgstr "Podcast-Web-App"
+#: .\podcasts\forms.py:50
+msgid "Email"
+msgstr "E-Mail"
 
-#: .\podcasts\templates\podcasts\base.html:37
-msgid "Podcast News"
-msgstr "Podcast-Neuigkeiten"
+#: .\podcasts\forms.py:52
+msgid "Username"
+msgstr "Benutzername"
 
-#: .\podcasts\templates\podcasts\base.html:40
+#: .\podcasts\forms.py:169
+msgid "File size is too large, must be ≤ 2 MB."
+msgstr "Die Dateigröße ist zu groß, muss ≤ 2 MB betragen."
+
+#: .\podcasts\forms.py:172
+msgid "Only JPG, PNG or GIF files are accepted."
+msgstr "Nur JPG-, PNG- oder GIF-Dateien werden akzeptiert."
+
+#: .\podcasts\templates\account\email\email_confirmation_message.html:6
+msgid "Confirm your Muse Podcast account"
+msgstr "Bestätigen Sie Ihr Muse Podcast-Konto"
+
+#: .\podcasts\templates\account\email\email_confirmation_message.html:9
+msgid "You're almost done! Confirm your account by clicking the button below:"
+msgstr ""
+"Bestätigen Sie Ihr Konto, indem Sie auf die unten stehende Schaltfläche "
+"klicken:"
+
+#: .\podcasts\templates\account\email\email_confirmation_message.html:15
+#: .\podcasts\templates\account\email\email_confirmation_signup_message.html:15
+msgid "Confirm my account"
+msgstr "Bestätigen Sie mein Konto ."
+
+#: .\podcasts\templates\account\email\email_confirmation_message.html:20
+#: .\podcasts\templates\account\email\email_confirmation_signup_message.html:20
+msgid "Or paste this link in your browser:"
+msgstr "Oder fügen Sie diesen Link in Ihren Browser ein:"
+
+#: .\podcasts\templates\account\email\email_confirmation_message.html:25
+#: .\podcasts\templates\account\email\email_confirmation_message.txt:6
+#: .\podcasts\templates\account\email\email_confirmation_signup_message.html:25
+#: .\podcasts\templates\account\email\email_confirmation_signup_message.txt:8
+msgid "This link expires in 24 hours."
+msgstr "Dieser Link verfällt in 24 Stunden."
+
+#: .\podcasts\templates\account\email\email_confirmation_message.html:29
+#: .\podcasts\templates\account\email\email_confirmation_message.txt:8
+#: .\podcasts\templates\account\email\email_confirmation_signup_message.html:29
+#: .\podcasts\templates\account\email\email_confirmation_signup_message.txt:10
+msgid "Worm regards,"
+msgstr "Der Wurm begrüßt mich."
+
+#: .\podcasts\templates\account\email\email_confirmation_message.txt:2
+msgid ""
+"You're almost done! Confirm your Muse Podcast account by clicking the link "
+"below:"
+msgstr ""
+"Bestätigen Sie Ihr Muse Podcast-Konto, indem Sie auf den folgenden Link "
+"klicken:"
+
+#: .\podcasts\templates\account\email\email_confirmation_signup_message.html:6
+msgid "Welcome to Muse Podcast!"
+msgstr "Willkommen auf dem Muse Podcast!"
+
+#: .\podcasts\templates\account\email\email_confirmation_signup_message.html:9
+msgid "Confirm your account by clicking the button below:"
+msgstr ""
+"Bestätigen Sie Ihr Konto, indem Sie auf die unten stehende Schaltfläche "
+"klicken:"
+
+#: .\podcasts\templates\account\email\email_confirmation_signup_message.txt:2
+msgid ""
+"\n"
+"Welcome to Muse Podcast! Confirm your account by clicking the link below:\n"
+msgstr ""
+"\n"
+"Willkommen auf Muse Podcast! Bestätigen Sie Ihr Konto, indem Sie auf den folgenden Link klicken: \n"
+
+#: .\podcasts\templates\account\email_confirm.html:6
+msgid "Confirm Your Email"
+msgstr "Bestätigen Sie Ihre E-Mail"
+
+#: .\podcasts\templates\account\email_confirm.html:10
+#, python-format
+msgid ""
+"\n"
+"      Confirm the email address <strong>%(email)s</strong> to activate your account.\n"
+"      "
+msgstr ""
+"\n"
+"Bestätigen Sie die E-Mail-Adresse <strong>%(email)s</strong>, um Ihr Konto zu aktivieren. "
+
+#: .\podcasts\templates\account\email_confirm.html:18
+msgid "Confirm Email"
+msgstr "E-Mail-Bestätigung"
+
+#: .\podcasts\templates\account\email_confirm.html:24
+msgid "This confirmation link is invalid or has expired."
+msgstr "Dieser Bestätigungslink ist ungültig oder ist abgelaufen."
+
+#: .\podcasts\templates\account\email_confirm.html:27
+msgid "Start over"
+msgstr "Beginnen Sie von vorne ."
+
+#: .\podcasts\templates\account\verification_sent.html:7
+msgid "Verify Your Email Address"
+msgstr "Überprüfen Sie Ihre E-Mail-Adresse"
+
+#: .\podcasts\templates\account\verification_sent.html:9
+msgid ""
+"We just sent a verification link to your email. Click the link within 24 "
+"hours to activate your account."
+msgstr "Wir haben gerade einen Überprüfungslink an Ihre E-Mail gesendet."
+
+#: .\podcasts\templates\account\verification_sent.html:15
+msgid "Didn’t get the email?"
+msgstr "Hast du die E-Mail nicht bekommen?"
+
+#: .\podcasts\templates\account\verification_sent.html:17
+msgid "Check your spam/junk folder."
+msgstr "Überprüfen Sie Ihren Spam-/Junk-Ordner."
+
+#: .\podcasts\templates\account\verification_sent.html:18
+msgid "Make sure you entered the right address."
+msgstr "Stellen Sie sicher, dass Sie die richtige Adresse eingegeben haben."
+
+#: .\podcasts\templates\account\verification_sent.html:25
+#: .\podcasts\templates\security\locked_out.html:33
+#: .\podcasts\templates\socialaccount\cancelled.html:12
+#: .\podcasts\templates\socialaccount\error.html:12
+msgid "Back to Login"
+msgstr "Zurück zum Login"
+
+#: .\podcasts\templates\podcasts\base.html:16
+msgid "Podcast Search Engine"
+msgstr "Podcast Suchmaschine"
+
+#: .\podcasts\templates\podcasts\base.html:51
+msgid "Muse"
+msgstr "Musen"
+
+#: .\podcasts\templates\podcasts\base.html:54
+msgid "Home"
+msgstr "Zuhause"
+
+#: .\podcasts\templates\podcasts\base.html:55
+#: .\podcasts\templates\podcasts\channel_list.html:21
+#: .\podcasts\templates\podcasts\channel_list.html:72
+#: .\podcasts\templates\podcasts\channel_list_items.html:27
+#: .\podcasts\templates\podcasts\favorites_list.html:5
+#: .\podcasts\templates\podcasts\favorites_list.html:33
+#: .\podcasts\templates\podcasts\favorites_list_items.html:25
+msgid "Favorites"
+msgstr "Die Lieblingsspieler"
+
+#: .\podcasts\templates\podcasts\base.html:56
+#: .\podcasts\templates\podcasts\channel_list.html:27
+#: .\podcasts\templates\podcasts\channel_list.html:76
+#: .\podcasts\templates\podcasts\channel_list_items.html:31
+#: .\podcasts\templates\podcasts\favorites_list.html:38
+#: .\podcasts\templates\podcasts\favorites_list_items.html:29
+#: .\podcasts\templates\podcasts\notifications_list.html:6
+msgid "Notifications"
+msgstr "Mitteilungen"
+
+#: .\podcasts\templates\podcasts\base.html:57
+#: .\podcasts\templates\podcasts\bookmarks_list.html:65
+#: .\podcasts\templates\podcasts\bookmarks_list_items.html:57
+#: .\podcasts\templates\podcasts\channel_detail.html:141
+#: .\podcasts\templates\podcasts\channel_detail_item.html:46
+#: .\podcasts\templates\podcasts\episode_list.html:28
+#: .\podcasts\templates\podcasts\episode_list.html:83
+#: .\podcasts\templates\podcasts\episode_list_items.html:54
+#: .\podcasts\templates\podcasts\notifications_list.html:63
+#: .\podcasts\templates\podcasts\notifications_list_items.html:56
+msgid "Bookmarks"
+msgstr "Buchmarken"
+
+#: .\podcasts\templates\podcasts\base.html:58
+#: .\podcasts\templates\podcasts\base.html:162
 msgid "Channels"
 msgstr "Kanäle"
 
-#: .\podcasts\templates\podcasts\base.html:41
-#: .\podcasts\templates\podcasts\channel_detail.html:36
+#: .\podcasts\templates\podcasts\base.html:59
+#: .\podcasts\templates\podcasts\base.html:156
+#: .\podcasts\templates\podcasts\channel_detail.html:103
 msgid "Episodes"
 msgstr "Episoden"
 
-#: .\podcasts\templates\podcasts\base.html:69
-#: .\podcasts\templates\podcasts\base.html:70
+#: .\podcasts\templates\podcasts\base.html:86
+#: .\podcasts\templates\podcasts\base.html:87
 msgid "Toggle Theme"
 msgstr "Thema umschalten"
 
-#: .\podcasts\templates\podcasts\base.html:79
+#: .\podcasts\templates\podcasts\base.html:96
+msgid "Profile"
+msgstr "Profil"
+
+#: .\podcasts\templates\podcasts\base.html:101
+msgid "See Profile"
+msgstr "Siehe Profil"
+
+#: .\podcasts\templates\podcasts\base.html:104
+msgid "See Replies"
+msgstr "Siehe Antworten"
+
+#: .\podcasts\templates\podcasts\base.html:117
+#: .\podcasts\templates\podcasts\base.html:491
+msgid "Support Me"
+msgstr "Unterstützen Sie mich"
+
+#: .\podcasts\templates\podcasts\base.html:124
+msgid "Support Ticket"
+msgstr "Unterstützungsticket"
+
+#: .\podcasts\templates\podcasts\base.html:129
+msgid "Contribute"
+msgstr "Mitwirken"
+
+#: .\podcasts\templates\podcasts\base.html:134
+msgid "Sign Out"
+msgstr "Abmeldung"
+
+#: .\podcasts\templates\podcasts\base.html:138
+msgid "Sign In"
+msgstr "Melden Sie sich an"
+
+#: .\podcasts\templates\podcasts\base.html:170
 msgid "Search episodes or channels..."
 msgstr "Episoden oder Kanäle suchen…"
 
-#: .\podcasts\templates\podcasts\base.html:80
+#: .\podcasts\templates\podcasts\base.html:172
 msgid "Search"
 msgstr "Suchen"
 
-#: .\podcasts\templates\podcasts\base.html:86
+#: .\podcasts\templates\podcasts\base.html:187
+#: .\podcasts\templates\podcasts\base.html:381
 msgid "Channel Title"
 msgstr "Kanaltitel"
 
-#: .\podcasts\templates\podcasts\base.html:90
+#: .\podcasts\templates\podcasts\base.html:193
 msgid "Episode Title"
 msgstr "Titel der Episode"
 
-#: .\podcasts\templates\podcasts\base.html:94
+#: .\podcasts\templates\podcasts\base.html:199
 msgid "Episode Description"
 msgstr "Episodenbeschreibung"
 
-#: .\podcasts\templates\podcasts\base.html:98
+#: .\podcasts\templates\podcasts\base.html:205
 msgid "Transcript Text"
 msgstr "Transkripttext"
 
-#: .\podcasts\templates\podcasts\base.html:105
+#: .\podcasts\templates\podcasts\base.html:212
+#: .\podcasts\templates\podcasts\base.html:400
 msgid "Language"
 msgstr "Sprache"
 
-#: .\podcasts\templates\podcasts\base.html:183
+#: .\podcasts\templates\podcasts\base.html:292
 msgid "Date"
 msgstr "Datum"
 
-#: .\podcasts\templates\podcasts\base.html:189
+#: .\podcasts\templates\podcasts\base.html:300
 msgid "Anytime"
 msgstr "Jederzeit"
 
-#: .\podcasts\templates\podcasts\base.html:193
+#: .\podcasts\templates\podcasts\base.html:306
 msgid "Past Day"
 msgstr "Vergangener Tag"
 
-#: .\podcasts\templates\podcasts\base.html:197
+#: .\podcasts\templates\podcasts\base.html:312
 msgid "Past Week"
 msgstr "Vergangene Woche"
 
-#: .\podcasts\templates\podcasts\base.html:201
+#: .\podcasts\templates\podcasts\base.html:318
 msgid "Past Month"
 msgstr "Vergangener Monat"
 
-#: .\podcasts\templates\podcasts\base.html:205
+#: .\podcasts\templates\podcasts\base.html:324
 msgid "Past Year"
 msgstr "Vergangenes Jahr"
 
-#: .\podcasts\templates\podcasts\base.html:209
+#: .\podcasts\templates\podcasts\base.html:330
 msgid "Past 2 Years"
 msgstr "Letzte 2 Jahre"
 
-#: .\podcasts\templates\podcasts\base.html:213
+#: .\podcasts\templates\podcasts\base.html:336
 msgid "Past 3 Years"
 msgstr "Letzte 3 Jahre"
 
-#: .\podcasts\templates\podcasts\base.html:217
+#: .\podcasts\templates\podcasts\base.html:342
 msgid "Past 4 Years"
 msgstr "Letzte 4 Jahre"
 
-#: .\podcasts\templates\podcasts\base.html:221
+#: .\podcasts\templates\podcasts\base.html:348
 msgid "Past 5 Years"
 msgstr "Letzte 5 Jahre"
 
-#: .\podcasts\templates\podcasts\base.html:225
+#: .\podcasts\templates\podcasts\base.html:354
 msgid "Past 10 Years"
 msgstr "Letzte 10 Jahre"
 
-#: .\podcasts\templates\podcasts\base.html:229
+#: .\podcasts\templates\podcasts\base.html:360
 msgid "Past 15 Years"
 msgstr "Letzte 15 Jahre"
 
-#: .\podcasts\templates\podcasts\channel_detail.html:23
-#: .\podcasts\templates\podcasts\channel_list.html:29
-#: .\podcasts\templates\podcasts\channel_list_item.html:23
-msgid "by"
-msgstr "von"
+#: .\podcasts\templates\podcasts\base.html:387
+msgid "Channel Author"
+msgstr "Kanal Autor"
 
-#: .\podcasts\templates\podcasts\channel_list.html:4
-msgid "Podcast Channels"
-msgstr "Podcast-Kanäle"
+#: .\podcasts\templates\podcasts\base.html:393
+msgid "Channel Summary"
+msgstr "Zusammenfassung der Kanäle"
 
-#: .\podcasts\templates\podcasts\channel_list.html:23
-#, fuzzy
-#| msgid "No channels available."
-msgid "No image available"
-msgstr "Keine Kanäle verfügbar."
+#: .\podcasts\templates\podcasts\base.html:496
+#: .\podcasts\templates\podcasts\signup.html:175
+#: .\podcasts\templates\podcasts\signup.html:229
+#: .\podcasts\templates\podcasts\support_ticket.html:148
+#: .\podcasts\templates\socialaccount\signup.html:78
+#: .\podcasts\templates\socialaccount\signup.html:130
+msgid "Close"
+msgstr "Schließen"
 
-#: .\podcasts\templates\podcasts\channel_list.html:38
-msgid "No channels available."
-msgstr "Keine Kanäle verfügbar."
+#: .\podcasts\templates\podcasts\base.html:571
+msgid "Contact Me"
+msgstr "Kontaktieren Sie mich"
 
-#: .\podcasts\templates\podcasts\channel_list.html:44
-#: .\podcasts\templates\podcasts\channel_list.html:50
-msgid "Loading more channels..."
-msgstr "Weitere Kanäle werden geladen..."
+#: .\podcasts\templates\podcasts\bookmarks_list.html:6
+msgid "Bookmarked Episodes"
+msgstr "Buchmarkierte Episoden"
 
-#: .\podcasts\templates\podcasts\channel_list.html:49
-#: .\podcasts\templates\podcasts\episode_list.html:114
-#: .\podcasts\templates\podcasts\episode_list.html:124
-msgid "End of list..."
-msgstr "Ende der Liste …"
-
-#: .\podcasts\templates\podcasts\episode_detail.html:59
-#: .\podcasts\templates\podcasts\episode_list.html:41
-#: .\podcasts\templates\podcasts\episode_list_items.html:21
-#: .\podcasts\templates\podcasts\search_results.html:39
-#: .\podcasts\templates\podcasts\search_results.html:126
+#: .\podcasts\templates\podcasts\bookmarks_list.html:42
+#: .\podcasts\templates\podcasts\bookmarks_list_items.html:35
+#: .\podcasts\templates\podcasts\episode_detail.html:48
+#: .\podcasts\templates\podcasts\episode_list.html:72
+#: .\podcasts\templates\podcasts\episode_list_items.html:31
+#: .\podcasts\templates\podcasts\notifications_list.html:41
+#: .\podcasts\templates\podcasts\notifications_list_items.html:34
+#: .\podcasts\templates\podcasts\search_results_items.html:35
+#: .\podcasts\templates\podcasts\search_results_items.html:98
 msgid "from"
 msgstr "von"
 
+#: .\podcasts\templates\podcasts\bookmarks_list.html:57
+#: .\podcasts\templates\podcasts\bookmarks_list_items.html:50
+#: .\podcasts\templates\podcasts\channel_detail_item.html:39
+#: .\podcasts\templates\podcasts\episode_detail.html:70
+#: .\podcasts\templates\podcasts\episode_list.html:79
+#: .\podcasts\templates\podcasts\episode_list_items.html:46
+#: .\podcasts\templates\podcasts\notifications_list.html:56
+#: .\podcasts\templates\podcasts\notifications_list_items.html:49
+#: .\podcasts\templates\podcasts\search_results_items.html:49
+#: .\podcasts\templates\podcasts\search_results_items.html:112
+msgid "Explicit"
+msgstr "Explizit"
+
+#: .\podcasts\templates\podcasts\bookmarks_list.html:70
+#: .\podcasts\templates\podcasts\bookmarks_list_items.html:62
+#: .\podcasts\templates\podcasts\channel_detail.html:146
+#: .\podcasts\templates\podcasts\channel_detail_item.html:51
+#: .\podcasts\templates\podcasts\episode_detail.html:196
+#: .\podcasts\templates\podcasts\episode_list.html:34
+#: .\podcasts\templates\podcasts\episode_list.html:88
+#: .\podcasts\templates\podcasts\episode_list_items.html:59
+#: .\podcasts\templates\podcasts\notifications_list.html:68
+#: .\podcasts\templates\podcasts\notifications_list_items.html:61
+msgid "Comments"
+msgstr "Kommentare"
+
+#: .\podcasts\templates\podcasts\bookmarks_list.html:75
+#: .\podcasts\templates\podcasts\bookmarks_list_items.html:67
+#: .\podcasts\templates\podcasts\channel_detail.html:150
+#: .\podcasts\templates\podcasts\channel_detail_item.html:56
+#: .\podcasts\templates\podcasts\episode_list.html:93
+#: .\podcasts\templates\podcasts\episode_list_items.html:64
+#: .\podcasts\templates\podcasts\notifications_list.html:73
+#: .\podcasts\templates\podcasts\notifications_list_items.html:66
+msgid "Episode Rating"
+msgstr "Episodenbewertung"
+
+#: .\podcasts\templates\podcasts\bookmarks_list.html:84
+#: .\podcasts\templates\podcasts\bookmarks_list_items.html:76
+#: .\podcasts\templates\podcasts\channel_detail.html:90
+#: .\podcasts\templates\podcasts\channel_detail.html:91
+#: .\podcasts\templates\podcasts\channel_detail.html:158
+#: .\podcasts\templates\podcasts\channel_detail_item.html:65
+#: .\podcasts\templates\podcasts\channel_list.html:88
+#: .\podcasts\templates\podcasts\channel_list_items.html:43
+#: .\podcasts\templates\podcasts\episode_detail.html:117
+#: .\podcasts\templates\podcasts\episode_detail.html:118
+#: .\podcasts\templates\podcasts\episode_list.html:102
+#: .\podcasts\templates\podcasts\episode_list_items.html:73
+#: .\podcasts\templates\podcasts\favorites_list.html:52
+#: .\podcasts\templates\podcasts\favorites_list_items.html:41
+#: .\podcasts\templates\podcasts\notifications_list.html:82
+#: .\podcasts\templates\podcasts\notifications_list_items.html:75
+msgid "Total Views"
+msgstr "Gesamtheit der Ansichten"
+
+#: .\podcasts\templates\podcasts\bookmarks_list.html:105
+msgid "No bookmarked episodes available."
+msgstr "Keine gebuchten Episoden verfügbar."
+
+#: .\podcasts\templates\podcasts\bookmarks_list.html:112
+msgid "Loading more bookmarked episodes..."
+msgstr "Ich laden mehr Buchmarkierte Episoden..."
+
+#: .\podcasts\templates\podcasts\bookmarks_list.html:142
+#: .\podcasts\templates\podcasts\bookmarks_list.html:149
+#: .\podcasts\templates\podcasts\channel_detail.html:183
+#: .\podcasts\templates\podcasts\channel_detail.html:219
+#: .\podcasts\templates\podcasts\channel_detail.html:226
+#: .\podcasts\templates\podcasts\channel_list.html:107
+#: .\podcasts\templates\podcasts\episode_list.html:160
+#: .\podcasts\templates\podcasts\episode_list.html:167
+#: .\podcasts\templates\podcasts\favorites_list.html:74
+#: .\podcasts\templates\podcasts\notifications_list.html:134
+#: .\podcasts\templates\podcasts\notifications_list.html:141
+#: .\podcasts\templates\podcasts\replies_list.html:20
+#: .\podcasts\templates\podcasts\search_results_ch_items.html:72
+#: .\podcasts\templates\podcasts\search_results_items.html:153
+msgid "End of list..."
+msgstr "Ende der Liste …"
+
+#: .\podcasts\templates\podcasts\channel_detail.html:28
+#: .\podcasts\templates\podcasts\channel_list.html:64
+#: .\podcasts\templates\podcasts\channel_list_items.html:19
+#: .\podcasts\templates\podcasts\favorites_list.html:25
+#: .\podcasts\templates\podcasts\favorites_list_items.html:18
+#: .\podcasts\templates\podcasts\search_results_ch_items.html:41
+msgid "by"
+msgstr "von"
+
+#: .\podcasts\templates\podcasts\channel_detail.html:43
+msgid "Remove from Favorites"
+msgstr "Aus Favoriten entfernen"
+
+#: .\podcasts\templates\podcasts\channel_detail.html:43
+msgid "Add to Favorites"
+msgstr "Fügen Sie Favoriten hinzu"
+
+#: .\podcasts\templates\podcasts\channel_detail.html:51
+msgid "Number of Favorites"
+msgstr "Anzahl der Favoriten"
+
+#: .\podcasts\templates\podcasts\channel_detail.html:59
+msgid "Remove from Notifications"
+msgstr "Entfernen von Benachrichtigungen"
+
+#: .\podcasts\templates\podcasts\channel_detail.html:59
+msgid "Add to Notifications"
+msgstr "Hinzufügen zu Benachrichtigungen"
+
+#: .\podcasts\templates\podcasts\channel_detail.html:67
+msgid "Number of Notifications"
+msgstr "Anzahl der Mitteilungen"
+
+#: .\podcasts\templates\podcasts\channel_detail.html:77
+#: .\podcasts\templates\podcasts\episode_detail.html:103
+msgid "Update your rating"
+msgstr "Aktualisieren Sie Ihre Bewertung"
+
+#: .\podcasts\templates\podcasts\channel_detail.html:79
+msgid "Rate this channel"
+msgstr "Bezahlen Sie diesen Kanal"
+
+#: .\podcasts\templates\podcasts\channel_detail.html:83
+msgid "Average rating and number of ratings"
+msgstr "Durchschnittliche Bewertung und Anzahl der Ratings"
+
+#: .\podcasts\templates\podcasts\channel_detail.html:171
+msgid "No episodes available for this channel."
+msgstr "Keine Episoden sind für diesen Sender verfügbar."
+
+#: .\podcasts\templates\podcasts\channel_detail.html:178
+#: .\podcasts\templates\podcasts\channel_detail.html:184
+#: .\podcasts\templates\podcasts\episode_list.html:125
+#: .\podcasts\templates\podcasts\search_results_items.html:143
+#: .\podcasts\templates\podcasts\search_results_items.html:154
+msgid "Loading more episodes..."
+msgstr "Weitere Episoden werden geladen…"
+
+#: .\podcasts\templates\podcasts\channel_list.html:7
+msgid "Podcast Channels"
+msgstr "Podcast-Kanäle"
+
+#: .\podcasts\templates\podcasts\channel_list.html:12
+#: .\podcasts\templates\podcasts\episode_list.html:12
+msgid "Sort:"
+msgstr "Sortieren:"
+
+#: .\podcasts\templates\podcasts\channel_list.html:15
+#: .\podcasts\templates\podcasts\episode_list.html:22
+msgid "Watched"
+msgstr "Beobachtet"
+
+#: .\podcasts\templates\podcasts\channel_list.html:16
+#: .\podcasts\templates\podcasts\episode_list.html:23
+msgid "Most watched"
+msgstr "Am meisten beobachtet"
+
+#: .\podcasts\templates\podcasts\channel_list.html:17
+#: .\podcasts\templates\podcasts\episode_list.html:24
+msgid "Least watched"
+msgstr "Wenigstens beobachtet"
+
+#: .\podcasts\templates\podcasts\channel_list.html:22
+msgid "Most favorited"
+msgstr "Die beliebtesten"
+
+#: .\podcasts\templates\podcasts\channel_list.html:23
+msgid "Least favorited"
+msgstr "Wenigst bevorzugt"
+
+#: .\podcasts\templates\podcasts\channel_list.html:28
+msgid "Most notified"
+msgstr "Am meisten benachrichtigt"
+
+#: .\podcasts\templates\podcasts\channel_list.html:29
+msgid "Least notified"
+msgstr "Mindestens angemeldet"
+
+#: .\podcasts\templates\podcasts\channel_list.html:33
+#: .\podcasts\templates\podcasts\episode_list.html:40
+msgid "Stars"
+msgstr "Sterne"
+
+#: .\podcasts\templates\podcasts\channel_list.html:34
+#: .\podcasts\templates\podcasts\episode_list.html:41
+msgid "Most stars"
+msgstr "Die meisten Sterne"
+
+#: .\podcasts\templates\podcasts\channel_list.html:35
+#: .\podcasts\templates\podcasts\episode_list.html:42
+msgid "Least stars"
+msgstr "Wenigste Sterne"
+
+#: .\podcasts\templates\podcasts\channel_list.html:39
+#: .\podcasts\templates\podcasts\episode_list.html:46
+msgid "Alphabetical"
+msgstr "Alphabetisch"
+
+#: .\podcasts\templates\podcasts\channel_list.html:40
+#: .\podcasts\templates\podcasts\episode_list.html:47
+msgid "A → Z"
+msgstr "A → Z"
+
+#: .\podcasts\templates\podcasts\channel_list.html:41
+#: .\podcasts\templates\podcasts\episode_list.html:48
+msgid "Z → A"
+msgstr "Z → A"
+
+#: .\podcasts\templates\podcasts\channel_list.html:58
+#: .\podcasts\templates\podcasts\channel_list_items.html:13
+#: .\podcasts\templates\podcasts\favorites_list.html:19
+#: .\podcasts\templates\podcasts\favorites_list_items.html:12
+#: .\podcasts\templates\podcasts\replies_list_item.html:12
+msgid "No image available"
+msgstr "Keine Bilder verfügbar"
+
+#: .\podcasts\templates\podcasts\channel_list.html:80
+#: .\podcasts\templates\podcasts\channel_list_items.html:35
+#: .\podcasts\templates\podcasts\favorites_list.html:43
+#: .\podcasts\templates\podcasts\favorites_list_items.html:33
+msgid "Channel Rating"
+msgstr "Kanalbewertung"
+
+#: .\podcasts\templates\podcasts\channel_list.html:97
+msgid "No channels available."
+msgstr "Keine Kanäle verfügbar."
+
+#: .\podcasts\templates\podcasts\channel_list.html:103
+#: .\podcasts\templates\podcasts\channel_list.html:108
+#: .\podcasts\templates\podcasts\favorites_list.html:75
+#: .\podcasts\templates\podcasts\search_results_ch_items.html:68
+#: .\podcasts\templates\podcasts\search_results_ch_items.html:73
+msgid "Loading more channels..."
+msgstr "Weitere Kanäle werden geladen..."
+
+#: .\podcasts\templates\podcasts\contribute.html:6
+msgid "Community Podcast Generator"
+msgstr "Community Podcast Generator"
+
+#: .\podcasts\templates\podcasts\contribute.html:10
+msgid ""
+"Thank you for volunteering your computer's resources to help generate and "
+"process podcast episodes!"
+msgstr ""
+"Danke, dass Sie die Ressourcen Ihres Computers freiwillig bereitgestellt "
+"haben, um Podcast-Episoden zu erstellen und zu verarbeiten!"
+
+#: .\podcasts\templates\podcasts\contribute.html:11
+msgid ""
+"When you click 'Start Contributing', a lightweight agent running on your "
+"machine will fetch new RSS feed entries for your selected channels, "
+"transcribe or translate them into usable transcripts, process them locally "
+"using your CPU/GPU, and securely return the results. This helps us speed up "
+"episode generation and improve quality for the entire community."
+msgstr ""
+"Wenn Sie auf \"Start Contributing\" klicken, holt ein leichter Agent, der "
+"auf Ihrem Computer läuft, neue RSS-Feed-Einträge für Ihre gewählten Kanäle "
+"ab, transkribiert oder übersetzt sie in nutzbare Transkripte, verarbeitet "
+"sie lokal mit Ihrer CPU/GPU und liefert die Ergebnisse sicher zurück. Dies "
+"hilft uns, die Episode-Generation zu beschleunigen und die Qualität für die "
+"gesamte Community zu verbessern."
+
+#: .\podcasts\templates\podcasts\contribute.html:13
+msgid ""
+"Select which channels you'd like to support or choose 'All Channels' to help"
+" across the platform."
+msgstr ""
+"Wählen Sie aus, welche Kanäle Sie unterstützen möchten oder wählen Sie "
+"\"Alle Kanäle\", um über die Plattform hinweg zu helfen."
+
+#: .\podcasts\templates\podcasts\contribute.html:14
+msgid ""
+"Your contributions run in the background and won't interfere with your "
+"normal workflow."
+msgstr ""
+"Ihre Beiträge laufen im Hintergrund und beeinträchtigen Ihren normalen "
+"Arbeitsablauf nicht."
+
+#: .\podcasts\templates\podcasts\contribute.html:15
+msgid "You can stop or restart at any time using the button below."
+msgstr ""
+"Sie können jederzeit mit der unten stehenden Schaltfläche aufhören oder neu "
+"starten."
+
+#: .\podcasts\templates\podcasts\contribute.html:16
+msgid ""
+"Soon, we'll introduce a leaderboard to highlight top contributors and a "
+"rewards system to thank you for your support."
+msgstr ""
+"Bald werden wir eine Rangliste vorstellen, um die Top-Beiträger "
+"hervorzuheben, und ein Belohnungssystem, um Ihnen für Ihre Unterstützung zu "
+"danken."
+
+#: .\podcasts\templates\podcasts\contribute.html:30
+msgid "Select Channels"
+msgstr "Wählen Sie Kanäle aus"
+
+#: .\podcasts\templates\podcasts\contribute.html:35
+msgid "All Channels"
+msgstr "Alle Kanäle"
+
+#: .\podcasts\templates\podcasts\contribute.html:48
+#: .\podcasts\templates\podcasts\contribute.html:84
+msgid "Start Contributing"
+msgstr "Beginnen Sie mit dem Beitragen"
+
+#: .\podcasts\templates\podcasts\contribute.html:50
+#: .\podcasts\templates\podcasts\contribute.html:87
+msgid "Status: Idle"
+msgstr "Status: Untätig"
+
+#: .\podcasts\templates\podcasts\contribute.html:84
+msgid "Stop Contributing"
+msgstr "Hören Sie auf mitzuarbeiten"
+
+#: .\podcasts\templates\podcasts\contribute.html:87
+msgid "Status: Contributing"
+msgstr "Status: Beitrag"
+
+#: .\podcasts\templates\podcasts\disable_2fa.html:6
+#: .\podcasts\templates\podcasts\profile.html:26
+msgid "Disable Two‑Factor Authentication"
+msgstr "Zweifaktor-Authentifizierung deaktivieren"
+
+#: .\podcasts\templates\podcasts\disable_2fa.html:7
+msgid ""
+"Please enter your OTP token to confirm disabling two‑factor authentication."
+msgstr ""
+"Bitte geben Sie Ihr OTP-Token ein, um die Zwei-Faktor-Authentifizierung zu "
+"deaktivieren."
+
+#: .\podcasts\templates\podcasts\disable_2fa.html:11
+msgid "Disable 2FA"
+msgstr "2FA deaktivieren"
+
+#: .\podcasts\templates\podcasts\episode_detail.html:79
+msgid "Remove from Bookmarks"
+msgstr "Entfernen Sie aus den Lesezeichen"
+
+#: .\podcasts\templates\podcasts\episode_detail.html:79
+msgid "Add to Bookmarks"
+msgstr "Hinzufügen zu Lernzeichen"
+
+#: .\podcasts\templates\podcasts\episode_detail.html:87
+msgid "Number of Bookmarks"
+msgstr "Anzahl der Zeichnungen"
+
+#: .\podcasts\templates\podcasts\episode_detail.html:92
+msgid "Comment"
+msgstr "Kommentar"
+
+#: .\podcasts\templates\podcasts\episode_detail.html:95
+msgid "Number of Comments"
+msgstr "Anzahl der Kommentare"
+
 #: .\podcasts\templates\podcasts\episode_detail.html:105
+msgid "Rate this episode"
+msgstr "Bewertet diese Episode ."
+
+#: .\podcasts\templates\podcasts\episode_detail.html:111
+msgid "Average rating and total ratings"
+msgstr "Durchschnittsbewertungen und Gesamtbewertungen"
+
+#: .\podcasts\templates\podcasts\episode_detail.html:138
+msgid "Audio:"
+msgstr "Audio:"
+
+#: .\podcasts\templates\podcasts\episode_detail.html:151
 msgid "Chapters"
 msgstr "Kapitel"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:117
+#: .\podcasts\templates\podcasts\episode_detail.html:158
+msgid "No chapters available for this episode."
+msgstr "Keine Kapitel verfügbar für diese Episode."
+
+#: .\podcasts\templates\podcasts\episode_detail.html:168
 msgid "Transcript"
 msgstr "Transkript"
 
-#: .\podcasts\templates\podcasts\episode_list.html:6
+#: .\podcasts\templates\podcasts\episode_detail.html:207
+msgid "Write a comment..."
+msgstr "Schreiben Sie einen Kommentar..."
+
+#: .\podcasts\templates\podcasts\episode_detail.html:210
+msgid "Submit Comment"
+msgstr "Einreichung von Kommentaren"
+
+#: .\podcasts\templates\podcasts\episode_detail.html:614
+msgid "Please enter a comment"
+msgstr "Bitte geben Sie einen Kommentar ein"
+
+#: .\podcasts\templates\podcasts\episode_list.html:7
 msgid "Podcast Episodes"
 msgstr "Podcast-Episoden"
 
-#: .\podcasts\templates\podcasts\episode_list.html:77
-msgid "Loading more episodes..."
-msgstr "Weitere Episoden werden geladen…"
+#: .\podcasts\templates\podcasts\episode_list.html:16
+msgid "Recent"
+msgstr "Vor kurzem"
+
+#: .\podcasts\templates\podcasts\episode_list.html:17
+msgid "Most recent"
+msgstr "Zuletzt"
+
+#: .\podcasts\templates\podcasts\episode_list.html:18
+msgid "Least recent"
+msgstr "Zumindest vor kurzem"
+
+#: .\podcasts\templates\podcasts\episode_list.html:29
+msgid "Most bookmarked"
+msgstr "Die meisten Buchmarken"
+
+#: .\podcasts\templates\podcasts\episode_list.html:30
+msgid "Least bookmarked"
+msgstr "Mindeste Buchmarkierung"
+
+#: .\podcasts\templates\podcasts\episode_list.html:35
+msgid "Most commented"
+msgstr "Die meisten Kommentare"
+
+#: .\podcasts\templates\podcasts\episode_list.html:36
+msgid "Least commented"
+msgstr "Wenigstens kommentiert"
+
+#: .\podcasts\templates\podcasts\episode_list.html:118
+#: .\podcasts\templates\podcasts\episode_list_items.html:88
+msgid "No episodes available."
+msgstr "Keine Episoden verfügbar."
+
+#: .\podcasts\templates\podcasts\favorites_list.html:63
+msgid "No favorite channels found."
+msgstr "Keine Lieblingskanäle gefunden."
+
+#: .\podcasts\templates\podcasts\favorites_list.html:69
+msgid "Loading more favorite channels..."
+msgstr "Mehr Lieblingskanäle laden..."
+
+#: .\podcasts\templates\podcasts\home.html:6
+msgid "Welcome to the Podcast Search Engine"
+msgstr "Willkommen auf der Podcast-Suchmaschine"
+
+#: .\podcasts\templates\podcasts\home.html:7
+msgid "Please log in or create an account to access the site features."
+msgstr ""
+"Bitte melden Sie sich an oder erstellen Sie ein Konto, um auf die Funktionen"
+" der Website zuzugreifen."
+
+#: .\podcasts\templates\podcasts\home.html:8
+msgid "Your memory is short, the Muse's is not..."
+msgstr "Ihr Gedächtnis ist kurz, das der Muse ist nicht..."
+
+#: .\podcasts\templates\podcasts\home.html:9
+msgid "Search to find your thoughts!"
+msgstr "Suchen Sie nach Ihren Gedanken!"
+
+#: .\podcasts\templates\podcasts\home.html:11
+#: .\podcasts\templates\registration\login.html:7
+msgid "Login"
+msgstr "Einloggen"
+
+#: .\podcasts\templates\podcasts\home.html:12
+#: .\podcasts\templates\podcasts\signup.html:7
+msgid "Create Account"
+msgstr "Erstellen Sie ein Konto"
+
+#: .\podcasts\templates\podcasts\home.html:19
+msgid "Muse Podcast Search Engine"
+msgstr "Muse Podcast Suchmaschine"
+
+#: .\podcasts\templates\podcasts\home.html:22
+msgid "License: GPL v3"
+msgstr "Lizenz: GPL v3"
+
+#: .\podcasts\templates\podcasts\home.html:25
+msgid "https://github.com/musepodcast/podcast-search-engine"
+msgstr ""
+"Das ist eine sehr wichtige Sache, die ich heute noch nicht erlebt habe."
+
+#: .\podcasts\templates\podcasts\home.html:35
+msgid "🚀 About"
+msgstr " Über"
+
+#: .\podcasts\templates\podcasts\home.html:36
+msgid ""
+"Muse is a free, AI-powered podcast search engine. Tired of scouring episode "
+"show notes for bits of information, we built a platform where you can:"
+msgstr "Muse ist eine kostenlose, KI-betriebene Podcast-Suchmaschine."
+
+#: .\podcasts\templates\podcasts\home.html:38
+msgid ""
+"🔍 Search any podcast by keyword (titles, descriptions, or transcript "
+"content)"
+msgstr ""
+"🔍 Suchen Sie nach Podcasts nach Schlüsselwörtern (Titel, Beschreibungen oder"
+" Transkriptinhalte)"
+
+#: .\podcasts\templates\podcasts\home.html:39
+msgid "📄 View full, time-stamped transcripts (speaker-diarized and formatted)"
+msgstr ""
+" Anzeige vollständiger, zeitgemachter Transkripte (diarisiert und "
+"formatiert)"
+
+#: .\podcasts\templates\podcasts\home.html:40
+msgid "✍️ Read AI-generated chapter summaries"
+msgstr "✍️ Lesen Sie die von KI generierten Kapitel-Überschnitte"
+
+#: .\podcasts\templates\podcasts\home.html:41
+msgid "🎧 Click through to listen at the exact moment a topic is discussed"
+msgstr ""
+" Klicken Sie hierher, um genau zu hören, wann ein Thema diskutiert wird"
+
+#: .\podcasts\templates\podcasts\home.html:42
+msgid "🆕 Discover new channels or episodes based on your interests"
+msgstr ""
+" Entdecken Sie neue Kanäle oder Episoden, die sich an Ihren Interessen "
+"orientieren"
+
+#: .\podcasts\templates\podcasts\home.html:44
+msgid ""
+"Currently optimized for desktop browsers. Mobile-friendly support and native"
+" apps are coming soon!"
+msgstr ""
+"Momentan für Desktop-Browser optimiert. Mobilfunkfreundliche Unterstützung "
+"und native Apps kommen bald!"
+
+#: .\podcasts\templates\podcasts\home.html:46
+msgid "🌟 Key Features"
+msgstr " Schlüsselmerkmale"
+
+#: .\podcasts\templates\podcasts\home.html:48
+msgid "Account Signup & Management"
+msgstr "Registrierung und Verwaltung von Konten"
+
+#: .\podcasts\templates\podcasts\home.html:48
+msgid ""
+"Create a free account to save searches, bookmark episodes, and track "
+"listening history."
+msgstr ""
+"Erstellen Sie ein kostenloses Konto, um Suchanfragen zu speichern, Episoden "
+"zu buchmarkieren und die Hörgeschichte zu verfolgen."
+
+#: .\podcasts\templates\podcasts\home.html:49
+msgid "Transcript Generation"
+msgstr "Transkriptgeneration"
+
+#: .\podcasts\templates\podcasts\home.html:49
+msgid ""
+"Ingests RSS feeds from any podcast; uses OpenAI Whisper Turbo on an NVIDIA "
+"GPU for fast, high-quality transcription; diarizes speakers and formats with"
+" timestamps."
+msgstr ""
+"Verbraucht RSS-Feeds aus jedem Podcast; verwendet OpenAI Whisper Turbo auf "
+"einer NVIDIA-GPU für schnelle, qualitativ hochwertige Transkription; "
+"verfolgt Lautsprecher und Formate mit Zeitstempeln."
+
+#: .\podcasts\templates\podcasts\home.html:50
+msgid "Chapter Summaries"
+msgstr "Zusammenfassungen von Kapiteln"
+
+#: .\podcasts\templates\podcasts\home.html:50
+msgid ""
+"Generates concise summaries of each transcript segment using FalconsAI text-"
+"summarization."
+msgstr ""
+"Generiert kurze Zusammenfassungen jedes Transkriptsegments mit Hilfe von "
+"FalconsAI-Textumfassungen."
+
+#: .\podcasts\templates\podcasts\home.html:51
+msgid "Full-Text Search"
+msgstr "Volltextsuche"
+
+#: .\podcasts\templates\podcasts\home.html:51
+msgid ""
+"Powered by Elasticsearch for lightning-fast, fuzzy-match queries; filters by"
+" title, description, channel metadata, or transcript."
+msgstr ""
+"Powered by Elasticsearch für blitzschnelle, fuzzy-match-Fragen; Filter nach "
+"Titel, Beschreibung, Kanalmetadaten oder Transkript."
+
+#: .\podcasts\templates\podcasts\home.html:52
+msgid "Flexible Playback"
+msgstr "Flexible Wiedergabe"
+
+#: .\podcasts\templates\podcasts\home.html:52
+msgid ""
+"Jump directly to the moment a keyword appears in the audio player on the "
+"website."
+msgstr ""
+"Springen Sie direkt zum Moment, in dem ein Schlüsselwort im Audio-Player auf"
+" der Website erscheint."
+
+#: .\podcasts\templates\podcasts\home.html:55
+msgid "🏗️ Architecture & Tech Stack"
+msgstr "️ Architektur & Tech Stack"
+
+#: .\podcasts\templates\podcasts\home.html:59
+msgid "Layer"
+msgstr "Schicht"
+
+#: .\podcasts\templates\podcasts\home.html:60
+msgid "Technology"
+msgstr "Technologie"
+
+#: .\podcasts\templates\podcasts\home.html:65
+msgid "Backend"
+msgstr "Hintergrund"
+
+#: .\podcasts\templates\podcasts\home.html:65
+msgid "Python, Django"
+msgstr "Python, Django"
+
+#: .\podcasts\templates\podcasts\home.html:68
+msgid "Transcription"
+msgstr "Transkription"
+
+#: .\podcasts\templates\podcasts\home.html:68
+msgid "OpenAI Whisper Turbo (GPU-accelerated)"
+msgstr "OpenAI Whisper Turbo (GPU-beschleunigt)"
+
+#: .\podcasts\templates\podcasts\home.html:71
+msgid "Summarization"
+msgstr "Zusammenfassung"
+
+#: .\podcasts\templates\podcasts\home.html:71
+msgid "FalconsAI / text_summarization"
+msgstr "FalconsAI / Text_Zusammenfassung"
+
+#: .\podcasts\templates\podcasts\home.html:74
+msgid "Database"
+msgstr "Datenbank"
+
+#: .\podcasts\templates\podcasts\home.html:74
+msgid "PostgreSQL"
+msgstr "PostgreSQL"
+
+#: .\podcasts\templates\podcasts\home.html:77
+msgid "Search Engine"
+msgstr "Suchmaschine"
+
+#: .\podcasts\templates\podcasts\home.html:77
+msgid "Elasticsearch"
+msgstr "Elastische Suche"
+
+#: .\podcasts\templates\podcasts\home.html:80
+msgid "Frontend"
+msgstr "Frontend"
+
+#: .\podcasts\templates\podcasts\home.html:80
+msgid "Django templates, HTML, CSS, JavaScript"
+msgstr "Django-Vorlagen, HTML, CSS, JavaScript"
+
+#: .\podcasts\templates\podcasts\home.html:83
+msgid "Deployment"
+msgstr "Ausrüstung"
+
+#: .\podcasts\templates\podcasts\home.html:83
+msgid "Docker, NVIDIA GPU passthrough, Ubuntu VM"
+msgstr "Docker, NVIDIA GPU Pass durch Ubuntu VM"
+
+#: .\podcasts\templates\podcasts\notifications_list.html:97
+msgid "No notifications available."
+msgstr "Keine Benachrichtigungen verfügbar."
+
+#: .\podcasts\templates\podcasts\notifications_list.html:104
+msgid "Loading more notifications..."
+msgstr "Weitere Benachrichtigungen laden..."
+
+#: .\podcasts\templates\podcasts\profile.html:7
+msgid "User Profile"
+msgstr "Benutzerprofil"
+
+#: .\podcasts\templates\podcasts\profile.html:8
+msgid "Username:"
+msgstr "Benutzername:"
+
+#: .\podcasts\templates\podcasts\profile.html:9
+msgid "Email:"
+msgstr "E-Mail:"
+
+#: .\podcasts\templates\podcasts\profile.html:10
+msgid "First Name:"
+msgstr "Vorname:"
+
+#: .\podcasts\templates\podcasts\profile.html:11
+msgid "Last Name:"
+msgstr "Nachname:"
+
+#: .\podcasts\templates\podcasts\profile.html:12
+msgid "Birthdate:"
+msgstr "Geburtsdatum:"
+
+#: .\podcasts\templates\podcasts\profile.html:13
+msgid "Country:"
+msgstr "Land:"
+
+#: .\podcasts\templates\podcasts\profile.html:14
+msgid "Phone Number:"
+msgstr "Telefonnummer:"
+
+#: .\podcasts\templates\podcasts\profile.html:15
+msgid "Gender:"
+msgstr "Geschlecht:"
+
+#: .\podcasts\templates\podcasts\profile.html:17
+#: .\podcasts\templates\podcasts\profile_edit.html:7
+msgid "Edit Profile"
+msgstr "Bearbeiten Sie Profil"
+
+#: .\podcasts\templates\podcasts\profile.html:21
+msgid "Two‑Factor Authentication"
+msgstr "Zwei-Faktor-Authentifizierung"
+
+#: .\podcasts\templates\podcasts\profile.html:23
+msgid "Two‑Factor Authentication is enabled on your account."
+msgstr "Die Zwei-Faktor-Authentifizierung ist auf Ihrem Konto aktiviert."
+
+#: .\podcasts\templates\podcasts\profile.html:32
+msgid "Enable Two‑Factor Authentication"
+msgstr "Zwei-Faktor-Authentifizierung aktivieren"
+
+#: .\podcasts\templates\podcasts\profile.html:41
+msgid "Admin Access"
+msgstr "Admin-Zugriff"
+
+#: .\podcasts\templates\podcasts\profile.html:43
+msgid "Enter Admin Portal"
+msgstr "Geben Sie das Admin-Portal ein"
+
+#: .\podcasts\templates\podcasts\profile_edit.html:11
+msgid "Save Changes"
+msgstr "Speichern Sie Änderungen"
+
+#: .\podcasts\templates\podcasts\profile_edit.html:16
+#: .\podcasts\templates\registration\password_change_form.html:7
+#: .\podcasts\templates\registration\password_change_form.html:11
+msgid "Change Password"
+msgstr "Passwort ändern"
+
+#: .\podcasts\templates\podcasts\profile_edit.html:18
+msgid "Want to change your password?"
+msgstr "Willst du dein Passwort ändern?"
+
+#: .\podcasts\templates\podcasts\profile_edit.html:19
+msgid "Click here"
+msgstr "Klicken Sie hier ."
+
+#: .\podcasts\templates\podcasts\replies_list.html:5
+msgid "Replies"
+msgstr "Antworten"
+
+#: .\podcasts\templates\podcasts\replies_list.html:11
+msgid "No replies found."
+msgstr "Keine Antworten gefunden."
+
+#: .\podcasts\templates\podcasts\replies_list.html:16
+#: .\podcasts\templates\podcasts\replies_list.html:21
+msgid "Loading more replies..."
+msgstr "Mehr Antworten laden..."
+
+#: .\podcasts\templates\podcasts\replies_list_item.html:18
+msgid "Time:"
+msgstr "Zeit:"
 
 #: .\podcasts\templates\podcasts\search_results.html:6
 msgid "Results for"
 msgstr "Ergebnisse für"
 
-#: .\podcasts\templates\podcasts\search_results.html:62
-#: .\podcasts\templates\podcasts\search_results.html:149
-msgid "Explicit"
-msgstr "Explizit"
+#: .\podcasts\templates\podcasts\search_results.html:11
+#: .\podcasts\templates\podcasts\search_results_ch.html:10
+msgid "Did you mean"
+msgstr "Meinst du das?"
 
-#: .\podcasts\templates\podcasts\search_results.html:178
+#: .\podcasts\templates\podcasts\search_results_ch.html:6
+msgid "Channels matching"
+msgstr "Verbindliche Kanäle"
+
+#: .\podcasts\templates\podcasts\search_results_ch_items.html:26
+msgid "No image"
+msgstr "Keine Bilder"
+
+#: .\podcasts\templates\podcasts\search_results_ch_items.html:62
+msgid "No channels found matching your search."
+msgstr "Keine Kanäle gefunden, die mit Ihrer Suche übereinstimmen."
+
+#: .\podcasts\templates\podcasts\search_results_items.html:136
 msgid "No episodes found matching your search."
 msgstr "Keine Episoden gefunden, die Ihrer Suche entsprechen."
 
-#: .\podcasts\templates\podcasts\search_results.html:179
+#: .\podcasts\templates\podcasts\search_results_items.html:137
 msgid "Try different keywords or check your spelling."
 msgstr ""
 "Probieren Sie verschiedene Schlüsselwörter aus oder überprüfen Sie Ihre "
 "Rechtschreibung."
 
-#: .\venv\Lib\site-packages\django\contrib\messages\apps.py:16
-msgid "Messages"
-msgstr "Nachrichten"
+#: .\podcasts\templates\podcasts\signup.html:30
+msgid "Sign up with GitHub"
+msgstr "Anmelden Sie sich bei GitHub"
 
-#: .\venv\Lib\site-packages\django\contrib\sitemaps\apps.py:8
-msgid "Site Maps"
-msgstr "Sitemaps"
+#: .\podcasts\templates\podcasts\signup.html:36
+msgid "or create an account manually"
+msgstr "oder ein Konto manuell erstellen"
 
-#: .\venv\Lib\site-packages\django\contrib\staticfiles\apps.py:9
-msgid "Static Files"
-msgstr ""
+#: .\podcasts\templates\podcasts\signup.html:42
+msgid "Please fix the errors below."
+msgstr "Bitte beheben Sie die Fehler unten."
 
-#: .\venv\Lib\site-packages\django\contrib\syndication\apps.py:7
-msgid "Syndication"
-msgstr ""
+#: .\podcasts\templates\podcasts\signup.html:108
+#: .\podcasts\templates\registration\login.html:52
+msgid "Password"
+msgstr "Kennwort"
 
-#. Translators: String used to replace omitted page numbers in elided page
-#. range generated by paginators, e.g. [1, 2, '…', 5, 6, 7, '…', 9, 10].
-#: .\venv\Lib\site-packages\django\core\paginator.py:30
-msgid "…"
-msgstr ""
+#: .\podcasts\templates\podcasts\signup.html:114
+#: .\podcasts\templates\podcasts\signup.html:128
+msgid "Show/Hide password"
+msgstr "Kennwort anzeigen/verbergen"
 
-#: .\venv\Lib\site-packages\django\core\paginator.py:32
-msgid "That page number is not an integer"
-msgstr ""
+#: .\podcasts\templates\podcasts\signup.html:122
+msgid "Confirm Password"
+msgstr "Passwort bestätigen"
 
-#: .\venv\Lib\site-packages\django\core\paginator.py:33
-msgid "That page number is less than 1"
-msgstr ""
+#: .\podcasts\templates\podcasts\signup.html:141
+msgid "Password Requirements:"
+msgstr "Kennwortanforderungen:"
 
-#: .\venv\Lib\site-packages\django\core\paginator.py:34
-msgid "That page contains no results"
-msgstr ""
+#: .\podcasts\templates\podcasts\signup.html:143
+msgid "Must be at least 8 characters long."
+msgstr "Sie muss mindestens 8 Zeichen lang sein."
 
-#: .\venv\Lib\site-packages\django\core\validators.py:22
-msgid "Enter a valid value."
-msgstr ""
+#: .\podcasts\templates\podcasts\signup.html:144
+msgid "Cannot be a common password."
+msgstr "Das kann kein gemeinsames Passwort sein."
 
-#: .\venv\Lib\site-packages\django\core\validators.py:70
-msgid "Enter a valid domain name."
-msgstr ""
+#: .\podcasts\templates\podcasts\signup.html:145
+msgid "Cannot be entirely numeric."
+msgstr "Das kann nicht ganz numerisch sein."
 
-#: .\venv\Lib\site-packages\django\core\validators.py:155
-#: .\venv\Lib\site-packages\django\forms\fields.py:768
-msgid "Enter a valid URL."
-msgstr ""
+#: .\podcasts\templates\podcasts\signup.html:146
+msgid "Should not be too similar to your personal information."
+msgstr "Es sollte nicht zu ähnlich sein wie Ihre persönlichen Daten."
 
-#: .\venv\Lib\site-packages\django\core\validators.py:216
-msgid "Enter a valid integer."
-msgstr ""
+#: .\podcasts\templates\podcasts\signup.html:154
+#: .\podcasts\templates\socialaccount\signup.html:59
+msgid "By checking this box, I acknowledge that I have read and agree to"
+msgstr "Ich gebe zu, daß ich das Buch gelesen und damit einverstanden bin."
 
-#: .\venv\Lib\site-packages\django\core\validators.py:227
-msgid "Enter a valid email address."
-msgstr ""
+#: .\podcasts\templates\podcasts\signup.html:156
+msgid "Muse Podcast, LLC's Privacy Notice"
+msgstr "Die Datenschutzerklärung von Muse Podcast, LLC"
 
-#. Translators: "letters" means latin letters: a-z and A-Z.
-#: .\venv\Lib\site-packages\django\core\validators.py:310
+#: .\podcasts\templates\podcasts\signup.html:157
+#: .\podcasts\templates\socialaccount\signup.html:62
 msgid ""
-"Enter a valid “slug” consisting of letters, numbers, underscores or hyphens."
+", and consent to the collection, anonymized sharing, and sale of data as "
+"described."
 msgstr ""
+", und die Einwilligung zur Erhebung, anonymisierten Weitergabe und dem "
+"Verkauf von Daten, wie beschrieben."
 
-#: .\venv\Lib\site-packages\django\core\validators.py:318
+#: .\podcasts\templates\podcasts\signup.html:161
+msgid "Sign Up"
+msgstr "Schreiben Sie sich an"
+
+#: .\podcasts\templates\podcasts\signup.html:174
+#: .\podcasts\templates\socialaccount\signup.html:77
+msgid "Privacy Notice for Muse Podcast, LLC"
+msgstr "Datenschutzerklärung für Muse Podcast, LLC"
+
+#: .\podcasts\templates\podcasts\signup.html:178
+#: .\podcasts\templates\socialaccount\signup.html:81
+msgid "Last updated:"
+msgstr "Zuletzt aktualisiert:"
+
+#: .\podcasts\templates\podcasts\signup.html:179
+#: .\podcasts\templates\socialaccount\signup.html:82
 msgid ""
-"Enter a valid “slug” consisting of Unicode letters, numbers, underscores, or "
-"hyphens."
+"Muse Podcast, LLC is committed to protecting your privacy. This Privacy "
+"Notice explains how we collect, use, share, and safeguard your information "
+"when you visit our website and register an account."
 msgstr ""
+"Muse Podcast, LLC verpflichtet sich, Ihre Privatsphäre zu schützen. Diese "
+"Datenschutzerklärung erklärt, wie wir Ihre Informationen sammeln, verwenden,"
+" teilen und schützen, wenn Sie unsere Website besuchen und ein Konto "
+"registrieren."
 
-#: .\venv\Lib\site-packages\django\core\validators.py:330
-#: .\venv\Lib\site-packages\django\core\validators.py:339
-#: .\venv\Lib\site-packages\django\core\validators.py:353
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2215
-#, python-format
-msgid "Enter a valid %(protocol)s address."
-msgstr ""
+#: .\podcasts\templates\podcasts\signup.html:180
+#: .\podcasts\templates\socialaccount\signup.html:83
+msgid "Information We Collect"
+msgstr "Informationen, die wir sammeln"
 
-#: .\venv\Lib\site-packages\django\core\validators.py:332
-msgid "IPv4"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\core\validators.py:341
-#: .\venv\Lib\site-packages\django\utils\ipv6.py:30
-msgid "IPv6"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\core\validators.py:355
-msgid "IPv4 or IPv6"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\core\validators.py:396
-msgid "Enter only digits separated by commas."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\core\validators.py:402
-#, python-format
-msgid "Ensure this value is %(limit_value)s (it is %(show_value)s)."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\core\validators.py:437
-#, python-format
-msgid "Ensure this value is less than or equal to %(limit_value)s."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\core\validators.py:446
-#, python-format
-msgid "Ensure this value is greater than or equal to %(limit_value)s."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\core\validators.py:455
-#, python-format
-msgid "Ensure this value is a multiple of step size %(limit_value)s."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\core\validators.py:462
-#, python-format
+#: .\podcasts\templates\podcasts\signup.html:181
+#: .\podcasts\templates\socialaccount\signup.html:84
 msgid ""
-"Ensure this value is a multiple of step size %(limit_value)s, starting from "
-"%(offset)s, e.g. %(offset)s, %(valid_value1)s, %(valid_value2)s, and so on."
+"We collect the following information when you create an account or use our "
+"website:"
 msgstr ""
+"Wir sammeln folgende Informationen, wenn Sie ein Konto erstellen oder unsere"
+" Website nutzen:"
 
-#: .\venv\Lib\site-packages\django\core\validators.py:494
-#, python-format
+#: .\podcasts\templates\podcasts\signup.html:183
+#: .\podcasts\templates\socialaccount\signup.html:86
+msgid "Personal Information:"
+msgstr "Personenbezogene Daten:"
+
+#: .\podcasts\templates\podcasts\signup.html:185
+#: .\podcasts\templates\socialaccount\signup.html:88
+msgid "First Name"
+msgstr "Vornamen"
+
+#: .\podcasts\templates\podcasts\signup.html:186
+#: .\podcasts\templates\socialaccount\signup.html:89
+msgid "Last Name"
+msgstr "Nachnamen"
+
+#: .\podcasts\templates\podcasts\signup.html:187
+msgid "Email Address"
+msgstr "E-Mail-Adresse"
+
+#: .\podcasts\templates\podcasts\signup.html:188
+#: .\podcasts\templates\socialaccount\signup.html:90
+msgid "Birthdate"
+msgstr "Geburtsdatum"
+
+#: .\podcasts\templates\podcasts\signup.html:189
+#: .\podcasts\templates\socialaccount\signup.html:91
+msgid "Country"
+msgstr "Land"
+
+#: .\podcasts\templates\podcasts\signup.html:190
+#: .\podcasts\templates\socialaccount\signup.html:92
+msgid "Phone Number"
+msgstr "Telefonnummer"
+
+#: .\podcasts\templates\podcasts\signup.html:191
+#: .\podcasts\templates\socialaccount\signup.html:93
+msgid "Gender"
+msgstr "Geschlecht"
+
+#: .\podcasts\templates\podcasts\signup.html:194
+#: .\podcasts\templates\socialaccount\signup.html:96
+msgid "Technical Information:"
+msgstr "Technische Informationen:"
+
+#: .\podcasts\templates\podcasts\signup.html:196
+#: .\podcasts\templates\socialaccount\signup.html:98
+msgid "Geolocation"
+msgstr "Geolokalisierung"
+
+#: .\podcasts\templates\podcasts\signup.html:197
+#: .\podcasts\templates\socialaccount\signup.html:99
+msgid "IP Addresses"
+msgstr "IP-Adressen"
+
+#: .\podcasts\templates\podcasts\signup.html:200
+#: .\podcasts\templates\socialaccount\signup.html:102
+msgid "Usage Information:"
+msgstr "Gebrauchsinformationen:"
+
+#: .\podcasts\templates\podcasts\signup.html:202
+#: .\podcasts\templates\socialaccount\signup.html:104
+msgid "Data on what you search, view, or click within our website."
+msgstr ""
+"Daten über das, was Sie auf unserer Website suchen, ansehen oder klicken."
+
+#: .\podcasts\templates\podcasts\signup.html:206
+#: .\podcasts\templates\socialaccount\signup.html:108
+msgid "Purpose of Data Collection"
+msgstr "Zweck der Datenerhebung"
+
+#: .\podcasts\templates\podcasts\signup.html:207
+msgid "Muse Podcast, LLC collects this data to:"
+msgstr "Muse Podcast, LLC sammelt diese Daten an:"
+
+#: .\podcasts\templates\podcasts\signup.html:209
+#: .\podcasts\templates\socialaccount\signup.html:110
+msgid "Provide, maintain, and improve our website services."
+msgstr "Bereitstellen, pflegen und verbessern Sie unsere Website-Dienste."
+
+#: .\podcasts\templates\podcasts\signup.html:210
+#: .\podcasts\templates\socialaccount\signup.html:111
+msgid "Protect our website and users against fraudulent activities and scams."
+msgstr ""
+"Schützen Sie unsere Website und Ihre Nutzer vor betrügerischen Aktivitäten "
+"und Betrügereien."
+
+#: .\podcasts\templates\podcasts\signup.html:211
+#: .\podcasts\templates\socialaccount\signup.html:112
+msgid "Generate analytics to enhance user experience."
+msgstr "Erstellen Sie Analysen, um die Benutzererfahrung zu verbessern."
+
+#: .\podcasts\templates\podcasts\signup.html:213
+#: .\podcasts\templates\socialaccount\signup.html:114
+msgid "Data Sharing and Selling"
+msgstr "Datenaustausch und Verkauf"
+
+#: .\podcasts\templates\podcasts\signup.html:214
+#: .\podcasts\templates\socialaccount\signup.html:115
 msgid ""
-"Ensure this value has at least %(limit_value)d character (it has "
-"%(show_value)d)."
-msgid_plural ""
-"Ensure this value has at least %(limit_value)d characters (it has "
-"%(show_value)d)."
-msgstr[0] ""
-msgstr[1] ""
-
-#: .\venv\Lib\site-packages\django\core\validators.py:512
-#, python-format
-msgid ""
-"Ensure this value has at most %(limit_value)d character (it has "
-"%(show_value)d)."
-msgid_plural ""
-"Ensure this value has at most %(limit_value)d characters (it has "
-"%(show_value)d)."
-msgstr[0] ""
-msgstr[1] ""
-
-#: .\venv\Lib\site-packages\django\core\validators.py:535
-#: .\venv\Lib\site-packages\django\forms\fields.py:359
-#: .\venv\Lib\site-packages\django\forms\fields.py:398
-msgid "Enter a number."
+"To keep our services free and advertisement-free, Muse Podcast, LLC may sell"
+" aggregated, anonymized data analytics to podcast creators, business "
+"partners, or other third parties. We ensure your privacy by anonymizing "
+"data, meaning your personal identifiable information (like your name or "
+"exact contact details) will never be sold or shared. Your identity is "
+"replaced by a unique, randomized number to maintain your anonymity."
 msgstr ""
+"Um unsere Dienste kostenlos und werbefrei zu halten, kann Muse Podcast, LLC "
+"aggregierte, anonymisierte Datenanalysen an Podcast-Ersteller, "
+"Geschäftspartner oder andere Dritte verkaufen. Wir gewährleisten Ihre "
+"Privatsphäre, indem wir Daten anonymisieren, was bedeutet, dass Ihre "
+"persönlich identifizierbaren Informationen (wie Ihr Name oder genaue "
+"Kontaktdaten) nie verkauft oder geteilt werden. Ihre Identität wird durch "
+"eine einzigartige, randomisierte Nummer ersetzt, um Ihre Anonymität zu "
+"erhalten."
 
-#: .\venv\Lib\site-packages\django\core\validators.py:537
-#, python-format
-msgid "Ensure that there are no more than %(max)s digit in total."
-msgid_plural "Ensure that there are no more than %(max)s digits in total."
-msgstr[0] ""
-msgstr[1] ""
+#: .\podcasts\templates\podcasts\signup.html:215
+#: .\podcasts\templates\socialaccount\signup.html:116
+msgid "Data Security"
+msgstr "Datensicherheit"
 
-#: .\venv\Lib\site-packages\django\core\validators.py:542
-#, python-format
-msgid "Ensure that there are no more than %(max)s decimal place."
-msgid_plural "Ensure that there are no more than %(max)s decimal places."
-msgstr[0] ""
-msgstr[1] ""
-
-#: .\venv\Lib\site-packages\django\core\validators.py:547
-#, python-format
-msgid ""
-"Ensure that there are no more than %(max)s digit before the decimal point."
-msgid_plural ""
-"Ensure that there are no more than %(max)s digits before the decimal point."
-msgstr[0] ""
-msgstr[1] ""
-
-#: .\venv\Lib\site-packages\django\core\validators.py:618
-#, python-format
-msgid ""
-"File extension “%(extension)s” is not allowed. Allowed extensions are: "
-"%(allowed_extensions)s."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\core\validators.py:680
-msgid "Null characters are not allowed."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\base.py:1571
-#: .\venv\Lib\site-packages\django\forms\models.py:908
-msgid "and"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\base.py:1573
-#, python-format
-msgid "%(model_name)s with this %(field_labels)s already exists."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\constraints.py:22
-#, python-format
-msgid "Constraint “%(name)s” is violated."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:134
-#, python-format
-msgid "Value %(value)r is not a valid choice."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:135
-msgid "This field cannot be null."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:136
-msgid "This field cannot be blank."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:137
-#, python-format
-msgid "%(model_name)s with this %(field_label)s already exists."
-msgstr ""
-
-#. Translators: The 'lookup_type' is one of 'date', 'year' or
-#. 'month'. Eg: "Title must be unique for pub_date year"
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:141
-#, python-format
-msgid ""
-"%(field_label)s must be unique for %(date_field_label)s %(lookup_type)s."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:180
-#, python-format
-msgid "Field of type: %(field_type)s"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1156
-#, python-format
-msgid "“%(value)s” value must be either True or False."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1157
-#, python-format
-msgid "“%(value)s” value must be either True, False, or None."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1159
-msgid "Boolean (Either True or False)"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1209
-#, python-format
-msgid "String (up to %(max_length)s)"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1211
-msgid "String (unlimited)"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1320
-msgid "Comma-separated integers"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1421
+#: .\podcasts\templates\podcasts\signup.html:216
+#: .\podcasts\templates\socialaccount\signup.html:117
 #, python-format
 msgid ""
-"“%(value)s” value has an invalid date format. It must be in YYYY-MM-DD "
-"format."
+"Muse Podcast, LLC employs industry-standard practices and technologies to "
+"safeguard your personal information. However, no method of transmission over"
+" the internet or electronic storage is 100%% secure, so while we strive to "
+"protect your personal information, we cannot guarantee absolute security."
 msgstr ""
+"Muse Podcast, LLC employs industry-standard practices and technologies to "
+"safeguard your personal information. However, no method of transmission over"
+" the internet or electronic storage is 100%% secure, so while we strive to "
+"protect your personal information, we cannot guarantee absolute security."
 
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1425
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1560
+#: .\podcasts\templates\podcasts\signup.html:217
+#: .\podcasts\templates\socialaccount\signup.html:118
+msgid "Consent"
+msgstr "Einverständnis"
+
+#: .\podcasts\templates\podcasts\signup.html:218
+#: .\podcasts\templates\socialaccount\signup.html:119
+msgid ""
+"By clicking the checkbox when creating an account, you consent to the "
+"collection, use, and sharing practices described in this Privacy Notice."
+msgstr ""
+"Wenn Sie beim Erstellen eines Kontos auf das Kontrollkästchen klicken, "
+"stimmen Sie der in dieser Datenschutzerklärung beschriebenen Sammlung, "
+"Nutzung und Weitergabe zu."
+
+#: .\podcasts\templates\podcasts\signup.html:219
+#: .\podcasts\templates\socialaccount\signup.html:120
+msgid "Your Rights and Choices"
+msgstr "Ihre Rechte und Entscheidungen"
+
+#: .\podcasts\templates\podcasts\signup.html:220
+#: .\podcasts\templates\socialaccount\signup.html:121
+msgid ""
+"You have the right to access, correct, or request deletion of your personal "
+"data at any time. To exercise these rights or if you have questions about "
+"this Privacy Notice, contact us at:"
+msgstr ""
+"Sie haben das Recht, jederzeit auf Ihre personenbezogenen Daten zuzugreifen,"
+" zu korrigieren oder zu verlangen, dass sie gelöscht werden."
+
+#: .\podcasts\templates\podcasts\signup.html:225
+#: .\podcasts\templates\socialaccount\signup.html:126
+msgid "Changes to This Privacy Notice"
+msgstr "Änderungen an dieser Datenschutzerklärung"
+
+#: .\podcasts\templates\podcasts\signup.html:226
+#: .\podcasts\templates\socialaccount\signup.html:127
+msgid ""
+"Muse Podcast, LLC reserves the right to modify this Privacy Notice at any "
+"time. Changes will be posted on our website and are effective immediately "
+"upon posting."
+msgstr ""
+"Muse Podcast, LLC behält sich das Recht vor, diese Datenschutzerklärung "
+"jederzeit zu ändern."
+
+#: .\podcasts\templates\podcasts\signup.html:348
+msgid "Passwords match"
+msgstr "Passwörter übereinstimmen"
+
+#: .\podcasts\templates\podcasts\signup.html:350
+msgid "Passwords do not match"
+msgstr "Passwörter nicht übereinstimmen"
+
+#: .\podcasts\templates\podcasts\support_ticket.html:8
+msgid "Submit a Support Ticket"
+msgstr "Ein Unterstützungsticket einreichen"
+
+#: .\podcasts\templates\podcasts\support_ticket.html:28
+msgid "Submit Ticket"
+msgstr "Einreichen Sie ein Ticket"
+
+#: .\podcasts\templates\podcasts\support_ticket.html:33
+msgid "Your Tickets"
+msgstr "Ihre Tickets"
+
+#: .\podcasts\templates\podcasts\support_ticket.html:94
+msgid "Ticket #"
+msgstr "Ein Ticket ."
+
+#: .\podcasts\templates\podcasts\support_ticket.html:95
+msgid "Subject"
+msgstr "Betrifft"
+
+#: .\podcasts\templates\podcasts\support_ticket.html:96
+msgid "Message"
+msgstr "Nachricht"
+
+#: .\podcasts\templates\podcasts\support_ticket.html:97
+msgid "Submitted"
+msgstr "Vorgelegt"
+
+#: .\podcasts\templates\podcasts\support_ticket.html:98
+msgid "Last Reviewed"
+msgstr "Zuletzt geprüft"
+
+#: .\podcasts\templates\podcasts\support_ticket.html:99
+msgid "Status"
+msgstr "Status"
+
+#: .\podcasts\templates\podcasts\support_ticket.html:125
+msgid "You haven’t submitted any tickets yet."
+msgstr "Sie haben noch keine Tickets eingereicht."
+
+#: .\podcasts\templates\podcasts\support_ticket.html:142
+msgid "Success"
+msgstr "Erfolg"
+
+#: .\podcasts\templates\podcasts\support_ticket.html:144
+msgid "Failure"
+msgstr "Versagen"
+
+#: .\podcasts\templates\podcasts\support_ticket.html:157
+msgid "Your support ticket has been submitted successfully!"
+msgstr "Ihr Unterstützungsticket wurde erfolgreich eingereicht!"
+
+#: .\podcasts\templates\podcasts\support_ticket.html:159
+msgid ""
+"Your support ticket was unsuccessful, file size is too large, needs to be ≤ "
+"2 MB."
+msgstr ""
+"Ihr Support-Ticket war nicht erfolgreich, die Dateigröße ist zu groß, muss ≤"
+" 2 MB sein."
+
+#: .\podcasts\templates\podcasts\support_ticket.html:161
+msgid ""
+"Your support ticket was unsuccessful, file type incorrect, only "
+"(JPG/PNG/GIF) are accepted."
+msgstr ""
+"Ihr Support-Ticket war nicht erfolgreich, der Dateitype ist falsch, nur "
+"(JPG/PNG/GIF) akzeptiert."
+
+#: .\podcasts\templates\podcasts\support_ticket.html:163
+msgid ""
+"Your support ticket was unsuccessful, file type incorrect (only JPG/PNG/GIF)"
+" and file size is too large (≤ 2 MB)."
+msgstr ""
+"Ihr Support-Ticket war nicht erfolgreich, der Dateitype ist falsch (nur "
+"JPG/PNG/GIF) und die Dateigröße ist zu groß (≤ 2 MB)."
+
+#: .\podcasts\templates\podcasts\support_ticket.html:166
 #, python-format
 msgid ""
-"“%(value)s” value has the correct format (YYYY-MM-DD) but it is an invalid "
-"date."
+"You’ve reached your limit of %(limit)s open tickets "
+"(%(open_count)s/%(limit)s). Please wait for one to complete or cancel before"
+" opening a new one."
 msgstr ""
+"Sie haben Ihre Grenze von %(limit)s offenen Tickets "
+"(%(open_count)s/%(limit)s) erreicht."
 
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1429
-msgid "Date (without time)"
-msgstr ""
+#: .\podcasts\templates\podcasts\support_ticket.html:183
+msgid "OK"
+msgstr "Das ist ok."
 
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1556
-#, python-format
+#: .\podcasts\templates\registration\login.html:15
+msgid "Sign in with Google"
+msgstr "Melden Sie sich bei Google an"
+
+#: .\podcasts\templates\registration\login.html:23
+msgid "Sign in with X"
+msgstr "Melden Sie sich mit X an"
+
+#: .\podcasts\templates\registration\login.html:31
+msgid "Sign in with GitHub"
+msgstr "Melden Sie sich mit GitHub an"
+
+#: .\podcasts\templates\registration\login.html:38
+msgid "or sign in with an account manually"
+msgstr "oder mit einem Konto manuell anmelden"
+
+#: .\podcasts\templates\registration\login.html:46
+msgid "Email or Username"
+msgstr "E-Mail oder Benutzername"
+
+#: .\podcasts\templates\registration\login.html:58
+msgid "Show password"
+msgstr "Kennwort anzeigen"
+
+#: .\podcasts\templates\registration\login.html:65
+#: .\podcasts\templates\registration\password_reset_complete.html:11
+msgid "Log In"
+msgstr "Melden Sie sich an"
+
+#: .\podcasts\templates\registration\login.html:69
+msgid "Forgot your password?"
+msgstr "Hast du dein Passwort vergessen?"
+
+#: .\podcasts\templates\registration\login.html:72
+msgid "Don't have an account?"
+msgstr "Haben Sie kein Konto?"
+
+#: .\podcasts\templates\registration\login.html:72
+msgid "Sign up"
+msgstr "Schreiben Sie sich an ."
+
+#: .\podcasts\templates\registration\login_2fa.html:7
+msgid "Enter OTP Token"
+msgstr "Geben Sie OTP-Token ein"
+
+#: .\podcasts\templates\registration\login_2fa.html:11
+msgid "Submit"
+msgstr "Einreichung"
+
+#: .\podcasts\templates\registration\password_change_done.html:7
+msgid "Password Changed"
+msgstr "Passwort geändert"
+
+#: .\podcasts\templates\registration\password_change_done.html:8
+msgid "Your password has been successfully changed."
+msgstr "Ihr Passwort wurde erfolgreich geändert."
+
+#: .\podcasts\templates\registration\password_change_done.html:9
+msgid "Return to Profile"
+msgstr "Zurück zum Profil"
+
+#: .\podcasts\templates\registration\password_reset_complete.html:7
+msgid "Password Reset Complete"
+msgstr "Passwortrücksetzung vollständig"
+
+#: .\podcasts\templates\registration\password_reset_complete.html:9
 msgid ""
-"“%(value)s” value has an invalid format. It must be in YYYY-MM-DD "
-"HH:MM[:ss[.uuuuuu]][TZ] format."
+"Your password has been successfully reset. You can now log in with your new "
+"password."
 msgstr ""
+"Ihr Passwort wurde erfolgreich zurückgesetzt. Sie können sich nun mit Ihrem "
+"neuen Passwort anmelden."
 
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1564
-#, python-format
+#: .\podcasts\templates\registration\password_reset_confirm.html:7
+msgid "Reset Your Password"
+msgstr "Setzen Sie Ihr Passwort neu ein"
+
+#: .\podcasts\templates\registration\password_reset_confirm.html:11
+#: .\podcasts\templates\registration\password_reset_form.html:7
+#: .\podcasts\templates\security\locked_out.html:32
+msgid "Reset Password"
+msgstr "Kennwort zurücksetzen"
+
+#: .\podcasts\templates\registration\password_reset_done.html:7
+msgid "Password Reset Email Sent"
+msgstr "Passwort Wiederherstellung E-Mail gesendet"
+
+#: .\podcasts\templates\registration\password_reset_done.html:9
 msgid ""
-"“%(value)s” value has the correct format (YYYY-MM-DD HH:MM[:ss[.uuuuuu]]"
-"[TZ]) but it is an invalid date/time."
+"We've emailed you instructions for resetting your password. Please check "
+"your inbox (and spam folder) for the reset link."
 msgstr ""
+"Wir haben Ihnen Anweisungen zur Wiederherstellung Ihres Passworts per E-Mail"
+" geschickt. Bitte überprüfen Sie Ihren Posteingang (und den Spam-Ordner) für"
+" den Wiederherstellungslink."
 
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1569
-msgid "Date (with time)"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1696
-#, python-format
-msgid "“%(value)s” value must be a decimal number."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1698
-msgid "Decimal number"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1859
-#, python-format
+#: .\podcasts\templates\registration\password_reset_form.html:8
 msgid ""
-"“%(value)s” value has an invalid format. It must be in [DD] "
-"[[HH:]MM:]ss[.uuuuuu] format."
+"Enter your email address and we'll send you a link to reset your password."
 msgstr ""
+"Geben Sie Ihre E-Mail-Adresse ein und wir senden Ihnen einen Link, um Ihr "
+"Passwort zurückzusetzen."
 
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1863
-msgid "Duration"
-msgstr ""
+#: .\podcasts\templates\registration\password_reset_form.html:12
+msgid "Send Reset Link"
+msgstr "Schicken Sie Reset-Link"
 
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1915
-msgid "Email address"
-msgstr ""
+#: .\podcasts\templates\security\locked_out.html:9
+msgid "Account Locked"
+msgstr "Konto gesperrt"
 
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1940
-msgid "File path"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2018
-#, python-format
-msgid "“%(value)s” value must be a float."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2020
-msgid "Floating point number"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2060
-#, python-format
-msgid "“%(value)s” value must be an integer."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2062
-msgid "Integer"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2158
-msgid "Big (8 byte) integer"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2175
-msgid "Small integer"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2183
-msgid "IPv4 address"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2214
-msgid "IP address"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2305
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2306
-#, python-format
-msgid "“%(value)s” value must be either None, True or False."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2308
-msgid "Boolean (Either True, False or None)"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2359
-msgid "Positive big integer"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2374
-msgid "Positive integer"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2389
-msgid "Positive small integer"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2405
-#, python-format
-msgid "Slug (up to %(max_length)s)"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2441
-msgid "Text"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2521
-#, python-format
+#: .\podcasts\templates\security\locked_out.html:11
 msgid ""
-"“%(value)s” value has an invalid format. It must be in HH:MM[:ss[.uuuuuu]] "
-"format."
+"For your security, we’ve temporarily locked your account after multiple "
+"failed login attempts."
 msgstr ""
+"Für Ihre Sicherheit haben wir Ihr Konto nach mehreren fehlgeschlagenen "
+"Anmeldeversuchen vorübergehend gesperrt."
 
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2525
+#: .\podcasts\templates\security\locked_out.html:17
+msgid "Please wait and try again."
+msgstr "Warten Sie bitte und versuchen Sie es noch einmal."
+
+#: .\podcasts\templates\security\locked_out.html:19
+msgid "Time until unlock:"
+msgstr "Zeit bis zum Aufschließen:"
+
+#: .\podcasts\templates\security\locked_out.html:25
+msgid "Unlocks at"
+msgstr "Schließfächer"
+
+#: .\podcasts\templates\security\locked_out.html:37
 #, python-format
-msgid ""
-"“%(value)s” value has the correct format (HH:MM[:ss[.uuuuuu]]) but it is an "
-"invalid time."
+msgid "If you think this was a mistake, contact support at %(email)s."
 msgstr ""
+"Wenn Sie glauben, dass dies ein Fehler war, kontaktieren Sie die "
+"Unterstützung unter %(email)s."
 
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2529
-msgid "Time"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2637
-msgid "URL"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2661
-msgid "Raw binary data"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2726
-#, python-format
-msgid "“%(value)s” is not a valid UUID."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2728
-msgid "Universally unique identifier"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\files.py:244
-msgid "File"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\files.py:420
-msgid "Image"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\json.py:24
-msgid "A JSON object"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\json.py:26
-msgid "Value must be valid JSON."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\related.py:932
-#, python-format
-msgid "%(model)s instance with %(field)s %(value)r does not exist."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\related.py:934
-msgid "Foreign Key (type determined by related field)"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\related.py:1228
-msgid "One-to-one relationship"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\related.py:1285
-#, python-format
-msgid "%(from)s-%(to)s relationship"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\related.py:1287
-#, python-format
-msgid "%(from)s-%(to)s relationships"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\related.py:1335
-msgid "Many-to-many relationship"
-msgstr ""
-
-#. Translators: If found as last label character, these punctuation
-#. characters will prevent the default label_suffix to be appended to the label
-#: .\venv\Lib\site-packages\django\forms\boundfield.py:185
-msgid ":?.!"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\forms\fields.py:95
-msgid "This field is required."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\forms\fields.py:308
-msgid "Enter a whole number."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\forms\fields.py:479
-#: .\venv\Lib\site-packages\django\forms\fields.py:1260
-msgid "Enter a valid date."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\forms\fields.py:502
-#: .\venv\Lib\site-packages\django\forms\fields.py:1261
-msgid "Enter a valid time."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\forms\fields.py:529
-msgid "Enter a valid date/time."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\forms\fields.py:563
-msgid "Enter a valid duration."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\forms\fields.py:564
-#, python-brace-format
-msgid "The number of days must be between {min_days} and {max_days}."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\forms\fields.py:633
-msgid "No file was submitted. Check the encoding type on the form."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\forms\fields.py:634
-msgid "No file was submitted."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\forms\fields.py:635
-msgid "The submitted file is empty."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\forms\fields.py:637
-#, python-format
-msgid "Ensure this filename has at most %(max)d character (it has %(length)d)."
-msgid_plural ""
-"Ensure this filename has at most %(max)d characters (it has %(length)d)."
-msgstr[0] ""
-msgstr[1] ""
-
-#: .\venv\Lib\site-packages\django\forms\fields.py:642
-msgid "Please either submit a file or check the clear checkbox, not both."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\forms\fields.py:710
-msgid ""
-"Upload a valid image. The file you uploaded was either not an image or a "
-"corrupted image."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\forms\fields.py:882
-#: .\venv\Lib\site-packages\django\forms\fields.py:968
-#: .\venv\Lib\site-packages\django\forms\models.py:1592
-#, python-format
-msgid "Select a valid choice. %(value)s is not one of the available choices."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\forms\fields.py:970
-#: .\venv\Lib\site-packages\django\forms\fields.py:1089
-#: .\venv\Lib\site-packages\django\forms\models.py:1590
-msgid "Enter a list of values."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\forms\fields.py:1090
-msgid "Enter a complete value."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\forms\fields.py:1329
-msgid "Enter a valid UUID."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\forms\fields.py:1359
-msgid "Enter a valid JSON."
-msgstr ""
-
-#. Translators: This is the default suffix added to form field labels
-#: .\venv\Lib\site-packages\django\forms\forms.py:94
-msgid ":"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\forms\forms.py:230
-#, python-format
-msgid "(Hidden field %(name)s) %(error)s"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\forms\formsets.py:61
-#, python-format
-msgid ""
-"ManagementForm data is missing or has been tampered with. Missing fields: "
-"%(field_names)s. You may need to file a bug report if the issue persists."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\forms\formsets.py:65
-#, python-format
-msgid "Please submit at most %(num)d form."
-msgid_plural "Please submit at most %(num)d forms."
-msgstr[0] ""
-msgstr[1] ""
-
-#: .\venv\Lib\site-packages\django\forms\formsets.py:70
-#, python-format
-msgid "Please submit at least %(num)d form."
-msgid_plural "Please submit at least %(num)d forms."
-msgstr[0] ""
-msgstr[1] ""
-
-#: .\venv\Lib\site-packages\django\forms\formsets.py:484
-#: .\venv\Lib\site-packages\django\forms\formsets.py:491
-msgid "Order"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\forms\formsets.py:499
-msgid "Delete"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\forms\models.py:901
-#, python-format
-msgid "Please correct the duplicate data for %(field)s."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\forms\models.py:906
-#, python-format
-msgid "Please correct the duplicate data for %(field)s, which must be unique."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\forms\models.py:913
-#, python-format
-msgid ""
-"Please correct the duplicate data for %(field_name)s which must be unique "
-"for the %(lookup)s in %(date_field)s."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\forms\models.py:922
-msgid "Please correct the duplicate values below."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\forms\models.py:1359
-msgid "The inline value did not match the parent instance."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\forms\models.py:1450
-msgid "Select a valid choice. That choice is not one of the available choices."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\forms\models.py:1594
-#, python-format
-msgid "“%(pk)s” is not a valid value."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\forms\utils.py:227
-#, python-format
-msgid ""
-"%(datetime)s couldn’t be interpreted in time zone %(current_timezone)s; it "
-"may be ambiguous or it may not exist."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\forms\widgets.py:461
-msgid "Clear"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\forms\widgets.py:462
-msgid "Currently"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\forms\widgets.py:463
-msgid "Change"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\forms\widgets.py:800
-msgid "Unknown"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\forms\widgets.py:801
-msgid "Yes"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\forms\widgets.py:802
-msgid "No"
-msgstr ""
-
-#. Translators: Please do not add spaces around commas.
-#: .\venv\Lib\site-packages\django\template\defaultfilters.py:873
-msgid "yes,no,maybe"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\template\defaultfilters.py:903
-#: .\venv\Lib\site-packages\django\template\defaultfilters.py:920
-#, python-format
-msgid "%(size)d byte"
-msgid_plural "%(size)d bytes"
-msgstr[0] ""
-msgstr[1] ""
-
-#: .\venv\Lib\site-packages\django\template\defaultfilters.py:922
-#, python-format
-msgid "%s KB"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\template\defaultfilters.py:924
-#, python-format
-msgid "%s MB"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\template\defaultfilters.py:926
-#, python-format
-msgid "%s GB"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\template\defaultfilters.py:928
-#, python-format
-msgid "%s TB"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\template\defaultfilters.py:930
-#, python-format
-msgid "%s PB"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dateformat.py:74
-msgid "p.m."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dateformat.py:75
-msgid "a.m."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dateformat.py:80
-msgid "PM"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dateformat.py:81
-msgid "AM"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dateformat.py:153
-msgid "midnight"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dateformat.py:155
-msgid "noon"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:7
-msgid "Monday"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:8
-msgid "Tuesday"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:9
-msgid "Wednesday"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:10
-msgid "Thursday"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:11
-msgid "Friday"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:12
-msgid "Saturday"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:13
-msgid "Sunday"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:16
-msgid "Mon"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:17
-msgid "Tue"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:18
-msgid "Wed"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:19
-msgid "Thu"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:20
-msgid "Fri"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:21
-msgid "Sat"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:22
-msgid "Sun"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:25
-msgid "January"
-msgstr ""
+#: .\podcasts\templates\socialaccount\cancelled.html:7
+#: .\podcasts\templates\socialaccount\error.html:7
+msgid "Login Cancelled"
+msgstr "Einloggen storniert"
 
-#: .\venv\Lib\site-packages\django\utils\dates.py:26
-msgid "February"
+#: .\podcasts\templates\socialaccount\cancelled.html:9
+#: .\podcasts\templates\socialaccount\error.html:9
+msgid "You decided not to sign in with that external account."
 msgstr ""
+"Sie haben sich entschieden, sich nicht mit diesem externen Konto anzumelden."
 
-#: .\venv\Lib\site-packages\django\utils\dates.py:27
-msgid "March"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:28
-msgid "April"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:29
-msgid "May"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:30
-msgid "June"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:31
-msgid "July"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:32
-msgid "August"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:33
-msgid "September"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:34
-msgid "October"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:35
-msgid "November"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:36
-msgid "December"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:39
-msgid "jan"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:40
-msgid "feb"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:41
-msgid "mar"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:42
-msgid "apr"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:43
-msgid "may"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:44
-msgid "jun"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:45
-msgid "jul"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:46
-msgid "aug"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:47
-msgid "sep"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:48
-msgid "oct"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:49
-msgid "nov"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:50
-msgid "dec"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:53
-msgctxt "abbrev. month"
-msgid "Jan."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:54
-msgctxt "abbrev. month"
-msgid "Feb."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:55
-msgctxt "abbrev. month"
-msgid "March"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:56
-msgctxt "abbrev. month"
-msgid "April"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:57
-msgctxt "abbrev. month"
-msgid "May"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:58
-msgctxt "abbrev. month"
-msgid "June"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:59
-msgctxt "abbrev. month"
-msgid "July"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:60
-msgctxt "abbrev. month"
-msgid "Aug."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:61
-msgctxt "abbrev. month"
-msgid "Sept."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:62
-msgctxt "abbrev. month"
-msgid "Oct."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:63
-msgctxt "abbrev. month"
-msgid "Nov."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:64
-msgctxt "abbrev. month"
-msgid "Dec."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:67
-msgctxt "alt. month"
-msgid "January"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:68
-msgctxt "alt. month"
-msgid "February"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:69
-msgctxt "alt. month"
-msgid "March"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:70
-msgctxt "alt. month"
-msgid "April"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:71
-msgctxt "alt. month"
-msgid "May"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:72
-msgctxt "alt. month"
-msgid "June"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:73
-msgctxt "alt. month"
-msgid "July"
-msgstr ""
+#: .\podcasts\templates\socialaccount\signup.html:7
+msgid "Finish signing up"
+msgstr "Beenden Sie die Anmeldung."
 
-#: .\venv\Lib\site-packages\django\utils\dates.py:74
-msgctxt "alt. month"
-msgid "August"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:75
-msgctxt "alt. month"
-msgid "September"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:76
-msgctxt "alt. month"
-msgid "October"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:77
-msgctxt "alt. month"
-msgid "November"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:78
-msgctxt "alt. month"
-msgid "December"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\ipv6.py:8
-msgid "This is not a valid IPv6 address."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\text.py:75
-#, python-format
-msgctxt "String to return when truncating text"
-msgid "%(truncated_text)s…"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\text.py:286
-msgid "or"
-msgstr ""
-
-#. Translators: This string is used as a separator between list elements
-#: .\venv\Lib\site-packages\django\utils\text.py:305
-#: .\venv\Lib\site-packages\django\utils\timesince.py:135
-msgid ", "
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\timesince.py:8
-#, python-format
-msgid "%(num)d year"
-msgid_plural "%(num)d years"
-msgstr[0] ""
-msgstr[1] ""
-
-#: .\venv\Lib\site-packages\django\utils\timesince.py:9
-#, python-format
-msgid "%(num)d month"
-msgid_plural "%(num)d months"
-msgstr[0] ""
-msgstr[1] ""
-
-#: .\venv\Lib\site-packages\django\utils\timesince.py:10
-#, python-format
-msgid "%(num)d week"
-msgid_plural "%(num)d weeks"
-msgstr[0] ""
-msgstr[1] ""
-
-#: .\venv\Lib\site-packages\django\utils\timesince.py:11
-#, python-format
-msgid "%(num)d day"
-msgid_plural "%(num)d days"
-msgstr[0] ""
-msgstr[1] ""
-
-#: .\venv\Lib\site-packages\django\utils\timesince.py:12
-#, python-format
-msgid "%(num)d hour"
-msgid_plural "%(num)d hours"
-msgstr[0] ""
-msgstr[1] ""
-
-#: .\venv\Lib\site-packages\django\utils\timesince.py:13
-#, python-format
-msgid "%(num)d minute"
-msgid_plural "%(num)d minutes"
-msgstr[0] ""
-msgstr[1] ""
-
-#: .\venv\Lib\site-packages\django\views\csrf.py:29
-msgid "Forbidden"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\views\csrf.py:30
-msgid "CSRF verification failed. Request aborted."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\views\csrf.py:34
-msgid ""
-"You are seeing this message because this HTTPS site requires a “Referer "
-"header” to be sent by your web browser, but none was sent. This header is "
-"required for security reasons, to ensure that your browser is not being "
-"hijacked by third parties."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\views\csrf.py:40
-msgid ""
-"If you have configured your browser to disable “Referer” headers, please re-"
-"enable them, at least for this site, or for HTTPS connections, or for “same-"
-"origin” requests."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\views\csrf.py:45
-msgid ""
-"If you are using the <meta name=\"referrer\" content=\"no-referrer\"> tag or "
-"including the “Referrer-Policy: no-referrer” header, please remove them. The "
-"CSRF protection requires the “Referer” header to do strict referer checking. "
-"If you’re concerned about privacy, use alternatives like <a "
-"rel=\"noreferrer\" …> for links to third-party sites."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\views\csrf.py:54
-msgid ""
-"You are seeing this message because this site requires a CSRF cookie when "
-"submitting forms. This cookie is required for security reasons, to ensure "
-"that your browser is not being hijacked by third parties."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\views\csrf.py:60
-msgid ""
-"If you have configured your browser to disable cookies, please re-enable "
-"them, at least for this site, or for “same-origin” requests."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\views\csrf.py:66
-msgid "More information is available with DEBUG=True."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\views\generic\dates.py:44
-msgid "No year specified"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\views\generic\dates.py:64
-#: .\venv\Lib\site-packages\django\views\generic\dates.py:115
-#: .\venv\Lib\site-packages\django\views\generic\dates.py:214
-msgid "Date out of range"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\views\generic\dates.py:94
-msgid "No month specified"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\views\generic\dates.py:147
-msgid "No day specified"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\views\generic\dates.py:194
-msgid "No week specified"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\views\generic\dates.py:349
-#: .\venv\Lib\site-packages\django\views\generic\dates.py:380
-#, python-format
-msgid "No %(verbose_name_plural)s available"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\views\generic\dates.py:652
-#, python-format
-msgid ""
-"Future %(verbose_name_plural)s not available because "
-"%(class_name)s.allow_future is False."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\views\generic\dates.py:692
-#, python-format
-msgid "Invalid date string “%(datestr)s” given format “%(format)s”"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\views\generic\detail.py:56
-#, python-format
-msgid "No %(verbose_name)s found matching the query"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\views\generic\list.py:70
-msgid "Page is not “last”, nor can it be converted to an int."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\views\generic\list.py:77
-#, python-format
-msgid "Invalid page (%(page_number)s): %(message)s"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\views\generic\list.py:169
-#, python-format
-msgid "Empty list and “%(class_name)s.allow_empty” is False."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\views\static.py:49
-msgid "Directory indexes are not allowed here."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\views\static.py:51
-#, python-format
-msgid "“%(path)s” does not exist"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\views\static.py:68
-#: .\venv\Lib\site-packages\django\views\templates\directory_index.html:8
-#: .\venv\Lib\site-packages\django\views\templates\directory_index.html:11
-#, python-format
-msgid "Index of %(directory)s"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\views\templates\default_urlconf.html:7
-#: .\venv\Lib\site-packages\django\views\templates\default_urlconf.html:204
-msgid "The install worked successfully! Congratulations!"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\views\templates\default_urlconf.html:206
-#, python-format
-msgid ""
-"View <a href=\"https://docs.djangoproject.com/en/%(version)s/releases/\" "
-"target=\"_blank\" rel=\"noopener\">release notes</a> for Django %(version)s"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\views\templates\default_urlconf.html:208
-#, python-format
-msgid ""
-"You are seeing this page because <a href=\"https://docs.djangoproject.com/en/"
-"%(version)s/ref/settings/#debug\" target=\"_blank\" "
-"rel=\"noopener\">DEBUG=True</a> is in your settings file and you have not "
-"configured any URLs."
-msgstr ""
+#: .\podcasts\templates\socialaccount\signup.html:61
+msgid "Muse Podcast, LLC’s Privacy Notice"
+msgstr "Muse Podcast, LLC's Datenschutzerklärung"
 
-#: .\venv\Lib\site-packages\django\views\templates\default_urlconf.html:217
-msgid "Django Documentation"
-msgstr ""
+#: .\podcasts\templates\socialaccount\signup.html:67
+msgid "Complete Signup"
+msgstr "Vollständige Anmeldung"
 
-#: .\venv\Lib\site-packages\django\views\templates\default_urlconf.html:218
-msgid "Topics, references, &amp; how-to’s"
-msgstr ""
+#: .\podcasts\templates\two_factor\core\otp.html:5
+msgid "Enter OTP"
+msgstr "Geben Sie OTP ein"
 
-#: .\venv\Lib\site-packages\django\views\templates\default_urlconf.html:226
-msgid "Tutorial: A Polling App"
-msgstr ""
+#: .\podcasts\templates\two_factor\core\otp.html:9
+msgid "Submit OTP"
+msgstr "Einreichung des OTP"
 
-#: .\venv\Lib\site-packages\django\views\templates\default_urlconf.html:227
-msgid "Get started with Django"
-msgstr ""
+#~ msgid "Podcast Web App"
+#~ msgstr "Podcast-Web-App"
 
-#: .\venv\Lib\site-packages\django\views\templates\default_urlconf.html:235
-msgid "Django Community"
-msgstr ""
+#~ msgid "Podcast News"
+#~ msgstr "Podcast-Neuigkeiten"
 
-#: .\venv\Lib\site-packages\django\views\templates\default_urlconf.html:236
-msgid "Connect, get help, or contribute"
-msgstr ""
+#~ msgid "Site Maps"
+#~ msgstr "Sitemaps"
