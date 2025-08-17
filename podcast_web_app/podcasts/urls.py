@@ -41,14 +41,12 @@ urlpatterns = [
     path('channel/<int:channel_id>/toggle_follow/', views.toggle_follow, name='toggle_follow'),
     path('channel/<int:channel_id>/toggle_notifications/', views.toggle_notifications, name='toggle_notifications'),
     path('channel/<int:channel_id>/update_rating/', views.update_rating, name='update_rating'),
-    # Episode detail URL with sanitized title.
-    path('<str:sanitized_channel_title>/<str:sanitized_episode_title>/', views.EpisodeDetailView.as_view(), name='episode_detail'),
-    path('<str:sanitized_channel_title>/', views.ChannelDetailView.as_view(), name='channel_detail'),  # Channel detail URL
-    # === New URL patterns for comments ===
     path('episode/<int:episode_id>/post_comment/', views.post_comment, name='post_comment'),
     path('episode/<int:episode_id>/comments/', views.get_comments, name='get_comments'),
     path('comment/<int:comment_id>/reaction/', views.comment_reaction, name='comment_reaction'),
     path('search_users/', views.search_users, name='search_users'),
+    path('<str:sanitized_channel_title>/<str:sanitized_episode_title>/', views.EpisodeDetailView.as_view(), name='episode_detail'),
+    path('<str:sanitized_channel_title>/', views.ChannelDetailView.as_view(), name='channel_detail'),  # Channel detail URL
 ]
 # path('login/', auth_views.LoginView.as_view(template_name='registration/login.html'), name='login'),
 # 

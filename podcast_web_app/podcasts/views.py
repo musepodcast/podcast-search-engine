@@ -675,6 +675,14 @@ class ChannelListView(LoginRequiredMixin, ListView):
             return render(self.request, 'podcasts/channel_list_items.html', context)
         return super().render_to_response(context, **response_kwargs)
 
+def _norm_lang(request):
+    raw = (get_selected_language(request) or 'en').lower()
+    # treat all English as base
+    if raw.startswith('en'):
+        return 'en'
+    # collapse es-ES -> es, pt-BR -> pt, etc.
+    return raw.split('-', 1)[0]
+
 class ChannelDetailView(LoginRequiredMixin, DetailView):
     login_url           = reverse_lazy('podcasts:home')
     template_name       = 'podcasts/channel_detail.html'
@@ -682,15 +690,23 @@ class ChannelDetailView(LoginRequiredMixin, DetailView):
 
     def get_object(self):
         slug = self.kwargs['sanitized_channel_title']
-        lang = get_selected_language(self.request)
-        if lang in ('en', 'en-us'):
-            return get_object_or_404(Channel, sanitized_channel_title=slug)
-        return get_object_or_404(
-            ChannelTranslations,
+        lang = _norm_lang(self.request)
+
+        # always resolve the base channel by the base slug
+        base = get_object_or_404(Channel, sanitized_channel_title=slug)
+
+        if lang == 'en':
+            return base
+
+        # look up translation by *matching slug and language*, no FK
+        tr = ChannelTranslations.objects.filter(
             sanitized_channel_title=slug,
-            language=lang,
+            language__startswith=lang,   # handles es-ES vs es
             translated=True
-        )
+        ).first()
+
+        # if translation exists, return it; otherwise fall back to base
+        return tr or base
 
     def dispatch(self, request, *args, **kwargs):
         disp = self.get_object()
@@ -859,38 +875,38 @@ class EpisodeDetailView(LoginRequiredMixin, DetailView):
             visit.save()
 
         return super().dispatch(request, *args, **kwargs)
-
     def get_object(self):
         slug_ch = self.kwargs['sanitized_channel_title']
         slug_ep = self.kwargs['sanitized_episode_title']
-        lang    = get_selected_language(self.request)
+        lang    = (get_selected_language(self.request) or 'en').lower().split('-', 1)[0]
 
-        if lang in ('en','en-us'):
-            return get_object_or_404(
-                Episode,
-                channel__sanitized_channel_title=slug_ch,
-                sanitized_episode_title=slug_ep
-            )
+        # If you *do* store translated slugs on EpisodeTranslations, this will work; if not, it just falls back.
+        if lang != 'en':
+            tr = EpisodeTranslations.objects.filter(
+                episode__channel__sanitized_channel_title=slug_ch,
+                sanitized_episode_title=slug_ep,  # ok only if present on translations
+                language__startswith=lang,
+                translated=True
+            ).select_related('episode', 'episode__channel').first()
+            if tr:
+                return tr
 
-        # try to find the exact translation
-        tr = EpisodeTranslations.objects.filter(
-            episode__channel__sanitized_channel_title=slug_ch,
-            sanitized_episode_title=slug_ep,
-            language=lang,
-            translated=True
-        ).first()
-        if tr:
-            return tr
-
-        # otherwise strip any "_Lang" suffix and retry
-        base_slug = slug_ep.rsplit('_',1)[0]
-        return get_object_or_404(
-            EpisodeTranslations,
-            episode__channel__sanitized_channel_title=slug_ch,
-            episode__sanitized_episode_title=base_slug,
-            language=lang,
-            translated=True
+        base = get_object_or_404(
+            Episode,
+            channel__sanitized_channel_title=slug_ch,
+            sanitized_episode_title=slug_ep
         )
+
+        if lang != 'en':
+            tr = EpisodeTranslations.objects.filter(
+                episode=base,
+                language__startswith=lang,
+                translated=True
+            ).select_related('episode', 'episode__channel').first()
+            if tr:
+                return tr
+
+        return base
 
     def get_queryset(self):
         lang = get_selected_language(self.request)
