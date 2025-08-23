@@ -278,6 +278,35 @@
   font-size: .95rem;
   }
 }
+  /* Make outline social buttons readable in LIGHT mode */
+  :root:not([data-theme="dark"]) .btn-outline-light {
+    /* darker text/border, subtle hover */
+    --bs-btn-color: var(--list-text);
+    --bs-btn-border-color: var(--border-color);
+    --bs-btn-hover-color: var(--list-text);
+    --bs-btn-hover-bg: var(--list-hover-bg);
+    --bs-btn-hover-border-color: var(--border-color);
+    --bs-btn-active-bg: var(--list-hover-bg);
+    --bs-btn-active-border-color: var(--border-color);
+    --bs-btn-disabled-color: var(--muted-color);
+    --bs-btn-disabled-border-color: var(--border-color);
+    box-shadow: none;
+  }
+  :root:not([data-theme="dark"]) .btn-outline-light:focus-visible {
+    outline: 2px solid var(--control-focus-ring);
+    outline-offset: 2px;
+  }
+
+  /* Optional: add subtle brand hints to the icons in LIGHT mode */
+  :root:not([data-theme="dark"]) .btn-outline-light .fa-google  { color: #24292f; }
+  :root:not([data-theme="dark"]) .btn-outline-light .fa-github  { color: #24292f; }
+  :root:not([data-theme="dark"]) .btn-outline-light .fa-x,
+  :root:not([data-theme="dark"]) .btn-outline-light .fa-x-twitter { color: #111; }
+
+  /* Keep dark mode as-is, just slightly nicer hover */
+  :root[data-theme="dark"] .btn-outline-light:hover {
+    background-color: rgba(255,255,255,0.16);
+}
 
 </style>
 

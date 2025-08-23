@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-17 15:09-0500\n"
+"POT-Creation-Date: 2025-08-18 20:34-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -86,7 +86,8 @@ msgid ""
 "Welcome to Muse Podcast! Confirm your account by clicking the link below:\n"
 msgstr ""
 "\n"
-"뮤즈 팟캐스트에 오신 것을 환영합니다! 아래 링크를 클릭하여 계정을 확인하세요: \n"
+"뮤즈 팟캐스트에 오신 것을 환영합니다! 아래 링크를 클릭하여 계정을 확인하세"
+"요: \n"
 
 #: .\podcasts\templates\account\email_confirm.html:6
 msgid "Confirm Your Email"
@@ -96,11 +97,13 @@ msgstr "이메일 확인"
 #, python-format
 msgid ""
 "\n"
-"      Confirm the email address <strong>%(email)s</strong> to activate your account.\n"
+"      Confirm the email address <strong>%(email)s</strong> to activate your "
+"account.\n"
 "      "
 msgstr ""
 "\n"
-"귀하의 계정을 활성화하기 위해 <strong>%(email)s</strong> 이메일 주소를 확인합니다. "
+"귀하의 계정을 활성화하기 위해 <strong>%(email)s</strong> 이메일 주소를 확인합"
+"니다. "
 
 #: .\podcasts\templates\account\email_confirm.html:18
 msgid "Confirm Email"
@@ -122,7 +125,9 @@ msgstr "이메일 주소를 확인 하십시오"
 msgid ""
 "We just sent a verification link to your email. Click the link within 24 "
 "hours to activate your account."
-msgstr "이메일로 확인 링크를 보냈어요 24시간 이내에 링크를 클릭해서 계정을 활성화하세요"
+msgstr ""
+"이메일로 확인 링크를 보냈어요 24시간 이내에 링크를 클릭해서 계정을 활성화하세"
+"요"
 
 #: .\podcasts\templates\account\verification_sent.html:15
 msgid "Didn’t get the email?"
@@ -156,8 +161,8 @@ msgid "Home"
 msgstr "가정"
 
 #: .\podcasts\templates\podcasts\base.html:55
-#: .\podcasts\templates\podcasts\channel_list.html:21
-#: .\podcasts\templates\podcasts\channel_list.html:72
+#: .\podcasts\templates\podcasts\channel_list.html:22
+#: .\podcasts\templates\podcasts\channel_list.html:73
 #: .\podcasts\templates\podcasts\channel_list_items.html:27
 #: .\podcasts\templates\podcasts\favorites_list.html:5
 #: .\podcasts\templates\podcasts\favorites_list.html:33
@@ -166,8 +171,8 @@ msgid "Favorites"
 msgstr "즐겨찾기"
 
 #: .\podcasts\templates\podcasts\base.html:56
-#: .\podcasts\templates\podcasts\channel_list.html:27
-#: .\podcasts\templates\podcasts\channel_list.html:76
+#: .\podcasts\templates\podcasts\channel_list.html:28
+#: .\podcasts\templates\podcasts\channel_list.html:77
 #: .\podcasts\templates\podcasts\channel_list_items.html:31
 #: .\podcasts\templates\podcasts\favorites_list.html:38
 #: .\podcasts\templates\podcasts\favorites_list_items.html:29
@@ -395,7 +400,7 @@ msgstr "에피소드 시청률"
 #: .\podcasts\templates\podcasts\channel_detail.html:91
 #: .\podcasts\templates\podcasts\channel_detail.html:158
 #: .\podcasts\templates\podcasts\channel_detail_item.html:65
-#: .\podcasts\templates\podcasts\channel_list.html:88
+#: .\podcasts\templates\podcasts\channel_list.html:89
 #: .\podcasts\templates\podcasts\channel_list_items.html:43
 #: .\podcasts\templates\podcasts\episode_detail.html:117
 #: .\podcasts\templates\podcasts\episode_detail.html:118
@@ -421,7 +426,7 @@ msgstr "더 많은 에피소드를 로드하고 있습니다."
 #: .\podcasts\templates\podcasts\channel_detail.html:183
 #: .\podcasts\templates\podcasts\channel_detail.html:219
 #: .\podcasts\templates\podcasts\channel_detail.html:226
-#: .\podcasts\templates\podcasts\channel_list.html:107
+#: .\podcasts\templates\podcasts\channel_list.html:108
 #: .\podcasts\templates\podcasts\episode_list.html:160
 #: .\podcasts\templates\podcasts\episode_list.html:167
 #: .\podcasts\templates\podcasts\favorites_list.html:74
@@ -434,7 +439,7 @@ msgid "End of list..."
 msgstr "목록 끝..."
 
 #: .\podcasts\templates\podcasts\channel_detail.html:28
-#: .\podcasts\templates\podcasts\channel_list.html:64
+#: .\podcasts\templates\podcasts\channel_list.html:65
 #: .\podcasts\templates\podcasts\channel_list_items.html:19
 #: .\podcasts\templates\podcasts\favorites_list.html:25
 #: .\podcasts\templates\podcasts\favorites_list_items.html:18
@@ -500,68 +505,68 @@ msgstr "팟캐스트 채널"
 msgid "Sort:"
 msgstr "종류:"
 
-#: .\podcasts\templates\podcasts\channel_list.html:15
+#: .\podcasts\templates\podcasts\channel_list.html:16
 #: .\podcasts\templates\podcasts\episode_list.html:22
 msgid "Watched"
 msgstr "감시"
 
-#: .\podcasts\templates\podcasts\channel_list.html:16
+#: .\podcasts\templates\podcasts\channel_list.html:17
 #: .\podcasts\templates\podcasts\episode_list.html:23
 msgid "Most watched"
 msgstr "가장 많이 보는"
 
-#: .\podcasts\templates\podcasts\channel_list.html:17
+#: .\podcasts\templates\podcasts\channel_list.html:18
 #: .\podcasts\templates\podcasts\episode_list.html:24
 msgid "Least watched"
 msgstr "최소한의 관측"
 
-#: .\podcasts\templates\podcasts\channel_list.html:22
+#: .\podcasts\templates\podcasts\channel_list.html:23
 msgid "Most favorited"
 msgstr "가장 즐겨찾기"
 
-#: .\podcasts\templates\podcasts\channel_list.html:23
+#: .\podcasts\templates\podcasts\channel_list.html:24
 msgid "Least favorited"
 msgstr "가장 잘 알려지지 않은"
 
-#: .\podcasts\templates\podcasts\channel_list.html:28
+#: .\podcasts\templates\podcasts\channel_list.html:29
 msgid "Most notified"
 msgstr "가장 통보된"
 
-#: .\podcasts\templates\podcasts\channel_list.html:29
+#: .\podcasts\templates\podcasts\channel_list.html:30
 msgid "Least notified"
 msgstr "최소한의 통보"
 
-#: .\podcasts\templates\podcasts\channel_list.html:33
+#: .\podcasts\templates\podcasts\channel_list.html:34
 #: .\podcasts\templates\podcasts\episode_list.html:40
 msgid "Stars"
 msgstr "별들"
 
-#: .\podcasts\templates\podcasts\channel_list.html:34
+#: .\podcasts\templates\podcasts\channel_list.html:35
 #: .\podcasts\templates\podcasts\episode_list.html:41
 msgid "Most stars"
 msgstr "대부분의 별들"
 
-#: .\podcasts\templates\podcasts\channel_list.html:35
+#: .\podcasts\templates\podcasts\channel_list.html:36
 #: .\podcasts\templates\podcasts\episode_list.html:42
 msgid "Least stars"
 msgstr "가장 적은 별"
 
-#: .\podcasts\templates\podcasts\channel_list.html:39
+#: .\podcasts\templates\podcasts\channel_list.html:40
 #: .\podcasts\templates\podcasts\episode_list.html:46
 msgid "Alphabetical"
 msgstr "알파벳"
 
-#: .\podcasts\templates\podcasts\channel_list.html:40
+#: .\podcasts\templates\podcasts\channel_list.html:41
 #: .\podcasts\templates\podcasts\episode_list.html:47
 msgid "A → Z"
 msgstr "A → Z"
 
-#: .\podcasts\templates\podcasts\channel_list.html:41
+#: .\podcasts\templates\podcasts\channel_list.html:42
 #: .\podcasts\templates\podcasts\episode_list.html:48
 msgid "Z → A"
 msgstr "Z → A"
 
-#: .\podcasts\templates\podcasts\channel_list.html:58
+#: .\podcasts\templates\podcasts\channel_list.html:59
 #: .\podcasts\templates\podcasts\channel_list_items.html:13
 #: .\podcasts\templates\podcasts\favorites_list.html:19
 #: .\podcasts\templates\podcasts\favorites_list_items.html:12
@@ -569,19 +574,19 @@ msgstr "Z → A"
 msgid "No image available"
 msgstr "이미지가 없습니다"
 
-#: .\podcasts\templates\podcasts\channel_list.html:80
+#: .\podcasts\templates\podcasts\channel_list.html:81
 #: .\podcasts\templates\podcasts\channel_list_items.html:35
 #: .\podcasts\templates\podcasts\favorites_list.html:43
 #: .\podcasts\templates\podcasts\favorites_list_items.html:33
 msgid "Channel Rating"
 msgstr "채널 등급"
 
-#: .\podcasts\templates\podcasts\channel_list.html:97
+#: .\podcasts\templates\podcasts\channel_list.html:98
 msgid "No channels available."
 msgstr "사용 가능한 채널이 없습니다."
 
-#: .\podcasts\templates\podcasts\channel_list.html:103
-#: .\podcasts\templates\podcasts\channel_list.html:108
+#: .\podcasts\templates\podcasts\channel_list.html:104
+#: .\podcasts\templates\podcasts\channel_list.html:109
 #: .\podcasts\templates\podcasts\favorites_list.html:75
 #: .\podcasts\templates\podcasts\search_results_ch_items.html:68
 #: .\podcasts\templates\podcasts\search_results_ch_items.html:73
@@ -596,7 +601,9 @@ msgstr "커뮤니티 팟캐스트 생성기"
 msgid ""
 "Thank you for volunteering your computer's resources to help generate and "
 "process podcast episodes!"
-msgstr "포드캐스트 에피소드를 생성하고 처리하는 데 도움이 되는 컴퓨터 자원을 자원해 주셔서 감사합니다!"
+msgstr ""
+"포드캐스트 에피소드를 생성하고 처리하는 데 도움이 되는 컴퓨터 자원을 자원해 "
+"주셔서 감사합니다!"
 
 #: .\podcasts\templates\podcasts\contribute.html:11
 msgid ""
@@ -606,21 +613,27 @@ msgid ""
 "using your CPU/GPU, and securely return the results. This helps us speed up "
 "episode generation and improve quality for the entire community."
 msgstr ""
-"'공헌 시작'을 클릭하면, 컴퓨터에서 실행되는 가벼운 에이전트는 선택한 채널에 대한 새로운 RSS 피드 항목을 가져오며, 사용 가능한 "
-"트랜스크립트로 복사하거나 번역하여, CPU/GPU를 사용하여 로컬로 처리하고, 결과를 안전하게 반환합니다. 이것은 에피소드 생성 속도를 "
-"높이고 전체 커뮤니티에 대한 품질을 향상시키는 데 도움이됩니다."
+"'공헌 시작'을 클릭하면, 컴퓨터에서 실행되는 가벼운 에이전트는 선택한 채널에 "
+"대한 새로운 RSS 피드 항목을 가져오며, 사용 가능한 트랜스크립트로 복사하거나 "
+"번역하여, CPU/GPU를 사용하여 로컬로 처리하고, 결과를 안전하게 반환합니다. 이"
+"것은 에피소드 생성 속도를 높이고 전체 커뮤니티에 대한 품질을 향상시키는 데 도"
+"움이됩니다."
 
 #: .\podcasts\templates\podcasts\contribute.html:13
 msgid ""
-"Select which channels you'd like to support or choose 'All Channels' to help"
-" across the platform."
-msgstr "어떤 채널을 지원하고 싶은지 선택하거나 플랫폼을 통해 지원하기 위해 '모든 채널'을 선택하십시오."
+"Select which channels you'd like to support or choose 'All Channels' to help "
+"across the platform."
+msgstr ""
+"어떤 채널을 지원하고 싶은지 선택하거나 플랫폼을 통해 지원하기 위해 '모든 채"
+"널'을 선택하십시오."
 
 #: .\podcasts\templates\podcasts\contribute.html:14
 msgid ""
 "Your contributions run in the background and won't interfere with your "
 "normal workflow."
-msgstr "여러분의 기여는 백그라운드에서 진행되며 정상적인 업무 흐름에 방해가 되지 않습니다."
+msgstr ""
+"여러분의 기여는 백그라운드에서 진행되며 정상적인 업무 흐름에 방해가 되지 않습"
+"니다."
 
 #: .\podcasts\templates\podcasts\contribute.html:15
 msgid "You can stop or restart at any time using the button below."
@@ -630,7 +643,9 @@ msgstr "아래 버튼을 사용하여 언제든지 중지하거나 다시 시작
 msgid ""
 "Soon, we'll introduce a leaderboard to highlight top contributors and a "
 "rewards system to thank you for your support."
-msgstr "곧, 우리는 최고의 기여자를 강조하는 순위표와 여러분의 지원에 감사하는 보상 시스템을 소개할 것입니다."
+msgstr ""
+"곧, 우리는 최고의 기여자를 강조하는 순위표와 여러분의 지원에 감사하는 보상 시"
+"스템을 소개할 것입니다."
 
 #: .\podcasts\templates\podcasts\contribute.html:30
 msgid "Select Channels"
@@ -666,7 +681,8 @@ msgstr "두 가지 요인 인증을 비활성화"
 #: .\podcasts\templates\podcasts\disable_2fa.html:7
 msgid ""
 "Please enter your OTP token to confirm disabling two‑factor authentication."
-msgstr "두 가지 요소 인증을 비활성화하는 것을 확인하기 위해 OTP 토큰을 입력하십시오."
+msgstr ""
+"두 가지 요소 인증을 비활성화하는 것을 확인하기 위해 OTP 토큰을 입력하십시오."
 
 #: .\podcasts\templates\podcasts\disable_2fa.html:11
 msgid "Disable 2FA"
@@ -829,7 +845,9 @@ msgstr "🔍 모든 포드캐스트를 키워드 ( 제목, 설명, 번역 내용
 
 #: .\podcasts\templates\podcasts\home.html:39
 msgid "📄 View full, time-stamped transcripts (speaker-diarized and formatted)"
-msgstr " 시간표로 작성된 전록을 볼 수 있습니다. (스피커에 의해 기호화 되어 있고 형식화 되어 있습니다.)"
+msgstr ""
+" 시간표로 작성된 전록을 볼 수 있습니다. (스피커에 의해 기호화 되어 있고 형식"
+"화 되어 있습니다.)"
 
 #: .\podcasts\templates\podcasts\home.html:40
 msgid "✍️ Read AI-generated chapter summaries"
@@ -845,9 +863,11 @@ msgstr " 관심사에 따라 새로운 채널이나 에피소드를 발견하세
 
 #: .\podcasts\templates\podcasts\home.html:44
 msgid ""
-"Currently optimized for desktop browsers. Mobile-friendly support and native"
-" apps are coming soon!"
-msgstr "현재 데스크톱 브라우저에 최적화되어 있습니다. 모바일 친화적인 지원 및 네이티브 앱이 곧 출시됩니다!"
+"Currently optimized for desktop browsers. Mobile-friendly support and native "
+"apps are coming soon!"
+msgstr ""
+"현재 데스크톱 브라우저에 최적화되어 있습니다. 모바일 친화적인 지원 및 네이티"
+"브 앱이 곧 출시됩니다!"
 
 #: .\podcasts\templates\podcasts\home.html:46
 msgid "🌟 Key Features"
@@ -861,7 +881,9 @@ msgstr "계정 등록 및 관리"
 msgid ""
 "Create a free account to save searches, bookmark episodes, and track "
 "listening history."
-msgstr "검색, 북마크 에피소드 저장 및 듣기 역사를 추적하기 위해 무료 계정을 생성하십시오."
+msgstr ""
+"검색, 북마크 에피소드 저장 및 듣기 역사를 추적하기 위해 무료 계정을 생성하십"
+"시오."
 
 #: .\podcasts\templates\podcasts\home.html:49
 msgid "Transcript Generation"
@@ -870,11 +892,12 @@ msgstr "번역본 세대"
 #: .\podcasts\templates\podcasts\home.html:49
 msgid ""
 "Ingests RSS feeds from any podcast; uses OpenAI Whisper Turbo on an NVIDIA "
-"GPU for fast, high-quality transcription; diarizes speakers and formats with"
-" timestamps."
+"GPU for fast, high-quality transcription; diarizes speakers and formats with "
+"timestamps."
 msgstr ""
-"모든 팟캐스트에서 RSS 피드를 흡수하고, NVIDIA GPU에서 OpenAI Whisper Turbo를 사용하여 빠르고 고품질의 변환을"
-" 수행하고, 시간표로 스피커와 포맷을 일간지화합니다."
+"모든 팟캐스트에서 RSS 피드를 흡수하고, NVIDIA GPU에서 OpenAI Whisper Turbo를 "
+"사용하여 빠르고 고품질의 변환을 수행하고, 시간표로 스피커와 포맷을 일간지화합"
+"니다."
 
 #: .\podcasts\templates\podcasts\home.html:50
 msgid "Chapter Summaries"
@@ -884,7 +907,9 @@ msgstr "장 요약"
 msgid ""
 "Generates concise summaries of each transcript segment using FalconsAI text-"
 "summarization."
-msgstr "FalconsAI 텍스트 요약을 사용하여 각 트랜스크립트 세그먼트의 간결한 요약을 생성합니다."
+msgstr ""
+"FalconsAI 텍스트 요약을 사용하여 각 트랜스크립트 세그먼트의 간결한 요약을 생"
+"성합니다."
 
 #: .\podcasts\templates\podcasts\home.html:51
 msgid "Full-Text Search"
@@ -892,11 +917,11 @@ msgstr "전체 텍스트 검색"
 
 #: .\podcasts\templates\podcasts\home.html:51
 msgid ""
-"Powered by Elasticsearch for lightning-fast, fuzzy-match queries; filters by"
-" title, description, channel metadata, or transcript."
+"Powered by Elasticsearch for lightning-fast, fuzzy-match queries; filters by "
+"title, description, channel metadata, or transcript."
 msgstr ""
-"번개속, 흐릿하게 일치하는 쿼리를 위한 Elasticsearch에 의해 작동합니다. 제목, 설명, 채널 메타데이터 또는 기록에 의해 "
-"필터."
+"번개속, 흐릿하게 일치하는 쿼리를 위한 Elasticsearch에 의해 작동합니다. 제목, "
+"설명, 채널 메타데이터 또는 기록에 의해 필터."
 
 #: .\podcasts\templates\podcasts\home.html:52
 msgid "Flexible Playback"
@@ -906,7 +931,8 @@ msgstr "유연한 재생"
 msgid ""
 "Jump directly to the moment a keyword appears in the audio player on the "
 "website."
-msgstr "웹 사이트의 오디오 플레이어에서 키워드가 표시되는 순간 바로 점프하십시오."
+msgstr ""
+"웹 사이트의 오디오 플레이어에서 키워드가 표시되는 순간 바로 점프하십시오."
 
 #: .\podcasts\templates\podcasts\home.html:55
 msgid "🏗️ Architecture & Tech Stack"
@@ -1192,8 +1218,9 @@ msgid ""
 "Notice explains how we collect, use, share, and safeguard your information "
 "when you visit our website and register an account."
 msgstr ""
-"뮤즈 팟캐스트, LLC는 귀하의 개인 정보 보호에 최선을 다하고 있습니다. 이 개인 정보 보호 정책은 귀하가 웹사이트를 방문하고 계정을 "
-"등록할 때 귀하의 정보를 수집, 사용, 공유 및 보호하는 방법을 설명합니다."
+"뮤즈 팟캐스트, LLC는 귀하의 개인 정보 보호에 최선을 다하고 있습니다. 이 개인 "
+"정보 보호 정책은 귀하가 웹사이트를 방문하고 계정을 등록할 때 귀하의 정보를 수"
+"집, 사용, 공유 및 보호하는 방법을 설명합니다."
 
 #: .\podcasts\templates\podcasts\signup.html:180
 #: .\podcasts\templates\socialaccount\signup.html:83
@@ -1205,7 +1232,8 @@ msgstr "우리가 수집 하는 정보"
 msgid ""
 "We collect the following information when you create an account or use our "
 "website:"
-msgstr "귀하가 계정을 만들거나 웹사이트를 이용할 때 아래와 같은 정보를 수집합니다."
+msgstr ""
+"귀하가 계정을 만들거나 웹사이트를 이용할 때 아래와 같은 정보를 수집합니다."
 
 #: .\podcasts\templates\podcasts\signup.html:183
 #: .\podcasts\templates\socialaccount\signup.html:86
@@ -1303,17 +1331,19 @@ msgstr "데이터 공유 및 판매"
 #: .\podcasts\templates\podcasts\signup.html:214
 #: .\podcasts\templates\socialaccount\signup.html:115
 msgid ""
-"To keep our services free and advertisement-free, Muse Podcast, LLC may sell"
-" aggregated, anonymized data analytics to podcast creators, business "
+"To keep our services free and advertisement-free, Muse Podcast, LLC may sell "
+"aggregated, anonymized data analytics to podcast creators, business "
 "partners, or other third parties. We ensure your privacy by anonymizing "
 "data, meaning your personal identifiable information (like your name or "
 "exact contact details) will never be sold or shared. Your identity is "
 "replaced by a unique, randomized number to maintain your anonymity."
 msgstr ""
-"우리의 서비스를 무료 및 광고 없는 상태로 유지하기 위해 Muse Podcast, LLC는 포드캐스트 제작자, 비즈니스 파트너 또는 다른"
-" 제3자에게 집합적이고 익명화된 데이터 분석을 판매할 수 있습니다. 우리는 데이터를 익명화함으로써 귀하의 개인정보를 보장합니다. 즉, "
-"귀하의 개인 식별 가능한 정보 (당신의 이름 또는 정확한 연락처) 는 결코 판매되거나 공유되지 않습니다. 귀하의 신원은 익명성을 유지하기"
-" 위해 독특하고 무작위화된 번호로 대체됩니다."
+"우리의 서비스를 무료 및 광고 없는 상태로 유지하기 위해 Muse Podcast, LLC는 포"
+"드캐스트 제작자, 비즈니스 파트너 또는 다른 제3자에게 집합적이고 익명화된 데이"
+"터 분석을 판매할 수 있습니다. 우리는 데이터를 익명화함으로써 귀하의 개인정보"
+"를 보장합니다. 즉, 귀하의 개인 식별 가능한 정보 (당신의 이름 또는 정확한 연락"
+"처) 는 결코 판매되거나 공유되지 않습니다. 귀하의 신원은 익명성을 유지하기 위"
+"해 독특하고 무작위화된 번호로 대체됩니다."
 
 #: .\podcasts\templates\podcasts\signup.html:215
 #: .\podcasts\templates\socialaccount\signup.html:116
@@ -1325,13 +1355,13 @@ msgstr "데이터 보안"
 #, python-format
 msgid ""
 "Muse Podcast, LLC employs industry-standard practices and technologies to "
-"safeguard your personal information. However, no method of transmission over"
-" the internet or electronic storage is 100%% secure, so while we strive to "
+"safeguard your personal information. However, no method of transmission over "
+"the internet or electronic storage is 100%% secure, so while we strive to "
 "protect your personal information, we cannot guarantee absolute security."
 msgstr ""
 "Muse Podcast, LLC employs industry-standard practices and technologies to "
-"safeguard your personal information. However, no method of transmission over"
-" the internet or electronic storage is 100%% secure, so while we strive to "
+"safeguard your personal information. However, no method of transmission over "
+"the internet or electronic storage is 100%% secure, so while we strive to "
 "protect your personal information, we cannot guarantee absolute security."
 
 #: .\podcasts\templates\podcasts\signup.html:217
@@ -1344,7 +1374,9 @@ msgstr "동의"
 msgid ""
 "By clicking the checkbox when creating an account, you consent to the "
 "collection, use, and sharing practices described in this Privacy Notice."
-msgstr "계정을 생성할 때 체크박스를 클릭하면 본 개인정보 보호정책에서 설명한 수집, 사용 및 공유 관행에 동의합니다."
+msgstr ""
+"계정을 생성할 때 체크박스를 클릭하면 본 개인정보 보호정책에서 설명한 수집, 사"
+"용 및 공유 관행에 동의합니다."
 
 #: .\podcasts\templates\podcasts\signup.html:219
 #: .\podcasts\templates\socialaccount\signup.html:120
@@ -1358,8 +1390,9 @@ msgid ""
 "data at any time. To exercise these rights or if you have questions about "
 "this Privacy Notice, contact us at:"
 msgstr ""
-"귀하의 개인정보를 언제든지 액세스하거나 수정하거나 삭제할 수 있는 권리가 있습니다. 이러한 권리를 행사하거나 이 개인정보 보호정책에 관한"
-" 질문이 있으면 다음과 같은 주소로 문의하시기 바랍니다."
+"귀하의 개인정보를 언제든지 액세스하거나 수정하거나 삭제할 수 있는 권리가 있습"
+"니다. 이러한 권리를 행사하거나 이 개인정보 보호정책에 관한 질문이 있으면 다음"
+"과 같은 주소로 문의하시기 바랍니다."
 
 #: .\podcasts\templates\podcasts\signup.html:225
 #: .\podcasts\templates\socialaccount\signup.html:126
@@ -1373,8 +1406,8 @@ msgid ""
 "time. Changes will be posted on our website and are effective immediately "
 "upon posting."
 msgstr ""
-"뮤즈 팟캐스트, LLC는 언제든지 이 개인정보보호정책을 수정할 권리를 보유합니다. 변경 사항은 저희 웹사이트에 게시되며 게시 후 즉시 "
-"시행됩니다."
+"뮤즈 팟캐스트, LLC는 언제든지 이 개인정보보호정책을 수정할 권리를 보유합니"
+"다. 변경 사항은 저희 웹사이트에 게시되며 게시 후 즉시 시행됩니다."
 
 #: .\podcasts\templates\podcasts\signup.html:348
 msgid "Passwords match"
@@ -1444,25 +1477,28 @@ msgstr "지원 티켓은 실패했고 파일 크기는 너무 커서 ≤2MB가 �
 
 #: .\podcasts\templates\podcasts\support_ticket.html:161
 msgid ""
-"Your support ticket was unsuccessful, file type incorrect, only "
-"(JPG/PNG/GIF) are accepted."
-msgstr "지원 티켓이 실패하고 파일 타입이 잘못됐습니다. JPG/PNG/GIF만 받아들여집니다."
+"Your support ticket was unsuccessful, file type incorrect, only (JPG/PNG/"
+"GIF) are accepted."
+msgstr ""
+"지원 티켓이 실패하고 파일 타입이 잘못됐습니다. JPG/PNG/GIF만 받아들여집니다."
 
 #: .\podcasts\templates\podcasts\support_ticket.html:163
 msgid ""
-"Your support ticket was unsuccessful, file type incorrect (only JPG/PNG/GIF)"
-" and file size is too large (≤ 2 MB)."
-msgstr "지원 티켓은 실패하고 파일 타입이 잘못되었습니다 (JPG/PNG/GIF만) 그리고 파일 크기는 너무 크다 (≤ 2 MB)."
+"Your support ticket was unsuccessful, file type incorrect (only JPG/PNG/GIF) "
+"and file size is too large (≤ 2 MB)."
+msgstr ""
+"지원 티켓은 실패하고 파일 타입이 잘못되었습니다 (JPG/PNG/GIF만) 그리고 파일 "
+"크기는 너무 크다 (≤ 2 MB)."
 
 #: .\podcasts\templates\podcasts\support_ticket.html:166
 #, python-format
 msgid ""
-"You’ve reached your limit of %(limit)s open tickets "
-"(%(open_count)s/%(limit)s). Please wait for one to complete or cancel before"
-" opening a new one."
+"You’ve reached your limit of %(limit)s open tickets (%(open_count)s/"
+"%(limit)s). Please wait for one to complete or cancel before opening a new "
+"one."
 msgstr ""
-"당신은%(limit)s 오픈 티켓 (%(open_count)s/%(limit)s) 의 제한을 달성했습니다. 새로운 티켓을 열기 전에 한 "
-"티켓이 완료되거나 취소될 때까지 기다립니다."
+"당신은%(limit)s 오픈 티켓 (%(open_count)s/%(limit)s) 의 제한을 달성했습니다. "
+"새로운 티켓을 열기 전에 한 티켓이 완료되거나 취소될 때까지 기다립니다."
 
 #: .\podcasts\templates\podcasts\support_ticket.html:183
 msgid "OK"
@@ -1537,7 +1573,9 @@ msgstr "비밀번호 재설정 완료"
 msgid ""
 "Your password has been successfully reset. You can now log in with your new "
 "password."
-msgstr "비밀번호가 성공적으로 재설정되었습니다. 이제 새로운 비밀번호로 로그인할 수 있습니다."
+msgstr ""
+"비밀번호가 성공적으로 재설정되었습니다. 이제 새로운 비밀번호로 로그인할 수 있"
+"습니다."
 
 #: .\podcasts\templates\registration\password_reset_confirm.html:7
 msgid "Reset Your Password"
@@ -1558,8 +1596,8 @@ msgid ""
 "We've emailed you instructions for resetting your password. Please check "
 "your inbox (and spam folder) for the reset link."
 msgstr ""
-"비밀번호를 다시 설정하는 지침을 이메일로 보냈습니다. 다시 설정 링크를 위해 우편 우편 상자 (그리고 스팸 폴더) 를 확인하시기 "
-"바랍니다."
+"비밀번호를 다시 설정하는 지침을 이메일로 보냈습니다. 다시 설정 링크를 위해 우"
+"편 우편 상자 (그리고 스팸 폴더) 를 확인하시기 바랍니다."
 
 #: .\podcasts\templates\registration\password_reset_form.html:8
 msgid ""
@@ -1578,7 +1616,9 @@ msgstr "계정 잠금"
 msgid ""
 "For your security, we’ve temporarily locked your account after multiple "
 "failed login attempts."
-msgstr "보안을 위해, 우리는 여러 번 실패한 로그인 시도 후 귀하의 계정을 일시적으로 잠금했습니다."
+msgstr ""
+"보안을 위해, 우리는 여러 번 실패한 로그인 시도 후 귀하의 계정을 일시적으로 잠"
+"금했습니다."
 
 #: .\podcasts\templates\security\locked_out.html:17
 msgid "Please wait and try again."
@@ -1627,11 +1667,1249 @@ msgstr "OTP를 입력"
 msgid "Submit OTP"
 msgstr "OTP를 제출"
 
+#: .\venv\Lib\site-packages\django\contrib\messages\apps.py:15
+#, fuzzy
+#| msgid "Message"
+msgid "Messages"
+msgstr "메시지"
+
+#: .\venv\Lib\site-packages\django\contrib\sitemaps\apps.py:8
+msgid "Site Maps"
+msgstr "사이트 맵"
+
+#: .\venv\Lib\site-packages\django\contrib\staticfiles\apps.py:9
+msgid "Static Files"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\contrib\syndication\apps.py:7
+msgid "Syndication"
+msgstr ""
+
+#. Translators: String used to replace omitted page numbers in elided page
+#. range generated by paginators, e.g. [1, 2, '…', 5, 6, 7, '…', 9, 10].
+#: .\venv\Lib\site-packages\django\core\paginator.py:30
+msgid "…"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\core\paginator.py:50
+msgid "That page number is not an integer"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\core\paginator.py:52
+msgid "That page number is less than 1"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\core\paginator.py:54
+msgid "That page contains no results"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\core\validators.py:22
+msgid "Enter a valid value."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\core\validators.py:104
+#: .\venv\Lib\site-packages\django\forms\fields.py:752
+msgid "Enter a valid URL."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\core\validators.py:165
+msgid "Enter a valid integer."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\core\validators.py:176
+msgid "Enter a valid email address."
+msgstr ""
+
+#. Translators: "letters" means latin letters: a-z and A-Z.
+#: .\venv\Lib\site-packages\django\core\validators.py:259
+msgid ""
+"Enter a valid “slug” consisting of letters, numbers, underscores or hyphens."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\core\validators.py:267
+msgid ""
+"Enter a valid “slug” consisting of Unicode letters, numbers, underscores, or "
+"hyphens."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\core\validators.py:281
+#: .\venv\Lib\site-packages\django\core\validators.py:289
+#: .\venv\Lib\site-packages\django\core\validators.py:318
+msgid "Enter a valid IPv4 address."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\core\validators.py:298
+#: .\venv\Lib\site-packages\django\core\validators.py:319
+msgid "Enter a valid IPv6 address."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\core\validators.py:310
+#: .\venv\Lib\site-packages\django\core\validators.py:317
+msgid "Enter a valid IPv4 or IPv6 address."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\core\validators.py:353
+msgid "Enter only digits separated by commas."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\core\validators.py:359
+#, python-format
+msgid "Ensure this value is %(limit_value)s (it is %(show_value)s)."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\core\validators.py:394
+#, python-format
+msgid "Ensure this value is less than or equal to %(limit_value)s."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\core\validators.py:403
+#, python-format
+msgid "Ensure this value is greater than or equal to %(limit_value)s."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\core\validators.py:412
+#, python-format
+msgid "Ensure this value is a multiple of step size %(limit_value)s."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\core\validators.py:422
+#, python-format
+msgid ""
+"Ensure this value has at least %(limit_value)d character (it has "
+"%(show_value)d)."
+msgid_plural ""
+"Ensure this value has at least %(limit_value)d characters (it has "
+"%(show_value)d)."
+msgstr[0] ""
+
+#: .\venv\Lib\site-packages\django\core\validators.py:440
+#, python-format
+msgid ""
+"Ensure this value has at most %(limit_value)d character (it has "
+"%(show_value)d)."
+msgid_plural ""
+"Ensure this value has at most %(limit_value)d characters (it has "
+"%(show_value)d)."
+msgstr[0] ""
+
+#: .\venv\Lib\site-packages\django\core\validators.py:463
+#: .\venv\Lib\site-packages\django\forms\fields.py:347
+#: .\venv\Lib\site-packages\django\forms\fields.py:386
+msgid "Enter a number."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\core\validators.py:465
+#, python-format
+msgid "Ensure that there are no more than %(max)s digit in total."
+msgid_plural "Ensure that there are no more than %(max)s digits in total."
+msgstr[0] ""
+
+#: .\venv\Lib\site-packages\django\core\validators.py:470
+#, python-format
+msgid "Ensure that there are no more than %(max)s decimal place."
+msgid_plural "Ensure that there are no more than %(max)s decimal places."
+msgstr[0] ""
+
+#: .\venv\Lib\site-packages\django\core\validators.py:475
+#, python-format
+msgid ""
+"Ensure that there are no more than %(max)s digit before the decimal point."
+msgid_plural ""
+"Ensure that there are no more than %(max)s digits before the decimal point."
+msgstr[0] ""
+
+#: .\venv\Lib\site-packages\django\core\validators.py:546
+#, python-format
+msgid ""
+"File extension “%(extension)s” is not allowed. Allowed extensions are: "
+"%(allowed_extensions)s."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\core\validators.py:607
+msgid "Null characters are not allowed."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\base.py:1423
+#: .\venv\Lib\site-packages\django\forms\models.py:893
+#, fuzzy
+#| msgid "Backend"
+msgid "and"
+msgstr "백엔드"
+
+#: .\venv\Lib\site-packages\django\db\models\base.py:1425
+#, python-format
+msgid "%(model_name)s with this %(field_labels)s already exists."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\constraints.py:17
+#, python-format
+msgid "Constraint “%(name)s” is violated."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:128
+#, python-format
+msgid "Value %(value)r is not a valid choice."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:129
+msgid "This field cannot be null."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:130
+msgid "This field cannot be blank."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:131
+#, python-format
+msgid "%(model_name)s with this %(field_label)s already exists."
+msgstr ""
+
+#. Translators: The 'lookup_type' is one of 'date', 'year' or
+#. 'month'. Eg: "Title must be unique for pub_date year"
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:135
+#, python-format
+msgid ""
+"%(field_label)s must be unique for %(date_field_label)s %(lookup_type)s."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:173
+#, python-format
+msgid "Field of type: %(field_type)s"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1094
+#, python-format
+msgid "“%(value)s” value must be either True or False."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1095
+#, python-format
+msgid "“%(value)s” value must be either True, False, or None."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1097
+msgid "Boolean (Either True or False)"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1147
+#, python-format
+msgid "String (up to %(max_length)s)"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1149
+msgid "String (unlimited)"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1253
+msgid "Comma-separated integers"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1354
+#, python-format
+msgid ""
+"“%(value)s” value has an invalid date format. It must be in YYYY-MM-DD "
+"format."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1358
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1493
+#, python-format
+msgid ""
+"“%(value)s” value has the correct format (YYYY-MM-DD) but it is an invalid "
+"date."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1362
+msgid "Date (without time)"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1489
+#, python-format
+msgid ""
+"“%(value)s” value has an invalid format. It must be in YYYY-MM-DD "
+"HH:MM[:ss[.uuuuuu]][TZ] format."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1497
+#, python-format
+msgid ""
+"“%(value)s” value has the correct format (YYYY-MM-DD HH:MM[:ss[.uuuuuu]]"
+"[TZ]) but it is an invalid date/time."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1502
+msgid "Date (with time)"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1626
+#, python-format
+msgid "“%(value)s” value must be a decimal number."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1628
+msgid "Decimal number"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1789
+#, python-format
+msgid ""
+"“%(value)s” value has an invalid format. It must be in [DD] "
+"[[HH:]MM:]ss[.uuuuuu] format."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1793
+#, fuzzy
+#| msgid "Summarization"
+msgid "Duration"
+msgstr "요약"
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1845
+#, fuzzy
+#| msgid "Email Address"
+msgid "Email address"
+msgstr "이메일 주소"
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1870
+msgid "File path"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1948
+#, python-format
+msgid "“%(value)s” value must be a float."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1950
+msgid "Floating point number"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1990
+#, python-format
+msgid "“%(value)s” value must be an integer."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1992
+msgid "Integer"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2088
+msgid "Big (8 byte) integer"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2105
+msgid "Small integer"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2113
+#, fuzzy
+#| msgid "IP Addresses"
+msgid "IPv4 address"
+msgstr "IP 주소는"
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2144
+#, fuzzy
+#| msgid "IP Addresses"
+msgid "IP address"
+msgstr "IP 주소는"
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2237
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2238
+#, python-format
+msgid "“%(value)s” value must be either None, True or False."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2240
+msgid "Boolean (Either True, False or None)"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2291
+msgid "Positive big integer"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2306
+msgid "Positive integer"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2321
+msgid "Positive small integer"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2337
+#, python-format
+msgid "Slug (up to %(max_length)s)"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2373
+msgid "Text"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2448
+#, python-format
+msgid ""
+"“%(value)s” value has an invalid format. It must be in HH:MM[:ss[.uuuuuu]] "
+"format."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2452
+#, python-format
+msgid ""
+"“%(value)s” value has the correct format (HH:MM[:ss[.uuuuuu]]) but it is an "
+"invalid time."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2456
+#, fuzzy
+#| msgid "Time:"
+msgid "Time"
+msgstr "시간:"
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2564
+msgid "URL"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2588
+msgid "Raw binary data"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2653
+#, python-format
+msgid "“%(value)s” is not a valid UUID."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2655
+msgid "Universally unique identifier"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\files.py:232
+msgid "File"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\files.py:393
+#, fuzzy
+#| msgid "No image"
+msgid "Image"
+msgstr "이미지가 없습니다."
+
+#: .\venv\Lib\site-packages\django\db\models\fields\json.py:26
+#, fuzzy
+#| msgid "Subject"
+msgid "A JSON object"
+msgstr "주제는"
+
+#: .\venv\Lib\site-packages\django\db\models\fields\json.py:28
+msgid "Value must be valid JSON."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\related.py:919
+#, python-format
+msgid "%(model)s instance with %(field)s %(value)r does not exist."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\related.py:921
+msgid "Foreign Key (type determined by related field)"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\related.py:1212
+msgid "One-to-one relationship"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\related.py:1269
+#, python-format
+msgid "%(from)s-%(to)s relationship"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\related.py:1271
+#, python-format
+msgid "%(from)s-%(to)s relationships"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\db\models\fields\related.py:1319
+msgid "Many-to-many relationship"
+msgstr ""
+
+#. Translators: If found as last label character, these punctuation
+#. characters will prevent the default label_suffix to be appended to the label
+#: .\venv\Lib\site-packages\django\forms\boundfield.py:184
+msgid ":?.!"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\fields.py:91
+msgid "This field is required."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\fields.py:298
+msgid "Enter a whole number."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\fields.py:467
+#: .\venv\Lib\site-packages\django\forms\fields.py:1241
+msgid "Enter a valid date."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\fields.py:490
+#: .\venv\Lib\site-packages\django\forms\fields.py:1242
+msgid "Enter a valid time."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\fields.py:517
+msgid "Enter a valid date/time."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\fields.py:551
+msgid "Enter a valid duration."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\fields.py:552
+#, python-brace-format
+msgid "The number of days must be between {min_days} and {max_days}."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\fields.py:621
+msgid "No file was submitted. Check the encoding type on the form."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\fields.py:622
+msgid "No file was submitted."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\fields.py:623
+msgid "The submitted file is empty."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\fields.py:625
+#, python-format
+msgid "Ensure this filename has at most %(max)d character (it has %(length)d)."
+msgid_plural ""
+"Ensure this filename has at most %(max)d characters (it has %(length)d)."
+msgstr[0] ""
+
+#: .\venv\Lib\site-packages\django\forms\fields.py:630
+msgid "Please either submit a file or check the clear checkbox, not both."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\fields.py:694
+msgid ""
+"Upload a valid image. The file you uploaded was either not an image or a "
+"corrupted image."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\fields.py:857
+#: .\venv\Lib\site-packages\django\forms\fields.py:949
+#: .\venv\Lib\site-packages\django\forms\models.py:1566
+#, python-format
+msgid "Select a valid choice. %(value)s is not one of the available choices."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\fields.py:951
+#: .\venv\Lib\site-packages\django\forms\fields.py:1070
+#: .\venv\Lib\site-packages\django\forms\models.py:1564
+msgid "Enter a list of values."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\fields.py:1071
+msgid "Enter a complete value."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\fields.py:1313
+msgid "Enter a valid UUID."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\fields.py:1343
+msgid "Enter a valid JSON."
+msgstr ""
+
+#. Translators: This is the default suffix added to form field labels
+#: .\venv\Lib\site-packages\django\forms\forms.py:98
+msgid ":"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\forms.py:244
+#: .\venv\Lib\site-packages\django\forms\forms.py:328
+#, python-format
+msgid "(Hidden field %(name)s) %(error)s"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\formsets.py:63
+#, python-format
+msgid ""
+"ManagementForm data is missing or has been tampered with. Missing fields: "
+"%(field_names)s. You may need to file a bug report if the issue persists."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\formsets.py:67
+#, python-format
+msgid "Please submit at most %(num)d form."
+msgid_plural "Please submit at most %(num)d forms."
+msgstr[0] ""
+
+#: .\venv\Lib\site-packages\django\forms\formsets.py:72
+#, python-format
+msgid "Please submit at least %(num)d form."
+msgid_plural "Please submit at least %(num)d forms."
+msgstr[0] ""
+
+#: .\venv\Lib\site-packages\django\forms\formsets.py:484
+#: .\venv\Lib\site-packages\django\forms\formsets.py:491
+msgid "Order"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\formsets.py:499
+msgid "Delete"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\models.py:886
+#, python-format
+msgid "Please correct the duplicate data for %(field)s."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\models.py:891
+#, python-format
+msgid "Please correct the duplicate data for %(field)s, which must be unique."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\models.py:898
+#, python-format
+msgid ""
+"Please correct the duplicate data for %(field_name)s which must be unique "
+"for the %(lookup)s in %(date_field)s."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\models.py:907
+#, fuzzy
+#| msgid "Please fix the errors below."
+msgid "Please correct the duplicate values below."
+msgstr "아래의 오류를 수정해 주시기 바랍니다."
+
+#: .\venv\Lib\site-packages\django\forms\models.py:1338
+msgid "The inline value did not match the parent instance."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\models.py:1429
+msgid "Select a valid choice. That choice is not one of the available choices."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\models.py:1568
+#, python-format
+msgid "“%(pk)s” is not a valid value."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\utils.py:226
+#, python-format
+msgid ""
+"%(datetime)s couldn’t be interpreted in time zone %(current_timezone)s; it "
+"may be ambiguous or it may not exist."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\widgets.py:463
+msgid "Clear"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\widgets.py:464
+msgid "Currently"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\widgets.py:465
+#, fuzzy
+#| msgid "Channels"
+msgid "Change"
+msgstr "채널"
+
+#: .\venv\Lib\site-packages\django\forms\widgets.py:794
+msgid "Unknown"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\widgets.py:795
+msgid "Yes"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\forms\widgets.py:796
+msgid "No"
+msgstr ""
+
+#. Translators: Please do not add spaces around commas.
+#: .\venv\Lib\site-packages\django\template\defaultfilters.py:874
+msgid "yes,no,maybe"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\template\defaultfilters.py:904
+#: .\venv\Lib\site-packages\django\template\defaultfilters.py:921
+#, python-format
+msgid "%(size)d byte"
+msgid_plural "%(size)d bytes"
+msgstr[0] ""
+
+#: .\venv\Lib\site-packages\django\template\defaultfilters.py:923
+#, python-format
+msgid "%s KB"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\template\defaultfilters.py:925
+#, python-format
+msgid "%s MB"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\template\defaultfilters.py:927
+#, python-format
+msgid "%s GB"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\template\defaultfilters.py:929
+#, python-format
+msgid "%s TB"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\template\defaultfilters.py:931
+#, python-format
+msgid "%s PB"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dateformat.py:73
+msgid "p.m."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dateformat.py:74
+msgid "a.m."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dateformat.py:79
+msgid "PM"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dateformat.py:80
+msgid "AM"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dateformat.py:152
+msgid "midnight"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dateformat.py:154
+msgid "noon"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:7
+msgid "Monday"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:8
+msgid "Tuesday"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:9
+msgid "Wednesday"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:10
+msgid "Thursday"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:11
+msgid "Friday"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:12
+msgid "Saturday"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:13
+msgid "Sunday"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:16
+msgid "Mon"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:17
+msgid "Tue"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:18
+#, fuzzy
+#| msgid "Watched"
+msgid "Wed"
+msgstr "감시"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:19
+msgid "Thu"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:20
+msgid "Fri"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:21
+#, fuzzy
+#| msgid "Status"
+msgid "Sat"
+msgstr "상태"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:22
+msgid "Sun"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:25
+msgid "January"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:26
+msgid "February"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:27
+#, fuzzy
+#| msgid "Search"
+msgid "March"
+msgstr "검색"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:28
+msgid "April"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:29
+msgid "May"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:30
+msgid "June"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:31
+msgid "July"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:32
+msgid "August"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:33
+msgid "September"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:34
+msgid "October"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:35
+#, fuzzy
+#| msgid "Phone Number"
+msgid "November"
+msgstr "전화번호"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:36
+msgid "December"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:39
+msgid "jan"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:40
+msgid "feb"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:41
+msgid "mar"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:42
+msgid "apr"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:43
+msgid "may"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:44
+msgid "jun"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:45
+msgid "jul"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:46
+msgid "aug"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:47
+msgid "sep"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:48
+msgid "oct"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:49
+msgid "nov"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:50
+msgid "dec"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:53
+msgctxt "abbrev. month"
+msgid "Jan."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:54
+msgctxt "abbrev. month"
+msgid "Feb."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:55
+#, fuzzy
+#| msgid "Search"
+msgctxt "abbrev. month"
+msgid "March"
+msgstr "검색"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:56
+msgctxt "abbrev. month"
+msgid "April"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:57
+msgctxt "abbrev. month"
+msgid "May"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:58
+msgctxt "abbrev. month"
+msgid "June"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:59
+msgctxt "abbrev. month"
+msgid "July"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:60
+msgctxt "abbrev. month"
+msgid "Aug."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:61
+msgctxt "abbrev. month"
+msgid "Sept."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:62
+msgctxt "abbrev. month"
+msgid "Oct."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:63
+msgctxt "abbrev. month"
+msgid "Nov."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:64
+msgctxt "abbrev. month"
+msgid "Dec."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:67
+msgctxt "alt. month"
+msgid "January"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:68
+msgctxt "alt. month"
+msgid "February"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:69
+#, fuzzy
+#| msgid "Search"
+msgctxt "alt. month"
+msgid "March"
+msgstr "검색"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:70
+msgctxt "alt. month"
+msgid "April"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:71
+msgctxt "alt. month"
+msgid "May"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:72
+msgctxt "alt. month"
+msgid "June"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:73
+msgctxt "alt. month"
+msgid "July"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:74
+msgctxt "alt. month"
+msgid "August"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:75
+msgctxt "alt. month"
+msgid "September"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:76
+msgctxt "alt. month"
+msgid "October"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:77
+#, fuzzy
+#| msgid "Phone Number"
+msgctxt "alt. month"
+msgid "November"
+msgstr "전화번호"
+
+#: .\venv\Lib\site-packages\django\utils\dates.py:78
+msgctxt "alt. month"
+msgid "December"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\ipv6.py:20
+msgid "This is not a valid IPv6 address."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\text.py:138
+#, python-format
+msgctxt "String to return when truncating text"
+msgid "%(truncated_text)s…"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\text.py:323
+msgid "or"
+msgstr ""
+
+#. Translators: This string is used as a separator between list elements
+#: .\venv\Lib\site-packages\django\utils\text.py:342
+#: .\venv\Lib\site-packages\django\utils\timesince.py:135
+msgid ", "
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\utils\timesince.py:8
+#, python-format
+msgid "%(num)d year"
+msgid_plural "%(num)d years"
+msgstr[0] ""
+
+#: .\venv\Lib\site-packages\django\utils\timesince.py:9
+#, python-format
+msgid "%(num)d month"
+msgid_plural "%(num)d months"
+msgstr[0] ""
+
+#: .\venv\Lib\site-packages\django\utils\timesince.py:10
+#, python-format
+msgid "%(num)d week"
+msgid_plural "%(num)d weeks"
+msgstr[0] ""
+
+#: .\venv\Lib\site-packages\django\utils\timesince.py:11
+#, python-format
+msgid "%(num)d day"
+msgid_plural "%(num)d days"
+msgstr[0] ""
+
+#: .\venv\Lib\site-packages\django\utils\timesince.py:12
+#, python-format
+msgid "%(num)d hour"
+msgid_plural "%(num)d hours"
+msgstr[0] ""
+
+#: .\venv\Lib\site-packages\django\utils\timesince.py:13
+#, python-format
+msgid "%(num)d minute"
+msgid_plural "%(num)d minutes"
+msgstr[0] ""
+
+#: .\venv\Lib\site-packages\django\views\csrf.py:111
+msgid "Forbidden"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\views\csrf.py:112
+msgid "CSRF verification failed. Request aborted."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\views\csrf.py:116
+msgid ""
+"You are seeing this message because this HTTPS site requires a “Referer "
+"header” to be sent by your web browser, but none was sent. This header is "
+"required for security reasons, to ensure that your browser is not being "
+"hijacked by third parties."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\views\csrf.py:122
+msgid ""
+"If you have configured your browser to disable “Referer” headers, please re-"
+"enable them, at least for this site, or for HTTPS connections, or for “same-"
+"origin” requests."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\views\csrf.py:127
+msgid ""
+"If you are using the <meta name=\"referrer\" content=\"no-referrer\"> tag or "
+"including the “Referrer-Policy: no-referrer” header, please remove them. The "
+"CSRF protection requires the “Referer” header to do strict referer checking. "
+"If you’re concerned about privacy, use alternatives like <a "
+"rel=\"noreferrer\" …> for links to third-party sites."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\views\csrf.py:136
+msgid ""
+"You are seeing this message because this site requires a CSRF cookie when "
+"submitting forms. This cookie is required for security reasons, to ensure "
+"that your browser is not being hijacked by third parties."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\views\csrf.py:142
+msgid ""
+"If you have configured your browser to disable cookies, please re-enable "
+"them, at least for this site, or for “same-origin” requests."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\views\csrf.py:148
+msgid "More information is available with DEBUG=True."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\views\generic\dates.py:44
+msgid "No year specified"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\views\generic\dates.py:64
+#: .\venv\Lib\site-packages\django\views\generic\dates.py:115
+#: .\venv\Lib\site-packages\django\views\generic\dates.py:214
+#, fuzzy
+#| msgid "Update your rating"
+msgid "Date out of range"
+msgstr "평가를 업데이트"
+
+#: .\venv\Lib\site-packages\django\views\generic\dates.py:94
+msgid "No month specified"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\views\generic\dates.py:147
+msgid "No day specified"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\views\generic\dates.py:194
+msgid "No week specified"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\views\generic\dates.py:349
+#: .\venv\Lib\site-packages\django\views\generic\dates.py:380
+#, python-format
+msgid "No %(verbose_name_plural)s available"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\views\generic\dates.py:652
+#, python-format
+msgid ""
+"Future %(verbose_name_plural)s not available because "
+"%(class_name)s.allow_future is False."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\views\generic\dates.py:692
+#, python-format
+msgid "Invalid date string “%(datestr)s” given format “%(format)s”"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\views\generic\detail.py:56
+#, fuzzy, python-format
+#| msgid "No episodes found matching your search."
+msgid "No %(verbose_name)s found matching the query"
+msgstr "검색어와 일치하는 에피소드를 찾을 수 없습니다."
+
+#: .\venv\Lib\site-packages\django\views\generic\list.py:70
+msgid "Page is not “last”, nor can it be converted to an int."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\views\generic\list.py:77
+#, python-format
+msgid "Invalid page (%(page_number)s): %(message)s"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\views\generic\list.py:169
+#, python-format
+msgid "Empty list and “%(class_name)s.allow_empty” is False."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\views\static.py:38
+msgid "Directory indexes are not allowed here."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\views\static.py:40
+#, python-format
+msgid "“%(path)s” does not exist"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\views\static.py:79
+#, python-format
+msgid "Index of %(directory)s"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\views\templates\default_urlconf.html:7
+#: .\venv\Lib\site-packages\django\views\templates\default_urlconf.html:220
+msgid "The install worked successfully! Congratulations!"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\views\templates\default_urlconf.html:206
+#, python-format
+msgid ""
+"View <a href=\"https://docs.djangoproject.com/en/%(version)s/releases/\" "
+"target=\"_blank\" rel=\"noopener\">release notes</a> for Django %(version)s"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\views\templates\default_urlconf.html:221
+#, python-format
+msgid ""
+"You are seeing this page because <a href=\"https://docs.djangoproject.com/en/"
+"%(version)s/ref/settings/#debug\" target=\"_blank\" "
+"rel=\"noopener\">DEBUG=True</a> is in your settings file and you have not "
+"configured any URLs."
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\views\templates\default_urlconf.html:229
+msgid "Django Documentation"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\views\templates\default_urlconf.html:230
+msgid "Topics, references, &amp; how-to’s"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\views\templates\default_urlconf.html:238
+msgid "Tutorial: A Polling App"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\views\templates\default_urlconf.html:239
+msgid "Get started with Django"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\views\templates\default_urlconf.html:247
+msgid "Django Community"
+msgstr ""
+
+#: .\venv\Lib\site-packages\django\views\templates\default_urlconf.html:248
+msgid "Connect, get help, or contribute"
+msgstr ""
+
+#: .\venv\Lib\site-packages\sympy\solvers\simplex.py:564
+msgid "x"
+msgstr ""
+
+#: .\venv\Lib\site-packages\sympy\solvers\simplex.py:565
+#, fuzzy
+#| msgid "by"
+msgid "y"
+msgstr "~에 의해"
+
 #~ msgid "Podcast Web App"
 #~ msgstr "팟캐스트 웹 앱"
 
 #~ msgid "Podcast News"
 #~ msgstr "팟캐스트 뉴스"
-
-#~ msgid "Site Maps"
-#~ msgstr "사이트 맵"

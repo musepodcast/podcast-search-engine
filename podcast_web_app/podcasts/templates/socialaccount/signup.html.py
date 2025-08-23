@@ -1,0 +1,241 @@
+
+BBBBBBB BBBBBBBBBBBBBBBBBBBB
+BBBB BBBB
+
+BBBBB BBBBBBB
+XXXX XXXXXXXXXXXXXXXX XXXXXX
+  XXXX gettext(u'Finish signing up') XXXXX
+    XXXXX XXXXXXXXXXXXXX
+    BBBBBBBBBB
+    
+
+    XXXX XXXXXXXXXXXXX
+      
+      
+      
+    XXXXXX
+
+    XXXX XXXXXXXXXXXXX
+      
+      
+      XXXX XXXXXXXXXXXXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXXXXXXXXXX
+      
+    XXXXXX
+    XXXX XXXXXXXXXXXXX
+      
+      
+      
+    XXXXXX
+    XXXX XXXXXXXXXXXXX
+      
+      
+      
+    XXXXXX
+    XXXX XXXXXXXXXXXXX
+      
+      
+      
+    XXXXXX
+    XXXX XXXXXXXXXXXXX
+      
+      
+      
+    XXXXXX
+    XXXX XXXXXXXXXXXXX
+      
+      
+      
+    XXXXXX
+    XXXX XXXXXXXXXXXXX
+      
+      
+      
+    XXXXXX
+
+    XXXX XXXXXXX XXXXXXX XXXXXXXX XXX
+    XXXX XXXXXXXXXXX XXXXXXXXXXXX
+      XXXXXX XXXXXXXXXXXXXXX XXXXXXXXXXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXXX XXXXXXXXX
+      XXXXXX XXXXXXXXXXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXXXXX
+         gettext(u'By checking this box, I acknowledge that I have read and agree to') 
+        XX XXXXXXXX XXXXXXXXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+           gettext(u'Muse Podcast, LLC’s Privacy Notice') 
+        XXXX gettext(u', and consent to the collection, anonymized sharing, and sale of data as described.') 
+      XXXXXXXX
+    XXXXXX
+
+    XXXXXXX XXXXXXXXXXXXX XXXXXXXXXX XXXXXXXXXXXXX
+       gettext(u'Complete Signup') 
+    XXXXXXXXX
+  XXXXXXX
+XXXXXX
+
+XXXX XXXXXXX XXXXXX XXXXX XXXXX XX XX XXXX XXXXXX XXXXXXXXX XXX
+XXXX XXXXXXXXXXXX XXXXX XXXXXXXXXXXXXXXXX XXXXXXXXXXXXX XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXXXXX
+  XXXX XXXXXXXXXXXXXXXXXXX XXXXXXXXXX
+    XXXX XXXXXXXXXXXXXXXXXXXXXX
+      XXXX XXXXXXXXXXXXXXXXXXXXX
+        XXX XXXXXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXXXXXXXXX gettext(u'Privacy Notice for Muse Podcast, LLC') XXXXX
+        XXXXXXX XXXXXXXXXXXXX XXXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXXXXXXXXX XXXXXXXXXXXX gettext(u'Close') XXXXXXXXXXX
+      XXXXXX
+      XXXX XXXXXXXXXXXXXXXXXXX
+        XXXXXXXXXXX gettext(u'Last updated:') XXXXXXXXX XXXXXXXXXXXXXX
+        XXX gettext(u'Muse Podcast, LLC is committed to protecting your privacy. This Privacy Notice explains how we collect, use, share, and safeguard your information when you visit our website and register an account.') XXXX
+        XXXX gettext(u'Information We Collect') XXXXX
+        XXX gettext(u'We collect the following information when you create an account or use our website:') XXXX
+        XXXX
+          XXXXXXXXXXXX gettext(u'Personal Information:') XXXXXXXXX
+            XXXX
+              XXXX gettext(u'First Name') XXXXX
+              XXXX gettext(u'Last Name') XXXXX
+              XXXX gettext(u'Birthdate') XXXXX
+              XXXX gettext(u'Country') XXXXX
+              XXXX gettext(u'Phone Number') XXXXX
+              XXXX gettext(u'Gender') XXXXX
+            XXXXX
+          XXXXX
+          XXXXXXXXXXXX gettext(u'Technical Information:') XXXXXXXXX
+            XXXX
+              XXXX gettext(u'Geolocation') XXXXX
+              XXXX gettext(u'IP Addresses') XXXXX
+            XXXXX
+          XXXXX
+          XXXXXXXXXXXX gettext(u'Usage Information:') XXXXXXXXX
+            XXXX
+              XXXX gettext(u'Data on what you search, view, or click within our website.') XXXXX
+            XXXXX
+          XXXXX
+        XXXXX
+        XXXX gettext(u'Purpose of Data Collection') XXXXX
+        XXXX
+          XXXX gettext(u'Provide, maintain, and improve our website services.') XXXXX
+          XXXX gettext(u'Protect our website and users against fraudulent activities and scams.') XXXXX
+          XXXX gettext(u'Generate analytics to enhance user experience.') XXXXX
+        XXXXX
+        XXXX gettext(u'Data Sharing and Selling') XXXXX
+        XXX gettext(u'To keep our services free and advertisement-free, Muse Podcast, LLC may sell aggregated, anonymized data analytics to podcast creators, business partners, or other third parties. We ensure your privacy by anonymizing data, meaning your personal identifiable information (like your name or exact contact details) will never be sold or shared. Your identity is replaced by a unique, randomized number to maintain your anonymity.') XXXX
+        XXXX gettext(u'Data Security') XXXXX
+        XXX gettext(u'Muse Podcast, LLC employs industry-standard practices and technologies to safeguard your personal information. However, no method of transmission over the internet or electronic storage is 100%% secure, so while we strive to protect your personal information, we cannot guarantee absolute security.') XXXX
+        XXXX gettext(u'Consent') XXXXX
+        XXX gettext(u'By clicking the checkbox when creating an account, you consent to the collection, use, and sharing practices described in this Privacy Notice.') XXXX
+        XXXX gettext(u'Your Rights and Choices') XXXXX
+        XXX gettext(u'You have the right to access, correct, or request deletion of your personal data at any time. To exercise these rights or if you have questions about this Privacy Notice, contact us at:') XXXX
+        XXX
+          XXXX XXXXXXXX XXXXXXX
+          XXXXXX XXXXXXXXXXXXXXXXXXXXXXXXXX
+        XXXX
+        XXXX gettext(u'Changes to This Privacy Notice') XXXXX
+        XXX gettext(u'Muse Podcast, LLC reserves the right to modify this Privacy Notice at any time. Changes will be posted on our website and are effective immediately upon posting.') XXXX
+      XXXXXX
+      XXXX XXXXXXXXXXXXXXXXXXXXX
+        XXXXXXX XXXXXXXXXXXXX XXXXXXXXXX XXXXXXXXXXXXXX XXXXXXXXXXXXXXXXXXXXXXXX gettext(u'Close') XXXXXXXXX
+      XXXXXX
+    XXXXXX
+  XXXXXX
+XXXXXX
+
+XXXX XXXX XXXX XXXXXXXXX XXX XXXXX XXXX XXXXX XXXX XXXX XXXXX XXX
+XXXXXXX
+  XXXXXXXXXXXXXXXXXXXXXXXX XXXXXXXXXXXXXX X
+    XXXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXXXXXXXXX XXXXXXXXXXX
+    XXXXXX XXXXXXXXXXXXXXXXX XXXXXXXXXXX
+  X
+  XXXXXXXXXXXXXXXXXXXXXXXX XXXXXXXXXXXXX X
+    XXXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXXXXXXXX XXXXXXXXXXX
+    XXXXXX XXXXXXXXXXXXXXXXXXXXXXXX XXXXXXXXXXX
+  X
+  XXXXXXXXXXXXXXXXXXXXXXXX XXXXXXXXXXX XXXXXXXXXXXXXXXXXXXXXX X
+    XXXXXX XXXXXXXXXXXXXXXXXXXXXXXX XXXXXXXXXXX
+  X
+  XXXXXXXXXXXXXXXXXXXXXXXX XXXXXXXXXXXXX X
+    XXXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXXXXXXXXX XXXXXXXXXXX
+    XXXXXX XXXXXXXXXXXXXXXXX XXXXXXXXXXX
+  X
+  XXXXXXXXXXXXXXXXXXXXXXXX XXXXXXXXXXXXXX X
+    XXXXXXXXXXXXXXXXX XXXXXXXXXXXXXX XXXXXXXXXXX
+    XXXXXXXXXXXXX XXXXXXXXXXXXXXXXXXXX XXXXXXXXXXX
+    XXXXXX XXXXXXXXXXXXXXXXX XXXXXXXXXXX
+  X
+  XXXXXXXXXXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXXXXXXXX X
+  XXXXXX XXXXXXXXXXXXXXXXXXXXXXXX XXXXXXXXXXX
+X
+  XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX XXXXXXXXXXXXXX X
+  XXXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXXXXXXXXX XXXXXXXXXXX
+  XXXXXX XXXXXXXXXXXXXXXXX XXXXXXXXXXX
+  X
+  XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX XXXXXXXXXXXXX X
+    XXXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXXXXXXXX XXXXXXXXXXX
+    XXXXXX XXXXXXXXXXXXXXXXXXXXXXXX XXXXXXXXXXX
+  X
+  XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX XXXXXXXXXXX XXXXXXXXXXXXXXXXXXXXXX X
+  XXXXXX XXXXXXXXXXXXXXXXXXXXXXXX XXXXXXXXXXX
+X
+  XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX XXXXXXXXXXXXX X
+    XXXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXXXXXXXXX XXXXXXXXXXX
+    XXXXXX XXXXXXXXXXXXXXXXX XXXXXXXXXXX
+  X
+  XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX XXXXXXXXXXXXXX X
+    XXXXXXXXXXXXXXXXX XXXXXXXXXXXXXX XXXXXXXXXXX
+    XXXXXXXXXXXXX XXXXXXXXXXXXXXXXXXXX XXXXXXXXXXX
+    XXXXXX XXXXXXXXXXXXXXXXX XXXXXXXXXXX
+  X
+  XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX XXXXXXXXXXXXXXXXXXXXXX X
+  XXXXXX XXXXXXXXXXXXXXXXXXXXXXXX XXXXXXXXXXX
+X
+
+  XXXXXXXXXXXXXXXX X
+  XXXXXX XXXXXXX XXXXXXXXXXX
+  XXXXXXXXXXXX XXXX
+  XXXXXXXXXXXXXXXX XXXXX
+X
+
+XXXXXXXXXXXXXXXXXXXXXX X
+  XXXXXX XXXXXXX XXXXXXXXXXX
+  XXXXXXXXXXXXXXXX XXXXXXXXXX
+X
+
+XXXXXXXX
+
+XXXXXXXX
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX XXXXXXXXXXX
+  XXXXX XXX X XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+  XX XXXXX X
+    XX XXXXXX XXX XXXXXXXXXXXX XXXX XXX XXXXX XXXXXX XX XXXXXXX
+    XX XXXX XXXXXX XXXXXXX XXX XXXXX XX XXX XXXX
+    XXXXXXXXXXXXXXX X XXXXXXXXXXXXXXX
+      XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX XXX  XX XXXXX XXXXXXXXXXXX X XXX XXXXXXXXXXXX
+      XXXXXXX X XXXX                            XX XXXX XXXXXX XXXXXX XXXXX
+  X
+XXX
+
+  XXXXX XXXXXXXXXXXXX X XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+  XXXXX XXXXXXXXXXXXXXX X XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+  XXX XXXXX X XXXXX
+
+  XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX XXXXXXXXXX X
+    XXXXXXXXXXXXXXXXXXXX
+    XXXXX XXX X XXXXXXXXXXXXXXXXXXXXXXXXXXX
+    XX XXXXXX X
+      XXXXXXXXXXXXXXXXXXXXXXXXXXX X XXX
+      XXXXXXX
+    X
+    XX XXXX XXXXX XXXXX XXXX XXXXXXXXX
+    XXXXX X XXXXXXXXXXXXX XX X
+      XXXXXXXBBB BBBBBBBBBBBBBBBBBBBBBBBBBBBBXXXXXXXXXXX X XXXXXXXXXXXXXXXXXXXXXXXX
+        XXXXXXXXX XX XXXXXXXXXXX
+        XXXXXXXXXX XX X
+          XX XXXXXXXXXXXXXXX X
+            XXXXXXXXXXXXXXXXXXXXXXXXXXX X XXXXXXX XXXX XXXXXXXX XX XXXXXXXX
+            XXXXXXXXXXXXXXXXXXXXXXXXXXX X XXXXXX
+          X XXXX X
+            XXXXXXXXXXXXXXXXXXXXXXXXXXX X XXXXX XXXXX XXXX XXXXXXXX XX XXXXXXXXXXXX
+            XXXXXXXXXXXXXXXXXXXXXXXXXXX X XXXXXXXX
+          X
+        XX
+        XXXXXXXXX XX X
+          XXXXXXXXXXXXXXXXXXXXXXXXXXX X XXXXXX XXXXXXXX XXXXXXXXXXXXXXX
+          XXXXXXXXXXXXXXXXXXXXXXXXXXX X XXXXXXXXX
+        XXX
+    XX XXXXX
+  XXX
+XXXXXXXXX
+BBBBBBBB
