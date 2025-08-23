@@ -8,6 +8,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 from django.utils.timesince import timesince
 from django.utils.translation import gettext as _
+from django.utils.translation import gettext_lazy as _lazy
 from .forms import CustomUserCreationForm
 from .models import CustomUser
 from allauth.account.models import EmailAddress
@@ -565,6 +566,19 @@ class ChannelListView(LoginRequiredMixin, ListView):
     ALLOWED_SORTS = {'views', 'favorites', 'notifications', 'stars', 'title'}
     ALLOWED_DIRS = {'asc', 'desc'}
 
+    LABELS = {
+        ('views','desc'): _lazy("Most watched"),
+        ('views','asc'):  _lazy("Least watched"),
+        ('favorites','desc'): _lazy("Most favorited"),
+        ('favorites','asc'):  _lazy("Least favorited"),
+        ('notifications','desc'): _lazy("Most notified"),
+        ('notifications','asc'):  _lazy("Least notified"),
+        ('stars','desc'): _lazy("Most stars"),
+        ('stars','asc'):  _lazy("Least stars"),
+        ('title','asc'):  _lazy("A → Z"),
+        ('title','desc'): _lazy("Z → A"),
+    }
+
     def _parse_sort(self):
         sort = self.request.GET.get('sort', 'views').lower()
         direction = self.request.GET.get('dir', 'desc').lower()
@@ -637,22 +651,12 @@ class ChannelListView(LoginRequiredMixin, ListView):
         sort, direction = self._parse_sort()
         context['sort'] = sort
         context['dir'] = direction
-
-        # human label for the button
-        labels = {
-            ('views', 'desc'): "Most watched",
-            ('views', 'asc'):  "Least watched",
-            ('favorites', 'desc'): "Most favorited",
-            ('favorites', 'asc'):  "Least favorited",
-            ('notifications', 'desc'): "Most notified",
-            ('notifications', 'asc'):  "Least notified",
-            ('stars', 'desc'): "Most stars",
-            ('stars', 'asc'):  "Least stars",
-            ('title', 'asc'):  "A → Z",
-            ('title', 'desc'): "Z → A",
-        }
-        context['current_sort_label'] = labels.get((sort, direction), "Most watched")
-
+            # Use the lazy labels so they render in the active language
+        context['current_sort_label'] = self.LABELS.get(
+            (sort, direction),
+            self.LABELS[('views', 'desc')]  # fallback aligns with your default
+        )
+        
         if lang not in ('en', 'en-us'):
             translations = ChannelTranslations.objects.filter(
                 language=lang,

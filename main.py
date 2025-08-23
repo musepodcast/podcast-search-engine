@@ -1309,7 +1309,7 @@ def main():
             logging.warning(f"No entries to process for feed: {feed_url}")
             continue
         
-        for entry in entries[:]:  # Process only the latest 10 to keep the database updated
+        for entry in entries[:10]:  # Process only the latest 10 to keep the database updated
             logging.debug(f"Starting processing for entry: {entry.get('title', 'No Title')}")
             process_entry(entry, channel_transcript_dir, download_dir, channel_title, diarization_pipeline, config, feed_data, channel_summary, channel_author)
 
