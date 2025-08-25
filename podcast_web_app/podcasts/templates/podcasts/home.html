@@ -9,7 +9,7 @@
     <p>{% trans "Search to find your thoughts!" %}</p>
     <div class="mt-4">
         <a href="{% url 'podcasts:login' %}" class="btn btn-primary me-2">{% trans "Login" %}</a>
-        <a href="{% url 'podcasts:signup' %}" class="btn btn-success">{% trans "Create Account" %}</a>
+        <a href="{% url 'podcasts:signup' %}" class="btn btn-create-account">{% trans "Create Account" %}</a>
     </div>
 </div>
 
@@ -86,18 +86,5 @@
   </table>
 </div>
 
-<!-- Highlight & Dark Table Styles -->
-<style>
-.github-link {
-  padding: 0.5rem 1rem;
-  border: 1px solid var(--bs-primary);
-  border-radius: 6px;
-  transition: background-color 0.2s, color 0.2s;
-}
-.github-link:hover {
-  background-color: var(--bs-primary);
-  color: #fff;
-  text-decoration: none;
-}
-</style>
+
 {% endblock %}

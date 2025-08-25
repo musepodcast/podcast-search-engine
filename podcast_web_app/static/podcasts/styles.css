@@ -6,10 +6,12 @@
 /* Light */
 :root {
   /* Base palette */
-  --background-color: #FFEDF3;
+  --background-color: #FAF7F3;
   --text-color: #131516;
   --header-bg-color: #0ABAB5;
   --header-text-color: #131516;
+  --button-bg-color: #0ABAB5;
+  --button-text-color: #e8ebee;
   --footer-bg-color: #f1f1f1;
   --footer-text-color: #131516;
   --link-color: #0b5ed7;
@@ -75,6 +77,8 @@
   --text-color: #e3e6e8;
   --header-bg-color: #093145;
   --header-text-color: #ffffff;
+  --button-bg-color: #0889ca;
+  --button-text-color: #e8ebee;
   --footer-bg-color: #2f3337;
   --footer-text-color: #e3e6e8;
   --link-color: #83a7ff;
@@ -226,10 +230,36 @@ input[type="text"]::placeholder { color: var(--muted-color); }
   font-weight: bold; padding: .2em; border-radius: 3px;
 }
 
-/* Responsive tweaks */
+/* =========================================================
+   Sort Filter and Podcast Episodes or Channels
+   ========================================================= */
+
 @media (max-width: 768px) {
-  .d-flex.justify-content-between.align-items-center.mb-3 { flex-direction: column; align-items: flex-start; }
-  .search-form form, .input-group, .form-check.form-check-inline { width: 100%; }
+  main .d-flex.justify-content-between.align-items-center.mb-3 {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    flex-wrap: nowrap;
+    gap: .5rem;
+  }
+
+  /* Title on the left */
+  main .d-flex.justify-content-between.align-items-center.mb-3 h2,
+  main .d-flex.justify-content-between.align-items-center.mb-3 .page-title {
+    margin: 0;
+    text-align: left;
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  /* Sort control on the right */
+  main .d-flex.justify-content-between.align-items-center.mb-3 .episode-sort,
+  main .d-flex.justify-content-between.align-items-center.mb-3 .channel-sort,
+  main .d-flex.justify-content-between.align-items-center.mb-3 .sort-wrap {
+    margin-left: auto !important;
+    flex: 0 0 auto;
+  }
 }
 
 /* =========================================================
@@ -242,6 +272,27 @@ input[type="text"]::placeholder { color: var(--muted-color); }
   padding: 1rem;
   margin-bottom: 1.5rem;
   box-shadow: var(--panel-shadow);
+}
+
+/* =========================================================
+Create Account button uses theme tokens
+========================================================= */
+.btn-create-account {
+  /* Base */
+  --bs-btn-bg: var(--button-bg-color);
+  --bs-btn-border-color: var(--button-bg-color);
+  --bs-btn-color: var(--list-hover-bg);
+
+  /* Hover / active */
+  --bs-btn-hover-bg: color-mix(in srgb, var(--button-bg-color) 90%, black 10%);
+  --bs-btn-hover-border-color: color-mix(in srgb, var(--button-bg-color) 90%, black 10%);
+  --bs-btn-hover-color: var(--list-hover-bg);
+
+  --bs-btn-active-bg: color-mix(in srgb, var(--button-bg-color) 80%, black 20%);
+  --bs-btn-active-border-color: color-mix(in srgb, var(--button-bg-color) 80%, black 20%);
+  --bs-btn-active-color: var(--list-hover-bg);
+
+  box-shadow: none; /* calmer focus */
 }
 
 /* =========================================================
@@ -374,7 +425,53 @@ input[type="text"]::placeholder { color: var(--muted-color); }
 .github-link { color: var(--link-color); border-color: var(--link-color); }
 .github-link:hover { background-color: var(--link-color); color: #fff; }
 
-/* Map Bootstrap's .btn-primary to our accent */
+/* =========================================================
+   EPISODE SORT DROPDOWN (light + dark via theme tokens)
+   ========================================================= */
+.episode-sort .btn-outline-light,
+.channel-sort .btn-outline-light{
+  --bs-btn-color: var(--list-text);
+  --bs-btn-border-color: var(--border-color);
+  --bs-btn-hover-bg: var(--list-hover-bg);
+  --bs-btn-hover-border-color: var(--border-color);
+  --bs-btn-active-bg: var(--list-hover-bg);
+  --bs-btn-active-border-color: var(--border-color);
+  --bs-btn-disabled-color: var(--muted-color);
+  --bs-btn-disabled-border-color: var(--border-color);
+  box-shadow: none;
+}
+
+.episode-sort .dropdown-menu,
+.channel-sort .dropdown-menu {
+  background-color: var(--list-bg);
+  color: var(--list-text);
+  border: 1px solid var(--border-color);
+}
+.episode-sort .dropdown-item,
+.channel-sort .dropdown-item { color: var(--list-text); }
+.episode-sort .dropdown-item:hover,
+.episode-sort .dropdown-item:focus,
+.channel-sort .dropdown-item:hover,
+.channel-sort .dropdown-item:focus {
+  background-color: var(--list-hover-bg);
+  color: var(--list-text);
+}
+.episode-sort .dropdown-item.active,
+.episode-sort .dropdown-item:active,
+.channel-sort .dropdown-item.active,
+.channel-sort .dropdown-item:active {
+  background-color: var(--highlight-bg-color);
+  color: var(--highlight-text-color);
+}
+.episode-sort .dropdown-header,
+.channel-sort .dropdown-header { color: var(--muted-color); }
+.episode-sort .dropdown-divider,
+.channel-sort .dropdown-divider { border-top-color: var(--border-color); }
+
+
+/* =========================================================
+   SEARCH BUTTON AND FILTER TOGGLES AND CHECKS
+   ========================================================= */
 .btn.btn-primary {
   --bs-btn-color: var(--accent-contrast);
   --bs-btn-bg: var(--accent);
@@ -420,3 +517,491 @@ input[type="text"]::placeholder { color: var(--muted-color); }
   --bs-btn-active-color: var(--list-text);
   --bs-btn-active-border-color: var(--border-color);
 }
+
+/* --- Safety: no accidental page-wide overflow --- */
+html, body { max-width: 100%; overflow-x: hidden; }
+*, *::before, *::after { box-sizing: border-box; }
+
+/* =========================================================
+   EPISODE/CHANNEL TEXT CLAMPS
+   ========================================================= */
+.description-clamp{
+  display:-webkit-box;
+  -webkit-line-clamp:2;
+  -webkit-box-orient:vertical;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.episode-title-clamp,
+.channel-title-clamp{
+  display:-webkit-box;
+  -webkit-box-orient:vertical;
+  -webkit-line-clamp:2;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  line-height:1.25;
+  max-height:calc(1.25em * 2);
+  overflow-wrap:anywhere;
+}
+.metadata-line{ font-size:.9rem; }
+.lang-select-btn, .profile-btn { font-size: .9rem; padding: 1rem 1rem; max-width: 42vw; }
+
+/* =========================================================
+   RESPONSIVE THUMBNAILS (episodes + channels)
+   Desktop first (160px), then step down on smaller screens.
+   ========================================================= */
+#episode-list .list-group-item .row,
+#channel-list  .list-group-item .row{
+  display:grid;
+  grid-template-columns:10rem 1fr; /* 160px + content */
+  gap:1rem;
+  align-items:start;
+}
+#episode-list .col-auto img,
+#channel-list  .col-auto img{
+  width:10rem; height:10rem;
+  aspect-ratio:1/1;
+  object-fit:cover; object-position:center;
+  border-radius:6px; display:block;
+}
+
+
+
+/* Small tablets */
+@media (min-width:577px) and (max-width:768px){
+  #episode-list .list-group-item .row,
+  #channel-list  .list-group-item .row{
+    grid-template-columns:10rem 1fr; /* 128px + content */
+    gap:.75rem;
+  }
+  #episode-list .col-auto img,
+  #channel-list  .col-auto img{
+    width:10rem !important; height:10rem !important;
+  }
+}
+
+/* Phones */
+@media (max-width:576px){
+  #episode-list .list-group-item .row,
+  #channel-list  .list-group-item .row{
+    grid-template-columns:10rem 1fr; /* 96px + content */
+    gap:.5rem;
+  }
+  #episode-list .col-auto img,
+  #channel-list  .col-auto img{
+    width:10rem !important; height:10rem !important;
+    aspect-ratio:1/1; object-fit:cover; object-position:center;
+  }
+}
+
+/* Ultra-small phones (≤360px) */
+@media (max-width: 360px) {
+  /* keep the header row wrapping */
+  header .d-flex.justify-content-between.align-items-center {
+    flex-wrap: wrap;
+  }
+
+  header nav {
+    order: 3;                 /* below title/controls */
+    width: 100%;
+
+    /* Switch from the scrollable flex row to a 2-row grid */
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: .4rem .5rem;
+
+    /* cancel the horizontal scroller used on larger phones */
+    overflow: visible;
+    white-space: normal;
+    padding-bottom: 0;
+  }
+
+  header nav a {
+    display: block;           /* fill grid cell */
+    text-align: left;
+    margin: 0 !important;     /* kill .me-3 from markup */
+    padding: .35rem .25rem;
+    font-size: .95rem;        /* tweak size for tiny screens */
+  }
+}
+/* Safety net for arbitrary content images */
+@media (max-width:576px){
+  main img{ max-width:100%; height:auto; }
+  .episode-hero img, .channel-hero img{
+    width:min(75vw,240px); height:auto; display:block;
+  }
+}
+
+/* =========================================================
+   Bottom "Search this page" bar: layout + sizing
+   ========================================================= */
+
+/* In case .flex-1 isn't a Bootstrap utility in your build */
+.flex-1 { flex: 1 1 auto !important; }
+
+/* Make the bar a proper flex row */
+#globalSearchBar {
+  display: flex !important;
+  align-items: center;
+}
+
+/* Let the left cluster expand; allow the input to grow */
+#searchControls {
+  flex: 1 1 auto !important;
+  min-width: 0 !important;          /* critical so the input can expand */
+  gap: .5rem;                        /* modest spacing */
+}
+
+/* Make the input dominate the row */
+#globalSearchInput {
+  flex: 1 1 70% !important;          /* grows wider than the buttons */
+  min-width: 14rem;                   /* gives a decent floor on small phones */
+}
+
+/* Park the toggle at the far right and keep it from shrinking */
+#toggleBarBtn {
+  margin-left: auto !important;       /* pushes it to the right */
+  flex: 0 0 auto !important;
+}
+/* Make the input just a tad smaller */
+#globalSearchInput {
+  flex: 1 1 62% !important;   /* was 70% */
+  min-width: 12rem;           /* was 14rem */
+}
+/* Tiny phones: give the input even more space, compress extras */
+@media (max-width: 360px) {
+  #searchControls { gap: .25rem !important; }
+  #globalSearchInput {
+    flex: 1 1 80% !important;
+    min-width: 0 !important;         /* allow full stretch */
+  }
+  /* Optional: hide advanced options to free space */
+  #searchControls .form-check-inline { display: none !important; }
+  #prevMatch, #nextMatch { padding: .25rem .35rem !important; font-size: .85rem !important; }
+  #matchCounter { min-width: 2.2em; font-size: .85rem; }
+  #toggleBarBtn { padding: .25rem .4rem !important; font-size: .85rem !important; }
+}
+
+/* =========================================================
+   TYPOGRAPHY & UI SCALE ON SMALL SCREENS
+   ========================================================= */
+@media (max-width:576px){
+  html{ font-size:10px; }
+  body{ line-height:1.4; }
+
+  h1{ font-size:1.5rem; margin-bottom:.5rem; }
+  h2{ font-size:1.25rem; }
+  h3{ font-size:1.1rem; }
+
+  .btn, .lang-select-btn, .profile-btn{ font-size:.95rem; padding:.35rem .5rem; }
+  .form-control, .form-check-label, .dropdown-menu, .dropdown-item{ font-size:.95rem; }
+
+  .episode-title-clamp, .channel-title-clamp{ font-size:1rem; }
+  .metadata-line{ font-size:.85rem; }
+  .description-clamp, .summary-clamp{ font-size:.95rem; -webkit-line-clamp:3; }
+
+  #globalSearchBar{ font-size:.9rem; }
+
+  .episode-sort .btn-outline-light,
+  .channel-sort .btn-outline-light{
+    padding:.375rem .5rem; font-size:.9rem;
+  }
+}
+
+/* Small tablets */
+@media (min-width:577px) and (max-width:768px){
+  html{ font-size:15.5px; }
+  .episode-title-clamp, .channel-title-clamp{ font-size:1.05rem; }
+  .metadata-line{ font-size:.9rem; }
+}
+
+/* =========================================================
+   SMALL TABLETS (577–768px)
+   - Header: brand left, controls right, nav on its own row
+   - Filters: break after 3rd checkbox; Language/Date next row
+   ========================================================= */
+@media (min-width: 577px) and (max-width: 768px) {
+  /* ----- Header layout (grid like phones) ----- */
+  header .d-flex.justify-content-between.align-items-center {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) auto; /* brand grows, controls fit */
+    grid-template-rows: auto auto;              /* row1: brand+controls, row2: nav */
+    grid-template-areas:
+      "brand controls"
+      "nav   nav";
+    column-gap: .75rem;
+    row-gap: .25rem;
+    align-items: center;
+  }
+
+  /* Let the inner left wrapper’s children (H1 + NAV) become grid items */
+  header .d-flex.justify-content-between.align-items-center > div:first-child {
+    display: contents;
+  }
+
+  /* Brand (Muse) — row 1, col 1 */
+  header .d-flex.justify-content-between.align-items-center > div:first-child h1 {
+    grid-area: brand;
+    margin: 0;
+  }
+
+  /* Nav — full width on row 2, left aligned, wrapped */
+  header .d-flex.justify-content-between.align-items-center > div:first-child nav {
+    grid-area: nav !important;
+    width: 100%;
+    display: flex !important;
+    flex-wrap: wrap;
+    gap: .5rem .25rem;
+    overflow: visible;
+    white-space: normal;
+    margin-top: .25rem;
+    padding: 0;
+    justify-content: flex-start;
+  }
+  header nav a {
+    margin: 0 !important;
+    padding: .4rem .35rem;
+  }
+
+  /* Controls (Language, Yin-Yang, Profile) — row 1, pinned right */
+  header .d-flex.justify-content-between.align-items-center > div:last-child {
+    grid-area: controls;
+    justify-self: end;
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    white-space: nowrap;
+  }
+
+  /* Slightly larger than phone icon, still compact */
+  .theme-toggle-icon { width: 25px; height: 25px; } /* compact icon on phones */
+  .lang-select-btn, .profile-btn { font-size: .9rem; padding: 1rem 1rem; max-width: 42vw; }
+
+  /* ----- Filters: 3 items per row (3 then 3) ----- */
+#filters-container { position: static; min-height: unset; }
+
+/* Keep JS control over visibility; when visible, wrap nicely */
+#episode-filters,
+#channel-filters {
+  position: static !important;
+  display: flex;          /* ensure flex in this range */
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .5rem .75rem;
+  margin-top: .25rem;
+  width: 100%;
+}
+
+/* Every item (checkbox or dropdown) takes 1/3 of the row */
+#episode-filters .form-check,
+#channel-filters  .form-check,
+#episode-filters .dropdown,
+#channel-filters  .dropdown {
+  flex: 1 1 calc(33.333% - .75rem);
+  min-width: 140px;       /* small enough to fit 3 across in this range */
+}
+
+/* Remove the earlier line-break trick so items line up 3/row */
+#episode-filters .form-check:nth-of-type(3),
+#channel-filters  .form-check:nth-of-type(3) {
+  margin-right: 0;        /* undo margin-right:auto from earlier rules */
+}
+
+/* Kill left margin from .ms-3 so dropdowns don’t push off-screen */
+#episode-filters .dropdown.ms-3,
+#channel-filters  .dropdown.ms-3 {
+  margin-left: 0 !important;
+}
+
+/* Keep dropdown panels inside the viewport */
+.dropdown-menu.lang-dropdown {
+  width: auto;
+  max-width: calc(100vw - 2rem);
+  max-height: 55vh; 
+  overflow: auto;
+}
+}
+
+/* =========================================================
+   PHONES (≤576px) — match small tablets (3 items per row)
+   - Header: brand left, controls right, nav full-width below
+   - Filters: ALWAYS 3 per row (3 then 3)
+   ========================================================= */
+@media (max-width: 576px) {
+  /* ----- Header: grid like tablets ----- */
+  header .d-flex.justify-content-between.align-items-center {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) auto; /* brand grows, controls fit */
+    grid-template-rows: auto auto;              /* row1: brand+controls, row2: nav */
+    grid-template-areas:
+      "brand controls"
+      "nav   nav";
+    column-gap: .5rem;
+    row-gap: .25rem;
+    align-items: center;
+  }
+  /* Let the inner left wrapper’s children (H1 + NAV) be grid items */
+  header .d-flex.justify-content-between.align-items-center > div:first-child { display: contents; }
+
+  /* Brand (Muse) — row 1, col 1 */
+  header .d-flex.justify-content-between.align-items-center > div:first-child h1 {
+    grid-area: brand;
+    margin: 0;
+  }
+
+  /* Nav — row 2, full width, left-aligned, wraps */
+  header .d-flex.justify-content-between.align-items-center > div:first-child nav {
+    grid-area: nav !important;
+    width: 100%;
+    display: flex !important;
+    flex-wrap: wrap;
+    gap: .5rem .25rem;
+    overflow: visible;
+    white-space: normal;
+    margin-top: .25rem;
+    padding: 0;
+    justify-content: flex-start;
+  }
+  header nav a {
+    margin: 0 !important;
+    padding: .4rem .35rem;
+  }
+
+  /* Controls (Language, Yin-Yang, Profile) — row 1, pinned right */
+  header .d-flex.justify-content-between.align-items-center > div:last-child {
+    grid-area: controls;
+    justify-self: end;
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    white-space: nowrap;
+  }
+  .theme-toggle-icon { width: 19px; height: 19px; } /* compact icon on phones */
+  .lang-select-btn, .profile-btn { font-size: .9rem; padding: 1rem 1rem; max-width: 42vw; }
+
+  /* ----- Filters: EXACTLY 3 items per row (3 then 3) ----- */
+  #filters-container { position: static; min-height: unset; }
+
+  /* Keep JS control over visibility; when visible, wrap nicely */
+  #episode-filters,
+  #channel-filters {
+    position: static !important;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .5rem .75rem;
+    margin-top: .25rem;
+    width: 100%;
+  }
+
+  /* Ordering: all checkboxes (order 1), then dropdowns (order 2) */
+  #episode-filters .form-check,
+  #channel-filters  .form-check { order: 1; }
+  #episode-filters .dropdown,
+  #channel-filters  .dropdown   { order: 2; }
+
+  /* THREE PER ROW for every item (checkbox or dropdown) */
+  #episode-filters .form-check,
+  #channel-filters  .form-check,
+  #episode-filters .dropdown,
+  #channel-filters  .dropdown {
+    flex: 1 1 calc(33.333% - .75rem);
+    min-width: 100px;            /* allows 3-up on ~360–576 widths */
+  }
+
+  /* Cancel any earlier “force wrap after 3rd” rules */
+  #episode-filters .form-check:nth-of-type(3),
+  #channel-filters  .form-check:nth-of-type(3) { margin-right: 0 !important; }
+
+  /* Kill Bootstrap .ms-3 so dropdowns don’t push off-screen */
+  #episode-filters .dropdown.ms-3,
+  #channel-filters  .dropdown.ms-3 { margin-left: 0 !important; }
+
+  /* Keep dropdown panels inside the viewport */
+  .dropdown-menu.lang-dropdown {
+    width: auto;
+    max-width: calc(100vw - 2rem);
+    overflow: auto;
+  }
+}
+
+/* =========================================================
+   TINY PHONES (≤360px) — keep nav in one row (scrollable)
+   ========================================================= */
+@media (max-width: 360px) {
+  /* Make everything a bit tighter; adjust 8.25–9 as you like */
+  html { font-size: 8.75px; }
+
+  /* Force the nav into a single horizontal row that can scroll */
+  header .d-flex.justify-content-between.align-items-center > div:first-child nav {
+    display: flex !important;          /* override any grid/flex from above */
+    flex-wrap: nowrap !important;       /* do NOT wrap to a second line */
+    overflow-x: auto;                    /* allow horizontal scroll in nav only */
+    -webkit-overflow-scrolling: touch;
+    white-space: nowrap;
+    gap: .25rem;                         /* tighten spacing between links */
+    padding-bottom: .25rem;              /* finger space while scrolling */
+  }
+
+  /* Compact the links so all six fit more easily */
+  header nav a {
+    flex: 0 0 auto;                      /* stay side-by-side */
+    margin: 0 !important;                /* kill .me-3 from markup */
+    padding: .25rem .35rem;
+    font-size: .85rem;                   /* smaller text for tiny screens */
+    line-height: 1.15;
+  }
+
+  /* Slightly smaller brand to free some horizontal room */
+  header h1 { font-size: 1.25rem; }
+   /* tighter bar padding */
+  #globalSearchBar {
+    padding: .25rem .5rem !important;
+  }
+
+  /* shrink gaps and let this row take the space */
+  #searchControls {
+    flex: 1 1 auto !important;
+    gap: .25rem !important;           /* was gap-2 via Bootstrap */
+  }
+
+  /* make the input dominate the row */
+  #globalSearchInput {
+    flex: 1 1 auto !important;
+    min-width: 0 !important;          /* allow flexbox to stretch it */
+    font-size: .95rem;
+    padding: .35rem .5rem;
+  }
+
+  /* compact prev/next buttons */
+  #prevMatch, #nextMatch {
+    padding: .25rem .35rem !important;
+    font-size: .85rem !important;
+    line-height: 1.1;
+  }
+
+  /* shrink the counter or hide it if you prefer */
+  #matchCounter {
+    min-width: 2.2em;
+    font-size: .85rem;
+  }
+  /* OR to hide it entirely, uncomment:
+  #matchCounter { display: none !important; }
+  */
+
+  /* hide advanced options to free space */
+  #searchControls .form-check-inline {
+    display: none !important;  /* hides: All, Match case, Whole word */
+  }
+
+  /* compact the "Hide search" button */
+  #toggleBarBtn {
+    padding: .25rem .4rem !important;
+    font-size: .85rem !important;
+    white-space: nowrap;
+  }
+  .lang-select-btn, .profile-btn { font-size: .9rem; padding: 1rem 1rem; max-width: 42vw; }
+  .theme-toggle-icon { width: 16px; height: 16px; } /* compact icon on phones */
+
+}
+
