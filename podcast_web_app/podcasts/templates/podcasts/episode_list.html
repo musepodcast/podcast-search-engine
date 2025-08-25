@@ -7,12 +7,12 @@
   <h2 class="mb-0">{% trans "Podcast Episodes" %}</h2>
 
   <!-- Sort control (top-right) -->
-  <div class="dropdown" data-bs-theme="dark">
+  <div class="dropdown episode-sort">
     <button class="btn btn-outline-light dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
       {% trans "Sort:" %} {{ current_sort_label }}
     </button>
-    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark">
-
+    <ul class="dropdown-menu dropdown-menu-end">
+      
       <li class="dropdown-header">{% trans "Recent" %}</li>
       <li><a class="dropdown-item {% if sort == 'recent' and dir == 'desc' %}active{% endif %}" href="?sort=recent&dir=desc">{% trans "Most recent" %}</a></li>
       <li><a class="dropdown-item {% if sort == 'recent' and dir == 'asc' %}active{% endif %}" href="?sort=recent&dir=asc">{% trans "Least recent" %}</a></li>
@@ -200,30 +200,6 @@ document.addEventListener("DOMContentLoaded", function(){
 }
 .metadata-line { font-size: 0.9rem; }
 
-/* Dark dropdown tweaks */
-:root[data-theme="dark"] .dropdown-menu-dark {
-  background-color: var(--surface-color, #1f1f27);
-  color: var(--text-color, #e6e6eb);
-  border: 1px solid var(--border-color, #2b2b36);
-}
-:root[data-theme="dark"] .dropdown-menu-dark .dropdown-item { color: var(--text-color, #e6e6eb); }
-:root[data-theme="dark"] .dropdown-menu-dark .dropdown-item:hover,
-:root[data-theme="dark"] .dropdown-menu-dark .dropdown-item:focus {
-  background-color: var(--hover-color, #2b2b36);
-  color: var(--text-color, #e6e6eb);
-}
-:root[data-theme="dark"] .dropdown-menu-dark .dropdown-item.active,
-:root[data-theme="dark"] .dropdown-menu-dark .dropdown-item:active {
-  background-color: var(--active-color, #343449);
-  color: #fff;
-}
-:root[data-theme="dark"] .dropdown-menu-dark .dropdown-header { color: var(--muted-color, #9aa0a6); }
-:root[data-theme="dark"] .dropdown-menu-dark .dropdown-divider { border-top-color: var(--border-color, #2b2b36); }
-:root[data-theme="dark"] .btn-outline-light {
-  --bs-btn-color: var(--text-color, #e6e6eb);
-  --bs-btn-border-color: var(--border-color, #3a3a48);
-  --bs-btn-hover-bg: var(--hover-color, #2b2b36);
-  --bs-btn-hover-border-color: var(--border-color, #505065);
-}
+
 </style>
 {% endblock %}
