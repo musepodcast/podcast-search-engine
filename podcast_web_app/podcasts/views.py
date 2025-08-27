@@ -592,30 +592,38 @@ class ChannelListView(LoginRequiredMixin, ListView):
         sort, direction = self._parse_sort()
         dir_prefix = '' if direction == 'asc' else '-'
 
+        # Subquery: total views per channel (no duplication from other joins)
+        visits_sq = (
+            ChannelVisit.objects
+            .filter(channel=OuterRef('pk'))
+            .values('channel')            # group by channel
+            .annotate(total=Sum('count')) # sum the counts
+            .values('total')[:1]          # select summed value
+        )
+
         qs = (
             Channel.objects
             .annotate(
+                total_views=Coalesce(Subquery(visits_sq, output_field=IntegerField()), 0),
                 favorites_count=Count(
                     'channel_interactions',
                     filter=Q(channel_interactions__followed=True),
-                    distinct=True
+                    distinct=True,
                 ),
                 notifications_count=Count(
                     'channel_interactions',
                     filter=Q(channel_interactions__notifications_enabled=True),
-                    distinct=True
+                    distinct=True,
                 ),
                 avg_rating=Avg('channel_interactions__rating'),
                 rating_count=Count(
                     'channel_interactions__user',
                     filter=Q(channel_interactions__rating__isnull=False),
-                    distinct=True
+                    distinct=True,
                 ),
-                total_views=Coalesce(Sum('channelvisit__count'), 0),
             )
         )
 
-        # Build ordering with A-Z tiebreaker (except when sorting by title itself)
         if sort == 'views':
             ordering = [f'{dir_prefix}total_views', 'channel_title']
         elif sort == 'favorites':
@@ -625,21 +633,20 @@ class ChannelListView(LoginRequiredMixin, ListView):
         elif sort == 'stars':
             if direction == 'desc':
                 ordering = [
-                    F('avg_rating').desc(nulls_last=True),   # highest first
-                    F('rating_count').desc(),                # more ratings wins tie
-                    'channel_title',                         # final tie → A–Z
+                    F('avg_rating').desc(nulls_last=True),
+                    F('rating_count').desc(),
+                    'channel_title',
                 ]
             else:
                 ordering = [
-                    F('avg_rating').asc(nulls_last=True),    # lowest first
-                    F('rating_count').asc(),                 # fewer ratings wins tie
+                    F('avg_rating').asc(nulls_last=True),
+                    F('rating_count').asc(),
                     'channel_title',
                 ]
         elif sort == 'title':
-            # Alphabetical only. If user picked A-Z vs Z-A, just sort by title; no extra tiebreaker.
             ordering = [f'{dir_prefix}channel_title']
         else:
-            ordering = ['-total_views', 'channel_title']  # safe default
+            ordering = ['-total_views', 'channel_title']
 
         return qs.order_by(*ordering)
 
@@ -1620,29 +1627,44 @@ class FavoritesListView(LoginRequiredMixin, ListView):
     paginate_by = 5  # adjust as needed
 
     def get_queryset(self):
-        # Get IDs of channels that the user follows.
+        # Channels the user follows
         channel_ids = ChannelInteraction.objects.filter(
-            user=self.request.user,
-            followed=True
+            user=self.request.user, followed=True
         ).values_list('channel_id', flat=True)
-        qs = Channel.objects.filter(id__in=channel_ids).order_by('channel_title')
-        qs = qs.annotate(
-            favorites_count=Count(
-                'channel_interactions',
-                filter=Q(channel_interactions__followed=True),
-                distinct=True
-            ),
-            notifications_count=Count(
-                'channel_interactions',
-                filter=Q(channel_interactions__notifications_enabled=True),
-                distinct=True
-            ),
-            avg_rating=Avg('channel_interactions__rating'),
-            rating_count=Count(
-                'channel_interactions__rating',
-                distinct=True
-            ),
-            total_views=Sum('channelvisit__count')
+
+        # Subquery: sum views per channel, isolated from other joins
+        visits_sq = (
+            ChannelVisit.objects
+            .filter(channel=OuterRef('pk'))
+            .values('channel')
+            .annotate(total=Sum('count'))
+            .values('total')[:1]
+        )
+
+        qs = (
+            Channel.objects
+            .filter(id__in=channel_ids)
+            .annotate(
+                total_views=Coalesce(Subquery(visits_sq, output_field=IntegerField()), 0),
+                favorites_count=Count(
+                    'channel_interactions',
+                    filter=Q(channel_interactions__followed=True),
+                    distinct=True,
+                ),
+                notifications_count=Count(
+                    'channel_interactions',
+                    filter=Q(channel_interactions__notifications_enabled=True),
+                    distinct=True,
+                ),
+                avg_rating=Avg('channel_interactions__rating'),
+                # count of ratings (number of users who rated), not distinct rating *values*
+                rating_count=Count(
+                    'channel_interactions__user',
+                    filter=Q(channel_interactions__rating__isnull=False),
+                    distinct=True,
+                ),
+            )
+            .order_by('channel_title')
         )
         return qs
 
