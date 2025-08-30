@@ -38,16 +38,18 @@
     <li>{% trans "🔍 Search any podcast by keyword (titles, descriptions, or transcript content)" %}</li>
     <li>{% trans "📄 View full, time-stamped transcripts (speaker-diarized and formatted)" %}</li>
     <li>{% trans "✍️ Read AI-generated chapter summaries" %}</li>
+    <li>{% trans "🌐 Find podcasts in 17 different languages natively transcribed or AI translated" %}</li>
     <li>{% trans "🎧 Click through to listen at the exact moment a topic is discussed" %}</li>
     <li>{% trans "🆕 Discover new channels or episodes based on your interests" %}</li>
   </ul>
-  <p><em>{% trans "Currently optimized for desktop browsers. Mobile-friendly support and native apps are coming soon!" %}</em></p>
+  <p><em>{% trans "Currently optimized for desktop browsers, tablets, foldables, and smartphones. Community contribution and native apps are coming soon!" %}</em></p>
 
   <h3>{% trans "🌟 Key Features" %}</h3>
   <ul>
     <li><strong>{% trans "Account Signup & Management" %}</strong><br>{% trans "Create a free account to save searches, bookmark episodes, and track listening history." %}</li>
     <li><strong>{% trans "Transcript Generation" %}</strong><br>{% trans "Ingests RSS feeds from any podcast; uses OpenAI Whisper Turbo on an NVIDIA GPU for fast, high-quality transcription; diarizes speakers and formats with timestamps." %}</li>
     <li><strong>{% trans "Chapter Summaries" %}</strong><br>{% trans "Generates concise summaries of each transcript segment using FalconsAI text-summarization." %}</li>
+    <li><strong>{% trans "Transcript Translations" %}</strong><br>{% trans "Takes podcasts and translates them into 17 different languages using nllb-200-distilled-600M translation model." %}</li>
     <li><strong>{% trans "Full-Text Search" %}</strong><br>{% trans "Powered by Elasticsearch for lightning-fast, fuzzy-match queries; filters by title, description, channel metadata, or transcript." %}</li>
     <li><strong>{% trans "Flexible Playback" %}</strong><br>{% trans "Jump directly to the moment a keyword appears in the audio player on the website." %}</li>
   </ul>
@@ -71,16 +73,19 @@
         <td>{% trans "Summarization" %}</td><td>{% trans "FalconsAI / text_summarization" %}</td>
       </tr>
       <tr>
-        <td>{% trans "Database" %}</td><td>{% trans "PostgreSQL" %}</td>
+        <td>{% trans "Translation" %}</td><td>{% trans "Facebook / nllb-200-distilled-600M translation model" %}</td>
+      </tr>
+      <tr>
+        <td>{% trans "Database" %}</td><td>{% trans "PostgreSQL | MaraiaDB" %}</td>
       </tr>
       <tr>
         <td>{% trans "Search Engine" %}</td><td>{% trans "Elasticsearch" %}</td>
       </tr>
       <tr>
-        <td>{% trans "Frontend" %}</td><td>{% trans "Django templates, HTML, CSS, JavaScript" %}</td>
+        <td>{% trans "Frontend" %}</td><td>{% trans "Django templates | HTML | CSS | JavaScript" %}</td>
       </tr>
       <tr>
-        <td>{% trans "Deployment" %}</td><td>{% trans "Docker, NVIDIA GPU passthrough, Ubuntu VM" %}</td>
+        <td>{% trans "Deployment" %}</td><td>{% trans "Docker | Ubuntu VM | Windows OS" %}</td>
       </tr>
     </tbody>
   </table>
