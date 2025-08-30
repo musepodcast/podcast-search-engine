@@ -26,7 +26,7 @@ Muse is a free, AI-powered podcast search engine. Tired of scouring episode show
 ## 🌟 Key Features
 
 - **Account Signup & Management**  
-  Create a free account to save searches, bookmark episodes, and track listening history.
+  - Create a free account to save searches, bookmark episodes, and track listening history.
 
 - **Transcript Generation**  
   – Ingests RSS feeds from any podcast.  
@@ -34,17 +34,17 @@ Muse is a free, AI-powered podcast search engine. Tired of scouring episode show
   – Diarizes speakers and splits into readable paragraphs with timestamps.
 
 - **Chapter Summaries**  
-  Generates concise summaries of each transcript segment using FalconsAI text-summarization.  
+  - Generates concise summaries of each transcript segment using FalconsAI text-summarization.  
 
 - **Transcript Translations**
-  Takes podcasts and translates them into 17 different languages using nllb-200-distilled-600M translation model.
+  - Takes podcasts and translates them into 17 different languages using nllb-200-distilled-600M translation model.
 
 - **Full-Text Search**  
   – Powered by Elasticsearch for lightning-fast, fuzzy-match queries.  
   – Filters by episode title, description, channel metadata, or transcript content.
 
 - **Flexible Playback**  
-  Jump directly to the moment a keyword appears in the audio player on the website.
+  - Jump directly to the moment a keyword appears in the audio player on the website.
 
 ---
 
@@ -56,9 +56,9 @@ Muse is a free, AI-powered podcast search engine. Tired of scouring episode show
 | **Transcription**   | OpenAI Whisper Turbo (GPU-accelerated)      |
 | **Summarization**   | FalconsAI / text_summarization              |
 | **Translation**     | Facebook / nllb-200-distilled-600M          |
-| **Database**        | PostgreSQL | MariaDB                        |
+| **Database**        | PostgreSQL, MariaDB                         |
 | **Search Engine**   | Elasticsearch                               |
 | **Frontend**        | Django templates, HTML, CSS, JavaScript     |
-| **Deployment**      | Docker | Ubuntu VM | Windows OS             |
+| **Deployment**      | Docker, Ubuntu VM, Windows OS               |
 
 ---
