@@ -13,12 +13,13 @@ Muse is a free, AI-powered podcast search engine. Tired of scouring episode show
 
 - 🔍 **Search any podcast** by keyword (titles, descriptions, or transcript content)  
 - 📄 View **full, time-stamped transcripts** (speaker-diarized and formatted)  
-- ✍️ Read **AI-generated chapter summaries**  
+- ✍️ Read **AI-generated chapter summaries**
+- 🌐 Find podcasts in **17 different languages** natively transcribed or AI translated  
 - 🎧 Click through to listen at the exact moment a topic is discussed  
 - 🆕 Discover **new channels** or episodes based on your interests  
 
-> **Currently optimized for desktop browsers.**  
-> Mobile-friendly support and native apps are coming soon!
+> **Currently optimized for desktop browsers, tablets, foldables, and smartphones.**  
+> Community contribution and native apps are coming soon!
 
 ---
 
@@ -34,6 +35,9 @@ Muse is a free, AI-powered podcast search engine. Tired of scouring episode show
 
 - **Chapter Summaries**  
   Generates concise summaries of each transcript segment using FalconsAI text-summarization.  
+
+- **Transcript Translations**
+  Takes podcasts and translates them into 17 different languages using nllb-200-distilled-600M translation model.
 
 - **Full-Text Search**  
   – Powered by Elasticsearch for lightning-fast, fuzzy-match queries.  
@@ -51,9 +55,10 @@ Muse is a free, AI-powered podcast search engine. Tired of scouring episode show
 | **Backend**         | Python, Django                              |
 | **Transcription**   | OpenAI Whisper Turbo (GPU-accelerated)      |
 | **Summarization**   | FalconsAI / text_summarization              |
-| **Database**        | PostgreSQL                                  |
+| **Translation**     | Facebook / nllb-200-distilled-600M          |
+| **Database**        | PostgreSQL | MariaDB                        |
 | **Search Engine**   | Elasticsearch                               |
 | **Frontend**        | Django templates, HTML, CSS, JavaScript     |
-| **Deployment**      | Docker, NVIDIA GPU passthrough, Ubuntu VM   |
+| **Deployment**      | Docker | Ubuntu VM | Windows OS             |
 
 ---
