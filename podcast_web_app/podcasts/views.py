@@ -31,6 +31,7 @@ from .models import (
 
 )
 from .filters import EpisodeFilter
+from django.core.paginator import Paginator, EmptyPage
 
 from .forms import CustomAuthenticationForm, SupportTicketForm
 from .models import SupportTicketAttachment
@@ -754,7 +755,7 @@ class ChannelDetailView(LoginRequiredMixin, DetailView):
         # expose the translated-or-not display object
         ctx['channel'] = self.display_channel if not isinstance(self.display_channel, Channel) else base
 
-        # toggles & your five aggregates
+        # toggles & aggregates (unchanged)
         interaction, _ = ChannelInteraction.objects.get_or_create(
             user=self.request.user, channel=base
         )
@@ -763,12 +764,8 @@ class ChannelDetailView(LoginRequiredMixin, DetailView):
             'receive_notifications': interaction.notifications_enabled,
             'channel_rating':        interaction.rating,
             'star_range':            range(1, 6),
-            'favorites_count':     ChannelInteraction.objects.filter(
-                                     channel=base, followed=True
-                                   ).count(),
-            'notifications_count': ChannelInteraction.objects.filter(
-                                     channel=base, notifications_enabled=True
-                                   ).count(),
+            'favorites_count':     ChannelInteraction.objects.filter(channel=base, followed=True).count(),
+            'notifications_count': ChannelInteraction.objects.filter(channel=base, notifications_enabled=True).count(),
         })
         rating_stats = ChannelInteraction.objects.filter(
             channel=base, rating__isnull=False
@@ -778,33 +775,189 @@ class ChannelDetailView(LoginRequiredMixin, DetailView):
         )
         ctx['avg_rating']   = rating_stats['avg_rating']   or 0.0
         ctx['rating_count'] = rating_stats['rating_count'] or 0
-        ctx['total_views']  = ChannelVisit.objects.filter(
-                                channel=base
-                             ).aggregate(total=Sum('count'))['total'] or 0
+        ctx['total_views']  = ChannelVisit.objects.filter(channel=base).aggregate(total=Sum('count'))['total'] or 0
 
-        # ---- now annotate episodes exactly like ChannelListView did for channels ----
-
-        # build our per-episode subqueries
-        lookup = OuterRef('episode') if lang not in ('en','en-us') else OuterRef('pk')
-        bookmarks_sq = EpisodeInteraction.objects.filter(
-                          episode=lookup, bookmarked=True
-                      ).order_by().values('episode') \
-                       .annotate(c=Count('*')).values('c')
-        avg_rating_sq = EpisodeInteraction.objects.filter(
-                          episode=lookup
-                       ).order_by().values('episode') \
-                       .annotate(a=Avg('rating')).values('a')
-        rating_count_sq = EpisodeInteraction.objects.filter(
-                             episode=lookup, rating__isnull=False
-                         ).order_by().values('episode') \
-                          .annotate(c=Count('rating')).values('c')
-        views_sq = EpisodeVisit.objects.filter(
-                       episode=lookup
-                   ).order_by().values('episode') \
-                    .annotate(s=Sum('count')).values('s')
-
+        # ---- CHANNEL-SCOPED SEARCH ----
+        q = (self.request.GET.get('q') or '').strip()
         page_num = int(self.request.GET.get('page', 1))
+        page_size = 10
 
+        # Common subqueries for annotations
+        lookup = OuterRef('episode') if lang not in ('en','en-us') else OuterRef('pk')
+        bookmarks_sq = EpisodeInteraction.objects.filter(episode=lookup, bookmarked=True) \
+                        .order_by().values('episode').annotate(c=Count('*')).values('c')
+        avg_rating_sq = EpisodeInteraction.objects.filter(episode=lookup) \
+                        .order_by().values('episode').annotate(a=Avg('rating')).values('a')
+        rating_count_sq = EpisodeInteraction.objects.filter(episode=lookup, rating__isnull=False) \
+                            .order_by().values('episode').annotate(c=Count('rating')).values('c')
+        views_sq = EpisodeVisit.objects.filter(episode=lookup) \
+                    .order_by().values('episode').annotate(s=Sum('count')).values('s')
+
+        if q:
+            # 1) Title matches (ORM) restricted to this channel
+            if lang in ('en','en-us'):
+                title_ids = list(
+                    base.episodes
+                        .filter(episode_title__icontains=q)
+                        .values_list('id', flat=True)
+                )
+            else:
+                title_ids = list(
+                    EpisodeTranslations.objects
+                        .filter(episode__channel=base, language=lang, translated=True,
+                                episode_title__icontains=q)
+                        .values_list('episode_id', flat=True)
+                )
+
+            # 2) Transcript matches (ES) collapsed to one hit per episode
+            #    We’ll fetch a reasonably generous window so pagination works.
+            try:
+                broad_q  = ES_Q('match',        segment_text={'query': q, 'operator': 'or'})
+                phrase_q = ES_Q('match_phrase', segment_text={'query': q})
+                # pull more than a page to allow ranking; cap to 500 for safety
+                top_k = min(500, page_num * page_size + 100)
+                tsearch = (
+                    TranscriptDocument.search()
+                    .query('function_score',
+                        query=broad_q,
+                        functions=[{'filter': phrase_q, 'weight': 10}],
+                        boost_mode='sum',
+                        score_mode='sum')
+                    .params(collapse={'field': 'episode_id',
+                                    'inner_hits': {'name': 'top_segment', 'size': 1}})
+                    .sort({'_score': 'desc'})
+                )
+                t_resp  = tsearch[0:top_k].execute()
+                es_hits = [(int(h['_source']['episode_id']), float(h['_score'])) for h in t_resp.hits.hits]
+            except Exception:
+                # ES unavailable → fall back gracefully to title-only
+                es_hits = []
+
+            # 3) Restrict ES hits to this channel’s episodes
+            chan_ids = set(
+                base.episodes.values_list('id', flat=True)
+            )
+            es_hits = [(eid, score) for (eid, score) in es_hits if eid in chan_ids]
+
+            # 4) Merge & rank: title matches get a strong bonus
+            score_map = {}
+            for eid, s in es_hits:
+                score_map[eid] = max(score_map.get(eid, 0.0), s)
+            for eid in title_ids:
+                # big boost for title match
+                score_map[eid] = (score_map.get(eid, 0.0) + 100.0)
+
+            ordered_ids = list(score_map.keys())
+            if not ordered_ids:
+                # No matches → empty + standard paginator shell
+                paginator = Paginator(range(0), page_size)
+                try:
+                    page_obj = paginator.page(page_num)
+                except EmptyPage:
+                    page_obj = paginator.page(1)
+                ctx['episodes'] = []
+                return ctx
+
+            # 5) Fetch page slice with publication_date for tie-breaks
+            #    We need objects to sort by (score desc, pub_date desc)
+            #    Sort globally then slice.
+            if lang in ('en','en-us'):
+                objs = (Episode.objects
+                            .filter(id__in=ordered_ids)
+                            .select_related('channel'))
+                obj_by_id = {o.id: o for o in objs}
+                ranked = [
+                    (obj_by_id[eid], score_map[eid])
+                    for eid in ordered_ids if eid in obj_by_id
+                ]
+                ranked.sort(key=lambda pair: (-pair[1],
+                                            -pair[0].publication_date.timestamp() if pair[0].publication_date else 0))
+                all_objs = [o for (o, _) in ranked]
+                total    = len(all_objs)
+                start    = (page_num - 1) * page_size
+                end      = start + page_size
+                page_objs = all_objs[start:end]
+
+                # annotate only current page slice (fast)
+                ids_slice = [o.id for o in page_objs]
+                ann_qs = (Episode.objects.filter(id__in=ids_slice)
+                        .annotate(
+                            bookmarks_count     = Coalesce(Subquery(bookmarks_sq,   output_field=IntegerField()), Value(0)),
+                            ep_avg_rating       = Coalesce(Subquery(avg_rating_sq, output_field=FloatField()),   Value(0.0)),
+                            ep_rating_count     = Coalesce(Subquery(rating_count_sq, output_field=IntegerField()), Value(0)),
+                            total_episode_views = Coalesce(Subquery(views_sq,         output_field=IntegerField()), Value(0)),
+                        ))
+                ann_map = {e.id: e for e in ann_qs}
+                page_annotated = [ann_map.get(i, obj_by_id[i]) for i in ids_slice]
+
+                paginator = Paginator(range(total), page_size)
+                try:
+                    page_obj = paginator.page(page_num)
+                except EmptyPage:
+                    page_obj = paginator.page(1)
+                ctx['episodes'] = page_annotated
+
+            else:
+                # translations path
+                tr_qs = EpisodeTranslations.objects.filter(
+                            episode__in=ordered_ids, language=lang, translated=True
+                    ).select_related('episode')
+                tr_by_eid = {tr.episode_id: tr for tr in tr_qs}
+
+                # For ranking, we need publication_date on translations; if absent, use episode’s
+                # Build light cache of episodes for date tie-breaks where needed
+                eps = Episode.objects.filter(id__in=ordered_ids).values('id', 'publication_date')
+                pub_map = {e['id']: e['publication_date'] for e in eps}
+
+                # Compose ranked translations
+                ranked_tr = []
+                for eid in ordered_ids:
+                    tr = tr_by_eid.get(eid)
+                    if not tr:
+                        continue  # skip missing translation in this language
+                    pub_dt = getattr(tr, 'publication_date', None) or pub_map.get(eid)
+                    ranked_tr.append((tr, score_map[eid], pub_dt))
+
+                ranked_tr.sort(key=lambda t: (-t[1], -t[2].timestamp() if t[2] else 0))
+                total = len(ranked_tr)
+                start = (page_num - 1) * page_size
+                end   = start + page_size
+                page_tr = [t[0] for t in ranked_tr[start:end]]
+
+                # patch channel & annotate like your non-search path
+                for tr in page_tr:
+                    tr.channel = base
+                ids_slice = [tr.episode_id for tr in page_tr]
+                ann_qs = (EpisodeTranslations.objects.filter(
+                            episode_id__in=ids_slice, language=lang, translated=True
+                        ).annotate(
+                            bookmarks_count     = Coalesce(Subquery(bookmarks_sq,   output_field=IntegerField()), Value(0)),
+                            ep_avg_rating       = Coalesce(Subquery(avg_rating_sq, output_field=FloatField()),   Value(0.0)),
+                            ep_rating_count     = Coalesce(Subquery(rating_count_sq, output_field=IntegerField()), Value(0)),
+                            total_episode_views = Coalesce(Subquery(views_sq,         output_field=IntegerField()), Value(0)),
+                        ))
+                # merge annotated metrics back into page_tr (by episode_id)
+                ann_map = {(tr.episode_id): tr for tr in ann_qs}
+                merged = []
+                for tr in page_tr:
+                    m = ann_map.get(tr.episode_id)
+                    if m:
+                        # carry over the display fields from original tr if needed
+                        m.channel = base
+                        merged.append(m)
+                    else:
+                        merged.append(tr)
+
+                paginator = Paginator(range(total), page_size)
+                try:
+                    page_obj = paginator.page(page_num)
+                except EmptyPage:
+                    page_obj = paginator.page(1)
+                ctx['episodes'] = merged
+
+            return ctx  # end q branch
+
+        # ---- DEFAULT (no search term): your original pagination ----
         if lang in ('en', 'en-us'):
             eps_qs = base.episodes.all().order_by('-publication_date').annotate(
                 bookmarks_count     = Coalesce(Subquery(bookmarks_sq,   output_field=IntegerField()), Value(0)),
@@ -812,37 +965,32 @@ class ChannelDetailView(LoginRequiredMixin, DetailView):
                 ep_rating_count     = Coalesce(Subquery(rating_count_sq, output_field=IntegerField()), Value(0)),
                 total_episode_views = Coalesce(Subquery(views_sq,         output_field=IntegerField()), Value(0)),
             )
-            paginator = Paginator(eps_qs, 10)
-            page_num = int(self.request.GET.get('page', 1))
+            paginator = Paginator(eps_qs, page_size)
             try:
                 page_obj = paginator.page(page_num)
             except EmptyPage:
-                # out-of-range → no episodes
                 page_obj = []
             ctx['episodes'] = page_obj
         else:
             tr_qs = EpisodeTranslations.objects.filter(
-                episode__channel=base,
-                language=lang,
-                translated=True
+                episode__channel=base, language=lang, translated=True
             ).order_by('-publication_date').annotate(
                 bookmarks_count     = Coalesce(Subquery(bookmarks_sq,   output_field=IntegerField()), Value(0)),
                 ep_avg_rating       = Coalesce(Subquery(avg_rating_sq, output_field=FloatField()),   Value(0.0)),
                 ep_rating_count     = Coalesce(Subquery(rating_count_sq, output_field=IntegerField()), Value(0)),
                 total_episode_views = Coalesce(Subquery(views_sq,         output_field=IntegerField()), Value(0)),
             )
-            # patch the .channel onto each translation
             for tr in tr_qs:
                 tr.channel = base
-            paginator = Paginator(tr_qs, 10)
-            page_num = int(self.request.GET.get('page', 1))
+            paginator = Paginator(tr_qs, page_size)
             try:
                 page_obj = paginator.page(page_num)
             except EmptyPage:
-                # out-of-range → no episodes
                 page_obj = []
-            ctx['episodes'] = page_obj    
+            ctx['episodes'] = page_obj
+
         return ctx
+
 
     def render_to_response(self, context, **response_kwargs):
         if self.request.GET.get('ajax') == '1':
