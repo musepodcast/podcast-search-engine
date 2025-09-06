@@ -7,10 +7,8 @@ from typing import Dict, Tuple
 PROJECT_ROOT = Path(__file__).resolve().parent
 LOCALE_DIR   = PROJECT_ROOT / "locale"
 
-# Your site languages (skip translating 'en')
 SITE_LANGS = ["en","pt","es","it","fr","ru","uk","cn","tw","ko","ja","tr","de","ar","hi","vi","tl"]
 
-# Map your UI codes -> NLLB target codes
 NLLB_LANG = {
     "pt": "por_Latn",
     "es": "spa_Latn",
@@ -18,8 +16,8 @@ NLLB_LANG = {
     "fr": "fra_Latn",
     "ru": "rus_Cyrl",
     "uk": "ukr_Cyrl",
-    "cn": "zho_Hans",   # Simplified
-    "tw": "zho_Hant",   # Traditional
+    "cn": "zho_Hans",  # Simplified
+    "tw": "zho_Hant",  # Traditional
     "ko": "kor_Hang",
     "ja": "jpn_Jpan",
     "tr": "tur_Latn",
@@ -31,7 +29,6 @@ NLLB_LANG = {
 }
 SRC_LANG = "eng_Latn"
 
-# ------- deps -------
 def ensure(pkg, mod=None):
     try:
         __import__(mod or pkg)
@@ -49,7 +46,7 @@ import torch
 from datasets import Dataset
 from transformers import AutoTokenizer, AutoModelForSeq2SeqLM, pipeline
 
-# ------- protect placeholders/tags so the model doesn't break them -------
+# --------- placeholder/tag protection ----------
 PH_NAMED   = re.compile(r"%\([^)]+\)[#0\- +]?\d*(?:\.\d+)?[sdif]")
 PH_SIMPLE  = re.compile(r"%(?:\d+\$)?[#0\- +]?\d*(?:\.\d+)?[sdif]")
 DJ_BRACES  = re.compile(r"{{\s*[^}]+\s*}}")
@@ -81,7 +78,39 @@ def restore(text: str, token_map: Dict[str,str]) -> str:
         text = text.replace(k, v)
     return text
 
-# ------- translate small strings with chunking safety (rarely needed for .po) -------
+# ---------- NEW: translate preserving newlines ----------
+NL_RE = re.compile(r"(\r\n|\r|\n)")
+
+def _translate_one_chunk(chunk: str, tx_pipe, tokenizer, max_gen_len=256):
+    # chunk has NO newline characters
+    if not chunk or not chunk.strip():
+        return chunk
+    protected, tmap = protect(chunk)
+    out = tx_pipe(protected, max_length=max_gen_len)[0]["translation_text"]
+    out = restore(out, tmap)
+    # forbid accidental newlines inside a line (don’t add/remove lines)
+    out = NL_RE.sub(" ", out)
+    return out
+
+def translate_text_preserving_newlines(text: str, tx_pipe, tokenizer) -> str:
+    """
+    Translate while keeping the exact count and placement of newline tokens.
+    """
+    if not text:
+        return text
+    parts = NL_RE.split(text)  # keeps separators
+    out_parts = []
+    for p in parts:
+        if not p:
+            continue
+        if NL_RE.fullmatch(p):
+            # Keep newline token exactly as in source
+            out_parts.append(p)
+        else:
+            out_parts.append(_translate_one_chunk(p, tx_pipe, tokenizer))
+    return "".join(out_parts)
+
+# (kept for rare very long one-liners; not used on multiline strings anymore)
 def translate_text(text: str, tx_pipe, tokenizer, max_gen_len=256, chunk_tok=220, batch_size=16) -> str:
     if not text or not text.strip():
         return text
@@ -92,7 +121,6 @@ def translate_text(text: str, tx_pipe, tokenizer, max_gen_len=256, chunk_tok=220
         out = tx_pipe(protected, max_length=max_gen_len)[0]["translation_text"]
         return restore(out, tmap)
 
-    # split into chunks (very rare for UI strings)
     chunks = []
     for i in range(0, len(tokens), chunk_tok):
         chunk = tokenizer.decode(tokens[i:i+chunk_tok], skip_special_tokens=True)
@@ -107,23 +135,29 @@ def translate_text(text: str, tx_pipe, tokenizer, max_gen_len=256, chunk_tok=220
     joined = " ".join(ds_t["translation"])
     return restore(joined, tmap)
 
-# ------- PO processing -------
+# ---------- PO entry handling ----------
 def translate_entry(entry: polib.POEntry, tx_pipe, tokenizer, lang_code: str, nplurals: int):
     if entry.obsolete:
         return False
     changed = False
 
+    # Decide translator based on presence of newlines
+    def tx(s: str) -> str:
+        if NL_RE.search(s or ""):
+            return translate_text_preserving_newlines(s, tx_pipe, tokenizer)
+        return translate_text(s, tx_pipe, tokenizer)
+
     if not entry.msgid_plural:
         # singular
         if "fuzzy" in entry.flags or not entry.msgstr:
-            entry.msgstr = translate_text(entry.msgid, tx_pipe, tokenizer)
+            entry.msgstr = tx(entry.msgid)
             if "fuzzy" in entry.flags:
                 entry.flags = [f for f in entry.flags if f != "fuzzy"]
             changed = True
     else:
-        # plural: translate both msgid (singular meaning) and msgid_plural
-        singular_tx = translate_text(entry.msgid, tx_pipe, tokenizer)
-        plural_tx   = translate_text(entry.msgid_plural, tx_pipe, tokenizer)
+        # plural: translate both forms; keep same newline pattern as their sources
+        singular_tx = tx(entry.msgid)
+        plural_tx   = tx(entry.msgid_plural)
 
         # ensure the expected plural slots exist
         if not entry.msgstr_plural:
@@ -148,7 +182,6 @@ def run(cmd):
     subprocess.check_call(cmd, cwd=str(PROJECT_ROOT))
 
 def ensure_po_for(lang: str):
-    # Make sure locale/<lang>/LC_MESSAGES/django.po exists (create with makemessages -l if needed)
     po_path = LOCALE_DIR / lang / "LC_MESSAGES" / "django.po"
     if not po_path.exists():
         run([sys.executable, "manage.py", "makemessages", "-l", lang,
@@ -156,8 +189,7 @@ def ensure_po_for(lang: str):
     return po_path
 
 def main():
-    # 1) Create/refresh PO catalogs
-    #    Do per-language to ensure missing ones are created; then a global -a to refresh all.
+    # 1) Ensure catalogs exist, then refresh all
     for lang in SITE_LANGS:
         if lang == "en":
             continue
@@ -165,13 +197,13 @@ def main():
     run([sys.executable, "manage.py", "makemessages", "-a",
          "--ignore=venv", "--ignore=node_modules", "--ignore=static"])
 
-    # 2) Load NLLB model once
+    # 2) Load NLLB once
     device = 0 if torch.cuda.is_available() else -1
     print(f"Loading NLLB model on {'GPU' if device >= 0 else 'CPU'} …")
     tokenizer = AutoTokenizer.from_pretrained("facebook/nllb-200-distilled-600M")
     model     = AutoModelForSeq2SeqLM.from_pretrained("facebook/nllb-200-distilled-600M")
 
-    # 3) For each target language, build a pipeline with tgt_lang and translate missing/fuzzy entries
+    # 3) Translate per target language
     for lang in SITE_LANGS:
         if lang == "en":
             print("[en] Skip translating source language.")
@@ -191,6 +223,7 @@ def main():
             continue
 
         po = polib.pofile(str(po_path))
+
         # read plural forms (e.g., 'nplurals=2; plural=(n != 1);')
         nplurals = 2
         pf = po.metadata.get("Plural-Forms", "")
@@ -203,13 +236,11 @@ def main():
 
         changed = 0
         for e in po:
-            # translate if empty or fuzzy (handles your “Stars” example and the fuzzy “No episodes…” case)
             needs = ("fuzzy" in e.flags) or \
                     (not e.msgid_plural and not e.msgstr) or \
                     (e.msgid_plural and any(v == "" for v in e.msgstr_plural.values()))
-            if needs:
-                if translate_entry(e, tx_pipe, tokenizer, lang, nplurals):
-                    changed += 1
+            if needs and translate_entry(e, tx_pipe, tokenizer, lang, nplurals):
+                changed += 1
 
         if changed:
             po.save(str(po_path))

@@ -28,6 +28,8 @@ import io  # Imported for handling IO operations
 from bs4 import BeautifulSoup  # Imported for clean_html function
 import torch.nn.functional as F
 from pathlib import Path
+import argparse
+
 
 BASE = Path(__file__).parent            # …\podcast_news
 # where all your artifacts now live
@@ -929,6 +931,27 @@ def process_chunk(chunk, pipeline):
         logging.error(f"Unexpected error processing chunk {chunk}: {e}")
         return None
 
+def parse_cli_args():
+    parser = argparse.ArgumentParser(description="Podcast pipeline runner")
+    # Use the mini file instead of master_rss.json
+    parser.add_argument('--master_rss_mini', action='store_true',
+                        help='Use watcher_json/master_rss_mini.json instead of master_rss.json')
+    # Explicit file override, e.g. -f my_list.json
+    parser.add_argument('-f', '--feeds-file', default=None,
+                        help='Feeds JSON filename under watcher_json (e.g. master_rss.json, master_rss_mini.json)')
+    # Limit how many entries per feed to process (0 or absent = ALL)
+    parser.add_argument('-n', '--limit', type=int, default=None,
+                        help='Max entries per feed (default: all)')
+    args, unknown = parser.parse_known_args()
+
+    # Support your shorthand like "--30"
+    for tok in unknown:
+        m = re.fullmatch(r'--(\d{1,4})', tok)
+        if m:
+            args.limit = int(m.group(1))
+    return args
+
+
 def process_entry(entry, channel_transcript_dir, download_dir, channel_title, pipeline, config, feed_data, channel_summary, channel_author):
     """
     Process a single podcast episode entry:
@@ -1183,32 +1206,9 @@ def process_entry(entry, channel_transcript_dir, download_dir, channel_title, pi
     except Exception as e:
         logging.error(f"An error occurred while processing entry '{sanitized_title}': {e}", exc_info=True)      
 
-def main():
-    """
-    podcast_feeds = [
-        'https://feeds.megaphone.fm/jessemichels',              # American Alchemy
-        'https://audioboom.com/channels/5033205.rss',           # Redacted News
-        'https://feeds.megaphone.fm/candace',                   # Candace Owens
-        'https://feeds.megaphone.fm/GLT1412515089',             # Joe Rogan Experience
-        'https://feeds.megaphone.fm/RSV1597324942',             # The Tucker Carlson Show
-        'https://feeds.megaphone.fm/WWO7410387571',             # Shawn Ryan Show
-        'https://anchor.fm/s/2fa50a94/podcast/rss',             # PBD
-        'http://feeds.feedburner.com/gangster-capitalism',      # Campus Files
-        'https://tschimandher.libsyn.com/rss',                  # The Skinny Confidential Him & Her Podcast
-        'https://feeds.megaphone.fm/APPI6857213837',            # Andrew Schulz's Flagrant with Akaash Singh
-        'https://www.spreaker.com/show/5975113/episodes/feed',  # Total Disclosure: UFOs-CoverUps & Conspiracy
-        'https://feeds.simplecast.com/ob9OSBIN',                # The Economics of Everyday Things
-        'https://feeds.megaphone.fm/search-engine',             # Search Engine
-
-        # Add more RSS feed URLs here
-    ]
-    """
-    
-    # --- load your feeds parameters ---
-    #feeds_cfg = yaml.safe_load(open('feeds_config.yaml', 'r'))['feeds']
-    master_file = DATABASE_ROOT / "watcher_json" / "master_rss.json"
-
-     # read your master list of { name, url }
+def main(feeds_filename='master_rss.json', limit_per_feed=0):
+    # pick the feeds file
+    master_file = DATABASE_ROOT / "watcher_json" / feeds_filename
     try:
         with open(master_file, 'r', encoding='utf-8') as f:
             master = json.load(f)
@@ -1216,22 +1216,21 @@ def main():
         logging.critical(f"Could not find {master_file}; run update_master_rss.py first.")
         return
 
-    # just take the URL field for each entry
-    podcast_feeds = [ entry['url'] for entry in master ]
-    # initialize list for feeds needing manual review
+    logging.info(f"🔧 Feeds file: {master_file.name} | Entry limit per feed: "
+                 f"{'ALL' if not limit_per_feed or limit_per_feed <= 0 else limit_per_feed}")
+
+    podcast_feeds = [entry['url'] for entry in master]
     failed_feeds = []
     download_dir        = DATABASE_ROOT / "podcasts"
     base_transcript_dir = DATABASE_ROOT / "transcripts"
     os.makedirs(download_dir, exist_ok=True)
     os.makedirs(base_transcript_dir, exist_ok=True)
 
-    # Initialize the diarization pipeline once
     diarization_pipeline = initialize_diarization_pipeline()
     if not diarization_pipeline:
         logging.critical("Diarization pipeline failed to initialize. Exiting.")
         return
 
-    # Ensure summarizer is initialized (Retained for chapter titles)
     if not summarizer:
         logging.critical("Summarization pipeline is not available. Exiting.")
         return
@@ -1244,85 +1243,54 @@ def main():
             failed_feeds.append(feed_url)
             continue
 
-        # Check for entries; treat zero entries as a failure to review
         entries = getattr(feed, 'entries', [])
         if not entries:
             logging.warning(f"No entries to process for feed: {feed_url}")
             failed_feeds.append(feed_url)
             continue
 
-        # Parse the feed using the integrated metadata extraction
+        # Parse metadata once per feed
         feed_data = parse_podcast_feed(feed_url)
-        #logging.debug("Full feed_data:")
-        #logging.debug(json.dumps(feed_data, indent=2, ensure_ascii=False))
         if not feed_data:
             logging.error(f"Failed to parse feed data for: {feed_url}")
             continue
 
-        # Extract the channel name from the feed
         channel_title = feed_data.get('title', 'Unknown_Channel')
-
         sanitized_channel_title = sanitize_filename(channel_title)
-        logging.info(f"Channel Title: {channel_title}")
-        logging.info(f"Sanitized Channel Title: {sanitized_channel_title}")
-
-        channel_author = None
-
-        # 1) If 'authors' is populated:
-        if 'authors' in feed_data and feed_data['authors']:
-            # Usually a list of strings
-            channel_author = feed_data['authors'][0]
-
-        # 2) Or if 'itunes_tags' has an 'author' key:
-        elif 'itunes_tags' in feed_data and 'author' in feed_data['itunes_tags']:
-            channel_author = feed_data['itunes_tags']['author']
-
-        # 3) Or if feed_data['author'] is present
-        elif 'author' in feed_data:
-            channel_author = feed_data['author']
-
-        # 4) Or if feed_data['manual_author'] is present
-        elif 'manual_author' in feed_data:
-            channel_author = feed_data['manual_author']
-
-        logging.info(f"Channel Author: {channel_author}")
-
-        channel_summary = None
-
-       
-        # For the summary, some feeds place it in 'description', others in 'summary'
+        channel_author = (feed_data.get('authors', [None])[0]
+                          or feed_data.get('itunes_tags', {}).get('author')
+                          or feed_data.get('author')
+                          or feed_data.get('manual_author'))
         channel_summary = feed_data.get('summary') or feed_data.get('description')
-        logging.info(f"Channel Summary: {channel_summary}")
-        
-
-        # Determine source language (use feed language if available, otherwise default to "eng")
         source_lang = feed_data.get('language', 'eng').lower()
-        # Create subdirectory: transcripts/<channel_name>/<source_lang>/
+
         channel_transcript_dir = os.path.join(base_transcript_dir, sanitized_channel_title, source_lang)
         os.makedirs(channel_transcript_dir, exist_ok=True)
-        logging.info(f"Transcript directory for channel '{sanitized_channel_title}': {channel_transcript_dir}")
 
-        entries = feed.entries
         logging.info(f"Number of entries found: {len(entries)}")
 
-        if not entries:
-            logging.warning(f"No entries to process for feed: {feed_url}")
-            continue
-        
-        for entry in entries[:30]:  # Process only the latest 10 to keep the database updated
-            logging.debug(f"Starting processing for entry: {entry.get('title', 'No Title')}")
-            process_entry(entry, channel_transcript_dir, download_dir, channel_title, diarization_pipeline, config, feed_data, channel_summary, channel_author)
+        # >>> HERE is the per-feed limit <<<
+        if limit_per_feed and limit_per_feed > 0:
+            entries_to_process = entries[:limit_per_feed]
+        else:
+            entries_to_process = entries
 
+        logging.info(f"Will process {len(entries_to_process)} entries for this feed.")
+
+        for entry in entries_to_process:
+            logging.debug(f"Starting processing for entry: {entry.get('title', 'No Title')}")
+            process_entry(
+                entry, channel_transcript_dir, download_dir, channel_title,
+                diarization_pipeline, config, feed_data, channel_summary, channel_author
+            )
 
     failed_dir = DATABASE_ROOT / "watcher_json"
     failed_dir.mkdir(parents=True, exist_ok=True)
-    # Print a list of failed feeds
     failed_file = failed_dir / "failed_feeds.json"
     with open(failed_file, 'w', encoding='utf-8') as f:
         json.dump(failed_feeds, f, indent=2, ensure_ascii=False)
     logging.info(f"Saved {len(failed_feeds)} failed feeds to {failed_file}")
 
-    # After processing all feeds, run the translation script.
     logging.info("All feeds processed. Running translation script...")
     try:
         subprocess.run(["python", "translate.py"], check=True)
@@ -1330,8 +1298,16 @@ def main():
     except Exception as e:
         logging.error(f"Translation script failed: {e}")
 
+
 if __name__ == "__main__":
     try:
-        main()
+        args = parse_cli_args()
+        feeds_filename = (
+            args.feeds_file
+            or ("master_rss_mini.json" if args.master_rss_mini else "master_rss.json")
+        )
+        limit = args.limit or 0  # 0/None = ALL
+        main(feeds_filename=feeds_filename, limit_per_feed=limit)
     except Exception as e:
         logging.critical(f"Unhandled exception: {e}", exc_info=True)
+
