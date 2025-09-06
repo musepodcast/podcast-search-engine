@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-18 20:34-0500\n"
+"POT-Creation-Date: 2025-09-06 17:50-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -146,19 +146,19 @@ msgstr "Doğru adrese girdiğinden emin ol."
 msgid "Back to Login"
 msgstr "Login'e geri dön"
 
-#: .\podcasts\templates\podcasts\base.html:16
+#: .\podcasts\templates\podcasts\base.html:18
 msgid "Podcast Search Engine"
 msgstr "Podcast Arama Motoru"
 
-#: .\podcasts\templates\podcasts\base.html:51
+#: .\podcasts\templates\podcasts\base.html:53
 msgid "Muse"
 msgstr "Müze"
 
-#: .\podcasts\templates\podcasts\base.html:54
+#: .\podcasts\templates\podcasts\base.html:56
 msgid "Home"
 msgstr "Ev"
 
-#: .\podcasts\templates\podcasts\base.html:55
+#: .\podcasts\templates\podcasts\base.html:57
 #: .\podcasts\templates\podcasts\channel_list.html:22
 #: .\podcasts\templates\podcasts\channel_list.html:73
 #: .\podcasts\templates\podcasts\channel_list_items.html:27
@@ -168,7 +168,7 @@ msgstr "Ev"
 msgid "Favorites"
 msgstr "En sevdiğim"
 
-#: .\podcasts\templates\podcasts\base.html:56
+#: .\podcasts\templates\podcasts\base.html:58
 #: .\podcasts\templates\podcasts\channel_list.html:28
 #: .\podcasts\templates\podcasts\channel_list.html:77
 #: .\podcasts\templates\podcasts\channel_list_items.html:31
@@ -178,10 +178,10 @@ msgstr "En sevdiğim"
 msgid "Notifications"
 msgstr "İletişimler"
 
-#: .\podcasts\templates\podcasts\base.html:57
+#: .\podcasts\templates\podcasts\base.html:59
 #: .\podcasts\templates\podcasts\bookmarks_list.html:65
 #: .\podcasts\templates\podcasts\bookmarks_list_items.html:57
-#: .\podcasts\templates\podcasts\channel_detail.html:141
+#: .\podcasts\templates\podcasts\channel_detail.html:155
 #: .\podcasts\templates\podcasts\channel_detail_item.html:46
 #: .\podcasts\templates\podcasts\episode_list.html:28
 #: .\podcasts\templates\podcasts\episode_list.html:83
@@ -191,142 +191,143 @@ msgstr "İletişimler"
 msgid "Bookmarks"
 msgstr "Kayıt işaretleri"
 
-#: .\podcasts\templates\podcasts\base.html:58
-#: .\podcasts\templates\podcasts\base.html:162
+#: .\podcasts\templates\podcasts\base.html:60
+#: .\podcasts\templates\podcasts\base.html:164
 msgid "Channels"
 msgstr "Kanallar"
 
-#: .\podcasts\templates\podcasts\base.html:59
-#: .\podcasts\templates\podcasts\base.html:156
-#: .\podcasts\templates\podcasts\channel_detail.html:103
+#: .\podcasts\templates\podcasts\base.html:61
+#: .\podcasts\templates\podcasts\base.html:158
+#: .\podcasts\templates\podcasts\channel_detail.html:117
 msgid "Episodes"
 msgstr "Bölümler"
 
-#: .\podcasts\templates\podcasts\base.html:86
-#: .\podcasts\templates\podcasts\base.html:87
+#: .\podcasts\templates\podcasts\base.html:88
+#: .\podcasts\templates\podcasts\base.html:89
 msgid "Toggle Theme"
 msgstr "Temayı Değiştir"
 
-#: .\podcasts\templates\podcasts\base.html:96
+#: .\podcasts\templates\podcasts\base.html:98
 msgid "Profile"
 msgstr "Profil"
 
-#: .\podcasts\templates\podcasts\base.html:101
+#: .\podcasts\templates\podcasts\base.html:103
 msgid "See Profile"
 msgstr "Profil görüntüsü"
 
-#: .\podcasts\templates\podcasts\base.html:104
+#: .\podcasts\templates\podcasts\base.html:106
 msgid "See Replies"
 msgstr "Cevaplar"
 
-#: .\podcasts\templates\podcasts\base.html:117
-#: .\podcasts\templates\podcasts\base.html:491
+#: .\podcasts\templates\podcasts\base.html:119
+#: .\podcasts\templates\podcasts\base.html:493
 msgid "Support Me"
 msgstr "Beni Destekle"
 
-#: .\podcasts\templates\podcasts\base.html:124
+#: .\podcasts\templates\podcasts\base.html:126
 msgid "Support Ticket"
 msgstr "Destek Bileti"
 
-#: .\podcasts\templates\podcasts\base.html:129
+#: .\podcasts\templates\podcasts\base.html:131
 msgid "Contribute"
 msgstr "Katkı sağlayın"
 
-#: .\podcasts\templates\podcasts\base.html:134
+#: .\podcasts\templates\podcasts\base.html:136
 msgid "Sign Out"
 msgstr "İmzalayın"
 
-#: .\podcasts\templates\podcasts\base.html:138
+#: .\podcasts\templates\podcasts\base.html:140
 msgid "Sign In"
 msgstr "Giriş yap"
 
-#: .\podcasts\templates\podcasts\base.html:170
+#: .\podcasts\templates\podcasts\base.html:172
 msgid "Search episodes or channels..."
 msgstr "Bölümleri veya kanalları arayın..."
 
-#: .\podcasts\templates\podcasts\base.html:172
+#: .\podcasts\templates\podcasts\base.html:174
+#: .\podcasts\templates\podcasts\channel_detail.html:111
 msgid "Search"
 msgstr "Ara"
 
-#: .\podcasts\templates\podcasts\base.html:187
-#: .\podcasts\templates\podcasts\base.html:381
+#: .\podcasts\templates\podcasts\base.html:189
+#: .\podcasts\templates\podcasts\base.html:383
 msgid "Channel Title"
 msgstr "Kanal Başlığı"
 
-#: .\podcasts\templates\podcasts\base.html:193
+#: .\podcasts\templates\podcasts\base.html:195
 msgid "Episode Title"
 msgstr "Bölüm Başlığı"
 
-#: .\podcasts\templates\podcasts\base.html:199
+#: .\podcasts\templates\podcasts\base.html:201
 msgid "Episode Description"
 msgstr "Bölüm Açıklaması"
 
-#: .\podcasts\templates\podcasts\base.html:205
+#: .\podcasts\templates\podcasts\base.html:207
 msgid "Transcript Text"
 msgstr "Transkript Metni"
 
-#: .\podcasts\templates\podcasts\base.html:212
-#: .\podcasts\templates\podcasts\base.html:400
+#: .\podcasts\templates\podcasts\base.html:214
+#: .\podcasts\templates\podcasts\base.html:402
 msgid "Language"
 msgstr "Dil"
 
-#: .\podcasts\templates\podcasts\base.html:292
+#: .\podcasts\templates\podcasts\base.html:294
 msgid "Date"
 msgstr "Tarih"
 
-#: .\podcasts\templates\podcasts\base.html:300
+#: .\podcasts\templates\podcasts\base.html:302
 msgid "Anytime"
 msgstr "Her zaman"
 
-#: .\podcasts\templates\podcasts\base.html:306
+#: .\podcasts\templates\podcasts\base.html:308
 msgid "Past Day"
 msgstr "Geçen Gün"
 
-#: .\podcasts\templates\podcasts\base.html:312
+#: .\podcasts\templates\podcasts\base.html:314
 msgid "Past Week"
 msgstr "Geçen Hafta"
 
-#: .\podcasts\templates\podcasts\base.html:318
+#: .\podcasts\templates\podcasts\base.html:320
 msgid "Past Month"
 msgstr "Geçen Ay"
 
-#: .\podcasts\templates\podcasts\base.html:324
+#: .\podcasts\templates\podcasts\base.html:326
 msgid "Past Year"
 msgstr "Geçen Yıl"
 
-#: .\podcasts\templates\podcasts\base.html:330
+#: .\podcasts\templates\podcasts\base.html:332
 msgid "Past 2 Years"
 msgstr "Son 2 Yıl"
 
-#: .\podcasts\templates\podcasts\base.html:336
+#: .\podcasts\templates\podcasts\base.html:338
 msgid "Past 3 Years"
 msgstr "Son 3 Yıl"
 
-#: .\podcasts\templates\podcasts\base.html:342
+#: .\podcasts\templates\podcasts\base.html:344
 msgid "Past 4 Years"
 msgstr "Son 4 Yıl"
 
-#: .\podcasts\templates\podcasts\base.html:348
+#: .\podcasts\templates\podcasts\base.html:350
 msgid "Past 5 Years"
 msgstr "Son 5 Yıl"
 
-#: .\podcasts\templates\podcasts\base.html:354
+#: .\podcasts\templates\podcasts\base.html:356
 msgid "Past 10 Years"
 msgstr "Son 10 Yıl"
 
-#: .\podcasts\templates\podcasts\base.html:360
+#: .\podcasts\templates\podcasts\base.html:362
 msgid "Past 15 Years"
 msgstr "Son 15 Yıl"
 
-#: .\podcasts\templates\podcasts\base.html:387
+#: .\podcasts\templates\podcasts\base.html:389
 msgid "Channel Author"
 msgstr "Kanal Yazarı"
 
-#: .\podcasts\templates\podcasts\base.html:393
+#: .\podcasts\templates\podcasts\base.html:395
 msgid "Channel Summary"
 msgstr "Kanal Özetleri"
 
-#: .\podcasts\templates\podcasts\base.html:496
+#: .\podcasts\templates\podcasts\base.html:498
 #: .\podcasts\templates\podcasts\signup.html:175
 #: .\podcasts\templates\podcasts\signup.html:229
 #: .\podcasts\templates\podcasts\support_ticket.html:148
@@ -335,7 +336,7 @@ msgstr "Kanal Özetleri"
 msgid "Close"
 msgstr "Yakınlık"
 
-#: .\podcasts\templates\podcasts\base.html:571
+#: .\podcasts\templates\podcasts\base.html:573
 msgid "Contact Me"
 msgstr "Benimle iletişime geç"
 
@@ -370,7 +371,7 @@ msgstr "Açık"
 
 #: .\podcasts\templates\podcasts\bookmarks_list.html:70
 #: .\podcasts\templates\podcasts\bookmarks_list_items.html:62
-#: .\podcasts\templates\podcasts\channel_detail.html:146
+#: .\podcasts\templates\podcasts\channel_detail.html:160
 #: .\podcasts\templates\podcasts\channel_detail_item.html:51
 #: .\podcasts\templates\podcasts\episode_detail.html:196
 #: .\podcasts\templates\podcasts\episode_list.html:34
@@ -383,7 +384,7 @@ msgstr "Yorumlar"
 
 #: .\podcasts\templates\podcasts\bookmarks_list.html:75
 #: .\podcasts\templates\podcasts\bookmarks_list_items.html:67
-#: .\podcasts\templates\podcasts\channel_detail.html:150
+#: .\podcasts\templates\podcasts\channel_detail.html:164
 #: .\podcasts\templates\podcasts\channel_detail_item.html:56
 #: .\podcasts\templates\podcasts\episode_list.html:93
 #: .\podcasts\templates\podcasts\episode_list_items.html:64
@@ -396,7 +397,7 @@ msgstr "Bölüm Rating"
 #: .\podcasts\templates\podcasts\bookmarks_list_items.html:76
 #: .\podcasts\templates\podcasts\channel_detail.html:90
 #: .\podcasts\templates\podcasts\channel_detail.html:91
-#: .\podcasts\templates\podcasts\channel_detail.html:158
+#: .\podcasts\templates\podcasts\channel_detail.html:172
 #: .\podcasts\templates\podcasts\channel_detail_item.html:65
 #: .\podcasts\templates\podcasts\channel_list.html:89
 #: .\podcasts\templates\podcasts\channel_list_items.html:43
@@ -421,9 +422,7 @@ msgstr "Daha fazla kayıtlı bölüm yükleniyor..."
 
 #: .\podcasts\templates\podcasts\bookmarks_list.html:142
 #: .\podcasts\templates\podcasts\bookmarks_list.html:149
-#: .\podcasts\templates\podcasts\channel_detail.html:183
-#: .\podcasts\templates\podcasts\channel_detail.html:219
-#: .\podcasts\templates\podcasts\channel_detail.html:226
+#: .\podcasts\templates\podcasts\channel_detail.html:197
 #: .\podcasts\templates\podcasts\channel_list.html:108
 #: .\podcasts\templates\podcasts\episode_list.html:160
 #: .\podcasts\templates\podcasts\episode_list.html:167
@@ -482,12 +481,20 @@ msgstr "Bu kanalı değerlendir ."
 msgid "Average rating and number of ratings"
 msgstr "Ortalama derecelendirme ve derecelendirme sayısı"
 
-#: .\podcasts\templates\podcasts\channel_detail.html:171
+#: .\podcasts\templates\podcasts\channel_detail.html:102
+msgid "Search episodes in this channel"
+msgstr "Bu kanaldaki arama bölümleri"
+
+#: .\podcasts\templates\podcasts\channel_detail.html:108
+msgid "Search episodes in this channel…"
+msgstr "Bu kanaldaki arama bölümleri..."
+
+#: .\podcasts\templates\podcasts\channel_detail.html:185
 msgid "No episodes available for this channel."
 msgstr "Bu kanal için hiçbir bölüm mevcut değil."
 
-#: .\podcasts\templates\podcasts\channel_detail.html:178
-#: .\podcasts\templates\podcasts\channel_detail.html:184
+#: .\podcasts\templates\podcasts\channel_detail.html:192
+#: .\podcasts\templates\podcasts\channel_detail.html:198
 #: .\podcasts\templates\podcasts\episode_list.html:125
 #: .\podcasts\templates\podcasts\search_results_items.html:143
 #: .\podcasts\templates\podcasts\search_results_items.html:154
@@ -859,30 +866,37 @@ msgid "✍️ Read AI-generated chapter summaries"
 msgstr "✍️ AI tarafından oluşturulan bölümlerin özetlerini okuyun"
 
 #: .\podcasts\templates\podcasts\home.html:41
+msgid ""
+"🌐 Find podcasts in 17 different languages natively transcribed or AI "
+"translated"
+msgstr ""
+" Doğal olarak aktarılan veya AI tercüme edilen 17 farklı dilde podcast bulun"
+
+#: .\podcasts\templates\podcasts\home.html:42
 msgid "🎧 Click through to listen at the exact moment a topic is discussed"
 msgstr " Bir konunun tartışıldığı tam anda dinlemek için buraya tıklayın"
 
-#: .\podcasts\templates\podcasts\home.html:42
+#: .\podcasts\templates\podcasts\home.html:43
 msgid "🆕 Discover new channels or episodes based on your interests"
 msgstr " ilgi alanlarınıza göre yeni kanallar ya da bölümler keşfedin"
 
-#: .\podcasts\templates\podcasts\home.html:44
+#: .\podcasts\templates\podcasts\home.html:45
 msgid ""
-"Currently optimized for desktop browsers. Mobile-friendly support and native "
-"apps are coming soon!"
+"Currently optimized for desktop browsers, tablets, foldables, and "
+"smartphones. Community contribution and native apps are coming soon!"
 msgstr ""
-"Şu anda masaüstü tarayıcılar için optimize edilmiş. Mobil dostu destek ve "
-"yerel uygulamalar yakında geliyor!"
+"Şu anda masaüstü tarayıcılar, tabletler, katlanabilir cihazlar ve akıllı "
+"telefonlar için optimize edilmiş."
 
-#: .\podcasts\templates\podcasts\home.html:46
+#: .\podcasts\templates\podcasts\home.html:47
 msgid "🌟 Key Features"
 msgstr " Anahtar Özellikler"
 
-#: .\podcasts\templates\podcasts\home.html:48
+#: .\podcasts\templates\podcasts\home.html:49
 msgid "Account Signup & Management"
 msgstr "Hesap Kayıt ve Yönetim"
 
-#: .\podcasts\templates\podcasts\home.html:48
+#: .\podcasts\templates\podcasts\home.html:49
 msgid ""
 "Create a free account to save searches, bookmark episodes, and track "
 "listening history."
@@ -890,11 +904,11 @@ msgstr ""
 "Aramaları kaydetmek, bölümleri işaretlemek ve dinleme geçmişini izlemek için "
 "ücretsiz bir hesap oluşturun."
 
-#: .\podcasts\templates\podcasts\home.html:49
+#: .\podcasts\templates\podcasts\home.html:50
 msgid "Transcript Generation"
 msgstr "Transkript Nesli"
 
-#: .\podcasts\templates\podcasts\home.html:49
+#: .\podcasts\templates\podcasts\home.html:50
 msgid ""
 "Ingests RSS feeds from any podcast; uses OpenAI Whisper Turbo on an NVIDIA "
 "GPU for fast, high-quality transcription; diarizes speakers and formats with "
@@ -904,11 +918,11 @@ msgstr ""
 "transkripsiyon için NVIDIA GPU'da OpenAI Whisper Turbo kullanır; zaman "
 "damgaları ile hoparlörleri ve biçimleri günlükleştirir."
 
-#: .\podcasts\templates\podcasts\home.html:50
+#: .\podcasts\templates\podcasts\home.html:51
 msgid "Chapter Summaries"
 msgstr "Bölüm Özetleri"
 
-#: .\podcasts\templates\podcasts\home.html:50
+#: .\podcasts\templates\podcasts\home.html:51
 msgid ""
 "Generates concise summaries of each transcript segment using FalconsAI text-"
 "summarization."
@@ -916,11 +930,23 @@ msgstr ""
 "FalconsAI metin özetlemesini kullanarak her transkript segmentinin kısa "
 "özetlerini oluşturur."
 
-#: .\podcasts\templates\podcasts\home.html:51
+#: .\podcasts\templates\podcasts\home.html:52
+msgid "Transcript Translations"
+msgstr "Çeviri Çevirileri"
+
+#: .\podcasts\templates\podcasts\home.html:52
+msgid ""
+"Takes podcasts and translates them into 17 different languages using "
+"nllb-200-distilled-600M translation model."
+msgstr ""
+"Podcasts alır ve nllb-200-distilled-600M çeviri modelini kullanarak 17 "
+"farklı dile çevirir."
+
+#: .\podcasts\templates\podcasts\home.html:53
 msgid "Full-Text Search"
 msgstr "Tam Metin Arama"
 
-#: .\podcasts\templates\podcasts\home.html:51
+#: .\podcasts\templates\podcasts\home.html:53
 msgid ""
 "Powered by Elasticsearch for lightning-fast, fuzzy-match queries; filters by "
 "title, description, channel metadata, or transcript."
@@ -929,11 +955,11 @@ msgstr ""
 "desteklenir; başlık, açıklama, kanal metadataları veya transkripti ile "
 "filtreler."
 
-#: .\podcasts\templates\podcasts\home.html:52
+#: .\podcasts\templates\podcasts\home.html:54
 msgid "Flexible Playback"
 msgstr "Esnek Çalma"
 
-#: .\podcasts\templates\podcasts\home.html:52
+#: .\podcasts\templates\podcasts\home.html:54
 msgid ""
 "Jump directly to the moment a keyword appears in the audio player on the "
 "website."
@@ -941,73 +967,81 @@ msgstr ""
 "Web sitesindeki ses oynatıcısında bir anahtar kelime ortaya çıktığı anda "
 "doğrudan atlayın."
 
-#: .\podcasts\templates\podcasts\home.html:55
+#: .\podcasts\templates\podcasts\home.html:57
 msgid "🏗️ Architecture & Tech Stack"
 msgstr "️ Mimarlık & Teknoloji Stack"
 
-#: .\podcasts\templates\podcasts\home.html:59
+#: .\podcasts\templates\podcasts\home.html:61
 msgid "Layer"
 msgstr "Katman"
 
-#: .\podcasts\templates\podcasts\home.html:60
+#: .\podcasts\templates\podcasts\home.html:62
 msgid "Technology"
 msgstr "Teknoloji"
 
-#: .\podcasts\templates\podcasts\home.html:65
+#: .\podcasts\templates\podcasts\home.html:67
 msgid "Backend"
 msgstr "Arkaplan"
 
-#: .\podcasts\templates\podcasts\home.html:65
+#: .\podcasts\templates\podcasts\home.html:67
 msgid "Python, Django"
 msgstr "Python, Django"
 
-#: .\podcasts\templates\podcasts\home.html:68
+#: .\podcasts\templates\podcasts\home.html:70
 msgid "Transcription"
 msgstr "Transkripsi"
 
-#: .\podcasts\templates\podcasts\home.html:68
+#: .\podcasts\templates\podcasts\home.html:70
 msgid "OpenAI Whisper Turbo (GPU-accelerated)"
 msgstr "OpenAI Whisper Turbo (GPU hızlandırılmış)"
 
-#: .\podcasts\templates\podcasts\home.html:71
+#: .\podcasts\templates\podcasts\home.html:73
 msgid "Summarization"
 msgstr "Özetleme"
 
-#: .\podcasts\templates\podcasts\home.html:71
+#: .\podcasts\templates\podcasts\home.html:73
 msgid "FalconsAI / text_summarization"
 msgstr "FalconsAI / text_summarization"
 
-#: .\podcasts\templates\podcasts\home.html:74
+#: .\podcasts\templates\podcasts\home.html:76
+msgid "Translation"
+msgstr "Tercüme"
+
+#: .\podcasts\templates\podcasts\home.html:76
+msgid "Facebook / nllb-200-distilled-600M translation model"
+msgstr "Facebook / nllb-200-distilled-600M çeviri modeli"
+
+#: .\podcasts\templates\podcasts\home.html:79
 msgid "Database"
 msgstr "Veritabanı"
 
-#: .\podcasts\templates\podcasts\home.html:74
-msgid "PostgreSQL"
-msgstr "PostgreSQL"
+#: .\podcasts\templates\podcasts\home.html:79
+msgid "PostgreSQL | MaraiaDB"
+msgstr "PostgreSQL . MaraiaDB ."
 
-#: .\podcasts\templates\podcasts\home.html:77
+#: .\podcasts\templates\podcasts\home.html:82
 msgid "Search Engine"
 msgstr "Arama Motoru"
 
-#: .\podcasts\templates\podcasts\home.html:77
+#: .\podcasts\templates\podcasts\home.html:82
 msgid "Elasticsearch"
 msgstr "Elastik arama"
 
-#: .\podcasts\templates\podcasts\home.html:80
+#: .\podcasts\templates\podcasts\home.html:85
 msgid "Frontend"
 msgstr "Ön uç"
 
-#: .\podcasts\templates\podcasts\home.html:80
-msgid "Django templates, HTML, CSS, JavaScript"
-msgstr "Django şablonları, HTML, CSS, JavaScript"
+#: .\podcasts\templates\podcasts\home.html:85
+msgid "Django templates | HTML | CSS | JavaScript"
+msgstr "Django şablonları HTML CSS JavaScript"
 
-#: .\podcasts\templates\podcasts\home.html:83
+#: .\podcasts\templates\podcasts\home.html:88
 msgid "Deployment"
 msgstr "Deployment"
 
-#: .\podcasts\templates\podcasts\home.html:83
-msgid "Docker, NVIDIA GPU passthrough, Ubuntu VM"
-msgstr "Docker, NVIDIA GPU geçişi, Ubuntu VM"
+#: .\podcasts\templates\podcasts\home.html:88
+msgid "Docker | Ubuntu VM | Windows OS"
+msgstr "Docker Ubuntu VM Windows OS"
 
 #: .\podcasts\templates\podcasts\notifications_list.html:97
 msgid "No notifications available."
@@ -1424,11 +1458,11 @@ msgstr ""
 "hakkını saklar. Değişiklikler web sitemizde yayınlanacak ve yayınlandıktan "
 "hemen sonra yürürlüğe girecektir."
 
-#: .\podcasts\templates\podcasts\signup.html:348
+#: .\podcasts\templates\podcasts\signup.html:377
 msgid "Passwords match"
 msgstr "Şifre eşleşimi"
 
-#: .\podcasts\templates\podcasts\signup.html:350
+#: .\podcasts\templates\podcasts\signup.html:379
 msgid "Passwords do not match"
 msgstr "Şifre eşleşmiyor"
 
@@ -1691,1261 +1725,98 @@ msgstr "OTP girin"
 msgid "Submit OTP"
 msgstr "OTP gönder"
 
-#: .\venv\Lib\site-packages\django\contrib\messages\apps.py:15
+#~ msgid "Docker, NVIDIA GPU passthrough, Ubuntu VM"
+#~ msgstr "Docker, NVIDIA GPU geçişi, Ubuntu VM"
+
 #, fuzzy
-#| msgid "Message"
-msgid "Messages"
-msgstr "Mesaj"
+#~ msgid "Messages"
+#~ msgstr "Mesaj"
 
-#: .\venv\Lib\site-packages\django\contrib\sitemaps\apps.py:8
-msgid "Site Maps"
-msgstr "Site Haritaları"
+#~ msgid "Site Maps"
+#~ msgstr "Site Haritaları"
 
-#: .\venv\Lib\site-packages\django\contrib\staticfiles\apps.py:9
-msgid "Static Files"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\contrib\syndication\apps.py:7
-msgid "Syndication"
-msgstr ""
-
-#. Translators: String used to replace omitted page numbers in elided page
-#. range generated by paginators, e.g. [1, 2, '…', 5, 6, 7, '…', 9, 10].
-#: .\venv\Lib\site-packages\django\core\paginator.py:30
-msgid "…"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\core\paginator.py:50
-msgid "That page number is not an integer"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\core\paginator.py:52
-msgid "That page number is less than 1"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\core\paginator.py:54
-msgid "That page contains no results"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\core\validators.py:22
-msgid "Enter a valid value."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\core\validators.py:104
-#: .\venv\Lib\site-packages\django\forms\fields.py:752
-msgid "Enter a valid URL."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\core\validators.py:165
-msgid "Enter a valid integer."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\core\validators.py:176
-msgid "Enter a valid email address."
-msgstr ""
-
-#. Translators: "letters" means latin letters: a-z and A-Z.
-#: .\venv\Lib\site-packages\django\core\validators.py:259
-msgid ""
-"Enter a valid “slug” consisting of letters, numbers, underscores or hyphens."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\core\validators.py:267
-msgid ""
-"Enter a valid “slug” consisting of Unicode letters, numbers, underscores, or "
-"hyphens."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\core\validators.py:281
-#: .\venv\Lib\site-packages\django\core\validators.py:289
-#: .\venv\Lib\site-packages\django\core\validators.py:318
-msgid "Enter a valid IPv4 address."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\core\validators.py:298
-#: .\venv\Lib\site-packages\django\core\validators.py:319
-msgid "Enter a valid IPv6 address."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\core\validators.py:310
-#: .\venv\Lib\site-packages\django\core\validators.py:317
-msgid "Enter a valid IPv4 or IPv6 address."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\core\validators.py:353
-msgid "Enter only digits separated by commas."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\core\validators.py:359
-#, python-format
-msgid "Ensure this value is %(limit_value)s (it is %(show_value)s)."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\core\validators.py:394
-#, python-format
-msgid "Ensure this value is less than or equal to %(limit_value)s."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\core\validators.py:403
-#, python-format
-msgid "Ensure this value is greater than or equal to %(limit_value)s."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\core\validators.py:412
-#, python-format
-msgid "Ensure this value is a multiple of step size %(limit_value)s."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\core\validators.py:422
-#, python-format
-msgid ""
-"Ensure this value has at least %(limit_value)d character (it has "
-"%(show_value)d)."
-msgid_plural ""
-"Ensure this value has at least %(limit_value)d characters (it has "
-"%(show_value)d)."
-msgstr[0] ""
-msgstr[1] ""
-
-#: .\venv\Lib\site-packages\django\core\validators.py:440
-#, python-format
-msgid ""
-"Ensure this value has at most %(limit_value)d character (it has "
-"%(show_value)d)."
-msgid_plural ""
-"Ensure this value has at most %(limit_value)d characters (it has "
-"%(show_value)d)."
-msgstr[0] ""
-msgstr[1] ""
-
-#: .\venv\Lib\site-packages\django\core\validators.py:463
-#: .\venv\Lib\site-packages\django\forms\fields.py:347
-#: .\venv\Lib\site-packages\django\forms\fields.py:386
-msgid "Enter a number."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\core\validators.py:465
-#, python-format
-msgid "Ensure that there are no more than %(max)s digit in total."
-msgid_plural "Ensure that there are no more than %(max)s digits in total."
-msgstr[0] ""
-msgstr[1] ""
-
-#: .\venv\Lib\site-packages\django\core\validators.py:470
-#, python-format
-msgid "Ensure that there are no more than %(max)s decimal place."
-msgid_plural "Ensure that there are no more than %(max)s decimal places."
-msgstr[0] ""
-msgstr[1] ""
-
-#: .\venv\Lib\site-packages\django\core\validators.py:475
-#, python-format
-msgid ""
-"Ensure that there are no more than %(max)s digit before the decimal point."
-msgid_plural ""
-"Ensure that there are no more than %(max)s digits before the decimal point."
-msgstr[0] ""
-msgstr[1] ""
-
-#: .\venv\Lib\site-packages\django\core\validators.py:546
-#, python-format
-msgid ""
-"File extension “%(extension)s” is not allowed. Allowed extensions are: "
-"%(allowed_extensions)s."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\core\validators.py:607
-msgid "Null characters are not allowed."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\base.py:1423
-#: .\venv\Lib\site-packages\django\forms\models.py:893
 #, fuzzy
-#| msgid "Backend"
-msgid "and"
-msgstr "Arkaplan"
+#~ msgid "and"
+#~ msgstr "Arkaplan"
 
-#: .\venv\Lib\site-packages\django\db\models\base.py:1425
-#, python-format
-msgid "%(model_name)s with this %(field_labels)s already exists."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\constraints.py:17
-#, python-format
-msgid "Constraint “%(name)s” is violated."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:128
-#, python-format
-msgid "Value %(value)r is not a valid choice."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:129
-msgid "This field cannot be null."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:130
-msgid "This field cannot be blank."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:131
-#, python-format
-msgid "%(model_name)s with this %(field_label)s already exists."
-msgstr ""
-
-#. Translators: The 'lookup_type' is one of 'date', 'year' or
-#. 'month'. Eg: "Title must be unique for pub_date year"
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:135
-#, python-format
-msgid ""
-"%(field_label)s must be unique for %(date_field_label)s %(lookup_type)s."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:173
-#, python-format
-msgid "Field of type: %(field_type)s"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1094
-#, python-format
-msgid "“%(value)s” value must be either True or False."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1095
-#, python-format
-msgid "“%(value)s” value must be either True, False, or None."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1097
-msgid "Boolean (Either True or False)"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1147
-#, python-format
-msgid "String (up to %(max_length)s)"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1149
-msgid "String (unlimited)"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1253
-msgid "Comma-separated integers"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1354
-#, python-format
-msgid ""
-"“%(value)s” value has an invalid date format. It must be in YYYY-MM-DD "
-"format."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1358
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1493
-#, python-format
-msgid ""
-"“%(value)s” value has the correct format (YYYY-MM-DD) but it is an invalid "
-"date."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1362
-msgid "Date (without time)"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1489
-#, python-format
-msgid ""
-"“%(value)s” value has an invalid format. It must be in YYYY-MM-DD "
-"HH:MM[:ss[.uuuuuu]][TZ] format."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1497
-#, python-format
-msgid ""
-"“%(value)s” value has the correct format (YYYY-MM-DD HH:MM[:ss[.uuuuuu]]"
-"[TZ]) but it is an invalid date/time."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1502
-msgid "Date (with time)"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1626
-#, python-format
-msgid "“%(value)s” value must be a decimal number."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1628
-msgid "Decimal number"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1789
-#, python-format
-msgid ""
-"“%(value)s” value has an invalid format. It must be in [DD] "
-"[[HH:]MM:]ss[.uuuuuu] format."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1793
 #, fuzzy
-#| msgid "Summarization"
-msgid "Duration"
-msgstr "Özetleme"
+#~ msgid "Duration"
+#~ msgstr "Özetleme"
 
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1845
 #, fuzzy
-#| msgid "Email Address"
-msgid "Email address"
-msgstr "E-posta adresi"
+#~ msgid "Email address"
+#~ msgstr "E-posta adresi"
 
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1870
-msgid "File path"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1948
-#, python-format
-msgid "“%(value)s” value must be a float."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1950
-msgid "Floating point number"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1990
-#, python-format
-msgid "“%(value)s” value must be an integer."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:1992
-msgid "Integer"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2088
-msgid "Big (8 byte) integer"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2105
-msgid "Small integer"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2113
 #, fuzzy
-#| msgid "IP Addresses"
-msgid "IPv4 address"
-msgstr "IP Adresleri"
+#~ msgid "IPv4 address"
+#~ msgstr "IP Adresleri"
 
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2144
 #, fuzzy
-#| msgid "IP Addresses"
-msgid "IP address"
-msgstr "IP Adresleri"
+#~ msgid "IP address"
+#~ msgstr "IP Adresleri"
 
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2237
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2238
-#, python-format
-msgid "“%(value)s” value must be either None, True or False."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2240
-msgid "Boolean (Either True, False or None)"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2291
-msgid "Positive big integer"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2306
-msgid "Positive integer"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2321
-msgid "Positive small integer"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2337
-#, python-format
-msgid "Slug (up to %(max_length)s)"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2373
-msgid "Text"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2448
-#, python-format
-msgid ""
-"“%(value)s” value has an invalid format. It must be in HH:MM[:ss[.uuuuuu]] "
-"format."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2452
-#, python-format
-msgid ""
-"“%(value)s” value has the correct format (HH:MM[:ss[.uuuuuu]]) but it is an "
-"invalid time."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2456
 #, fuzzy
-#| msgid "Time:"
-msgid "Time"
-msgstr "Zaman:"
+#~ msgid "Time"
+#~ msgstr "Zaman:"
 
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2564
-msgid "URL"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2588
-msgid "Raw binary data"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2653
-#, python-format
-msgid "“%(value)s” is not a valid UUID."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\__init__.py:2655
-msgid "Universally unique identifier"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\files.py:232
-msgid "File"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\files.py:393
 #, fuzzy
-#| msgid "No image"
-msgid "Image"
-msgstr "Görüntü yok."
+#~ msgid "Image"
+#~ msgstr "Görüntü yok."
 
-#: .\venv\Lib\site-packages\django\db\models\fields\json.py:26
 #, fuzzy
-#| msgid "Subject"
-msgid "A JSON object"
-msgstr "Konu"
+#~ msgid "A JSON object"
+#~ msgstr "Konu"
 
-#: .\venv\Lib\site-packages\django\db\models\fields\json.py:28
-msgid "Value must be valid JSON."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\related.py:919
-#, python-format
-msgid "%(model)s instance with %(field)s %(value)r does not exist."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\related.py:921
-msgid "Foreign Key (type determined by related field)"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\related.py:1212
-msgid "One-to-one relationship"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\related.py:1269
-#, python-format
-msgid "%(from)s-%(to)s relationship"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\related.py:1271
-#, python-format
-msgid "%(from)s-%(to)s relationships"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\db\models\fields\related.py:1319
-msgid "Many-to-many relationship"
-msgstr ""
-
-#. Translators: If found as last label character, these punctuation
-#. characters will prevent the default label_suffix to be appended to the label
-#: .\venv\Lib\site-packages\django\forms\boundfield.py:184
-msgid ":?.!"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\forms\fields.py:91
-msgid "This field is required."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\forms\fields.py:298
-msgid "Enter a whole number."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\forms\fields.py:467
-#: .\venv\Lib\site-packages\django\forms\fields.py:1241
-msgid "Enter a valid date."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\forms\fields.py:490
-#: .\venv\Lib\site-packages\django\forms\fields.py:1242
-msgid "Enter a valid time."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\forms\fields.py:517
-msgid "Enter a valid date/time."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\forms\fields.py:551
-msgid "Enter a valid duration."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\forms\fields.py:552
-#, python-brace-format
-msgid "The number of days must be between {min_days} and {max_days}."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\forms\fields.py:621
-msgid "No file was submitted. Check the encoding type on the form."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\forms\fields.py:622
-msgid "No file was submitted."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\forms\fields.py:623
-msgid "The submitted file is empty."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\forms\fields.py:625
-#, python-format
-msgid "Ensure this filename has at most %(max)d character (it has %(length)d)."
-msgid_plural ""
-"Ensure this filename has at most %(max)d characters (it has %(length)d)."
-msgstr[0] ""
-msgstr[1] ""
-
-#: .\venv\Lib\site-packages\django\forms\fields.py:630
-msgid "Please either submit a file or check the clear checkbox, not both."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\forms\fields.py:694
-msgid ""
-"Upload a valid image. The file you uploaded was either not an image or a "
-"corrupted image."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\forms\fields.py:857
-#: .\venv\Lib\site-packages\django\forms\fields.py:949
-#: .\venv\Lib\site-packages\django\forms\models.py:1566
-#, python-format
-msgid "Select a valid choice. %(value)s is not one of the available choices."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\forms\fields.py:951
-#: .\venv\Lib\site-packages\django\forms\fields.py:1070
-#: .\venv\Lib\site-packages\django\forms\models.py:1564
-msgid "Enter a list of values."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\forms\fields.py:1071
-msgid "Enter a complete value."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\forms\fields.py:1313
-msgid "Enter a valid UUID."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\forms\fields.py:1343
-msgid "Enter a valid JSON."
-msgstr ""
-
-#. Translators: This is the default suffix added to form field labels
-#: .\venv\Lib\site-packages\django\forms\forms.py:98
-msgid ":"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\forms\forms.py:244
-#: .\venv\Lib\site-packages\django\forms\forms.py:328
-#, python-format
-msgid "(Hidden field %(name)s) %(error)s"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\forms\formsets.py:63
-#, python-format
-msgid ""
-"ManagementForm data is missing or has been tampered with. Missing fields: "
-"%(field_names)s. You may need to file a bug report if the issue persists."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\forms\formsets.py:67
-#, python-format
-msgid "Please submit at most %(num)d form."
-msgid_plural "Please submit at most %(num)d forms."
-msgstr[0] ""
-msgstr[1] ""
-
-#: .\venv\Lib\site-packages\django\forms\formsets.py:72
-#, python-format
-msgid "Please submit at least %(num)d form."
-msgid_plural "Please submit at least %(num)d forms."
-msgstr[0] ""
-msgstr[1] ""
-
-#: .\venv\Lib\site-packages\django\forms\formsets.py:484
-#: .\venv\Lib\site-packages\django\forms\formsets.py:491
-msgid "Order"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\forms\formsets.py:499
-msgid "Delete"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\forms\models.py:886
-#, python-format
-msgid "Please correct the duplicate data for %(field)s."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\forms\models.py:891
-#, python-format
-msgid "Please correct the duplicate data for %(field)s, which must be unique."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\forms\models.py:898
-#, python-format
-msgid ""
-"Please correct the duplicate data for %(field_name)s which must be unique "
-"for the %(lookup)s in %(date_field)s."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\forms\models.py:907
 #, fuzzy
-#| msgid "Please fix the errors below."
-msgid "Please correct the duplicate values below."
-msgstr "Lütfen aşağıdaki hataları düzeltin."
+#~ msgid "Please correct the duplicate values below."
+#~ msgstr "Lütfen aşağıdaki hataları düzeltin."
 
-#: .\venv\Lib\site-packages\django\forms\models.py:1338
-msgid "The inline value did not match the parent instance."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\forms\models.py:1429
-msgid "Select a valid choice. That choice is not one of the available choices."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\forms\models.py:1568
-#, python-format
-msgid "“%(pk)s” is not a valid value."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\forms\utils.py:226
-#, python-format
-msgid ""
-"%(datetime)s couldn’t be interpreted in time zone %(current_timezone)s; it "
-"may be ambiguous or it may not exist."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\forms\widgets.py:463
-msgid "Clear"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\forms\widgets.py:464
-msgid "Currently"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\forms\widgets.py:465
 #, fuzzy
-#| msgid "Channels"
-msgid "Change"
-msgstr "Kanallar"
+#~ msgid "Change"
+#~ msgstr "Kanallar"
 
-#: .\venv\Lib\site-packages\django\forms\widgets.py:794
-msgid "Unknown"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\forms\widgets.py:795
-msgid "Yes"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\forms\widgets.py:796
-msgid "No"
-msgstr ""
-
-#. Translators: Please do not add spaces around commas.
-#: .\venv\Lib\site-packages\django\template\defaultfilters.py:874
-msgid "yes,no,maybe"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\template\defaultfilters.py:904
-#: .\venv\Lib\site-packages\django\template\defaultfilters.py:921
-#, python-format
-msgid "%(size)d byte"
-msgid_plural "%(size)d bytes"
-msgstr[0] ""
-msgstr[1] ""
-
-#: .\venv\Lib\site-packages\django\template\defaultfilters.py:923
-#, python-format
-msgid "%s KB"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\template\defaultfilters.py:925
-#, python-format
-msgid "%s MB"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\template\defaultfilters.py:927
-#, python-format
-msgid "%s GB"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\template\defaultfilters.py:929
-#, python-format
-msgid "%s TB"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\template\defaultfilters.py:931
-#, python-format
-msgid "%s PB"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dateformat.py:73
-msgid "p.m."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dateformat.py:74
-msgid "a.m."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dateformat.py:79
-msgid "PM"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dateformat.py:80
-msgid "AM"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dateformat.py:152
-msgid "midnight"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dateformat.py:154
-msgid "noon"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:7
-msgid "Monday"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:8
-msgid "Tuesday"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:9
-msgid "Wednesday"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:10
-msgid "Thursday"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:11
-msgid "Friday"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:12
-msgid "Saturday"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:13
-msgid "Sunday"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:16
-msgid "Mon"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:17
-msgid "Tue"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:18
 #, fuzzy
-#| msgid "Watched"
-msgid "Wed"
-msgstr "Gözaltına alındı."
+#~ msgid "Wed"
+#~ msgstr "Gözaltına alındı."
 
-#: .\venv\Lib\site-packages\django\utils\dates.py:19
-msgid "Thu"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:20
-msgid "Fri"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:21
 #, fuzzy
-#| msgid "Status"
-msgid "Sat"
-msgstr "Durum"
+#~ msgid "Sat"
+#~ msgstr "Durum"
 
-#: .\venv\Lib\site-packages\django\utils\dates.py:22
-msgid "Sun"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:25
-msgid "January"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:26
-msgid "February"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:27
 #, fuzzy
-#| msgid "Search"
-msgid "March"
-msgstr "Ara"
+#~ msgid "March"
+#~ msgstr "Ara"
 
-#: .\venv\Lib\site-packages\django\utils\dates.py:28
-msgid "April"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:29
-msgid "May"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:30
-msgid "June"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:31
-msgid "July"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:32
-msgid "August"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:33
-msgid "September"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:34
-msgid "October"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:35
 #, fuzzy
-#| msgid "Phone Number"
-msgid "November"
-msgstr "Telefon numarası"
+#~ msgid "November"
+#~ msgstr "Telefon numarası"
 
-#: .\venv\Lib\site-packages\django\utils\dates.py:36
-msgid "December"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:39
-msgid "jan"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:40
-msgid "feb"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:41
-msgid "mar"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:42
-msgid "apr"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:43
-msgid "may"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:44
-msgid "jun"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:45
-msgid "jul"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:46
-msgid "aug"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:47
-msgid "sep"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:48
-msgid "oct"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:49
-msgid "nov"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:50
-msgid "dec"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:53
-msgctxt "abbrev. month"
-msgid "Jan."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:54
-msgctxt "abbrev. month"
-msgid "Feb."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:55
 #, fuzzy
-#| msgid "Search"
-msgctxt "abbrev. month"
-msgid "March"
-msgstr "Ara"
+#~ msgctxt "abbrev. month"
+#~ msgid "March"
+#~ msgstr "Ara"
 
-#: .\venv\Lib\site-packages\django\utils\dates.py:56
-msgctxt "abbrev. month"
-msgid "April"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:57
-msgctxt "abbrev. month"
-msgid "May"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:58
-msgctxt "abbrev. month"
-msgid "June"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:59
-msgctxt "abbrev. month"
-msgid "July"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:60
-msgctxt "abbrev. month"
-msgid "Aug."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:61
-msgctxt "abbrev. month"
-msgid "Sept."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:62
-msgctxt "abbrev. month"
-msgid "Oct."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:63
-msgctxt "abbrev. month"
-msgid "Nov."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:64
-msgctxt "abbrev. month"
-msgid "Dec."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:67
-msgctxt "alt. month"
-msgid "January"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:68
-msgctxt "alt. month"
-msgid "February"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:69
 #, fuzzy
-#| msgid "Search"
-msgctxt "alt. month"
-msgid "March"
-msgstr "Ara"
+#~ msgctxt "alt. month"
+#~ msgid "March"
+#~ msgstr "Ara"
 
-#: .\venv\Lib\site-packages\django\utils\dates.py:70
-msgctxt "alt. month"
-msgid "April"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:71
-msgctxt "alt. month"
-msgid "May"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:72
-msgctxt "alt. month"
-msgid "June"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:73
-msgctxt "alt. month"
-msgid "July"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:74
-msgctxt "alt. month"
-msgid "August"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:75
-msgctxt "alt. month"
-msgid "September"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:76
-msgctxt "alt. month"
-msgid "October"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\dates.py:77
 #, fuzzy
-#| msgid "Phone Number"
-msgctxt "alt. month"
-msgid "November"
-msgstr "Telefon numarası"
+#~ msgctxt "alt. month"
+#~ msgid "November"
+#~ msgstr "Telefon numarası"
 
-#: .\venv\Lib\site-packages\django\utils\dates.py:78
-msgctxt "alt. month"
-msgid "December"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\ipv6.py:20
-msgid "This is not a valid IPv6 address."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\text.py:138
-#, python-format
-msgctxt "String to return when truncating text"
-msgid "%(truncated_text)s…"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\text.py:323
-msgid "or"
-msgstr ""
-
-#. Translators: This string is used as a separator between list elements
-#: .\venv\Lib\site-packages\django\utils\text.py:342
-#: .\venv\Lib\site-packages\django\utils\timesince.py:135
-msgid ", "
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\utils\timesince.py:8
-#, python-format
-msgid "%(num)d year"
-msgid_plural "%(num)d years"
-msgstr[0] ""
-msgstr[1] ""
-
-#: .\venv\Lib\site-packages\django\utils\timesince.py:9
-#, python-format
-msgid "%(num)d month"
-msgid_plural "%(num)d months"
-msgstr[0] ""
-msgstr[1] ""
-
-#: .\venv\Lib\site-packages\django\utils\timesince.py:10
-#, python-format
-msgid "%(num)d week"
-msgid_plural "%(num)d weeks"
-msgstr[0] ""
-msgstr[1] ""
-
-#: .\venv\Lib\site-packages\django\utils\timesince.py:11
-#, python-format
-msgid "%(num)d day"
-msgid_plural "%(num)d days"
-msgstr[0] ""
-msgstr[1] ""
-
-#: .\venv\Lib\site-packages\django\utils\timesince.py:12
-#, python-format
-msgid "%(num)d hour"
-msgid_plural "%(num)d hours"
-msgstr[0] ""
-msgstr[1] ""
-
-#: .\venv\Lib\site-packages\django\utils\timesince.py:13
-#, python-format
-msgid "%(num)d minute"
-msgid_plural "%(num)d minutes"
-msgstr[0] ""
-msgstr[1] ""
-
-#: .\venv\Lib\site-packages\django\views\csrf.py:111
-msgid "Forbidden"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\views\csrf.py:112
-msgid "CSRF verification failed. Request aborted."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\views\csrf.py:116
-msgid ""
-"You are seeing this message because this HTTPS site requires a “Referer "
-"header” to be sent by your web browser, but none was sent. This header is "
-"required for security reasons, to ensure that your browser is not being "
-"hijacked by third parties."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\views\csrf.py:122
-msgid ""
-"If you have configured your browser to disable “Referer” headers, please re-"
-"enable them, at least for this site, or for HTTPS connections, or for “same-"
-"origin” requests."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\views\csrf.py:127
-msgid ""
-"If you are using the <meta name=\"referrer\" content=\"no-referrer\"> tag or "
-"including the “Referrer-Policy: no-referrer” header, please remove them. The "
-"CSRF protection requires the “Referer” header to do strict referer checking. "
-"If you’re concerned about privacy, use alternatives like <a "
-"rel=\"noreferrer\" …> for links to third-party sites."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\views\csrf.py:136
-msgid ""
-"You are seeing this message because this site requires a CSRF cookie when "
-"submitting forms. This cookie is required for security reasons, to ensure "
-"that your browser is not being hijacked by third parties."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\views\csrf.py:142
-msgid ""
-"If you have configured your browser to disable cookies, please re-enable "
-"them, at least for this site, or for “same-origin” requests."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\views\csrf.py:148
-msgid "More information is available with DEBUG=True."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\views\generic\dates.py:44
-msgid "No year specified"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\views\generic\dates.py:64
-#: .\venv\Lib\site-packages\django\views\generic\dates.py:115
-#: .\venv\Lib\site-packages\django\views\generic\dates.py:214
 #, fuzzy
-#| msgid "Update your rating"
-msgid "Date out of range"
-msgstr "Ratinginizi güncelleyin"
+#~ msgid "Date out of range"
+#~ msgstr "Ratinginizi güncelleyin"
 
-#: .\venv\Lib\site-packages\django\views\generic\dates.py:94
-msgid "No month specified"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\views\generic\dates.py:147
-msgid "No day specified"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\views\generic\dates.py:194
-msgid "No week specified"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\views\generic\dates.py:349
-#: .\venv\Lib\site-packages\django\views\generic\dates.py:380
-#, python-format
-msgid "No %(verbose_name_plural)s available"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\views\generic\dates.py:652
-#, python-format
-msgid ""
-"Future %(verbose_name_plural)s not available because "
-"%(class_name)s.allow_future is False."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\views\generic\dates.py:692
-#, python-format
-msgid "Invalid date string “%(datestr)s” given format “%(format)s”"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\views\generic\detail.py:56
 #, fuzzy, python-format
-#| msgid "No episodes found matching your search."
-msgid "No %(verbose_name)s found matching the query"
-msgstr "Aramanızla eşleşen bölüm bulunamadı."
+#~ msgid "No %(verbose_name)s found matching the query"
+#~ msgstr "Aramanızla eşleşen bölüm bulunamadı."
 
-#: .\venv\Lib\site-packages\django\views\generic\list.py:70
-msgid "Page is not “last”, nor can it be converted to an int."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\views\generic\list.py:77
-#, python-format
-msgid "Invalid page (%(page_number)s): %(message)s"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\views\generic\list.py:169
-#, python-format
-msgid "Empty list and “%(class_name)s.allow_empty” is False."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\views\static.py:38
-msgid "Directory indexes are not allowed here."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\views\static.py:40
-#, python-format
-msgid "“%(path)s” does not exist"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\views\static.py:79
-#, python-format
-msgid "Index of %(directory)s"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\views\templates\default_urlconf.html:7
-#: .\venv\Lib\site-packages\django\views\templates\default_urlconf.html:220
-msgid "The install worked successfully! Congratulations!"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\views\templates\default_urlconf.html:206
-#, python-format
-msgid ""
-"View <a href=\"https://docs.djangoproject.com/en/%(version)s/releases/\" "
-"target=\"_blank\" rel=\"noopener\">release notes</a> for Django %(version)s"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\views\templates\default_urlconf.html:221
-#, python-format
-msgid ""
-"You are seeing this page because <a href=\"https://docs.djangoproject.com/en/"
-"%(version)s/ref/settings/#debug\" target=\"_blank\" "
-"rel=\"noopener\">DEBUG=True</a> is in your settings file and you have not "
-"configured any URLs."
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\views\templates\default_urlconf.html:229
-msgid "Django Documentation"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\views\templates\default_urlconf.html:230
-msgid "Topics, references, &amp; how-to’s"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\views\templates\default_urlconf.html:238
-msgid "Tutorial: A Polling App"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\views\templates\default_urlconf.html:239
-msgid "Get started with Django"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\views\templates\default_urlconf.html:247
-msgid "Django Community"
-msgstr ""
-
-#: .\venv\Lib\site-packages\django\views\templates\default_urlconf.html:248
-msgid "Connect, get help, or contribute"
-msgstr ""
-
-#: .\venv\Lib\site-packages\sympy\solvers\simplex.py:564
-msgid "x"
-msgstr ""
-
-#: .\venv\Lib\site-packages\sympy\solvers\simplex.py:565
 #, fuzzy
-#| msgid "by"
-msgid "y"
-msgstr "tarafından"
+#~ msgid "y"
+#~ msgstr "tarafından"
 
 #~ msgid "Podcast Web App"
 #~ msgstr "Podcast Web Uygulaması"
