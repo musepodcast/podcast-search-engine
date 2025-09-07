@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-06 17:50-0500\n"
+"POT-Creation-Date: 2025-09-07 16:40-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,10 +16,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != "
-"11 ? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % "
-"100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || "
-"(n % 100 >=11 && n % 100 <=14 )) ? 2: 3);\n"
+"Plural-Forms: nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != 11 ? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || (n % 100 >=11 && n % 100 <=14 )) ? 2: 3);\n"
 
 #: .\podcasts\forms.py:50
 msgid "Email"
@@ -58,14 +55,14 @@ msgstr "Або вставити цю посиланню в свій браузе
 #: .\podcasts\templates\account\email\email_confirmation_message.html:25
 #: .\podcasts\templates\account\email\email_confirmation_message.txt:6
 #: .\podcasts\templates\account\email\email_confirmation_signup_message.html:25
-#: .\podcasts\templates\account\email\email_confirmation_signup_message.txt:8
+#: .\podcasts\templates\account\email\email_confirmation_signup_message.txt:6
 msgid "This link expires in 24 hours."
 msgstr "Цей зв'язок закінчується через 24 години."
 
 #: .\podcasts\templates\account\email\email_confirmation_message.html:29
 #: .\podcasts\templates\account\email\email_confirmation_message.txt:8
 #: .\podcasts\templates\account\email\email_confirmation_signup_message.html:29
-#: .\podcasts\templates\account\email\email_confirmation_signup_message.txt:10
+#: .\podcasts\templates\account\email\email_confirmation_signup_message.txt:8
 msgid "Worm regards,"
 msgstr "Вітають червонів,"
 
@@ -86,13 +83,14 @@ msgid "Confirm your account by clicking the button below:"
 msgstr "Підтвердіть свій обліковий запис, натискавши кнопку нижче:"
 
 #: .\podcasts\templates\account\email\email_confirmation_signup_message.txt:2
+#| msgid ""
+#| "\n"
+#| "Welcome to Muse Podcast! Confirm your account by clicking the link below:\n"
 msgid ""
-"\n"
-"Welcome to Muse Podcast! Confirm your account by clicking the link below:\n"
+"Welcome to Muse Podcast! Confirm your account by clicking the link below:"
 msgstr ""
-"\n"
-"Вітаємо Вас в Podcast Muse! Підтвердіть свій аккаунт, натиснувши нижче "
-"посилання: \n"
+"Вітаємо Вас на Podcast Muse! Підтвердіть свій аккаунт, натискавши посилання "
+"нижче:"
 
 #: .\podcasts\templates\account\email_confirm.html:6
 msgid "Confirm Your Email"
@@ -102,13 +100,11 @@ msgstr "Потвердіть електронну пошту"
 #, python-format
 msgid ""
 "\n"
-"      Confirm the email address <strong>%(email)s</strong> to activate your "
-"account.\n"
+"      Confirm the email address <strong>%(email)s</strong> to activate your account.\n"
 "      "
 msgstr ""
 "\n"
-"Підтвердіть адресу електронної пошти <strong>%(email)s</strong> для "
-"активації вашого облікового запису. "
+"Підтвердіть адресу електронної пошти <strong>%(email)s</strong> для активації вашого облікового запису. "
 
 #: .\podcasts\templates\account\email_confirm.html:18
 msgid "Confirm Email"
@@ -168,7 +164,7 @@ msgstr "Додому"
 
 #: .\podcasts\templates\podcasts\base.html:57
 #: .\podcasts\templates\podcasts\channel_list.html:22
-#: .\podcasts\templates\podcasts\channel_list.html:73
+#: .\podcasts\templates\podcasts\channel_list.html:79
 #: .\podcasts\templates\podcasts\channel_list_items.html:27
 #: .\podcasts\templates\podcasts\favorites_list.html:5
 #: .\podcasts\templates\podcasts\favorites_list.html:33
@@ -178,7 +174,7 @@ msgstr "Улюблені"
 
 #: .\podcasts\templates\podcasts\base.html:58
 #: .\podcasts\templates\podcasts\channel_list.html:28
-#: .\podcasts\templates\podcasts\channel_list.html:77
+#: .\podcasts\templates\podcasts\channel_list.html:83
 #: .\podcasts\templates\podcasts\channel_list_items.html:31
 #: .\podcasts\templates\podcasts\favorites_list.html:38
 #: .\podcasts\templates\podcasts\favorites_list_items.html:29
@@ -189,7 +185,7 @@ msgstr "Повідомлення"
 #: .\podcasts\templates\podcasts\base.html:59
 #: .\podcasts\templates\podcasts\bookmarks_list.html:65
 #: .\podcasts\templates\podcasts\bookmarks_list_items.html:57
-#: .\podcasts\templates\podcasts\channel_detail.html:155
+#: .\podcasts\templates\podcasts\channel_detail.html:164
 #: .\podcasts\templates\podcasts\channel_detail_item.html:46
 #: .\podcasts\templates\podcasts\episode_list.html:28
 #: .\podcasts\templates\podcasts\episode_list.html:83
@@ -206,7 +202,8 @@ msgstr "Канали"
 
 #: .\podcasts\templates\podcasts\base.html:61
 #: .\podcasts\templates\podcasts\base.html:158
-#: .\podcasts\templates\podcasts\channel_detail.html:117
+#: .\podcasts\templates\podcasts\channel_detail.html:126
+#: .\podcasts\templates\podcasts\channel_list.html:46
 msgid "Episodes"
 msgstr "Епізоди"
 
@@ -253,7 +250,7 @@ msgid "Search episodes or channels..."
 msgstr "Шукати епізоди чи канали..."
 
 #: .\podcasts\templates\podcasts\base.html:174
-#: .\podcasts\templates\podcasts\channel_detail.html:111
+#: .\podcasts\templates\podcasts\channel_detail.html:120
 msgid "Search"
 msgstr "Пошук"
 
@@ -379,9 +376,9 @@ msgstr "Відвертий"
 
 #: .\podcasts\templates\podcasts\bookmarks_list.html:70
 #: .\podcasts\templates\podcasts\bookmarks_list_items.html:62
-#: .\podcasts\templates\podcasts\channel_detail.html:160
+#: .\podcasts\templates\podcasts\channel_detail.html:169
 #: .\podcasts\templates\podcasts\channel_detail_item.html:51
-#: .\podcasts\templates\podcasts\episode_detail.html:196
+#: .\podcasts\templates\podcasts\episode_detail.html:192
 #: .\podcasts\templates\podcasts\episode_list.html:34
 #: .\podcasts\templates\podcasts\episode_list.html:88
 #: .\podcasts\templates\podcasts\episode_list_items.html:59
@@ -392,7 +389,7 @@ msgstr "Комментарії"
 
 #: .\podcasts\templates\podcasts\bookmarks_list.html:75
 #: .\podcasts\templates\podcasts\bookmarks_list_items.html:67
-#: .\podcasts\templates\podcasts\channel_detail.html:164
+#: .\podcasts\templates\podcasts\channel_detail.html:173
 #: .\podcasts\templates\podcasts\channel_detail_item.html:56
 #: .\podcasts\templates\podcasts\episode_list.html:93
 #: .\podcasts\templates\podcasts\episode_list_items.html:64
@@ -405,11 +402,10 @@ msgstr "Рейтинг епізодів"
 #: .\podcasts\templates\podcasts\bookmarks_list_items.html:76
 #: .\podcasts\templates\podcasts\channel_detail.html:90
 #: .\podcasts\templates\podcasts\channel_detail.html:91
-#: .\podcasts\templates\podcasts\channel_detail.html:172
+#: .\podcasts\templates\podcasts\channel_detail.html:181
 #: .\podcasts\templates\podcasts\channel_detail_item.html:65
-#: .\podcasts\templates\podcasts\channel_list.html:89
+#: .\podcasts\templates\podcasts\channel_list.html:95
 #: .\podcasts\templates\podcasts\channel_list_items.html:43
-#: .\podcasts\templates\podcasts\episode_detail.html:117
 #: .\podcasts\templates\podcasts\episode_detail.html:118
 #: .\podcasts\templates\podcasts\episode_list.html:102
 #: .\podcasts\templates\podcasts\episode_list_items.html:73
@@ -430,11 +426,11 @@ msgstr "Завантажую додаткові епізоди..."
 
 #: .\podcasts\templates\podcasts\bookmarks_list.html:142
 #: .\podcasts\templates\podcasts\bookmarks_list.html:149
-#: .\podcasts\templates\podcasts\channel_detail.html:197
-#: .\podcasts\templates\podcasts\channel_list.html:108
+#: .\podcasts\templates\podcasts\channel_detail.html:206
+#: .\podcasts\templates\podcasts\channel_list.html:118
 #: .\podcasts\templates\podcasts\episode_list.html:160
 #: .\podcasts\templates\podcasts\episode_list.html:167
-#: .\podcasts\templates\podcasts\favorites_list.html:74
+#: .\podcasts\templates\podcasts\favorites_list.html:79
 #: .\podcasts\templates\podcasts\notifications_list.html:134
 #: .\podcasts\templates\podcasts\notifications_list.html:141
 #: .\podcasts\templates\podcasts\replies_list.html:20
@@ -444,7 +440,7 @@ msgid "End of list..."
 msgstr "Кінець списку..."
 
 #: .\podcasts\templates\podcasts\channel_detail.html:28
-#: .\podcasts\templates\podcasts\channel_list.html:65
+#: .\podcasts\templates\podcasts\channel_list.html:71
 #: .\podcasts\templates\podcasts\channel_list_items.html:19
 #: .\podcasts\templates\podcasts\favorites_list.html:25
 #: .\podcasts\templates\podcasts\favorites_list_items.html:18
@@ -489,20 +485,28 @@ msgstr "Оцінюйте цей канал"
 msgid "Average rating and number of ratings"
 msgstr "Середній рейтинг і кількість рейтингів"
 
-#: .\podcasts\templates\podcasts\channel_detail.html:102
+#: .\podcasts\templates\podcasts\channel_detail.html:98
+#: .\podcasts\templates\podcasts\channel_detail.html:99
+#: .\podcasts\templates\podcasts\channel_list.html:99
+#: .\podcasts\templates\podcasts\channel_list_items.html:47
+#| msgid "Podcast Episodes"
+msgid "Total Episodes"
+msgstr "Загальні епізоди"
+
+#: .\podcasts\templates\podcasts\channel_detail.html:111
 msgid "Search episodes in this channel"
 msgstr "Пошукові епізоди на цьому каналі"
 
-#: .\podcasts\templates\podcasts\channel_detail.html:108
+#: .\podcasts\templates\podcasts\channel_detail.html:117
 msgid "Search episodes in this channel…"
 msgstr "Пошукові епізоди на цьому каналі..."
 
-#: .\podcasts\templates\podcasts\channel_detail.html:185
+#: .\podcasts\templates\podcasts\channel_detail.html:194
 msgid "No episodes available for this channel."
 msgstr "На цьому каналі немає епізодів."
 
-#: .\podcasts\templates\podcasts\channel_detail.html:192
-#: .\podcasts\templates\podcasts\channel_detail.html:198
+#: .\podcasts\templates\podcasts\channel_detail.html:201
+#: .\podcasts\templates\podcasts\channel_detail.html:207
 #: .\podcasts\templates\podcasts\episode_list.html:125
 #: .\podcasts\templates\podcasts\search_results_items.html:143
 #: .\podcasts\templates\podcasts\search_results_items.html:154
@@ -579,7 +583,17 @@ msgstr "А → З"
 msgid "Z → A"
 msgstr "З → А"
 
-#: .\podcasts\templates\podcasts\channel_list.html:59
+#: .\podcasts\templates\podcasts\channel_list.html:47
+#| msgid "Podcast Episodes"
+msgid "Most episodes"
+msgstr "Більшість епізодів"
+
+#: .\podcasts\templates\podcasts\channel_list.html:48
+#| msgid "Podcast Episodes"
+msgid "Least episodes"
+msgstr "Найменші епізоди"
+
+#: .\podcasts\templates\podcasts\channel_list.html:65
 #: .\podcasts\templates\podcasts\channel_list_items.html:13
 #: .\podcasts\templates\podcasts\favorites_list.html:19
 #: .\podcasts\templates\podcasts\favorites_list_items.html:12
@@ -587,20 +601,20 @@ msgstr "З → А"
 msgid "No image available"
 msgstr "Немає доступного зображення"
 
-#: .\podcasts\templates\podcasts\channel_list.html:81
+#: .\podcasts\templates\podcasts\channel_list.html:87
 #: .\podcasts\templates\podcasts\channel_list_items.html:35
 #: .\podcasts\templates\podcasts\favorites_list.html:43
 #: .\podcasts\templates\podcasts\favorites_list_items.html:33
 msgid "Channel Rating"
 msgstr "Рейтинг каналу"
 
-#: .\podcasts\templates\podcasts\channel_list.html:98
+#: .\podcasts\templates\podcasts\channel_list.html:108
 msgid "No channels available."
 msgstr "Немає доступних каналів."
 
-#: .\podcasts\templates\podcasts\channel_list.html:104
-#: .\podcasts\templates\podcasts\channel_list.html:109
-#: .\podcasts\templates\podcasts\favorites_list.html:75
+#: .\podcasts\templates\podcasts\channel_list.html:114
+#: .\podcasts\templates\podcasts\channel_list.html:119
+#: .\podcasts\templates\podcasts\favorites_list.html:80
 #: .\podcasts\templates\podcasts\search_results_ch_items.html:68
 #: .\podcasts\templates\podcasts\search_results_ch_items.html:73
 msgid "Loading more channels..."
@@ -626,16 +640,16 @@ msgid ""
 "using your CPU/GPU, and securely return the results. This helps us speed up "
 "episode generation and improve quality for the entire community."
 msgstr ""
-"Коли ви натиснете на кнопку \"Започніть вносити\", легкий агент, який працює "
-"на вашій машині, збирає нові записи RSS-подачі для ваших обраних каналів, "
+"Коли ви натиснете на кнопку \"Започніть вносити\", легкий агент, який працює"
+" на вашій машині, збирає нові записи RSS-подачі для ваших обраних каналів, "
 "транскриптує або перекладає їх на корисні транскрипти, обробляє їх локально "
-"за допомогою процесора/GPU, і безпечно повертає результати. Це допомагає нам "
-"прискорювати генерацію епізодів і поліпшити якість для всієї спільноти."
+"за допомогою процесора/GPU, і безпечно повертає результати. Це допомагає нам"
+" прискорювати генерацію епізодів і поліпшити якість для всієї спільноти."
 
 #: .\podcasts\templates\podcasts\contribute.html:13
 msgid ""
-"Select which channels you'd like to support or choose 'All Channels' to help "
-"across the platform."
+"Select which channels you'd like to support or choose 'All Channels' to help"
+" across the platform."
 msgstr ""
 "Виберіть, які канали ви хочете підтримати або виберіть \"Всі канали\", щоб "
 "допомогти на всій платформі."
@@ -704,11 +718,16 @@ msgstr ""
 msgid "Disable 2FA"
 msgstr "Виключити 2FA"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:79
+#: .\podcasts\templates\podcasts\episode_detail.html:40
+#| msgid "No channels available."
+msgid "No channel image"
+msgstr "Без зображення каналу"
+
+#: .\podcasts\templates\podcasts\episode_detail.html:80
 msgid "Remove from Bookmarks"
 msgstr "Вилучити з відміток"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:79
+#: .\podcasts\templates\podcasts\episode_detail.html:80
 msgid "Add to Bookmarks"
 msgstr "Додавати кнопки"
 
@@ -732,31 +751,60 @@ msgstr "Оцінюйте цей епізод"
 msgid "Average rating and total ratings"
 msgstr "Середній рейтинг і загальні рейтинги"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:138
+#: .\podcasts\templates\podcasts\episode_detail.html:137
+msgid "Your browser does not support the audio element."
+msgstr "Ваш браузер не підтримує аудіоелемент."
+
+#: .\podcasts\templates\podcasts\episode_detail.html:141
 msgid "Audio:"
 msgstr "Аудіо:"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:151
+#: .\podcasts\templates\podcasts\episode_detail.html:141
+#| msgid "No image available"
+msgid "No audio available"
+msgstr "Немає аудіо."
+
+#: .\podcasts\templates\podcasts\episode_detail.html:149
 msgid "Chapters"
 msgstr "Розділи"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:158
+#: .\podcasts\templates\podcasts\episode_detail.html:156
 msgid "No chapters available for this episode."
 msgstr "На цей епізод немає розділів."
 
-#: .\podcasts\templates\podcasts\episode_detail.html:168
+#: .\podcasts\templates\podcasts\episode_detail.html:165
 msgid "Transcript"
 msgstr "Стенограма"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:207
+#: .\podcasts\templates\podcasts\episode_detail.html:183
+#| msgid "No chapters available for this episode."
+msgid "No transcript available for this episode."
+msgstr "Немає транскрипту для цього епізоду."
+
+#: .\podcasts\templates\podcasts\episode_detail.html:198
 msgid "Write a comment..."
 msgstr "Напишіть коментар..."
 
-#: .\podcasts\templates\podcasts\episode_detail.html:210
+#: .\podcasts\templates\podcasts\episode_detail.html:201
 msgid "Submit Comment"
 msgstr "Подачі коментарів"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:614
+#: .\podcasts\templates\podcasts\episode_detail.html:417
+#| msgid "Remove from Bookmarks"
+msgid "Remove episode from Bookmarks"
+msgstr "Вилучити епізод з відзначанок"
+
+#: .\podcasts\templates\podcasts\episode_detail.html:423
+#| msgid "Add to Bookmarks"
+msgid "Add episode to Bookmarks"
+msgstr "Додавати епізод до відзнак"
+
+#: .\podcasts\templates\podcasts\episode_detail.html:476
+#| msgid "Most commented"
+msgid "No comments yet."
+msgstr "Ще немає коментарів."
+
+#: .\podcasts\templates\podcasts\episode_detail.html:540
 msgid "Please enter a comment"
 msgstr "Будь ласка, введіть коментар"
 
@@ -797,11 +845,17 @@ msgstr "Мінімум коментарів"
 msgid "No episodes available."
 msgstr "Ніяких епізодів немає."
 
-#: .\podcasts\templates\podcasts\favorites_list.html:63
+#: .\podcasts\templates\podcasts\favorites_list.html:57
+#: .\podcasts\templates\podcasts\favorites_list_items.html:45
+#| msgid "Total Views"
+msgid "Total episodes"
+msgstr "Загальні епізоди"
+
+#: .\podcasts\templates\podcasts\favorites_list.html:68
 msgid "No favorite channels found."
 msgstr "Ніяких улюблених каналів не знайдено."
 
-#: .\podcasts\templates\podcasts\favorites_list.html:69
+#: .\podcasts\templates\podcasts\favorites_list.html:74
 msgid "Loading more favorite channels..."
 msgstr "Завантажуючи більше улюблених каналів..."
 
@@ -862,8 +916,8 @@ msgid ""
 "🔍 Search any podcast by keyword (titles, descriptions, or transcript "
 "content)"
 msgstr ""
-"🔍 Пошукуйте будь-який підкаст за ключовим словом (заголовки, описи або "
-"зміст транскрипту)"
+"🔍 Пошукуйте будь-який підкаст за ключовим словом (заголовки, описи або зміст"
+" транскрипту)"
 
 #: .\podcasts\templates\podcasts\home.html:39
 msgid "📄 View full, time-stamped transcripts (speaker-diarized and formatted)"
@@ -922,12 +976,12 @@ msgstr "Початок транскриптів"
 #: .\podcasts\templates\podcasts\home.html:50
 msgid ""
 "Ingests RSS feeds from any podcast; uses OpenAI Whisper Turbo on an NVIDIA "
-"GPU for fast, high-quality transcription; diarizes speakers and formats with "
-"timestamps."
+"GPU for fast, high-quality transcription; diarizes speakers and formats with"
+" timestamps."
 msgstr ""
 "Вживає RSS-потоки з будь-якого підкасту; використовує OpenAI Whisper Turbo "
-"на GPU NVIDIA для швидкої, високоякісної транскрипції; записує громкоговорих "
-"і формати з часовими штампами."
+"на GPU NVIDIA для швидкої, високоякісної транскрипції; записує громкоговорих"
+" і формати з часовими штампами."
 
 #: .\podcasts\templates\podcasts\home.html:51
 msgid "Chapter Summaries"
@@ -959,11 +1013,11 @@ msgstr "Пошук повного тексту"
 
 #: .\podcasts\templates\podcasts\home.html:53
 msgid ""
-"Powered by Elasticsearch for lightning-fast, fuzzy-match queries; filters by "
-"title, description, channel metadata, or transcript."
+"Powered by Elasticsearch for lightning-fast, fuzzy-match queries; filters by"
+" title, description, channel metadata, or transcript."
 msgstr ""
-"Використовується системою Elasticsearch для молниеносних запитів з розбіжною "
-"відповідддністю; фільтри за назвами, описами, метаданами каналу або "
+"Використовується системою Elasticsearch для молниеносних запитів з розбіжною"
+" відповідддністю; фільтри за назвами, описами, метаданами каналу або "
 "транскриптом."
 
 #: .\podcasts\templates\podcasts\home.html:54
@@ -1387,20 +1441,20 @@ msgstr "Розповсюдження та продаж даних"
 #: .\podcasts\templates\podcasts\signup.html:214
 #: .\podcasts\templates\socialaccount\signup.html:115
 msgid ""
-"To keep our services free and advertisement-free, Muse Podcast, LLC may sell "
-"aggregated, anonymized data analytics to podcast creators, business "
+"To keep our services free and advertisement-free, Muse Podcast, LLC may sell"
+" aggregated, anonymized data analytics to podcast creators, business "
 "partners, or other third parties. We ensure your privacy by anonymizing "
 "data, meaning your personal identifiable information (like your name or "
 "exact contact details) will never be sold or shared. Your identity is "
 "replaced by a unique, randomized number to maintain your anonymity."
 msgstr ""
-"Для того, щоб зберегти наші послуги безкоштовними і без рекламних оголошень, "
-"Muse Podcast, LLC може продавати агреговану, анонімну аналітику даних "
+"Для того, щоб зберегти наші послуги безкоштовними і без рекламних оголошень,"
+" Muse Podcast, LLC може продавати агреговану, анонімну аналітику даних "
 "творцям підкастів, діловим партнерам або іншим третім особам. Ми "
 "забезпечуємо вашу конфіденційність анонімізацією даних, що означає, що ваша "
 "особиста ідентифікаційна інформація (наприклад, ваше ім'я або точні дані "
-"контакту) ніколи не буде продана або поширена. Ваша ідентичність замінюється "
-"унікальним, рандомізованим номером для збереження вашої анонімності."
+"контакту) ніколи не буде продана або поширена. Ваша ідентичність замінюється"
+" унікальним, рандомізованим номером для збереження вашої анонімності."
 
 #: .\podcasts\templates\podcasts\signup.html:215
 #: .\podcasts\templates\socialaccount\signup.html:116
@@ -1412,13 +1466,13 @@ msgstr "Безпека даних"
 #, python-format
 msgid ""
 "Muse Podcast, LLC employs industry-standard practices and technologies to "
-"safeguard your personal information. However, no method of transmission over "
-"the internet or electronic storage is 100%% secure, so while we strive to "
+"safeguard your personal information. However, no method of transmission over"
+" the internet or electronic storage is 100%% secure, so while we strive to "
 "protect your personal information, we cannot guarantee absolute security."
 msgstr ""
 "Muse Podcast, LLC employs industry-standard practices and technologies to "
-"safeguard your personal information. However, no method of transmission over "
-"the internet or electronic storage is 100%% secure, so while we strive to "
+"safeguard your personal information. However, no method of transmission over"
+" the internet or electronic storage is 100%% secure, so while we strive to "
 "protect your personal information, we cannot guarantee absolute security."
 
 #: .\podcasts\templates\podcasts\signup.html:217
@@ -1449,8 +1503,8 @@ msgid ""
 "this Privacy Notice, contact us at:"
 msgstr ""
 "Ви маєте право на доступ, виправлення або прохання про видалення ваших "
-"персональних даних в будь-який час. Для здійснення цих прав або якщо у вас є "
-"питання щодо цієї Повідомлення про конфіденційність, зв'яжіться з нами по "
+"персональних даних в будь-який час. Для здійснення цих прав або якщо у вас є"
+" питання щодо цієї Повідомлення про конфіденційність, зв'яжіться з нами по "
 "адресі:"
 
 #: .\podcasts\templates\podcasts\signup.html:225
@@ -1533,34 +1587,34 @@ msgid ""
 "Your support ticket was unsuccessful, file size is too large, needs to be ≤ "
 "2 MB."
 msgstr ""
-"Ваш квиток підтримки не вдалося, розмір файлу занадто великий, потрібно бути "
-"≤ 2 МБ."
+"Ваш квиток підтримки не вдалося, розмір файлу занадто великий, потрібно бути"
+" ≤ 2 МБ."
 
 #: .\podcasts\templates\podcasts\support_ticket.html:161
 msgid ""
-"Your support ticket was unsuccessful, file type incorrect, only (JPG/PNG/"
-"GIF) are accepted."
+"Your support ticket was unsuccessful, file type incorrect, only "
+"(JPG/PNG/GIF) are accepted."
 msgstr ""
-"Ваш квиток підтримки не вдалося, тип файлу неправильний, тільки (JPG/PNG/"
-"GIF) приймаються."
+"Ваш квиток підтримки не вдалося, тип файлу неправильний, тільки "
+"(JPG/PNG/GIF) приймаються."
 
 #: .\podcasts\templates\podcasts\support_ticket.html:163
 msgid ""
-"Your support ticket was unsuccessful, file type incorrect (only JPG/PNG/GIF) "
-"and file size is too large (≤ 2 MB)."
+"Your support ticket was unsuccessful, file type incorrect (only JPG/PNG/GIF)"
+" and file size is too large (≤ 2 MB)."
 msgstr ""
-"Ваш квиток підтримки не вдалося, тип файлу неправильний (только JPG/PNG/GIF) "
-"і розмір файлу занадто великий (≤ 2 МБ)."
+"Ваш квиток підтримки не вдалося, тип файлу неправильний (только JPG/PNG/GIF)"
+" і розмір файлу занадто великий (≤ 2 МБ)."
 
 #: .\podcasts\templates\podcasts\support_ticket.html:166
 #, python-format
 msgid ""
-"You’ve reached your limit of %(limit)s open tickets (%(open_count)s/"
-"%(limit)s). Please wait for one to complete or cancel before opening a new "
-"one."
+"You’ve reached your limit of %(limit)s open tickets "
+"(%(open_count)s/%(limit)s). Please wait for one to complete or cancel before"
+" opening a new one."
 msgstr ""
-"Ви досягли свого ліміту відкритих квитків %(limit)s (%(open_count)s/"
-"%(limit)s)."
+"Ви досягли свого ліміту відкритих квитків %(limit)s "
+"(%(open_count)s/%(limit)s)."
 
 #: .\podcasts\templates\podcasts\support_ticket.html:183
 msgid "OK"
@@ -1709,7 +1763,8 @@ msgstr "Занксований вхід"
 #: .\podcasts\templates\socialaccount\cancelled.html:9
 #: .\podcasts\templates\socialaccount\error.html:9
 msgid "You decided not to sign in with that external account."
-msgstr "Ви вирішили не зареєструватися за допомогою цього зовнішнього рахунку."
+msgstr ""
+"Ви вирішили не зареєструватися за допомогою цього зовнішнього рахунку."
 
 #: .\podcasts\templates\socialaccount\signup.html:7
 msgid "Finish signing up"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-06 17:50-0500\n"
+"POT-Creation-Date: 2025-09-07 16:40-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -55,14 +55,14 @@ msgstr "またはこのリンクをブラウザに貼る:"
 #: .\podcasts\templates\account\email\email_confirmation_message.html:25
 #: .\podcasts\templates\account\email\email_confirmation_message.txt:6
 #: .\podcasts\templates\account\email\email_confirmation_signup_message.html:25
-#: .\podcasts\templates\account\email\email_confirmation_signup_message.txt:8
+#: .\podcasts\templates\account\email\email_confirmation_signup_message.txt:6
 msgid "This link expires in 24 hours."
 msgstr "このリンクは24時間以内に終了します"
 
 #: .\podcasts\templates\account\email\email_confirmation_message.html:29
 #: .\podcasts\templates\account\email\email_confirmation_message.txt:8
 #: .\podcasts\templates\account\email\email_confirmation_signup_message.html:29
-#: .\podcasts\templates\account\email\email_confirmation_signup_message.txt:10
+#: .\podcasts\templates\account\email\email_confirmation_signup_message.txt:8
 msgid "Worm regards,"
 msgstr "ワームの挨拶"
 
@@ -81,13 +81,12 @@ msgid "Confirm your account by clicking the button below:"
 msgstr "下のボタンをクリックしてアカウントを確認してください."
 
 #: .\podcasts\templates\account\email\email_confirmation_signup_message.txt:2
+#| msgid ""
+#| "\n"
+#| "Welcome to Muse Podcast! Confirm your account by clicking the link below:\n"
 msgid ""
-"\n"
-"Welcome to Muse Podcast! Confirm your account by clicking the link below:\n"
-msgstr ""
-"\n"
-"ミューズポッドキャストへようこそ! 下のリンクをクリックしてアカウントを確認し"
-"てください. \n"
+"Welcome to Muse Podcast! Confirm your account by clicking the link below:"
+msgstr "ミューズ・ポッドキャストへようこそ! 下のリンクをクリックしてアカウントを確認してください."
 
 #: .\podcasts\templates\account\email_confirm.html:6
 msgid "Confirm Your Email"
@@ -97,13 +96,11 @@ msgstr "メールを確認する"
 #, python-format
 msgid ""
 "\n"
-"      Confirm the email address <strong>%(email)s</strong> to activate your "
-"account.\n"
+"      Confirm the email address <strong>%(email)s</strong> to activate your account.\n"
 "      "
 msgstr ""
 "\n"
-"アカウントを起動するには <strong>%(email)s</strong>のメールアドレスを確認して"
-"ください. "
+"アカウントを起動するには <strong>%(email)s</strong>のメールアドレスを確認してください. "
 
 #: .\podcasts\templates\account\email_confirm.html:18
 msgid "Confirm Email"
@@ -160,7 +157,7 @@ msgstr "家庭"
 
 #: .\podcasts\templates\podcasts\base.html:57
 #: .\podcasts\templates\podcasts\channel_list.html:22
-#: .\podcasts\templates\podcasts\channel_list.html:73
+#: .\podcasts\templates\podcasts\channel_list.html:79
 #: .\podcasts\templates\podcasts\channel_list_items.html:27
 #: .\podcasts\templates\podcasts\favorites_list.html:5
 #: .\podcasts\templates\podcasts\favorites_list.html:33
@@ -170,7 +167,7 @@ msgstr "お気に入り"
 
 #: .\podcasts\templates\podcasts\base.html:58
 #: .\podcasts\templates\podcasts\channel_list.html:28
-#: .\podcasts\templates\podcasts\channel_list.html:77
+#: .\podcasts\templates\podcasts\channel_list.html:83
 #: .\podcasts\templates\podcasts\channel_list_items.html:31
 #: .\podcasts\templates\podcasts\favorites_list.html:38
 #: .\podcasts\templates\podcasts\favorites_list_items.html:29
@@ -181,7 +178,7 @@ msgstr "通知"
 #: .\podcasts\templates\podcasts\base.html:59
 #: .\podcasts\templates\podcasts\bookmarks_list.html:65
 #: .\podcasts\templates\podcasts\bookmarks_list_items.html:57
-#: .\podcasts\templates\podcasts\channel_detail.html:155
+#: .\podcasts\templates\podcasts\channel_detail.html:164
 #: .\podcasts\templates\podcasts\channel_detail_item.html:46
 #: .\podcasts\templates\podcasts\episode_list.html:28
 #: .\podcasts\templates\podcasts\episode_list.html:83
@@ -198,7 +195,8 @@ msgstr "チャンネル"
 
 #: .\podcasts\templates\podcasts\base.html:61
 #: .\podcasts\templates\podcasts\base.html:158
-#: .\podcasts\templates\podcasts\channel_detail.html:117
+#: .\podcasts\templates\podcasts\channel_detail.html:126
+#: .\podcasts\templates\podcasts\channel_list.html:46
 msgid "Episodes"
 msgstr "エピソード"
 
@@ -245,7 +243,7 @@ msgid "Search episodes or channels..."
 msgstr "エピソードまたはチャンネルを検索..."
 
 #: .\podcasts\templates\podcasts\base.html:174
-#: .\podcasts\templates\podcasts\channel_detail.html:111
+#: .\podcasts\templates\podcasts\channel_detail.html:120
 msgid "Search"
 msgstr "検索"
 
@@ -371,9 +369,9 @@ msgstr "明示的"
 
 #: .\podcasts\templates\podcasts\bookmarks_list.html:70
 #: .\podcasts\templates\podcasts\bookmarks_list_items.html:62
-#: .\podcasts\templates\podcasts\channel_detail.html:160
+#: .\podcasts\templates\podcasts\channel_detail.html:169
 #: .\podcasts\templates\podcasts\channel_detail_item.html:51
-#: .\podcasts\templates\podcasts\episode_detail.html:196
+#: .\podcasts\templates\podcasts\episode_detail.html:192
 #: .\podcasts\templates\podcasts\episode_list.html:34
 #: .\podcasts\templates\podcasts\episode_list.html:88
 #: .\podcasts\templates\podcasts\episode_list_items.html:59
@@ -384,7 +382,7 @@ msgstr "コメント"
 
 #: .\podcasts\templates\podcasts\bookmarks_list.html:75
 #: .\podcasts\templates\podcasts\bookmarks_list_items.html:67
-#: .\podcasts\templates\podcasts\channel_detail.html:164
+#: .\podcasts\templates\podcasts\channel_detail.html:173
 #: .\podcasts\templates\podcasts\channel_detail_item.html:56
 #: .\podcasts\templates\podcasts\episode_list.html:93
 #: .\podcasts\templates\podcasts\episode_list_items.html:64
@@ -397,11 +395,10 @@ msgstr "エピソード 評価"
 #: .\podcasts\templates\podcasts\bookmarks_list_items.html:76
 #: .\podcasts\templates\podcasts\channel_detail.html:90
 #: .\podcasts\templates\podcasts\channel_detail.html:91
-#: .\podcasts\templates\podcasts\channel_detail.html:172
+#: .\podcasts\templates\podcasts\channel_detail.html:181
 #: .\podcasts\templates\podcasts\channel_detail_item.html:65
-#: .\podcasts\templates\podcasts\channel_list.html:89
+#: .\podcasts\templates\podcasts\channel_list.html:95
 #: .\podcasts\templates\podcasts\channel_list_items.html:43
-#: .\podcasts\templates\podcasts\episode_detail.html:117
 #: .\podcasts\templates\podcasts\episode_detail.html:118
 #: .\podcasts\templates\podcasts\episode_list.html:102
 #: .\podcasts\templates\podcasts\episode_list_items.html:73
@@ -422,11 +419,11 @@ msgstr "記録されたエピソードを 読み込み..."
 
 #: .\podcasts\templates\podcasts\bookmarks_list.html:142
 #: .\podcasts\templates\podcasts\bookmarks_list.html:149
-#: .\podcasts\templates\podcasts\channel_detail.html:197
-#: .\podcasts\templates\podcasts\channel_list.html:108
+#: .\podcasts\templates\podcasts\channel_detail.html:206
+#: .\podcasts\templates\podcasts\channel_list.html:118
 #: .\podcasts\templates\podcasts\episode_list.html:160
 #: .\podcasts\templates\podcasts\episode_list.html:167
-#: .\podcasts\templates\podcasts\favorites_list.html:74
+#: .\podcasts\templates\podcasts\favorites_list.html:79
 #: .\podcasts\templates\podcasts\notifications_list.html:134
 #: .\podcasts\templates\podcasts\notifications_list.html:141
 #: .\podcasts\templates\podcasts\replies_list.html:20
@@ -436,7 +433,7 @@ msgid "End of list..."
 msgstr "リストの終わり..."
 
 #: .\podcasts\templates\podcasts\channel_detail.html:28
-#: .\podcasts\templates\podcasts\channel_list.html:65
+#: .\podcasts\templates\podcasts\channel_list.html:71
 #: .\podcasts\templates\podcasts\channel_list_items.html:19
 #: .\podcasts\templates\podcasts\favorites_list.html:25
 #: .\podcasts\templates\podcasts\favorites_list_items.html:18
@@ -481,20 +478,28 @@ msgstr "このチャンネルを評価する"
 msgid "Average rating and number of ratings"
 msgstr "平均評価と評価数"
 
-#: .\podcasts\templates\podcasts\channel_detail.html:102
+#: .\podcasts\templates\podcasts\channel_detail.html:98
+#: .\podcasts\templates\podcasts\channel_detail.html:99
+#: .\podcasts\templates\podcasts\channel_list.html:99
+#: .\podcasts\templates\podcasts\channel_list_items.html:47
+#| msgid "Podcast Episodes"
+msgid "Total Episodes"
+msgstr "合計エピソード"
+
+#: .\podcasts\templates\podcasts\channel_detail.html:111
 msgid "Search episodes in this channel"
 msgstr "このチャンネルで検索エピソード"
 
-#: .\podcasts\templates\podcasts\channel_detail.html:108
+#: .\podcasts\templates\podcasts\channel_detail.html:117
 msgid "Search episodes in this channel…"
 msgstr "このチャンネルでの捜索エピソード..."
 
-#: .\podcasts\templates\podcasts\channel_detail.html:185
+#: .\podcasts\templates\podcasts\channel_detail.html:194
 msgid "No episodes available for this channel."
 msgstr "このチャンネルにはエピソードはありません."
 
-#: .\podcasts\templates\podcasts\channel_detail.html:192
-#: .\podcasts\templates\podcasts\channel_detail.html:198
+#: .\podcasts\templates\podcasts\channel_detail.html:201
+#: .\podcasts\templates\podcasts\channel_detail.html:207
 #: .\podcasts\templates\podcasts\episode_list.html:125
 #: .\podcasts\templates\podcasts\search_results_items.html:143
 #: .\podcasts\templates\podcasts\search_results_items.html:154
@@ -571,7 +576,17 @@ msgstr "A → Z"
 msgid "Z → A"
 msgstr "Z → A"
 
-#: .\podcasts\templates\podcasts\channel_list.html:59
+#: .\podcasts\templates\podcasts\channel_list.html:47
+#| msgid "Podcast Episodes"
+msgid "Most episodes"
+msgstr "ほとんどのエピソード"
+
+#: .\podcasts\templates\podcasts\channel_list.html:48
+#| msgid "Podcast Episodes"
+msgid "Least episodes"
+msgstr "最低のエピソード"
+
+#: .\podcasts\templates\podcasts\channel_list.html:65
 #: .\podcasts\templates\podcasts\channel_list_items.html:13
 #: .\podcasts\templates\podcasts\favorites_list.html:19
 #: .\podcasts\templates\podcasts\favorites_list_items.html:12
@@ -579,20 +594,20 @@ msgstr "Z → A"
 msgid "No image available"
 msgstr "画像はありません"
 
-#: .\podcasts\templates\podcasts\channel_list.html:81
+#: .\podcasts\templates\podcasts\channel_list.html:87
 #: .\podcasts\templates\podcasts\channel_list_items.html:35
 #: .\podcasts\templates\podcasts\favorites_list.html:43
 #: .\podcasts\templates\podcasts\favorites_list_items.html:33
 msgid "Channel Rating"
 msgstr "チャンネル評価"
 
-#: .\podcasts\templates\podcasts\channel_list.html:98
+#: .\podcasts\templates\podcasts\channel_list.html:108
 msgid "No channels available."
 msgstr "利用可能なチャンネルがありません。"
 
-#: .\podcasts\templates\podcasts\channel_list.html:104
-#: .\podcasts\templates\podcasts\channel_list.html:109
-#: .\podcasts\templates\podcasts\favorites_list.html:75
+#: .\podcasts\templates\podcasts\channel_list.html:114
+#: .\podcasts\templates\podcasts\channel_list.html:119
+#: .\podcasts\templates\podcasts\favorites_list.html:80
 #: .\podcasts\templates\podcasts\search_results_ch_items.html:68
 #: .\podcasts\templates\podcasts\search_results_ch_items.html:73
 msgid "Loading more channels..."
@@ -606,9 +621,7 @@ msgstr "コミュニティ ポッドキャスト生成器"
 msgid ""
 "Thank you for volunteering your computer's resources to help generate and "
 "process podcast episodes!"
-msgstr ""
-"ポッドキャストのエピソードを作成し処理するのに コンピュータのリソースをボラン"
-"ティアとして提供していただき ありがとうございました!"
+msgstr "ポッドキャストのエピソードを作成し処理するのに コンピュータのリソースをボランティアとして提供していただき ありがとうございました!"
 
 #: .\podcasts\templates\podcasts\contribute.html:11
 msgid ""
@@ -618,18 +631,13 @@ msgid ""
 "using your CPU/GPU, and securely return the results. This helps us speed up "
 "episode generation and improve quality for the entire community."
 msgstr ""
-"\"開始貢献\"をクリックすると,あなたのマシンで動作する軽量エージェントは,選択"
-"したチャネルのための新しいRSSフィードエントリを取り出し,使用可能なトランスク"
-"リプトに書き換え,CPU/GPUを使用して現地で処理し,結果を安全に返します.これはエ"
-"ピソード生成を加速させ,コミュニティ全体の品質を改善するのに役立ちます."
+"\"開始貢献\"をクリックすると,あなたのマシンで動作する軽量エージェントは,選択したチャネルのための新しいRSSフィードエントリを取り出し,使用可能なトランスクリプトに書き換え,CPU/GPUを使用して現地で処理し,結果を安全に返します.これはエピソード生成を加速させ,コミュニティ全体の品質を改善するのに役立ちます."
 
 #: .\podcasts\templates\podcasts\contribute.html:13
 msgid ""
-"Select which channels you'd like to support or choose 'All Channels' to help "
-"across the platform."
-msgstr ""
-"サポートしたいチャンネルを選択するか,プラットフォーム全体でサポートするために"
-"\"All Channels\"を選択してください."
+"Select which channels you'd like to support or choose 'All Channels' to help"
+" across the platform."
+msgstr "サポートしたいチャンネルを選択するか,プラットフォーム全体でサポートするために\"All Channels\"を選択してください."
 
 #: .\podcasts\templates\podcasts\contribute.html:14
 msgid ""
@@ -645,9 +653,7 @@ msgstr "下のボタンを使っていつでも停止または再起動できま
 msgid ""
 "Soon, we'll introduce a leaderboard to highlight top contributors and a "
 "rewards system to thank you for your support."
-msgstr ""
-"すぐにはトップ貢献者を紹介するランキングボードと 支援に感謝する賞金制度を紹介"
-"します"
+msgstr "すぐにはトップ貢献者を紹介するランキングボードと 支援に感謝する賞金制度を紹介します"
 
 #: .\podcasts\templates\podcasts\contribute.html:30
 msgid "Select Channels"
@@ -689,11 +695,16 @@ msgstr "OTPトークンを入力して,二要素認証を無効にすること�
 msgid "Disable 2FA"
 msgstr "2FAを無効にする"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:79
+#: .\podcasts\templates\podcasts\episode_detail.html:40
+#| msgid "No channels available."
+msgid "No channel image"
+msgstr "チャンネル画像はありません"
+
+#: .\podcasts\templates\podcasts\episode_detail.html:80
 msgid "Remove from Bookmarks"
 msgstr "ブックマークから削除する"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:79
+#: .\podcasts\templates\podcasts\episode_detail.html:80
 msgid "Add to Bookmarks"
 msgstr "ブックマークに追加"
 
@@ -717,31 +728,60 @@ msgstr "このエピソードを評価する"
 msgid "Average rating and total ratings"
 msgstr "平均評価と総評価"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:138
+#: .\podcasts\templates\podcasts\episode_detail.html:137
+msgid "Your browser does not support the audio element."
+msgstr "あなたのブラウザはオーディオ要素をサポートしていません."
+
+#: .\podcasts\templates\podcasts\episode_detail.html:141
 msgid "Audio:"
 msgstr "音声:"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:151
+#: .\podcasts\templates\podcasts\episode_detail.html:141
+#| msgid "No image available"
+msgid "No audio available"
+msgstr "音声はありません"
+
+#: .\podcasts\templates\podcasts\episode_detail.html:149
 msgid "Chapters"
 msgstr "章"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:158
+#: .\podcasts\templates\podcasts\episode_detail.html:156
 msgid "No chapters available for this episode."
 msgstr "このエピソードには章がありません"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:168
+#: .\podcasts\templates\podcasts\episode_detail.html:165
 msgid "Transcript"
 msgstr "トランスクリプト"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:207
+#: .\podcasts\templates\podcasts\episode_detail.html:183
+#| msgid "No chapters available for this episode."
+msgid "No transcript available for this episode."
+msgstr "このエピソードには収録がありません"
+
+#: .\podcasts\templates\podcasts\episode_detail.html:198
 msgid "Write a comment..."
 msgstr "コメントを書いて..."
 
-#: .\podcasts\templates\podcasts\episode_detail.html:210
+#: .\podcasts\templates\podcasts\episode_detail.html:201
 msgid "Submit Comment"
 msgstr "コメントを投稿する"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:614
+#: .\podcasts\templates\podcasts\episode_detail.html:417
+#| msgid "Remove from Bookmarks"
+msgid "Remove episode from Bookmarks"
+msgstr "ブックマークからエピソードを削除"
+
+#: .\podcasts\templates\podcasts\episode_detail.html:423
+#| msgid "Add to Bookmarks"
+msgid "Add episode to Bookmarks"
+msgstr "ブックマークにエピソードを追加する"
+
+#: .\podcasts\templates\podcasts\episode_detail.html:476
+#| msgid "Most commented"
+msgid "No comments yet."
+msgstr "まだコメントはない"
+
+#: .\podcasts\templates\podcasts\episode_detail.html:540
 msgid "Please enter a comment"
 msgstr "コメントを入力してください"
 
@@ -782,11 +822,17 @@ msgstr "最少のコメント"
 msgid "No episodes available."
 msgstr "エピソードはありません"
 
-#: .\podcasts\templates\podcasts\favorites_list.html:63
+#: .\podcasts\templates\podcasts\favorites_list.html:57
+#: .\podcasts\templates\podcasts\favorites_list_items.html:45
+#| msgid "Total Views"
+msgid "Total episodes"
+msgstr "合計エピソード"
+
+#: .\podcasts\templates\podcasts\favorites_list.html:68
 msgid "No favorite channels found."
 msgstr "好きなチャンネルが見つかりませんでした"
 
-#: .\podcasts\templates\podcasts\favorites_list.html:69
+#: .\podcasts\templates\podcasts\favorites_list.html:74
 msgid "Loading more favorite channels..."
 msgstr "もっと好きなチャンネルを 載せ..."
 
@@ -796,8 +842,7 @@ msgstr "ポッドキャスト検索エンジンへようこそ"
 
 #: .\podcasts\templates\podcasts\home.html:7
 msgid "Please log in or create an account to access the site features."
-msgstr ""
-"サイト機能にアクセスするにはログインまたはアカウントを作成してください."
+msgstr "サイト機能にアクセスするにはログインまたはアカウントを作成してください."
 
 #: .\podcasts\templates\podcasts\home.html:8
 msgid "Your memory is short, the Muse's is not..."
@@ -837,23 +882,17 @@ msgstr " について"
 msgid ""
 "Muse is a free, AI-powered podcast search engine. Tired of scouring episode "
 "show notes for bits of information, we built a platform where you can:"
-msgstr ""
-"モーゼは無料で AIで動いている ポッドキャスト検索エンジンです エピソード番組の"
-"メモを探して疲れたので プラットフォームを作りました"
+msgstr "モーゼは無料で AIで動いている ポッドキャスト検索エンジンです エピソード番組のメモを探して疲れたので プラットフォームを作りました"
 
 #: .\podcasts\templates\podcasts\home.html:38
 msgid ""
 "🔍 Search any podcast by keyword (titles, descriptions, or transcript "
 "content)"
-msgstr ""
-"🔍 キーワード (タイトルは,記述,またはトランスクリプトコンテンツ) によってすべ"
-"てのポッドキャストを検索する"
+msgstr "🔍 キーワード (タイトルは,記述,またはトランスクリプトコンテンツ) によってすべてのポッドキャストを検索する"
 
 #: .\podcasts\templates\podcasts\home.html:39
 msgid "📄 View full, time-stamped transcripts (speaker-diarized and formatted)"
-msgstr ""
-" 完全,タイムスタンプ付きのトランスクリプト (スピーカー・ダイアリズされた,"
-"フォーマットされた) を表示する"
+msgstr " 完全,タイムスタンプ付きのトランスクリプト (スピーカー・ダイアリズされた,フォーマットされた) を表示する"
 
 #: .\podcasts\templates\podcasts\home.html:40
 msgid "✍️ Read AI-generated chapter summaries"
@@ -877,9 +916,7 @@ msgstr "興味に応じて新しいチャンネルやエピソードを発見す
 msgid ""
 "Currently optimized for desktop browsers, tablets, foldables, and "
 "smartphones. Community contribution and native apps are coming soon!"
-msgstr ""
-"現在,デスクトップブラウザ,タブレット,フォルダブル,スマートフォン向けに最適化"
-"されています."
+msgstr "現在,デスクトップブラウザ,タブレット,フォルダブル,スマートフォン向けに最適化されています."
 
 #: .\podcasts\templates\podcasts\home.html:47
 msgid "🌟 Key Features"
@@ -893,9 +930,7 @@ msgstr "口座登録と管理"
 msgid ""
 "Create a free account to save searches, bookmark episodes, and track "
 "listening history."
-msgstr ""
-"無料アカウントを作成して 検索,ブックマークエピソードを保存し 聴く履歴を追跡し"
-"ます"
+msgstr "無料アカウントを作成して 検索,ブックマークエピソードを保存し 聴く履歴を追跡します"
 
 #: .\podcasts\templates\podcasts\home.html:50
 msgid "Transcript Generation"
@@ -904,12 +939,11 @@ msgstr "トランスクリプト生成"
 #: .\podcasts\templates\podcasts\home.html:50
 msgid ""
 "Ingests RSS feeds from any podcast; uses OpenAI Whisper Turbo on an NVIDIA "
-"GPU for fast, high-quality transcription; diarizes speakers and formats with "
-"timestamps."
+"GPU for fast, high-quality transcription; diarizes speakers and formats with"
+" timestamps."
 msgstr ""
-"あらゆるポッドキャストからRSSフィードを摂取し,高速で高品質のトランスクリプ"
-"ションのために NVIDIA GPU で OpenAI Whisper Turbo を使用し,タイムスタンプでス"
-"ピーカーとフォーマットを日記化します."
+"あらゆるポッドキャストからRSSフィードを摂取し,高速で高品質のトランスクリプションのために NVIDIA GPU で OpenAI Whisper "
+"Turbo を使用し,タイムスタンプでスピーカーとフォーマットを日記化します."
 
 #: .\podcasts\templates\podcasts\home.html:51
 msgid "Chapter Summaries"
@@ -919,9 +953,7 @@ msgstr "章 の 概要"
 msgid ""
 "Generates concise summaries of each transcript segment using FalconsAI text-"
 "summarization."
-msgstr ""
-"FalconsAIテキスト概要を使用した各トランスクリプトセグメントの簡潔な概要を生成"
-"します."
+msgstr "FalconsAIテキスト概要を使用した各トランスクリプトセグメントの簡潔な概要を生成します."
 
 #: .\podcasts\templates\podcasts\home.html:52
 msgid "Transcript Translations"
@@ -931,9 +963,7 @@ msgstr "トランスクリプト 翻訳"
 msgid ""
 "Takes podcasts and translates them into 17 different languages using "
 "nllb-200-distilled-600M translation model."
-msgstr ""
-"nllb-200-distilled-600M翻訳モデルを使用してポッドキャストを 17 言語に翻訳しま"
-"す."
+msgstr "nllb-200-distilled-600M翻訳モデルを使用してポッドキャストを 17 言語に翻訳します."
 
 #: .\podcasts\templates\podcasts\home.html:53
 msgid "Full-Text Search"
@@ -941,11 +971,11 @@ msgstr "全文検索"
 
 #: .\podcasts\templates\podcasts\home.html:53
 msgid ""
-"Powered by Elasticsearch for lightning-fast, fuzzy-match queries; filters by "
-"title, description, channel metadata, or transcript."
+"Powered by Elasticsearch for lightning-fast, fuzzy-match queries; filters by"
+" title, description, channel metadata, or transcript."
 msgstr ""
-"Elasticsearchによって動力され 閃電速,模糊なマッチのクエリ; タイトル,説明,チャ"
-"ンネルメタデータ,またはトランスクリプトによるフィルター."
+"Elasticsearchによって動力され 閃電速,模糊なマッチのクエリ; "
+"タイトル,説明,チャンネルメタデータ,またはトランスクリプトによるフィルター."
 
 #: .\podcasts\templates\podcasts\home.html:54
 msgid "Flexible Playback"
@@ -1249,9 +1279,8 @@ msgid ""
 "Notice explains how we collect, use, share, and safeguard your information "
 "when you visit our website and register an account."
 msgstr ""
-"Muse Podcast, LLC は,お客様のプライバシーを保護することにコミットしています."
-"このプライバシーポリシーでは,お客様が当社のウェブサイトを訪問し,アカウントを"
-"登録する際にお客様の情報を収集,使用,共有,保護する方法について説明します."
+"Muse Podcast, LLC "
+"は,お客様のプライバシーを保護することにコミットしています.このプライバシーポリシーでは,お客様が当社のウェブサイトを訪問し,アカウントを登録する際にお客様の情報を収集,使用,共有,保護する方法について説明します."
 
 #: .\podcasts\templates\podcasts\signup.html:180
 #: .\podcasts\templates\socialaccount\signup.html:83
@@ -1263,9 +1292,7 @@ msgstr "集める 情報"
 msgid ""
 "We collect the following information when you create an account or use our "
 "website:"
-msgstr ""
-"お客様がアカウントを作成したり,ウェブサイトを使用する場合,以下の情報を収集し"
-"ます."
+msgstr "お客様がアカウントを作成したり,ウェブサイトを使用する場合,以下の情報を収集します."
 
 #: .\podcasts\templates\podcasts\signup.html:183
 #: .\podcasts\templates\socialaccount\signup.html:86
@@ -1363,19 +1390,16 @@ msgstr "データの共有と販売"
 #: .\podcasts\templates\podcasts\signup.html:214
 #: .\podcasts\templates\socialaccount\signup.html:115
 msgid ""
-"To keep our services free and advertisement-free, Muse Podcast, LLC may sell "
-"aggregated, anonymized data analytics to podcast creators, business "
+"To keep our services free and advertisement-free, Muse Podcast, LLC may sell"
+" aggregated, anonymized data analytics to podcast creators, business "
 "partners, or other third parties. We ensure your privacy by anonymizing "
 "data, meaning your personal identifiable information (like your name or "
 "exact contact details) will never be sold or shared. Your identity is "
 "replaced by a unique, randomized number to maintain your anonymity."
 msgstr ""
-"ミューズ・ポッドキャスト,LLCは,当社のサービスを無料と広告フリーに保つために,"
-"ポッドキャスト作成者,ビジネスパートナー,その他の第三者に集約,匿名化されたデー"
-"タ分析を販売することができます.私たちはデータを匿名化することによって,個人識"
-"別可能な情報 (あなたの名前や正確な連絡先など) は決して販売または共有されない"
-"ことを意味します.あなたの匿名性を維持するために,あなたのアイデンティティはユ"
-"ニークでランダム化された番号に置き換えられます."
+"ミューズ・ポッドキャスト,LLCは,当社のサービスを無料と広告フリーに保つために,ポッドキャスト作成者,ビジネスパートナー,その他の第三者に集約,匿名化されたデータ分析を販売することができます.私たちはデータを匿名化することによって,個人識別可能な情報"
+" (あなたの名前や正確な連絡先など) "
+"は決して販売または共有されないことを意味します.あなたの匿名性を維持するために,あなたのアイデンティティはユニークでランダム化された番号に置き換えられます."
 
 #: .\podcasts\templates\podcasts\signup.html:215
 #: .\podcasts\templates\socialaccount\signup.html:116
@@ -1387,13 +1411,13 @@ msgstr "データセキュリティ"
 #, python-format
 msgid ""
 "Muse Podcast, LLC employs industry-standard practices and technologies to "
-"safeguard your personal information. However, no method of transmission over "
-"the internet or electronic storage is 100%% secure, so while we strive to "
+"safeguard your personal information. However, no method of transmission over"
+" the internet or electronic storage is 100%% secure, so while we strive to "
 "protect your personal information, we cannot guarantee absolute security."
 msgstr ""
 "Muse Podcast, LLC employs industry-standard practices and technologies to "
-"safeguard your personal information. However, no method of transmission over "
-"the internet or electronic storage is 100%% secure, so while we strive to "
+"safeguard your personal information. However, no method of transmission over"
+" the internet or electronic storage is 100%% secure, so while we strive to "
 "protect your personal information, we cannot guarantee absolute security."
 
 #: .\podcasts\templates\podcasts\signup.html:217
@@ -1406,9 +1430,7 @@ msgstr "同意"
 msgid ""
 "By clicking the checkbox when creating an account, you consent to the "
 "collection, use, and sharing practices described in this Privacy Notice."
-msgstr ""
-"アカウントを作成する際のチェックボックスをクリックすると,このプライバシーポリ"
-"シーに記載されている収集,使用,共有の慣行に同意します."
+msgstr "アカウントを作成する際のチェックボックスをクリックすると,このプライバシーポリシーに記載されている収集,使用,共有の慣行に同意します."
 
 #: .\podcasts\templates\podcasts\signup.html:219
 #: .\podcasts\templates\socialaccount\signup.html:120
@@ -1422,9 +1444,7 @@ msgid ""
 "data at any time. To exercise these rights or if you have questions about "
 "this Privacy Notice, contact us at:"
 msgstr ""
-"お客様は,個人情報へのアクセス,修正,または削除をいつでも要求する権利がありま"
-"す.これらの権利を行使するために,またはこのプライバシーポリシーに関する質問が"
-"ある場合は,以下のような電話番号でご連絡ください."
+"お客様は,個人情報へのアクセス,修正,または削除をいつでも要求する権利があります.これらの権利を行使するために,またはこのプライバシーポリシーに関する質問がある場合は,以下のような電話番号でご連絡ください."
 
 #: .\podcasts\templates\podcasts\signup.html:225
 #: .\podcasts\templates\socialaccount\signup.html:126
@@ -1438,8 +1458,8 @@ msgid ""
 "time. Changes will be posted on our website and are effective immediately "
 "upon posting."
 msgstr ""
-"Muse Podcast, LLC は,このプライバシーポリシーをいつでも変更する権利を有しま"
-"す.変更は当社のウェブサイトに掲載され,投稿の直後に有効になります."
+"Muse Podcast, LLC "
+"は,このプライバシーポリシーをいつでも変更する権利を有します.変更は当社のウェブサイトに掲載され,投稿の直後に有効になります."
 
 #: .\podcasts\templates\podcasts\signup.html:377
 msgid "Passwords match"
@@ -1505,34 +1525,29 @@ msgstr "支援チケットは成功しました!"
 msgid ""
 "Your support ticket was unsuccessful, file size is too large, needs to be ≤ "
 "2 MB."
-msgstr ""
-"サポートチケットは失敗しました ファイルサイズは大きすぎるので ≤2MBが必要です"
+msgstr "サポートチケットは失敗しました ファイルサイズは大きすぎるので ≤2MBが必要です"
 
 #: .\podcasts\templates\podcasts\support_ticket.html:161
 msgid ""
-"Your support ticket was unsuccessful, file type incorrect, only (JPG/PNG/"
-"GIF) are accepted."
-msgstr ""
-"サポートチケットは失敗し,ファイルタイプが間違っていて,JPG/PNG/GIFのみが受け入"
-"れられます."
+"Your support ticket was unsuccessful, file type incorrect, only "
+"(JPG/PNG/GIF) are accepted."
+msgstr "サポートチケットは失敗し,ファイルタイプが間違っていて,JPG/PNG/GIFのみが受け入れられます."
 
 #: .\podcasts\templates\podcasts\support_ticket.html:163
 msgid ""
-"Your support ticket was unsuccessful, file type incorrect (only JPG/PNG/GIF) "
-"and file size is too large (≤ 2 MB)."
-msgstr ""
-"サポートチケットは失敗し,ファイルタイプが間違っており (JPG/PNG/GIFのみ) ファ"
-"イルサイズは大きすぎる (≤ 2 MB)."
+"Your support ticket was unsuccessful, file type incorrect (only JPG/PNG/GIF)"
+" and file size is too large (≤ 2 MB)."
+msgstr "サポートチケットは失敗し,ファイルタイプが間違っており (JPG/PNG/GIFのみ) ファイルサイズは大きすぎる (≤ 2 MB)."
 
 #: .\podcasts\templates\podcasts\support_ticket.html:166
 #, python-format
 msgid ""
-"You’ve reached your limit of %(limit)s open tickets (%(open_count)s/"
-"%(limit)s). Please wait for one to complete or cancel before opening a new "
-"one."
+"You’ve reached your limit of %(limit)s open tickets "
+"(%(open_count)s/%(limit)s). Please wait for one to complete or cancel before"
+" opening a new one."
 msgstr ""
-"あなたは%(limit)sオープンチケットの制限 (%(open_count)s/%(limit)s) を達成しま"
-"した.新しいチケットを開く前に,チケットの完成またはキャンセルを待て下さい."
+"あなたは%(limit)sオープンチケットの制限 (%(open_count)s/%(limit)s) "
+"を達成しました.新しいチケットを開く前に,チケットの完成またはキャンセルを待て下さい."
 
 #: .\podcasts\templates\podcasts\support_ticket.html:183
 msgid "OK"
@@ -1607,8 +1622,7 @@ msgstr "パスワードリセット完了"
 msgid ""
 "Your password has been successfully reset. You can now log in with your new "
 "password."
-msgstr ""
-"パスワードが成功してリセットされました. 新しい パスワードでログインできます."
+msgstr "パスワードが成功してリセットされました. 新しい パスワードでログインできます."
 
 #: .\podcasts\templates\registration\password_reset_confirm.html:7
 msgid "Reset Your Password"
@@ -1628,9 +1642,7 @@ msgstr "パスワードリセットメール送信"
 msgid ""
 "We've emailed you instructions for resetting your password. Please check "
 "your inbox (and spam folder) for the reset link."
-msgstr ""
-"パスワードをリセットするための指示をメールしました.リセットリンクをチェックし"
-"てください."
+msgstr "パスワードをリセットするための指示をメールしました.リセットリンクをチェックしてください."
 
 #: .\podcasts\templates\registration\password_reset_form.html:8
 msgid ""
@@ -1649,9 +1661,7 @@ msgstr "アカウントロック"
 msgid ""
 "For your security, we’ve temporarily locked your account after multiple "
 "failed login attempts."
-msgstr ""
-"あなたの安全のために,我々は複数の失敗したログイン試みの後,あなたのアカウント"
-"を一時的にロックしました."
+msgstr "あなたの安全のために,我々は複数の失敗したログイン試みの後,あなたのアカウントを一時的にロックしました."
 
 #: .\podcasts\templates\security\locked_out.html:17
 msgid "Please wait and try again."

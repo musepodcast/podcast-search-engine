@@ -1,7 +1,5 @@
 {% load i18n %}
-{% blocktrans with site_name=current_site.name %}
-Welcome to Muse Podcast! Confirm your account by clicking the link below:
-{% endblocktrans %}
+{% blocktrans %}Welcome to Muse Podcast! Confirm your account by clicking the link below:{% endblocktrans %}
 
 {{ activate_url }}
 
