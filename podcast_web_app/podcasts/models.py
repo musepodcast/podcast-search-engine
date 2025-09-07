@@ -201,6 +201,36 @@ class SearchQuery(models.Model):
         return f"{self.query} by {self.user or 'anonymous'}"
 
 
+class ChannelSearchQuery(models.Model):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        null=True, blank=True,
+        on_delete=models.SET_NULL
+    )
+    channel = models.ForeignKey('Channel', on_delete=models.CASCADE, related_name='searches')
+    query = models.CharField(max_length=255)
+
+    # optional metadata you’ll likely want
+    language = models.CharField(max_length=16, blank=True, null=True)
+    ip_address = models.GenericIPAddressField(null=True, blank=True)
+
+    # counters + timestamps
+    count = models.PositiveIntegerField(default=1)
+    first_searched = models.DateTimeField(auto_now_add=True)
+    last_searched  = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        indexes = [
+            models.Index(fields=['channel', 'query']),
+            models.Index(fields=['-last_searched']),
+        ]
+        verbose_name = 'Channel Search Query'
+        verbose_name_plural = 'Channel Search Queries'
+
+    def __str__(self):
+        who = self.user.username if self.user else 'anonymous'
+        return f"[{self.channel.channel_title}] {self.query} by {who}"
+
 
 class Transcript(models.Model):
     episode = models.ForeignKey(

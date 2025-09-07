@@ -2,7 +2,12 @@
 
 from django.views.generic import ListView, DetailView, TemplateView
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.db.models import Q, Prefetch, Avg, Count, Sum, F, OuterRef, Subquery, Value, IntegerField, FloatField
+from django.db.models import (
+    Q, Prefetch, Avg, 
+    Count, Sum, F, 
+    OuterRef, Subquery, Value, 
+    IntegerField, FloatField
+)
 from django.db.models.functions import Coalesce
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
@@ -27,7 +32,7 @@ from .models import (
     Chapter, ChapterTranslations,
     SearchQuery, ChannelInteraction, EpisodeInteraction,
     Comment, CommentReaction, Reply,
-    SupportTicket, SupportTicketAttachment
+    SupportTicket, SupportTicketAttachment, ChannelSearchQuery
 
 )
 from .filters import EpisodeFilter
@@ -566,7 +571,7 @@ class ChannelListView(LoginRequiredMixin, ListView):
     paginate_by = 10
 
     # Map query params to annotated fields
-    ALLOWED_SORTS = {'views', 'favorites', 'notifications', 'stars', 'title'}
+    ALLOWED_SORTS = {'views', 'favorites', 'notifications', 'stars', 'title', 'episodes'}
     ALLOWED_DIRS = {'asc', 'desc'}
 
     LABELS = {
@@ -580,6 +585,8 @@ class ChannelListView(LoginRequiredMixin, ListView):
         ('stars','asc'):  _lazy("Least stars"),
         ('title','asc'):  _lazy("A → Z"),
         ('title','desc'): _lazy("Z → A"),
+        ('episodes','desc'): _lazy("Most episodes"),
+        ('episodes','asc'):  _lazy("Least episodes"),
     }
 
     def _parse_sort(self):
@@ -603,11 +610,20 @@ class ChannelListView(LoginRequiredMixin, ListView):
             .annotate(total=Sum('count')) # sum the counts
             .values('total')[:1]          # select summed value
         )
+        # NEW: total episodes per channel via subquery
+        episodes_sq = (
+            Episode.objects
+            .filter(channel=OuterRef('pk'))
+            .values('channel')
+            .annotate(c=Count('*'))
+            .values('c')[:1]
+        )
 
         qs = (
             Channel.objects
             .annotate(
                 total_views=Coalesce(Subquery(visits_sq, output_field=IntegerField()), 0),
+                episode_count=Coalesce(Subquery(episodes_sq, output_field=IntegerField()), 0),
                 favorites_count=Count(
                     'channel_interactions',
                     filter=Q(channel_interactions__followed=True),
@@ -626,6 +642,7 @@ class ChannelListView(LoginRequiredMixin, ListView):
                 ),
             )
         )
+        # (optional) sorting by episodes
 
         if sort == 'views':
             ordering = [f'{dir_prefix}total_views', 'channel_title']
@@ -646,6 +663,8 @@ class ChannelListView(LoginRequiredMixin, ListView):
                     F('rating_count').asc(),
                     'channel_title',
                 ]
+        elif sort == 'episodes':
+            ordering = [f'{dir_prefix}episode_count', 'channel_title']
         elif sort == 'title':
             ordering = [f'{dir_prefix}channel_title']
         else:
@@ -898,7 +917,29 @@ class ChannelDetailView(LoginRequiredMixin, DetailView):
         ctx['avg_rating']   = rating_stats['avg_rating']   or 0.0
         ctx['rating_count'] = rating_stats['rating_count'] or 0
         ctx['total_views']  = ChannelVisit.objects.filter(channel=base).aggregate(total=Sum('count'))['total'] or 0
+        # --- Total episodes (per current language if translated; otherwise all base episodes) ---
+        if lang in ('en', 'en-us'):
+            total_episodes = self.base_channel.episodes.count()
+        else:
+            total_episodes = (
+                EpisodeTranslations.objects
+                .filter(
+                    episode__channel=self.base_channel,
+                    language=lang,
+                    translated=True
+                )
+                .count()
+            )
 
+        # expose as a plain context var…
+        ctx['total_episodes'] = total_episodes
+
+        # …and also attach to both display and base objects so {{ channel.total_episodes }} works
+        try:
+            setattr(self.base_channel, 'total_episodes', total_episodes)
+            setattr(self.display_channel, 'total_episodes', total_episodes)
+        except Exception:
+            pass
         # ---- CHANNEL-SCOPED SEARCH ----
         q = (self.request.GET.get('q') or '').strip()
         page_num  = int(self.request.GET.get('page', 1))
@@ -1127,6 +1168,37 @@ class ChannelDetailView(LoginRequiredMixin, DetailView):
             ctx['episodes'] = page_obj
 
         return ctx
+    
+    def get(self, request, *args, **kwargs):
+        # log both full-page and AJAX searches, but only for page=1 to avoid double counts
+        q = (request.GET.get('q') or '').strip()
+        if q and (request.GET.get('page', '1') == '1'):
+            user = request.user if request.user.is_authenticated else None
+            lang = get_selected_language(request)
+
+            xff = request.META.get('HTTP_X_FORWARDED_FOR', '')
+            ip  = (xff.split(',')[0].strip() if xff else request.META.get('REMOTE_ADDR'))
+
+            try:
+                obj, created = ChannelSearchQuery.objects.get_or_create(
+                    user=user,
+                    channel=self.base_channel,   # set in dispatch()
+                    query=q,
+                    defaults={'language': lang, 'ip_address': ip}
+                )
+                if not created:
+                    ChannelSearchQuery.objects.filter(pk=obj.pk).update(
+                        count=F('count') + 1,
+                        last_searched=timezone.now(),
+                        language=lang,
+                        ip_address=ip
+                    )
+            except Exception:
+                logging.exception("Failed to record ChannelSearchQuery")
+
+        return super().get(request, *args, **kwargs)
+
+
 
     # ---------- ajax partial vs full template ----------
     def render_to_response(self, context, **response_kwargs):
@@ -1923,11 +1995,21 @@ class FavoritesListView(LoginRequiredMixin, ListView):
             .values('total')[:1]
         )
 
+        # NEW: total episodes per channel via subquery
+        episodes_sq = (
+            Episode.objects
+            .filter(channel=OuterRef('pk'))
+            .values('channel')
+            .annotate(c=Count('*'))
+            .values('c')[:1]
+        )
+
         qs = (
             Channel.objects
             .filter(id__in=channel_ids)
             .annotate(
                 total_views=Coalesce(Subquery(visits_sq, output_field=IntegerField()), 0),
+                episode_count=Coalesce(Subquery(episodes_sq, output_field=IntegerField()), 0),
                 favorites_count=Count(
                     'channel_interactions',
                     filter=Q(channel_interactions__followed=True),

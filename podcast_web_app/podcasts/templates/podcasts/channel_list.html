@@ -40,6 +40,12 @@
       <li class="dropdown-header">{% trans "Alphabetical" %}</li>
       <li><a class="dropdown-item {% if sort == 'title' and dir == 'asc' %}active{% endif %}" href="?sort=title&dir=asc">{% trans "A → Z" %}</a></li>
       <li><a class="dropdown-item {% if sort == 'title' and dir == 'desc' %}active{% endif %}" href="?sort=title&dir=desc">{% trans "Z → A" %}</a></li>
+
+      <li><hr class="dropdown-divider"></li>
+
+      <li class="dropdown-header">{% trans "Episodes" %}</li>
+      <li><a class="dropdown-item {% if sort == 'episodes' and dir == 'desc' %}active{% endif %}" href="?sort=episodes&dir=desc">{% trans "Most episodes" %}</a></li>
+      <li><a class="dropdown-item {% if sort == 'episodes' and dir == 'asc' %}active{% endif %}" href="?sort=episodes&dir=asc">{% trans "Least episodes" %}</a></li>
     </ul>
   </div>
 </div>
@@ -86,9 +92,13 @@
                 N/A
               {% endif %}
             </span>
-            <span class="d-flex align-items-center" title="{% trans 'Total Views' %}">
+            <span class="d-flex align-items-center me-3" title="{% trans 'Total Views' %}">
               <i class="fa-solid fa-eye" style="font-size: 1rem; margin-right: 0.25rem;"></i>
               {{ channel.total_views|default:"0"|number_format }}
+            </span>
+            <span class="d-flex align-items-center me-3" title="{% trans 'Total Episodes' %}">
+              <i class="fa-solid fa-podcast" style="font-size: 1rem; margin-right: 0.25rem;"></i>
+              {{ channel.episode_count|default:"0"|number_format }}
             </span>
           </div>
         </div>

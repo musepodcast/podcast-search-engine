@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-06 17:50-0500\n"
+"POT-Creation-Date: 2025-09-07 16:40-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -55,14 +55,14 @@ msgstr "या अपने ब्राउज़र में इस लिं�
 #: .\podcasts\templates\account\email\email_confirmation_message.html:25
 #: .\podcasts\templates\account\email\email_confirmation_message.txt:6
 #: .\podcasts\templates\account\email\email_confirmation_signup_message.html:25
-#: .\podcasts\templates\account\email\email_confirmation_signup_message.txt:8
+#: .\podcasts\templates\account\email\email_confirmation_signup_message.txt:6
 msgid "This link expires in 24 hours."
 msgstr "यह लिंक 24 घंटों में समाप्त हो जाता है।"
 
 #: .\podcasts\templates\account\email\email_confirmation_message.html:29
 #: .\podcasts\templates\account\email\email_confirmation_message.txt:8
 #: .\podcasts\templates\account\email\email_confirmation_signup_message.html:29
-#: .\podcasts\templates\account\email\email_confirmation_signup_message.txt:10
+#: .\podcasts\templates\account\email\email_confirmation_signup_message.txt:8
 msgid "Worm regards,"
 msgstr "कृमि सलाम,"
 
@@ -81,12 +81,14 @@ msgid "Confirm your account by clicking the button below:"
 msgstr "नीचे दिए गए बटन पर क्लिक करके अपने खाते की पुष्टि करें:"
 
 #: .\podcasts\templates\account\email\email_confirmation_signup_message.txt:2
+#| msgid ""
+#| "\n"
+#| "Welcome to Muse Podcast! Confirm your account by clicking the link below:\n"
 msgid ""
-"\n"
-"Welcome to Muse Podcast! Confirm your account by clicking the link below:\n"
+"Welcome to Muse Podcast! Confirm your account by clicking the link below:"
 msgstr ""
-"\n"
-"मूस पॉडकास्ट में आपका स्वागत है! नीचे दिए गए लिंक पर क्लिक करके अपने खाते की पुष्टि करेंः \n"
+"मूस पॉडकास्ट में आपका स्वागत है! नीचे दिए गए लिंक पर क्लिक करके अपने खाते की"
+" पुष्टि करेंः"
 
 #: .\podcasts\templates\account\email_confirm.html:6
 msgid "Confirm Your Email"
@@ -96,8 +98,7 @@ msgstr "अपने ईमेल की पुष्टि करें"
 #, python-format
 msgid ""
 "\n"
-"      Confirm the email address <strong>%(email)s</strong> to activate your "
-"account.\n"
+"      Confirm the email address <strong>%(email)s</strong> to activate your account.\n"
 "      "
 msgstr ""
 "\n"
@@ -124,8 +125,8 @@ msgid ""
 "We just sent a verification link to your email. Click the link within 24 "
 "hours to activate your account."
 msgstr ""
-"हमने अभी आपके ईमेल पर एक सत्यापन लिंक भेजा है। अपने खाते को सक्रिय करने के लिए 24 घंटे के "
-"भीतर लिंक पर क्लिक करें।"
+"हमने अभी आपके ईमेल पर एक सत्यापन लिंक भेजा है। अपने खाते को सक्रिय करने के "
+"लिए 24 घंटे के भीतर लिंक पर क्लिक करें।"
 
 #: .\podcasts\templates\account\verification_sent.html:15
 msgid "Didn’t get the email?"
@@ -160,7 +161,7 @@ msgstr "घर"
 
 #: .\podcasts\templates\podcasts\base.html:57
 #: .\podcasts\templates\podcasts\channel_list.html:22
-#: .\podcasts\templates\podcasts\channel_list.html:73
+#: .\podcasts\templates\podcasts\channel_list.html:79
 #: .\podcasts\templates\podcasts\channel_list_items.html:27
 #: .\podcasts\templates\podcasts\favorites_list.html:5
 #: .\podcasts\templates\podcasts\favorites_list.html:33
@@ -170,7 +171,7 @@ msgstr "पसंदीदा"
 
 #: .\podcasts\templates\podcasts\base.html:58
 #: .\podcasts\templates\podcasts\channel_list.html:28
-#: .\podcasts\templates\podcasts\channel_list.html:77
+#: .\podcasts\templates\podcasts\channel_list.html:83
 #: .\podcasts\templates\podcasts\channel_list_items.html:31
 #: .\podcasts\templates\podcasts\favorites_list.html:38
 #: .\podcasts\templates\podcasts\favorites_list_items.html:29
@@ -181,7 +182,7 @@ msgstr "अधिसूचनाएँ"
 #: .\podcasts\templates\podcasts\base.html:59
 #: .\podcasts\templates\podcasts\bookmarks_list.html:65
 #: .\podcasts\templates\podcasts\bookmarks_list_items.html:57
-#: .\podcasts\templates\podcasts\channel_detail.html:155
+#: .\podcasts\templates\podcasts\channel_detail.html:164
 #: .\podcasts\templates\podcasts\channel_detail_item.html:46
 #: .\podcasts\templates\podcasts\episode_list.html:28
 #: .\podcasts\templates\podcasts\episode_list.html:83
@@ -198,7 +199,8 @@ msgstr "चैनल"
 
 #: .\podcasts\templates\podcasts\base.html:61
 #: .\podcasts\templates\podcasts\base.html:158
-#: .\podcasts\templates\podcasts\channel_detail.html:117
+#: .\podcasts\templates\podcasts\channel_detail.html:126
+#: .\podcasts\templates\podcasts\channel_list.html:46
 msgid "Episodes"
 msgstr "एपिसोड"
 
@@ -245,7 +247,7 @@ msgid "Search episodes or channels..."
 msgstr "एपिसोड या चैनल खोजें..."
 
 #: .\podcasts\templates\podcasts\base.html:174
-#: .\podcasts\templates\podcasts\channel_detail.html:111
+#: .\podcasts\templates\podcasts\channel_detail.html:120
 msgid "Search"
 msgstr "खोज"
 
@@ -371,9 +373,9 @@ msgstr "मुखर"
 
 #: .\podcasts\templates\podcasts\bookmarks_list.html:70
 #: .\podcasts\templates\podcasts\bookmarks_list_items.html:62
-#: .\podcasts\templates\podcasts\channel_detail.html:160
+#: .\podcasts\templates\podcasts\channel_detail.html:169
 #: .\podcasts\templates\podcasts\channel_detail_item.html:51
-#: .\podcasts\templates\podcasts\episode_detail.html:196
+#: .\podcasts\templates\podcasts\episode_detail.html:192
 #: .\podcasts\templates\podcasts\episode_list.html:34
 #: .\podcasts\templates\podcasts\episode_list.html:88
 #: .\podcasts\templates\podcasts\episode_list_items.html:59
@@ -384,7 +386,7 @@ msgstr "टिप्पणियाँ"
 
 #: .\podcasts\templates\podcasts\bookmarks_list.html:75
 #: .\podcasts\templates\podcasts\bookmarks_list_items.html:67
-#: .\podcasts\templates\podcasts\channel_detail.html:164
+#: .\podcasts\templates\podcasts\channel_detail.html:173
 #: .\podcasts\templates\podcasts\channel_detail_item.html:56
 #: .\podcasts\templates\podcasts\episode_list.html:93
 #: .\podcasts\templates\podcasts\episode_list_items.html:64
@@ -397,11 +399,10 @@ msgstr "एपिसोड रेटिंग"
 #: .\podcasts\templates\podcasts\bookmarks_list_items.html:76
 #: .\podcasts\templates\podcasts\channel_detail.html:90
 #: .\podcasts\templates\podcasts\channel_detail.html:91
-#: .\podcasts\templates\podcasts\channel_detail.html:172
+#: .\podcasts\templates\podcasts\channel_detail.html:181
 #: .\podcasts\templates\podcasts\channel_detail_item.html:65
-#: .\podcasts\templates\podcasts\channel_list.html:89
+#: .\podcasts\templates\podcasts\channel_list.html:95
 #: .\podcasts\templates\podcasts\channel_list_items.html:43
-#: .\podcasts\templates\podcasts\episode_detail.html:117
 #: .\podcasts\templates\podcasts\episode_detail.html:118
 #: .\podcasts\templates\podcasts\episode_list.html:102
 #: .\podcasts\templates\podcasts\episode_list_items.html:73
@@ -422,11 +423,11 @@ msgstr "अधिक बुकमार्क किए गए एपिसो�
 
 #: .\podcasts\templates\podcasts\bookmarks_list.html:142
 #: .\podcasts\templates\podcasts\bookmarks_list.html:149
-#: .\podcasts\templates\podcasts\channel_detail.html:197
-#: .\podcasts\templates\podcasts\channel_list.html:108
+#: .\podcasts\templates\podcasts\channel_detail.html:206
+#: .\podcasts\templates\podcasts\channel_list.html:118
 #: .\podcasts\templates\podcasts\episode_list.html:160
 #: .\podcasts\templates\podcasts\episode_list.html:167
-#: .\podcasts\templates\podcasts\favorites_list.html:74
+#: .\podcasts\templates\podcasts\favorites_list.html:79
 #: .\podcasts\templates\podcasts\notifications_list.html:134
 #: .\podcasts\templates\podcasts\notifications_list.html:141
 #: .\podcasts\templates\podcasts\replies_list.html:20
@@ -436,7 +437,7 @@ msgid "End of list..."
 msgstr "सूची का अंत..."
 
 #: .\podcasts\templates\podcasts\channel_detail.html:28
-#: .\podcasts\templates\podcasts\channel_list.html:65
+#: .\podcasts\templates\podcasts\channel_list.html:71
 #: .\podcasts\templates\podcasts\channel_list_items.html:19
 #: .\podcasts\templates\podcasts\favorites_list.html:25
 #: .\podcasts\templates\podcasts\favorites_list_items.html:18
@@ -481,20 +482,28 @@ msgstr "इस चैनल को रेट करें"
 msgid "Average rating and number of ratings"
 msgstr "औसत रेटिंग और रेटिंग की संख्या"
 
-#: .\podcasts\templates\podcasts\channel_detail.html:102
+#: .\podcasts\templates\podcasts\channel_detail.html:98
+#: .\podcasts\templates\podcasts\channel_detail.html:99
+#: .\podcasts\templates\podcasts\channel_list.html:99
+#: .\podcasts\templates\podcasts\channel_list_items.html:47
+#| msgid "Podcast Episodes"
+msgid "Total Episodes"
+msgstr "कुल एपिसोड"
+
+#: .\podcasts\templates\podcasts\channel_detail.html:111
 msgid "Search episodes in this channel"
 msgstr "इस चैनल में खोज एपिसोड"
 
-#: .\podcasts\templates\podcasts\channel_detail.html:108
+#: .\podcasts\templates\podcasts\channel_detail.html:117
 msgid "Search episodes in this channel…"
 msgstr "इस चैनल में खोज एपिसोड..."
 
-#: .\podcasts\templates\podcasts\channel_detail.html:185
+#: .\podcasts\templates\podcasts\channel_detail.html:194
 msgid "No episodes available for this channel."
 msgstr "इस चैनल के लिए कोई एपिसोड उपलब्ध नहीं है।"
 
-#: .\podcasts\templates\podcasts\channel_detail.html:192
-#: .\podcasts\templates\podcasts\channel_detail.html:198
+#: .\podcasts\templates\podcasts\channel_detail.html:201
+#: .\podcasts\templates\podcasts\channel_detail.html:207
 #: .\podcasts\templates\podcasts\episode_list.html:125
 #: .\podcasts\templates\podcasts\search_results_items.html:143
 #: .\podcasts\templates\podcasts\search_results_items.html:154
@@ -571,7 +580,17 @@ msgstr "A → Z"
 msgid "Z → A"
 msgstr "Z → A"
 
-#: .\podcasts\templates\podcasts\channel_list.html:59
+#: .\podcasts\templates\podcasts\channel_list.html:47
+#| msgid "Podcast Episodes"
+msgid "Most episodes"
+msgstr "अधिकांश एपिसोड"
+
+#: .\podcasts\templates\podcasts\channel_list.html:48
+#| msgid "Podcast Episodes"
+msgid "Least episodes"
+msgstr "न्यूनतम एपिसोड"
+
+#: .\podcasts\templates\podcasts\channel_list.html:65
 #: .\podcasts\templates\podcasts\channel_list_items.html:13
 #: .\podcasts\templates\podcasts\favorites_list.html:19
 #: .\podcasts\templates\podcasts\favorites_list_items.html:12
@@ -579,20 +598,20 @@ msgstr "Z → A"
 msgid "No image available"
 msgstr "कोई छवि उपलब्ध नहीं"
 
-#: .\podcasts\templates\podcasts\channel_list.html:81
+#: .\podcasts\templates\podcasts\channel_list.html:87
 #: .\podcasts\templates\podcasts\channel_list_items.html:35
 #: .\podcasts\templates\podcasts\favorites_list.html:43
 #: .\podcasts\templates\podcasts\favorites_list_items.html:33
 msgid "Channel Rating"
 msgstr "चैनल रेटिंग"
 
-#: .\podcasts\templates\podcasts\channel_list.html:98
+#: .\podcasts\templates\podcasts\channel_list.html:108
 msgid "No channels available."
 msgstr "कोई चैनल उपलब्ध नहीं है."
 
-#: .\podcasts\templates\podcasts\channel_list.html:104
-#: .\podcasts\templates\podcasts\channel_list.html:109
-#: .\podcasts\templates\podcasts\favorites_list.html:75
+#: .\podcasts\templates\podcasts\channel_list.html:114
+#: .\podcasts\templates\podcasts\channel_list.html:119
+#: .\podcasts\templates\podcasts\favorites_list.html:80
 #: .\podcasts\templates\podcasts\search_results_ch_items.html:68
 #: .\podcasts\templates\podcasts\search_results_ch_items.html:73
 msgid "Loading more channels..."
@@ -607,8 +626,8 @@ msgid ""
 "Thank you for volunteering your computer's resources to help generate and "
 "process podcast episodes!"
 msgstr ""
-"पॉडकास्ट एपिसोड बनाने और संसाधित करने में मदद करने के लिए अपने कंप्यूटर के संसाधनों को "
-"स्वयंसेवक बनाने के लिए धन्यवाद!"
+"पॉडकास्ट एपिसोड बनाने और संसाधित करने में मदद करने के लिए अपने कंप्यूटर के "
+"संसाधनों को स्वयंसेवक बनाने के लिए धन्यवाद!"
 
 #: .\podcasts\templates\podcasts\contribute.html:11
 msgid ""
@@ -618,38 +637,42 @@ msgid ""
 "using your CPU/GPU, and securely return the results. This helps us speed up "
 "episode generation and improve quality for the entire community."
 msgstr ""
-"जब आप 'प्रारंभ योगदान' पर क्लिक करते हैं, तो आपकी मशीन पर चलने वाला एक हल्का एजेंट आपके "
-"चयनित चैनलों के लिए नए आरएसएस फ़ीड प्रविष्टियों को प्राप्त करेगा, उन्हें ट्रान्सक्रिप्ट या "
-"उपयोग करने योग्य ट्रान्सक्रिप्ट में अनुवादित करेगा, उन्हें अपने सीपीयू / जीपीयू का उपयोग करके "
-"स्थानीय रूप से संसाधित करेगा, और परिणामों को सुरक्षित रूप से लौटाएगा। यह हमें एपिसोड "
-"जनरेशन को गति देने और पूरे समुदाय के लिए गुणवत्ता में सुधार करने में मदद करता है।"
+"जब आप 'प्रारंभ योगदान' पर क्लिक करते हैं, तो आपकी मशीन पर चलने वाला एक हल्का"
+" एजेंट आपके चयनित चैनलों के लिए नए आरएसएस फ़ीड प्रविष्टियों को प्राप्त "
+"करेगा, उन्हें ट्रान्सक्रिप्ट या उपयोग करने योग्य ट्रान्सक्रिप्ट में अनुवादित"
+" करेगा, उन्हें अपने सीपीयू / जीपीयू का उपयोग करके स्थानीय रूप से संसाधित "
+"करेगा, और परिणामों को सुरक्षित रूप से लौटाएगा। यह हमें एपिसोड जनरेशन को गति "
+"देने और पूरे समुदाय के लिए गुणवत्ता में सुधार करने में मदद करता है।"
 
 #: .\podcasts\templates\podcasts\contribute.html:13
 msgid ""
-"Select which channels you'd like to support or choose 'All Channels' to help "
-"across the platform."
+"Select which channels you'd like to support or choose 'All Channels' to help"
+" across the platform."
 msgstr ""
-"चुनें कि आप किन चैनलों का समर्थन करना चाहते हैं या प्लेटफ़ॉर्म पर मदद करने के लिए 'सभी "
-"चैनलों' चुनें।"
+"चुनें कि आप किन चैनलों का समर्थन करना चाहते हैं या प्लेटफ़ॉर्म पर मदद करने "
+"के लिए 'सभी चैनलों' चुनें।"
 
 #: .\podcasts\templates\podcasts\contribute.html:14
 msgid ""
 "Your contributions run in the background and won't interfere with your "
 "normal workflow."
-msgstr "आपके योगदान पृष्ठभूमि में चलते हैं और आपके सामान्य कार्यप्रवाह में हस्तक्षेप नहीं करेंगे।"
+msgstr ""
+"आपके योगदान पृष्ठभूमि में चलते हैं और आपके सामान्य कार्यप्रवाह में हस्तक्षेप"
+" नहीं करेंगे।"
 
 #: .\podcasts\templates\podcasts\contribute.html:15
 msgid "You can stop or restart at any time using the button below."
 msgstr ""
-"आप नीचे दिए गए बटन का उपयोग करके किसी भी समय रोक सकते हैं या फिर से शुरू कर सकते हैं।"
+"आप नीचे दिए गए बटन का उपयोग करके किसी भी समय रोक सकते हैं या फिर से शुरू कर "
+"सकते हैं।"
 
 #: .\podcasts\templates\podcasts\contribute.html:16
 msgid ""
 "Soon, we'll introduce a leaderboard to highlight top contributors and a "
 "rewards system to thank you for your support."
 msgstr ""
-"जल्द ही, हम शीर्ष योगदानकर्ताओं को उजागर करने के लिए एक रैंकिंग बोर्ड पेश करेंगे और आपके "
-"समर्थन के लिए आपको धन्यवाद देने के लिए एक पुरस्कार प्रणाली।"
+"जल्द ही, हम शीर्ष योगदानकर्ताओं को उजागर करने के लिए एक रैंकिंग बोर्ड पेश "
+"करेंगे और आपके समर्थन के लिए आपको धन्यवाद देने के लिए एक पुरस्कार प्रणाली।"
 
 #: .\podcasts\templates\podcasts\contribute.html:30
 msgid "Select Channels"
@@ -686,17 +709,23 @@ msgstr "दो-कारक प्रमाणीकरण को अक्ष�
 msgid ""
 "Please enter your OTP token to confirm disabling two‑factor authentication."
 msgstr ""
-"दो-कारक प्रमाणीकरण निष्क्रिय करने की पुष्टि करने के लिए कृपया अपना ओटीपी टोकन दर्ज करें।"
+"दो-कारक प्रमाणीकरण निष्क्रिय करने की पुष्टि करने के लिए कृपया अपना ओटीपी "
+"टोकन दर्ज करें।"
 
 #: .\podcasts\templates\podcasts\disable_2fa.html:11
 msgid "Disable 2FA"
 msgstr "2FA को अक्षम करें"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:79
+#: .\podcasts\templates\podcasts\episode_detail.html:40
+#| msgid "No channels available."
+msgid "No channel image"
+msgstr "कोई चैनल छवि नहीं"
+
+#: .\podcasts\templates\podcasts\episode_detail.html:80
 msgid "Remove from Bookmarks"
 msgstr "बुकमार्क से हटाएँ"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:79
+#: .\podcasts\templates\podcasts\episode_detail.html:80
 msgid "Add to Bookmarks"
 msgstr "बुकमार्क में जोड़ें"
 
@@ -720,31 +749,60 @@ msgstr "इस एपिसोड को रेट करें"
 msgid "Average rating and total ratings"
 msgstr "औसत रेटिंग और कुल रेटिंग"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:138
+#: .\podcasts\templates\podcasts\episode_detail.html:137
+msgid "Your browser does not support the audio element."
+msgstr "आपका ब्राउज़र ऑडियो तत्व का समर्थन नहीं करता है।"
+
+#: .\podcasts\templates\podcasts\episode_detail.html:141
 msgid "Audio:"
 msgstr "ऑडियोः"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:151
+#: .\podcasts\templates\podcasts\episode_detail.html:141
+#| msgid "No image available"
+msgid "No audio available"
+msgstr "कोई ऑडियो उपलब्ध नहीं"
+
+#: .\podcasts\templates\podcasts\episode_detail.html:149
 msgid "Chapters"
 msgstr "अध्याय"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:158
+#: .\podcasts\templates\podcasts\episode_detail.html:156
 msgid "No chapters available for this episode."
 msgstr "इस एपिसोड के लिए कोई अध्याय उपलब्ध नहीं है।"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:168
+#: .\podcasts\templates\podcasts\episode_detail.html:165
 msgid "Transcript"
 msgstr "प्रतिलिपि"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:207
+#: .\podcasts\templates\podcasts\episode_detail.html:183
+#| msgid "No chapters available for this episode."
+msgid "No transcript available for this episode."
+msgstr "इस एपिसोड के लिए कोई प्रतिलिपि उपलब्ध नहीं है।"
+
+#: .\podcasts\templates\podcasts\episode_detail.html:198
 msgid "Write a comment..."
 msgstr "एक टिप्पणी लिखें ..."
 
-#: .\podcasts\templates\podcasts\episode_detail.html:210
+#: .\podcasts\templates\podcasts\episode_detail.html:201
 msgid "Submit Comment"
 msgstr "टिप्पणी प्रस्तुत करें"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:614
+#: .\podcasts\templates\podcasts\episode_detail.html:417
+#| msgid "Remove from Bookmarks"
+msgid "Remove episode from Bookmarks"
+msgstr "बुकमार्क से एपिसोड निकालें"
+
+#: .\podcasts\templates\podcasts\episode_detail.html:423
+#| msgid "Add to Bookmarks"
+msgid "Add episode to Bookmarks"
+msgstr "बुकमार्क में एपिसोड जोड़ें"
+
+#: .\podcasts\templates\podcasts\episode_detail.html:476
+#| msgid "Most commented"
+msgid "No comments yet."
+msgstr "अभी तक कोई टिप्पणी नहीं।"
+
+#: .\podcasts\templates\podcasts\episode_detail.html:540
 msgid "Please enter a comment"
 msgstr "कृपया एक टिप्पणी दर्ज करें"
 
@@ -785,11 +843,17 @@ msgstr "कम से कम टिप्पणी की"
 msgid "No episodes available."
 msgstr "कोई एपिसोड उपलब्ध नहीं है।"
 
-#: .\podcasts\templates\podcasts\favorites_list.html:63
+#: .\podcasts\templates\podcasts\favorites_list.html:57
+#: .\podcasts\templates\podcasts\favorites_list_items.html:45
+#| msgid "Total Views"
+msgid "Total episodes"
+msgstr "कुल एपिसोड"
+
+#: .\podcasts\templates\podcasts\favorites_list.html:68
 msgid "No favorite channels found."
 msgstr "कोई पसंदीदा चैनल नहीं मिला।"
 
-#: .\podcasts\templates\podcasts\favorites_list.html:69
+#: .\podcasts\templates\podcasts\favorites_list.html:74
 msgid "Loading more favorite channels..."
 msgstr "अधिक पसंदीदा चैनलों को लोड..."
 
@@ -840,15 +904,16 @@ msgid ""
 "Muse is a free, AI-powered podcast search engine. Tired of scouring episode "
 "show notes for bits of information, we built a platform where you can:"
 msgstr ""
-"म्यूज़ एक मुफ्त, एआई-संचालित पॉडकास्ट सर्च इंजन है एपिसोड शो नोट्स को खोजने से थक गया, "
-"हमने एक मंच बनाया जहां आप कर सकते हैंः"
+"म्यूज़ एक मुफ्त, एआई-संचालित पॉडकास्ट सर्च इंजन है एपिसोड शो नोट्स को खोजने "
+"से थक गया, हमने एक मंच बनाया जहां आप कर सकते हैंः"
 
 #: .\podcasts\templates\podcasts\home.html:38
 msgid ""
 "🔍 Search any podcast by keyword (titles, descriptions, or transcript "
 "content)"
 msgstr ""
-"🔍 कुंजीशब्द द्वारा किसी भी पॉडकास्ट की खोज करें (शीर्षक, विवरण, या ट्रांसक्रिप्ट सामग्री)"
+"🔍 कुंजीशब्द द्वारा किसी भी पॉडकास्ट की खोज करें (शीर्षक, विवरण, या "
+"ट्रांसक्रिप्ट सामग्री)"
 
 #: .\podcasts\templates\podcasts\home.html:39
 msgid "📄 View full, time-stamped transcripts (speaker-diarized and formatted)"
@@ -858,19 +923,21 @@ msgstr " पूर्ण, समय-स्टैम्प्ड ट्रां�
 msgid "✍️ Read AI-generated chapter summaries"
 msgstr ""
 "✍️ आर्टिफिशियल आर्टिफिशियल आर्टिफिशियल आर्टिफिशियल आर्टिफिशियल आर्टिफिशियल "
-"आर्टिफिशियल आर्टिफिशियल आर्टिफिशियल आर्टिफिशियल आर्टिफिशियल आर्टिफिशियल आर्टिफिशियल "
-"आर्टिफिशियल आर्टिफिशियल आर्टिफिशियल आर्टिफिशियल आर्टिफिशियल आर्टिफिशियल आर्टिफिशियल "
-"आर्टिफिशियल आर्टिफिशियल आर्टिफिशियल आर्टिफिशियल आर्टिफिशियल आर्टिफिशियल आर्टिफिशियल "
-"आर्टिफिशियल आर्टिफिशियल आर्टिफिशियल आर्टिफिशियल आर्टिफिशियल आर्टिफिशियल आर्टिफिशियल "
-"आर्टिफिशियल आर्टिफिशियल आर्टिफिशियल आर्टिफिशियल आर्टिफिशियल आर्टिफिशियल आर्टिफिशियल "
-"आर्टिफिशियल आर्टिफिशियल आर्टिफिशियल आर्टिफिशियल आर्टिफिशियल"
+"आर्टिफिशियल आर्टिफिशियल आर्टिफिशियल आर्टिफिशियल आर्टिफिशियल आर्टिफिशियल "
+"आर्टिफिशियल आर्टिफिशियल आर्टिफिशियल आर्टिफिशियल आर्टिफिशियल आर्टिफिशियल "
+"आर्टिफिशियल आर्टिफिशियल आर्टिफिशियल आर्टिफिशियल आर्टिफिशियल आर्टिफिशियल "
+"आर्टिफिशियल आर्टिफिशियल आर्टिफिशियल आर्टिफिशियल आर्टिफिशियल आर्टिफिशियल "
+"आर्टिफिशियल आर्टिफिशियल आर्टिफिशियल आर्टिफिशियल आर्टिफिशियल आर्टिफिशियल "
+"आर्टिफिशियल आर्टिफिशियल आर्टिफिशियल आर्टिफिशियल आर्टिफिशियल आर्टिफिशियल "
+"आर्टिफिशियल आर्टिफिशियल आर्टिफिशियल आर्टिफिशियल"
 
 #: .\podcasts\templates\podcasts\home.html:41
 msgid ""
 "🌐 Find podcasts in 17 different languages natively transcribed or AI "
 "translated"
 msgstr ""
-" 17 अलग-अलग भाषाओं में पॉडकास्ट खोजें मूल रूप से प्रतिलिपिबद्ध या एआई द्वारा अनुवादित"
+" 17 अलग-अलग भाषाओं में पॉडकास्ट खोजें मूल रूप से प्रतिलिपिबद्ध या एआई द्वारा"
+" अनुवादित"
 
 #: .\podcasts\templates\podcasts\home.html:42
 msgid "🎧 Click through to listen at the exact moment a topic is discussed"
@@ -885,8 +952,8 @@ msgid ""
 "Currently optimized for desktop browsers, tablets, foldables, and "
 "smartphones. Community contribution and native apps are coming soon!"
 msgstr ""
-"वर्तमान में डेस्कटॉप ब्राउज़र, टैबलेट, फोल्डेबल और स्मार्टफोन के लिए अनुकूलित। सामुदायिक "
-"योगदान और मूल ऐप जल्द ही आ रहे हैं!"
+"वर्तमान में डेस्कटॉप ब्राउज़र, टैबलेट, फोल्डेबल और स्मार्टफोन के लिए "
+"अनुकूलित। सामुदायिक योगदान और मूल ऐप जल्द ही आ रहे हैं!"
 
 #: .\podcasts\templates\podcasts\home.html:47
 msgid "🌟 Key Features"
@@ -901,8 +968,8 @@ msgid ""
 "Create a free account to save searches, bookmark episodes, and track "
 "listening history."
 msgstr ""
-"खोजों, बुकमार्क एपिसोड को सहेजने और सुनने के इतिहास को ट्रैक करने के लिए एक मुफ्त खाता "
-"बनाएं।"
+"खोजों, बुकमार्क एपिसोड को सहेजने और सुनने के इतिहास को ट्रैक करने के लिए एक "
+"मुफ्त खाता बनाएं।"
 
 #: .\podcasts\templates\podcasts\home.html:50
 msgid "Transcript Generation"
@@ -911,12 +978,12 @@ msgstr "ट्रांसक्रिप्ट पीढ़ी"
 #: .\podcasts\templates\podcasts\home.html:50
 msgid ""
 "Ingests RSS feeds from any podcast; uses OpenAI Whisper Turbo on an NVIDIA "
-"GPU for fast, high-quality transcription; diarizes speakers and formats with "
-"timestamps."
+"GPU for fast, high-quality transcription; diarizes speakers and formats with"
+" timestamps."
 msgstr ""
-"किसी भी पॉडकास्ट से आरएसएस फ़ीड का सेवन करता है; तेजी से, उच्च गुणवत्ता वाले ट्रांसक्रिप्शन "
-"के लिए एनवीआईडीआईए जीपीयू पर ओपनएआई व्हिस्पर टर्बो का उपयोग करता है; टाइमस्टैम्प के "
-"साथ स्पीकर और प्रारूपों को डायरी करता है।"
+"किसी भी पॉडकास्ट से आरएसएस फ़ीड का सेवन करता है; तेजी से, उच्च गुणवत्ता वाले"
+" ट्रांसक्रिप्शन के लिए एनवीआईडीआईए जीपीयू पर ओपनएआई व्हिस्पर टर्बो का उपयोग "
+"करता है; टाइमस्टैम्प के साथ स्पीकर और प्रारूपों को डायरी करता है।"
 
 #: .\podcasts\templates\podcasts\home.html:51
 msgid "Chapter Summaries"
@@ -927,7 +994,8 @@ msgid ""
 "Generates concise summaries of each transcript segment using FalconsAI text-"
 "summarization."
 msgstr ""
-"FalconsAI पाठ-संक्षेप का उपयोग करके प्रत्येक प्रतिलेख खंड के संक्षिप्त सारांश उत्पन्न करता है।"
+"FalconsAI पाठ-संक्षेप का उपयोग करके प्रत्येक प्रतिलेख खंड के संक्षिप्त "
+"सारांश उत्पन्न करता है।"
 
 #: .\podcasts\templates\podcasts\home.html:52
 msgid "Transcript Translations"
@@ -938,8 +1006,8 @@ msgid ""
 "Takes podcasts and translates them into 17 different languages using "
 "nllb-200-distilled-600M translation model."
 msgstr ""
-"nllb-200-distilled-600M अनुवाद मॉडल का उपयोग करके पॉडकास्ट लेता है और उन्हें 17 अलग-"
-"अलग भाषाओं में अनुवाद करता है।"
+"nllb-200-distilled-600M अनुवाद मॉडल का उपयोग करके पॉडकास्ट लेता है और उन्हें"
+" 17 अलग-अलग भाषाओं में अनुवाद करता है।"
 
 #: .\podcasts\templates\podcasts\home.html:53
 msgid "Full-Text Search"
@@ -947,11 +1015,11 @@ msgstr "पूर्ण पाठ खोज"
 
 #: .\podcasts\templates\podcasts\home.html:53
 msgid ""
-"Powered by Elasticsearch for lightning-fast, fuzzy-match queries; filters by "
-"title, description, channel metadata, or transcript."
+"Powered by Elasticsearch for lightning-fast, fuzzy-match queries; filters by"
+" title, description, channel metadata, or transcript."
 msgstr ""
-"बिजली की तेजी से, धुंधली-मैच क्वेरी के लिए Elasticsearch द्वारा संचालित; शीर्षक, विवरण, "
-"चैनल मेटाडेटा, या ट्रांसक्रिप्ट द्वारा फ़िल्टर।"
+"बिजली की तेजी से, धुंधली-मैच क्वेरी के लिए Elasticsearch द्वारा संचालित; "
+"शीर्षक, विवरण, चैनल मेटाडेटा, या ट्रांसक्रिप्ट द्वारा फ़िल्टर।"
 
 #: .\podcasts\templates\podcasts\home.html:54
 msgid "Flexible Playback"
@@ -961,7 +1029,8 @@ msgstr "लचीली प्लेबैक"
 msgid ""
 "Jump directly to the moment a keyword appears in the audio player on the "
 "website."
-msgstr "सीधे वेबसाइट पर ऑडियो प्लेयर में एक कीवर्ड दिखाई देने के क्षण पर कूदें।"
+msgstr ""
+"सीधे वेबसाइट पर ऑडियो प्लेयर में एक कीवर्ड दिखाई देने के क्षण पर कूदें।"
 
 #: .\podcasts\templates\podcasts\home.html:57
 msgid "🏗️ Architecture & Tech Stack"
@@ -1221,7 +1290,8 @@ msgstr "यह आपकी व्यक्तिगत जानकारी �
 #: .\podcasts\templates\podcasts\signup.html:154
 #: .\podcasts\templates\socialaccount\signup.html:59
 msgid "By checking this box, I acknowledge that I have read and agree to"
-msgstr "इस बक्से को चेक करके मैं स्वीकार करता हूं कि मैंने इसे पढ़ा है और सहमत हूं"
+msgstr ""
+"इस बक्से को चेक करके मैं स्वीकार करता हूं कि मैंने इसे पढ़ा है और सहमत हूं"
 
 #: .\podcasts\templates\podcasts\signup.html:156
 msgid "Muse Podcast, LLC's Privacy Notice"
@@ -1232,7 +1302,8 @@ msgstr "म्यूज़ पॉडकास्ट, एलएलसी की �
 msgid ""
 ", and consent to the collection, anonymized sharing, and sale of data as "
 "described."
-msgstr ", और विवरण के अनुसार डेटा के संग्रह, गुमनाम साझाकरण और बिक्री के लिए सहमति।"
+msgstr ""
+", और विवरण के अनुसार डेटा के संग्रह, गुमनाम साझाकरण और बिक्री के लिए सहमति।"
 
 #: .\podcasts\templates\podcasts\signup.html:161
 msgid "Sign Up"
@@ -1255,9 +1326,10 @@ msgid ""
 "Notice explains how we collect, use, share, and safeguard your information "
 "when you visit our website and register an account."
 msgstr ""
-"Muse Podcast, LLC आपकी गोपनीयता की रक्षा करने के लिए प्रतिबद्ध है। यह गोपनीयता "
-"नीति बताती है कि जब आप हमारी वेबसाइट पर जाते हैं और एक खाता पंजीकृत करते हैं तो हम "
-"आपकी जानकारी कैसे एकत्र करते हैं, उपयोग करते हैं, साझा करते हैं और संरक्षित करते हैं।"
+"Muse Podcast, LLC आपकी गोपनीयता की रक्षा करने के लिए प्रतिबद्ध है। यह "
+"गोपनीयता नीति बताती है कि जब आप हमारी वेबसाइट पर जाते हैं और एक खाता पंजीकृत"
+" करते हैं तो हम आपकी जानकारी कैसे एकत्र करते हैं, उपयोग करते हैं, साझा करते "
+"हैं और संरक्षित करते हैं।"
 
 #: .\podcasts\templates\podcasts\signup.html:180
 #: .\podcasts\templates\socialaccount\signup.html:83
@@ -1270,8 +1342,8 @@ msgid ""
 "We collect the following information when you create an account or use our "
 "website:"
 msgstr ""
-"जब आप एक खाता बनाते हैं या हमारी वेबसाइट का उपयोग करते हैं तो हम निम्नलिखित जानकारी "
-"एकत्र करते हैंः"
+"जब आप एक खाता बनाते हैं या हमारी वेबसाइट का उपयोग करते हैं तो हम निम्नलिखित "
+"जानकारी एकत्र करते हैंः"
 
 #: .\podcasts\templates\podcasts\signup.html:183
 #: .\podcasts\templates\socialaccount\signup.html:86
@@ -1335,7 +1407,8 @@ msgstr "उपयोग की जानकारीः"
 #: .\podcasts\templates\podcasts\signup.html:202
 #: .\podcasts\templates\socialaccount\signup.html:104
 msgid "Data on what you search, view, or click within our website."
-msgstr "हमारी वेबसाइट में जो आप खोजते हैं, देखते हैं या क्लिक करते हैं, उस पर डेटा।"
+msgstr ""
+"हमारी वेबसाइट में जो आप खोजते हैं, देखते हैं या क्लिक करते हैं, उस पर डेटा।"
 
 #: .\podcasts\templates\podcasts\signup.html:206
 #: .\podcasts\templates\socialaccount\signup.html:108
@@ -1354,7 +1427,8 @@ msgstr "हमारी वेबसाइट सेवाएं प्रदा
 #: .\podcasts\templates\podcasts\signup.html:210
 #: .\podcasts\templates\socialaccount\signup.html:111
 msgid "Protect our website and users against fraudulent activities and scams."
-msgstr "हमारी वेबसाइट और उपयोगकर्ताओं को धोखाधड़ी और धोखाधड़ी से बचाने के लिए।"
+msgstr ""
+"हमारी वेबसाइट और उपयोगकर्ताओं को धोखाधड़ी और धोखाधड़ी से बचाने के लिए।"
 
 #: .\podcasts\templates\podcasts\signup.html:211
 #: .\podcasts\templates\socialaccount\signup.html:112
@@ -1369,19 +1443,20 @@ msgstr "डेटा साझा करना और बेचना"
 #: .\podcasts\templates\podcasts\signup.html:214
 #: .\podcasts\templates\socialaccount\signup.html:115
 msgid ""
-"To keep our services free and advertisement-free, Muse Podcast, LLC may sell "
-"aggregated, anonymized data analytics to podcast creators, business "
+"To keep our services free and advertisement-free, Muse Podcast, LLC may sell"
+" aggregated, anonymized data analytics to podcast creators, business "
 "partners, or other third parties. We ensure your privacy by anonymizing "
 "data, meaning your personal identifiable information (like your name or "
 "exact contact details) will never be sold or shared. Your identity is "
 "replaced by a unique, randomized number to maintain your anonymity."
 msgstr ""
-"हमारी सेवाओं को मुफ्त और विज्ञापन मुक्त रखने के लिए, म्यूज़ पॉडकास्ट, एलएलसी पॉडकास्ट "
-"रचनाकारों, व्यापार भागीदारों या अन्य तृतीय पक्षों को संकलित, गुमनाम डेटा एनालिटिक्स बेच "
-"सकता है। हम डेटा को गुमनाम करके आपकी गोपनीयता सुनिश्चित करते हैं, जिसका अर्थ है कि आपकी "
-"व्यक्तिगत पहचान योग्य जानकारी (जैसे आपका नाम या सटीक संपर्क विवरण) कभी भी बेची या "
-"साझा नहीं की जाएगी। आपकी पहचान आपकी गुमनामता बनाए रखने के लिए एक अद्वितीय, "
-"यादृच्छिक संख्या से प्रतिस्थापित की जाती है।"
+"हमारी सेवाओं को मुफ्त और विज्ञापन मुक्त रखने के लिए, म्यूज़ पॉडकास्ट, एलएलसी"
+" पॉडकास्ट रचनाकारों, व्यापार भागीदारों या अन्य तृतीय पक्षों को संकलित, "
+"गुमनाम डेटा एनालिटिक्स बेच सकता है। हम डेटा को गुमनाम करके आपकी गोपनीयता "
+"सुनिश्चित करते हैं, जिसका अर्थ है कि आपकी व्यक्तिगत पहचान योग्य जानकारी "
+"(जैसे आपका नाम या सटीक संपर्क विवरण) कभी भी बेची या साझा नहीं की जाएगी। आपकी"
+" पहचान आपकी गुमनामता बनाए रखने के लिए एक अद्वितीय, यादृच्छिक संख्या से "
+"प्रतिस्थापित की जाती है।"
 
 #: .\podcasts\templates\podcasts\signup.html:215
 #: .\podcasts\templates\socialaccount\signup.html:116
@@ -1393,13 +1468,13 @@ msgstr "डेटा सुरक्षा"
 #, python-format
 msgid ""
 "Muse Podcast, LLC employs industry-standard practices and technologies to "
-"safeguard your personal information. However, no method of transmission over "
-"the internet or electronic storage is 100%% secure, so while we strive to "
+"safeguard your personal information. However, no method of transmission over"
+" the internet or electronic storage is 100%% secure, so while we strive to "
 "protect your personal information, we cannot guarantee absolute security."
 msgstr ""
 "Muse Podcast, LLC employs industry-standard practices and technologies to "
-"safeguard your personal information. However, no method of transmission over "
-"the internet or electronic storage is 100%% secure, so while we strive to "
+"safeguard your personal information. However, no method of transmission over"
+" the internet or electronic storage is 100%% secure, so while we strive to "
 "protect your personal information, we cannot guarantee absolute security."
 
 #: .\podcasts\templates\podcasts\signup.html:217
@@ -1413,8 +1488,8 @@ msgid ""
 "By clicking the checkbox when creating an account, you consent to the "
 "collection, use, and sharing practices described in this Privacy Notice."
 msgstr ""
-"खाता बनाते समय चेकबॉक्स पर क्लिक करके, आप इस गोपनीयता सूचना में वर्णित संग्रह, उपयोग और "
-"साझाकरण प्रथाओं से सहमत हैं।"
+"खाता बनाते समय चेकबॉक्स पर क्लिक करके, आप इस गोपनीयता सूचना में वर्णित "
+"संग्रह, उपयोग और साझाकरण प्रथाओं से सहमत हैं।"
 
 #: .\podcasts\templates\podcasts\signup.html:219
 #: .\podcasts\templates\socialaccount\signup.html:120
@@ -1428,9 +1503,9 @@ msgid ""
 "data at any time. To exercise these rights or if you have questions about "
 "this Privacy Notice, contact us at:"
 msgstr ""
-"आपके पास किसी भी समय अपने व्यक्तिगत डेटा तक पहुँचने, सुधारने या हटाने का अधिकार है। इन "
-"अधिकारों का प्रयोग करने के लिए या यदि आपके पास इस गोपनीयता नीति के बारे में प्रश्न हैं, "
-"तो हमसे संपर्क करेंः"
+"आपके पास किसी भी समय अपने व्यक्तिगत डेटा तक पहुँचने, सुधारने या हटाने का "
+"अधिकार है। इन अधिकारों का प्रयोग करने के लिए या यदि आपके पास इस गोपनीयता "
+"नीति के बारे में प्रश्न हैं, तो हमसे संपर्क करेंः"
 
 #: .\podcasts\templates\podcasts\signup.html:225
 #: .\podcasts\templates\socialaccount\signup.html:126
@@ -1445,8 +1520,8 @@ msgid ""
 "upon posting."
 msgstr ""
 "Muse Podcast, LLC इस गोपनीयता सूचना को किसी भी समय संशोधित करने का अधिकार "
-"सुरक्षित रखता है। परिवर्तन हमारी वेबसाइट पर पोस्ट किए जाएंगे और पोस्ट करने के तुरंत बाद "
-"प्रभावी होंगे।"
+"सुरक्षित रखता है। परिवर्तन हमारी वेबसाइट पर पोस्ट किए जाएंगे और पोस्ट करने "
+"के तुरंत बाद प्रभावी होंगे।"
 
 #: .\podcasts\templates\podcasts\signup.html:377
 msgid "Passwords match"
@@ -1512,33 +1587,35 @@ msgstr "आपका समर्थन टिकट सफलतापूर्
 msgid ""
 "Your support ticket was unsuccessful, file size is too large, needs to be ≤ "
 "2 MB."
-msgstr "आपका समर्थन टिकट असफल रहा, फ़ाइल आकार बहुत बड़ा है, ≤ 2 MB होना चाहिए।"
+msgstr ""
+"आपका समर्थन टिकट असफल रहा, फ़ाइल आकार बहुत बड़ा है, ≤ 2 MB होना चाहिए।"
 
 #: .\podcasts\templates\podcasts\support_ticket.html:161
 msgid ""
-"Your support ticket was unsuccessful, file type incorrect, only (JPG/PNG/"
-"GIF) are accepted."
+"Your support ticket was unsuccessful, file type incorrect, only "
+"(JPG/PNG/GIF) are accepted."
 msgstr ""
-"आपका समर्थन टिकट असफल रहा, फ़ाइल प्रकार गलत है, केवल (जेपीजी/पीएनजी/जीआईएफ) स्वीकार "
-"किए जाते हैं।"
+"आपका समर्थन टिकट असफल रहा, फ़ाइल प्रकार गलत है, केवल (जेपीजी/पीएनजी/जीआईएफ) "
+"स्वीकार किए जाते हैं।"
 
 #: .\podcasts\templates\podcasts\support_ticket.html:163
 msgid ""
-"Your support ticket was unsuccessful, file type incorrect (only JPG/PNG/GIF) "
-"and file size is too large (≤ 2 MB)."
+"Your support ticket was unsuccessful, file type incorrect (only JPG/PNG/GIF)"
+" and file size is too large (≤ 2 MB)."
 msgstr ""
-"आपका समर्थन टिकट असफल रहा, फ़ाइल प्रकार गलत है (केवल JPG/PNG/GIF) और फ़ाइल आकार "
-"बहुत बड़ा है (≤ 2 MB) ।"
+"आपका समर्थन टिकट असफल रहा, फ़ाइल प्रकार गलत है (केवल JPG/PNG/GIF) और फ़ाइल "
+"आकार बहुत बड़ा है (≤ 2 MB) ।"
 
 #: .\podcasts\templates\podcasts\support_ticket.html:166
 #, python-format
 msgid ""
-"You’ve reached your limit of %(limit)s open tickets (%(open_count)s/"
-"%(limit)s). Please wait for one to complete or cancel before opening a new "
-"one."
+"You’ve reached your limit of %(limit)s open tickets "
+"(%(open_count)s/%(limit)s). Please wait for one to complete or cancel before"
+" opening a new one."
 msgstr ""
-"आप %(limit)s खुले टिकट (%(open_count)s/%(limit)s) की अपनी सीमा तक पहुंच चुके हैं। "
-"कृपया एक नया टिकट खोलने से पहले एक टिकट के पूरा होने या रद्द होने का इंतजार करें।"
+"आप %(limit)s खुले टिकट (%(open_count)s/%(limit)s) की अपनी सीमा तक पहुंच चुके"
+" हैं। कृपया एक नया टिकट खोलने से पहले एक टिकट के पूरा होने या रद्द होने का "
+"इंतजार करें।"
 
 #: .\podcasts\templates\podcasts\support_ticket.html:183
 msgid "OK"
@@ -1614,8 +1691,8 @@ msgid ""
 "Your password has been successfully reset. You can now log in with your new "
 "password."
 msgstr ""
-"आपका पासवर्ड सफलतापूर्वक रीसेट किया गया है। अब आप अपने नए पासवर्ड के साथ लॉग इन कर "
-"सकते हैं।"
+"आपका पासवर्ड सफलतापूर्वक रीसेट किया गया है। अब आप अपने नए पासवर्ड के साथ लॉग"
+" इन कर सकते हैं।"
 
 #: .\podcasts\templates\registration\password_reset_confirm.html:7
 msgid "Reset Your Password"
@@ -1636,14 +1713,15 @@ msgid ""
 "We've emailed you instructions for resetting your password. Please check "
 "your inbox (and spam folder) for the reset link."
 msgstr ""
-"हमने आपको अपना पासवर्ड रीसेट करने के लिए निर्देश ईमेल किए हैं. कृपया अपना इनबॉक्स (और "
-"स्पैम फ़ोल्डर) रीसेट लिंक के लिए जांचें।"
+"हमने आपको अपना पासवर्ड रीसेट करने के लिए निर्देश ईमेल किए हैं. कृपया अपना "
+"इनबॉक्स (और स्पैम फ़ोल्डर) रीसेट लिंक के लिए जांचें।"
 
 #: .\podcasts\templates\registration\password_reset_form.html:8
 msgid ""
 "Enter your email address and we'll send you a link to reset your password."
 msgstr ""
-"अपना ईमेल पता दर्ज करें और हम आपको अपना पासवर्ड रीसेट करने के लिए एक लिंक भेज देंगे।"
+"अपना ईमेल पता दर्ज करें और हम आपको अपना पासवर्ड रीसेट करने के लिए एक लिंक "
+"भेज देंगे।"
 
 #: .\podcasts\templates\registration\password_reset_form.html:12
 msgid "Send Reset Link"
@@ -1658,8 +1736,8 @@ msgid ""
 "For your security, we’ve temporarily locked your account after multiple "
 "failed login attempts."
 msgstr ""
-"आपकी सुरक्षा के लिए, हमने कई असफल लॉगिन प्रयासों के बाद आपके खाते को अस्थायी रूप से लॉक "
-"कर दिया है।"
+"आपकी सुरक्षा के लिए, हमने कई असफल लॉगिन प्रयासों के बाद आपके खाते को अस्थायी"
+" रूप से लॉक कर दिया है।"
 
 #: .\podcasts\templates\security\locked_out.html:17
 msgid "Please wait and try again."
@@ -1676,7 +1754,8 @@ msgstr "पर अनलॉक"
 #: .\podcasts\templates\security\locked_out.html:37
 #, python-format
 msgid "If you think this was a mistake, contact support at %(email)s."
-msgstr "यदि आपको लगता है कि यह एक गलती थी, तो %(email)s पर समर्थन से संपर्क करें।"
+msgstr ""
+"यदि आपको लगता है कि यह एक गलती थी, तो %(email)s पर समर्थन से संपर्क करें।"
 
 #: .\podcasts\templates\socialaccount\cancelled.html:7
 #: .\podcasts\templates\socialaccount\error.html:7

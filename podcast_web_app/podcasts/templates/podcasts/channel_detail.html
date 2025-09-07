@@ -87,12 +87,21 @@
 
                  <!-- NEW: Total Views with Solid Eye Icon -->
                 <div class="d-flex align-items-center gap-2">
-                    <i class="fa-solid fa-eye" title="{% trans 'Total Views' %}" style="font-size: 1.25rem; color: #e6e3e8;"></i>
+                    <i class="fa-solid fa-eye" title="{% trans 'Total Views' %}" style="font-size: 1.25rem;"></i>
                     <span class="total-views" title="{% trans 'Total Views' %}">
                         {{ total_views|number_format }}
                     </span>
                 </div>
 
+                <!-- NEW: Total Episodes with Podcast Icon -->
+                <div class="d-flex align-items-center gap-2">
+                    <i class="fa-solid fa-podcast" title="{% trans 'Total Episodes' %}" style="font-size: 1.25rem;"></i>
+                    <span class="total-episodes" title="{% trans 'Total Episodes' %}">
+                         {{ channel.total_episodes|default:"0"|number_format }}
+                    </span>
+                </div>
+
+                
             </div>
             {% endif %}
         </div>
@@ -325,44 +334,66 @@
 <!-- Custom CSS for the buttons -->
 <style>
     /* Rating info styling */
-    .total-views,    
+    /* Rating + counters: use theme text color (dark in light mode) */
+    .total-views,
     .favorites-count,
     .notifications-count,
     .channel-rating-info {
-        font-size: 1.25rem;
-        color: #e3e6e8;
-        margin-right: 0.5em;
+      font-size: 1.25rem;
+      color: var(--list-text);      /* was #e3e6e8 */
+      margin-right: 0.5em;
     }
 
-    /* Common styling */
-    .btn-follow, .btn-notification, .btn-following, .btn-notification-active {
-        border: 1px solid #b3b3b3; /* Gray outline */
-        border-radius: 50px;       /* Oval shape */
-        cursor: pointer;
-        outline: none;
-        padding: 0.4em 0.8em;
-        font-size: 0.9rem;
-        color: #e3e6e8;
+    /* Buttons: always pill-shaped, theme-aware */
+    .btn-follow,
+    .btn-notification,
+    .btn-following,
+    .btn-notification-active {
+      border: 1px solid var(--border-color);
+      border-radius: 999px;         /* force bubbles */
+      cursor: pointer;
+      outline: none;
+      padding: 0.4em 0.8em;
+      font-size: 0.9rem;
+      display: inline-flex;
+      align-items: center;
+      gap: .4rem;
     }
-    /* Inactive state: black background */
-    .btn-follow, .btn-notification {
-        background-color: #1c1e21;
+
+    /* Inactive: neutral surface + dark text in light mode, light text in dark mode comes from tokens */
+    .btn-follow,
+    .btn-notification {
+      background-color: var(--list-bg);   /* was #1c1e21 */
+      color: var(--list-text);            /* was #e3e6e8 */
     }
-    /* Active state: purple background */
-    .btn-following, .btn-notification-active {
-        background-color: #29214d;
+
+    /* Active: use your highlight pair for good contrast in both themes */
+    .btn-following,
+    .btn-notification-active {
+      background-color: var(--highlight-bg-color);   /* dark: gold, light: deep blue */
+      color: var(--highlight-text-color);
+      border-color: var(--highlight-bg-color);
     }
-    /* Star rating styling */
+
+    /* Icons inherit the button text color (no hard-coded grays) */
+    .btn-follow i,
+    .btn-notification i,
+    .btn-following i,
+    .btn-notification-active i {
+      color: currentColor;
+    }
+
+    /* Stars: dark by default in light mode, accent when active */
     #rating-container .star-icon {
-        cursor: pointer;
-        font-size: 1.2rem;
-        margin-right: 0.2em;
-        color: #e3e6e8;
+      cursor: pointer;
+      font-size: 1.2rem;
+      margin-right: 0.2em;
+      color: var(--list-text);       /* was #e3e6e8 */
     }
-    /* Active star */
     #rating-container .star-active {
-        color: #ffc107; /* A gold-ish color; adjust as needed */
-    }
+      color: var(--accent);          /* themed: purple in light, gold in dark */
+}
+
 </style>
 
 <!-- AJAX & Button Behavior JavaScript -->

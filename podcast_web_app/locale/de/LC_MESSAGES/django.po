@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-06 17:50-0500\n"
+"POT-Creation-Date: 2025-09-07 16:40-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -57,14 +57,14 @@ msgstr "Oder fügen Sie diesen Link in Ihren Browser ein:"
 #: .\podcasts\templates\account\email\email_confirmation_message.html:25
 #: .\podcasts\templates\account\email\email_confirmation_message.txt:6
 #: .\podcasts\templates\account\email\email_confirmation_signup_message.html:25
-#: .\podcasts\templates\account\email\email_confirmation_signup_message.txt:8
+#: .\podcasts\templates\account\email\email_confirmation_signup_message.txt:6
 msgid "This link expires in 24 hours."
 msgstr "Dieser Link verfällt in 24 Stunden."
 
 #: .\podcasts\templates\account\email\email_confirmation_message.html:29
 #: .\podcasts\templates\account\email\email_confirmation_message.txt:8
 #: .\podcasts\templates\account\email\email_confirmation_signup_message.html:29
-#: .\podcasts\templates\account\email\email_confirmation_signup_message.txt:10
+#: .\podcasts\templates\account\email\email_confirmation_signup_message.txt:8
 msgid "Worm regards,"
 msgstr "Der Wurm begrüßt mich."
 
@@ -87,13 +87,14 @@ msgstr ""
 "klicken:"
 
 #: .\podcasts\templates\account\email\email_confirmation_signup_message.txt:2
+#| msgid ""
+#| "\n"
+#| "Welcome to Muse Podcast! Confirm your account by clicking the link below:\n"
 msgid ""
-"\n"
-"Welcome to Muse Podcast! Confirm your account by clicking the link below:\n"
+"Welcome to Muse Podcast! Confirm your account by clicking the link below:"
 msgstr ""
-"\n"
 "Willkommen auf Muse Podcast! Bestätigen Sie Ihr Konto, indem Sie auf den "
-"folgenden Link klicken: \n"
+"folgenden Link klicken:"
 
 #: .\podcasts\templates\account\email_confirm.html:6
 msgid "Confirm Your Email"
@@ -103,13 +104,11 @@ msgstr "Bestätigen Sie Ihre E-Mail"
 #, python-format
 msgid ""
 "\n"
-"      Confirm the email address <strong>%(email)s</strong> to activate your "
-"account.\n"
+"      Confirm the email address <strong>%(email)s</strong> to activate your account.\n"
 "      "
 msgstr ""
 "\n"
-"Bestätigen Sie die E-Mail-Adresse <strong>%(email)s</strong>, um Ihr Konto "
-"zu aktivieren. "
+"Bestätigen Sie die E-Mail-Adresse <strong>%(email)s</strong>, um Ihr Konto zu aktivieren. "
 
 #: .\podcasts\templates\account\email_confirm.html:18
 msgid "Confirm Email"
@@ -166,7 +165,7 @@ msgstr "Zuhause"
 
 #: .\podcasts\templates\podcasts\base.html:57
 #: .\podcasts\templates\podcasts\channel_list.html:22
-#: .\podcasts\templates\podcasts\channel_list.html:73
+#: .\podcasts\templates\podcasts\channel_list.html:79
 #: .\podcasts\templates\podcasts\channel_list_items.html:27
 #: .\podcasts\templates\podcasts\favorites_list.html:5
 #: .\podcasts\templates\podcasts\favorites_list.html:33
@@ -176,7 +175,7 @@ msgstr "Die Lieblingsspieler"
 
 #: .\podcasts\templates\podcasts\base.html:58
 #: .\podcasts\templates\podcasts\channel_list.html:28
-#: .\podcasts\templates\podcasts\channel_list.html:77
+#: .\podcasts\templates\podcasts\channel_list.html:83
 #: .\podcasts\templates\podcasts\channel_list_items.html:31
 #: .\podcasts\templates\podcasts\favorites_list.html:38
 #: .\podcasts\templates\podcasts\favorites_list_items.html:29
@@ -187,7 +186,7 @@ msgstr "Mitteilungen"
 #: .\podcasts\templates\podcasts\base.html:59
 #: .\podcasts\templates\podcasts\bookmarks_list.html:65
 #: .\podcasts\templates\podcasts\bookmarks_list_items.html:57
-#: .\podcasts\templates\podcasts\channel_detail.html:155
+#: .\podcasts\templates\podcasts\channel_detail.html:164
 #: .\podcasts\templates\podcasts\channel_detail_item.html:46
 #: .\podcasts\templates\podcasts\episode_list.html:28
 #: .\podcasts\templates\podcasts\episode_list.html:83
@@ -204,7 +203,8 @@ msgstr "Kanäle"
 
 #: .\podcasts\templates\podcasts\base.html:61
 #: .\podcasts\templates\podcasts\base.html:158
-#: .\podcasts\templates\podcasts\channel_detail.html:117
+#: .\podcasts\templates\podcasts\channel_detail.html:126
+#: .\podcasts\templates\podcasts\channel_list.html:46
 msgid "Episodes"
 msgstr "Episoden"
 
@@ -251,7 +251,7 @@ msgid "Search episodes or channels..."
 msgstr "Episoden oder Kanäle suchen…"
 
 #: .\podcasts\templates\podcasts\base.html:174
-#: .\podcasts\templates\podcasts\channel_detail.html:111
+#: .\podcasts\templates\podcasts\channel_detail.html:120
 msgid "Search"
 msgstr "Suchen"
 
@@ -377,9 +377,9 @@ msgstr "Explizit"
 
 #: .\podcasts\templates\podcasts\bookmarks_list.html:70
 #: .\podcasts\templates\podcasts\bookmarks_list_items.html:62
-#: .\podcasts\templates\podcasts\channel_detail.html:160
+#: .\podcasts\templates\podcasts\channel_detail.html:169
 #: .\podcasts\templates\podcasts\channel_detail_item.html:51
-#: .\podcasts\templates\podcasts\episode_detail.html:196
+#: .\podcasts\templates\podcasts\episode_detail.html:192
 #: .\podcasts\templates\podcasts\episode_list.html:34
 #: .\podcasts\templates\podcasts\episode_list.html:88
 #: .\podcasts\templates\podcasts\episode_list_items.html:59
@@ -390,7 +390,7 @@ msgstr "Kommentare"
 
 #: .\podcasts\templates\podcasts\bookmarks_list.html:75
 #: .\podcasts\templates\podcasts\bookmarks_list_items.html:67
-#: .\podcasts\templates\podcasts\channel_detail.html:164
+#: .\podcasts\templates\podcasts\channel_detail.html:173
 #: .\podcasts\templates\podcasts\channel_detail_item.html:56
 #: .\podcasts\templates\podcasts\episode_list.html:93
 #: .\podcasts\templates\podcasts\episode_list_items.html:64
@@ -403,11 +403,10 @@ msgstr "Episodenbewertung"
 #: .\podcasts\templates\podcasts\bookmarks_list_items.html:76
 #: .\podcasts\templates\podcasts\channel_detail.html:90
 #: .\podcasts\templates\podcasts\channel_detail.html:91
-#: .\podcasts\templates\podcasts\channel_detail.html:172
+#: .\podcasts\templates\podcasts\channel_detail.html:181
 #: .\podcasts\templates\podcasts\channel_detail_item.html:65
-#: .\podcasts\templates\podcasts\channel_list.html:89
+#: .\podcasts\templates\podcasts\channel_list.html:95
 #: .\podcasts\templates\podcasts\channel_list_items.html:43
-#: .\podcasts\templates\podcasts\episode_detail.html:117
 #: .\podcasts\templates\podcasts\episode_detail.html:118
 #: .\podcasts\templates\podcasts\episode_list.html:102
 #: .\podcasts\templates\podcasts\episode_list_items.html:73
@@ -428,11 +427,11 @@ msgstr "Ich laden mehr Buchmarkierte Episoden..."
 
 #: .\podcasts\templates\podcasts\bookmarks_list.html:142
 #: .\podcasts\templates\podcasts\bookmarks_list.html:149
-#: .\podcasts\templates\podcasts\channel_detail.html:197
-#: .\podcasts\templates\podcasts\channel_list.html:108
+#: .\podcasts\templates\podcasts\channel_detail.html:206
+#: .\podcasts\templates\podcasts\channel_list.html:118
 #: .\podcasts\templates\podcasts\episode_list.html:160
 #: .\podcasts\templates\podcasts\episode_list.html:167
-#: .\podcasts\templates\podcasts\favorites_list.html:74
+#: .\podcasts\templates\podcasts\favorites_list.html:79
 #: .\podcasts\templates\podcasts\notifications_list.html:134
 #: .\podcasts\templates\podcasts\notifications_list.html:141
 #: .\podcasts\templates\podcasts\replies_list.html:20
@@ -442,7 +441,7 @@ msgid "End of list..."
 msgstr "Ende der Liste …"
 
 #: .\podcasts\templates\podcasts\channel_detail.html:28
-#: .\podcasts\templates\podcasts\channel_list.html:65
+#: .\podcasts\templates\podcasts\channel_list.html:71
 #: .\podcasts\templates\podcasts\channel_list_items.html:19
 #: .\podcasts\templates\podcasts\favorites_list.html:25
 #: .\podcasts\templates\podcasts\favorites_list_items.html:18
@@ -487,20 +486,28 @@ msgstr "Bezahlen Sie diesen Kanal"
 msgid "Average rating and number of ratings"
 msgstr "Durchschnittliche Bewertung und Anzahl der Ratings"
 
-#: .\podcasts\templates\podcasts\channel_detail.html:102
+#: .\podcasts\templates\podcasts\channel_detail.html:98
+#: .\podcasts\templates\podcasts\channel_detail.html:99
+#: .\podcasts\templates\podcasts\channel_list.html:99
+#: .\podcasts\templates\podcasts\channel_list_items.html:47
+#| msgid "Podcast Episodes"
+msgid "Total Episodes"
+msgstr "Gesamte Episoden"
+
+#: .\podcasts\templates\podcasts\channel_detail.html:111
 msgid "Search episodes in this channel"
 msgstr "Suche-Episoden in diesem Kanal"
 
-#: .\podcasts\templates\podcasts\channel_detail.html:108
+#: .\podcasts\templates\podcasts\channel_detail.html:117
 msgid "Search episodes in this channel…"
 msgstr "Suche-Episoden in diesem Kanal..."
 
-#: .\podcasts\templates\podcasts\channel_detail.html:185
+#: .\podcasts\templates\podcasts\channel_detail.html:194
 msgid "No episodes available for this channel."
 msgstr "Keine Episoden sind für diesen Sender verfügbar."
 
-#: .\podcasts\templates\podcasts\channel_detail.html:192
-#: .\podcasts\templates\podcasts\channel_detail.html:198
+#: .\podcasts\templates\podcasts\channel_detail.html:201
+#: .\podcasts\templates\podcasts\channel_detail.html:207
 #: .\podcasts\templates\podcasts\episode_list.html:125
 #: .\podcasts\templates\podcasts\search_results_items.html:143
 #: .\podcasts\templates\podcasts\search_results_items.html:154
@@ -577,7 +584,17 @@ msgstr "A → Z"
 msgid "Z → A"
 msgstr "Z → A"
 
-#: .\podcasts\templates\podcasts\channel_list.html:59
+#: .\podcasts\templates\podcasts\channel_list.html:47
+#| msgid "Podcast Episodes"
+msgid "Most episodes"
+msgstr "Die meisten Episoden"
+
+#: .\podcasts\templates\podcasts\channel_list.html:48
+#| msgid "Podcast Episodes"
+msgid "Least episodes"
+msgstr "Mindeste Episoden"
+
+#: .\podcasts\templates\podcasts\channel_list.html:65
 #: .\podcasts\templates\podcasts\channel_list_items.html:13
 #: .\podcasts\templates\podcasts\favorites_list.html:19
 #: .\podcasts\templates\podcasts\favorites_list_items.html:12
@@ -585,20 +602,20 @@ msgstr "Z → A"
 msgid "No image available"
 msgstr "Keine Bilder verfügbar"
 
-#: .\podcasts\templates\podcasts\channel_list.html:81
+#: .\podcasts\templates\podcasts\channel_list.html:87
 #: .\podcasts\templates\podcasts\channel_list_items.html:35
 #: .\podcasts\templates\podcasts\favorites_list.html:43
 #: .\podcasts\templates\podcasts\favorites_list_items.html:33
 msgid "Channel Rating"
 msgstr "Kanalbewertung"
 
-#: .\podcasts\templates\podcasts\channel_list.html:98
+#: .\podcasts\templates\podcasts\channel_list.html:108
 msgid "No channels available."
 msgstr "Keine Kanäle verfügbar."
 
-#: .\podcasts\templates\podcasts\channel_list.html:104
-#: .\podcasts\templates\podcasts\channel_list.html:109
-#: .\podcasts\templates\podcasts\favorites_list.html:75
+#: .\podcasts\templates\podcasts\channel_list.html:114
+#: .\podcasts\templates\podcasts\channel_list.html:119
+#: .\podcasts\templates\podcasts\favorites_list.html:80
 #: .\podcasts\templates\podcasts\search_results_ch_items.html:68
 #: .\podcasts\templates\podcasts\search_results_ch_items.html:73
 msgid "Loading more channels..."
@@ -633,8 +650,8 @@ msgstr ""
 
 #: .\podcasts\templates\podcasts\contribute.html:13
 msgid ""
-"Select which channels you'd like to support or choose 'All Channels' to help "
-"across the platform."
+"Select which channels you'd like to support or choose 'All Channels' to help"
+" across the platform."
 msgstr ""
 "Wählen Sie aus, welche Kanäle Sie unterstützen möchten oder wählen Sie "
 "\"Alle Kanäle\", um über die Plattform hinweg zu helfen."
@@ -704,11 +721,16 @@ msgstr ""
 msgid "Disable 2FA"
 msgstr "2FA deaktivieren"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:79
+#: .\podcasts\templates\podcasts\episode_detail.html:40
+#| msgid "No channels available."
+msgid "No channel image"
+msgstr "Keine Kanalbilder"
+
+#: .\podcasts\templates\podcasts\episode_detail.html:80
 msgid "Remove from Bookmarks"
 msgstr "Entfernen Sie aus den Lesezeichen"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:79
+#: .\podcasts\templates\podcasts\episode_detail.html:80
 msgid "Add to Bookmarks"
 msgstr "Hinzufügen zu Lernzeichen"
 
@@ -732,31 +754,60 @@ msgstr "Bewertet diese Episode ."
 msgid "Average rating and total ratings"
 msgstr "Durchschnittsbewertungen und Gesamtbewertungen"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:138
+#: .\podcasts\templates\podcasts\episode_detail.html:137
+msgid "Your browser does not support the audio element."
+msgstr "Ihr Browser unterstützt das Audio-Element nicht."
+
+#: .\podcasts\templates\podcasts\episode_detail.html:141
 msgid "Audio:"
 msgstr "Audio:"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:151
+#: .\podcasts\templates\podcasts\episode_detail.html:141
+#| msgid "No image available"
+msgid "No audio available"
+msgstr "Keine Audio verfügbar"
+
+#: .\podcasts\templates\podcasts\episode_detail.html:149
 msgid "Chapters"
 msgstr "Kapitel"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:158
+#: .\podcasts\templates\podcasts\episode_detail.html:156
 msgid "No chapters available for this episode."
 msgstr "Keine Kapitel verfügbar für diese Episode."
 
-#: .\podcasts\templates\podcasts\episode_detail.html:168
+#: .\podcasts\templates\podcasts\episode_detail.html:165
 msgid "Transcript"
 msgstr "Transkript"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:207
+#: .\podcasts\templates\podcasts\episode_detail.html:183
+#| msgid "No chapters available for this episode."
+msgid "No transcript available for this episode."
+msgstr "Keine Transkription für diese Episode verfügbar."
+
+#: .\podcasts\templates\podcasts\episode_detail.html:198
 msgid "Write a comment..."
 msgstr "Schreiben Sie einen Kommentar..."
 
-#: .\podcasts\templates\podcasts\episode_detail.html:210
+#: .\podcasts\templates\podcasts\episode_detail.html:201
 msgid "Submit Comment"
 msgstr "Einreichung von Kommentaren"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:614
+#: .\podcasts\templates\podcasts\episode_detail.html:417
+#| msgid "Remove from Bookmarks"
+msgid "Remove episode from Bookmarks"
+msgstr "Entfernen Sie Episoden aus Bookmarks"
+
+#: .\podcasts\templates\podcasts\episode_detail.html:423
+#| msgid "Add to Bookmarks"
+msgid "Add episode to Bookmarks"
+msgstr "Hinzufügen von Episoden zu Bookmarks"
+
+#: .\podcasts\templates\podcasts\episode_detail.html:476
+#| msgid "Most commented"
+msgid "No comments yet."
+msgstr "Noch keine Kommentare."
+
+#: .\podcasts\templates\podcasts\episode_detail.html:540
 msgid "Please enter a comment"
 msgstr "Bitte geben Sie einen Kommentar ein"
 
@@ -797,11 +848,17 @@ msgstr "Wenigstens kommentiert"
 msgid "No episodes available."
 msgstr "Keine Episoden verfügbar."
 
-#: .\podcasts\templates\podcasts\favorites_list.html:63
+#: .\podcasts\templates\podcasts\favorites_list.html:57
+#: .\podcasts\templates\podcasts\favorites_list_items.html:45
+#| msgid "Total Views"
+msgid "Total episodes"
+msgstr "Gesamte Episoden"
+
+#: .\podcasts\templates\podcasts\favorites_list.html:68
 msgid "No favorite channels found."
 msgstr "Keine Lieblingskanäle gefunden."
 
-#: .\podcasts\templates\podcasts\favorites_list.html:69
+#: .\podcasts\templates\podcasts\favorites_list.html:74
 msgid "Loading more favorite channels..."
 msgstr "Mehr Lieblingskanäle laden..."
 
@@ -812,8 +869,8 @@ msgstr "Willkommen auf der Podcast-Suchmaschine"
 #: .\podcasts\templates\podcasts\home.html:7
 msgid "Please log in or create an account to access the site features."
 msgstr ""
-"Bitte melden Sie sich an oder erstellen Sie ein Konto, um auf die Funktionen "
-"der Website zuzugreifen."
+"Bitte melden Sie sich an oder erstellen Sie ein Konto, um auf die Funktionen"
+" der Website zuzugreifen."
 
 #: .\podcasts\templates\podcasts\home.html:8
 msgid "Your memory is short, the Muse's is not..."
@@ -861,13 +918,14 @@ msgid ""
 "🔍 Search any podcast by keyword (titles, descriptions, or transcript "
 "content)"
 msgstr ""
-"🔍 Suchen Sie nach Podcasts nach Schlüsselwörtern (Titel, Beschreibungen "
-"oder Transkriptinhalte)"
+"🔍 Suchen Sie nach Podcasts nach Schlüsselwörtern (Titel, Beschreibungen oder"
+" Transkriptinhalte)"
 
 #: .\podcasts\templates\podcasts\home.html:39
 msgid "📄 View full, time-stamped transcripts (speaker-diarized and formatted)"
 msgstr ""
-" Anzeige vollständiger, zeitgemachter Transkripte (diarisiert und formatiert)"
+" Anzeige vollständiger, zeitgemachter Transkripte (diarisiert und "
+"formatiert)"
 
 #: .\podcasts\templates\podcasts\home.html:40
 msgid "✍️ Read AI-generated chapter summaries"
@@ -922,8 +980,8 @@ msgstr "Transkriptgeneration"
 #: .\podcasts\templates\podcasts\home.html:50
 msgid ""
 "Ingests RSS feeds from any podcast; uses OpenAI Whisper Turbo on an NVIDIA "
-"GPU for fast, high-quality transcription; diarizes speakers and formats with "
-"timestamps."
+"GPU for fast, high-quality transcription; diarizes speakers and formats with"
+" timestamps."
 msgstr ""
 "Verbraucht RSS-Feeds aus jedem Podcast; verwendet OpenAI Whisper Turbo auf "
 "einer NVIDIA-GPU für schnelle, qualitativ hochwertige Transkription; "
@@ -959,8 +1017,8 @@ msgstr "Volltextsuche"
 
 #: .\podcasts\templates\podcasts\home.html:53
 msgid ""
-"Powered by Elasticsearch for lightning-fast, fuzzy-match queries; filters by "
-"title, description, channel metadata, or transcript."
+"Powered by Elasticsearch for lightning-fast, fuzzy-match queries; filters by"
+" title, description, channel metadata, or transcript."
 msgstr ""
 "Powered by Elasticsearch für blitzschnelle, fuzzy-match-Fragen; Filter nach "
 "Titel, Beschreibung, Kanalmetadaten oder Transkript."
@@ -974,8 +1032,8 @@ msgid ""
 "Jump directly to the moment a keyword appears in the audio player on the "
 "website."
 msgstr ""
-"Springen Sie direkt zum Moment, in dem ein Schlüsselwort im Audio-Player auf "
-"der Website erscheint."
+"Springen Sie direkt zum Moment, in dem ein Schlüsselwort im Audio-Player auf"
+" der Website erscheint."
 
 #: .\podcasts\templates\podcasts\home.html:57
 msgid "🏗️ Architecture & Tech Stack"
@@ -1274,8 +1332,8 @@ msgid ""
 "when you visit our website and register an account."
 msgstr ""
 "Muse Podcast, LLC verpflichtet sich, Ihre Privatsphäre zu schützen. Diese "
-"Datenschutzerklärung erklärt, wie wir Ihre Informationen sammeln, verwenden, "
-"teilen und schützen, wenn Sie unsere Website besuchen und ein Konto "
+"Datenschutzerklärung erklärt, wie wir Ihre Informationen sammeln, verwenden,"
+" teilen und schützen, wenn Sie unsere Website besuchen und ein Konto "
 "registrieren."
 
 #: .\podcasts\templates\podcasts\signup.html:180
@@ -1289,8 +1347,8 @@ msgid ""
 "We collect the following information when you create an account or use our "
 "website:"
 msgstr ""
-"Wir sammeln folgende Informationen, wenn Sie ein Konto erstellen oder unsere "
-"Website nutzen:"
+"Wir sammeln folgende Informationen, wenn Sie ein Konto erstellen oder unsere"
+" Website nutzen:"
 
 #: .\podcasts\templates\podcasts\signup.html:183
 #: .\podcasts\templates\socialaccount\signup.html:86
@@ -1391,8 +1449,8 @@ msgstr "Datenaustausch und Verkauf"
 #: .\podcasts\templates\podcasts\signup.html:214
 #: .\podcasts\templates\socialaccount\signup.html:115
 msgid ""
-"To keep our services free and advertisement-free, Muse Podcast, LLC may sell "
-"aggregated, anonymized data analytics to podcast creators, business "
+"To keep our services free and advertisement-free, Muse Podcast, LLC may sell"
+" aggregated, anonymized data analytics to podcast creators, business "
 "partners, or other third parties. We ensure your privacy by anonymizing "
 "data, meaning your personal identifiable information (like your name or "
 "exact contact details) will never be sold or shared. Your identity is "
@@ -1417,13 +1475,13 @@ msgstr "Datensicherheit"
 #, python-format
 msgid ""
 "Muse Podcast, LLC employs industry-standard practices and technologies to "
-"safeguard your personal information. However, no method of transmission over "
-"the internet or electronic storage is 100%% secure, so while we strive to "
+"safeguard your personal information. However, no method of transmission over"
+" the internet or electronic storage is 100%% secure, so while we strive to "
 "protect your personal information, we cannot guarantee absolute security."
 msgstr ""
 "Muse Podcast, LLC employs industry-standard practices and technologies to "
-"safeguard your personal information. However, no method of transmission over "
-"the internet or electronic storage is 100%% secure, so while we strive to "
+"safeguard your personal information. However, no method of transmission over"
+" the internet or electronic storage is 100%% secure, so while we strive to "
 "protect your personal information, we cannot guarantee absolute security."
 
 #: .\podcasts\templates\podcasts\signup.html:217
@@ -1453,8 +1511,8 @@ msgid ""
 "data at any time. To exercise these rights or if you have questions about "
 "this Privacy Notice, contact us at:"
 msgstr ""
-"Sie haben das Recht, jederzeit auf Ihre personenbezogenen Daten zuzugreifen, "
-"zu korrigieren oder zu verlangen, dass sie gelöscht werden."
+"Sie haben das Recht, jederzeit auf Ihre personenbezogenen Daten zuzugreifen,"
+" zu korrigieren oder zu verlangen, dass sie gelöscht werden."
 
 #: .\podcasts\templates\podcasts\signup.html:225
 #: .\podcasts\templates\socialaccount\signup.html:126
@@ -1536,34 +1594,34 @@ msgid ""
 "Your support ticket was unsuccessful, file size is too large, needs to be ≤ "
 "2 MB."
 msgstr ""
-"Ihr Support-Ticket war nicht erfolgreich, die Dateigröße ist zu groß, muss ≤ "
-"2 MB sein."
+"Ihr Support-Ticket war nicht erfolgreich, die Dateigröße ist zu groß, muss ≤"
+" 2 MB sein."
 
 #: .\podcasts\templates\podcasts\support_ticket.html:161
 msgid ""
-"Your support ticket was unsuccessful, file type incorrect, only (JPG/PNG/"
-"GIF) are accepted."
+"Your support ticket was unsuccessful, file type incorrect, only "
+"(JPG/PNG/GIF) are accepted."
 msgstr ""
-"Ihr Support-Ticket war nicht erfolgreich, der Dateitype ist falsch, nur (JPG/"
-"PNG/GIF) akzeptiert."
+"Ihr Support-Ticket war nicht erfolgreich, der Dateitype ist falsch, nur "
+"(JPG/PNG/GIF) akzeptiert."
 
 #: .\podcasts\templates\podcasts\support_ticket.html:163
 msgid ""
-"Your support ticket was unsuccessful, file type incorrect (only JPG/PNG/GIF) "
-"and file size is too large (≤ 2 MB)."
+"Your support ticket was unsuccessful, file type incorrect (only JPG/PNG/GIF)"
+" and file size is too large (≤ 2 MB)."
 msgstr ""
-"Ihr Support-Ticket war nicht erfolgreich, der Dateitype ist falsch (nur JPG/"
-"PNG/GIF) und die Dateigröße ist zu groß (≤ 2 MB)."
+"Ihr Support-Ticket war nicht erfolgreich, der Dateitype ist falsch (nur "
+"JPG/PNG/GIF) und die Dateigröße ist zu groß (≤ 2 MB)."
 
 #: .\podcasts\templates\podcasts\support_ticket.html:166
 #, python-format
 msgid ""
-"You’ve reached your limit of %(limit)s open tickets (%(open_count)s/"
-"%(limit)s). Please wait for one to complete or cancel before opening a new "
-"one."
+"You’ve reached your limit of %(limit)s open tickets "
+"(%(open_count)s/%(limit)s). Please wait for one to complete or cancel before"
+" opening a new one."
 msgstr ""
-"Sie haben Ihre Grenze von %(limit)s offenen Tickets (%(open_count)s/"
-"%(limit)s) erreicht."
+"Sie haben Ihre Grenze von %(limit)s offenen Tickets "
+"(%(open_count)s/%(limit)s) erreicht."
 
 #: .\podcasts\templates\podcasts\support_ticket.html:183
 msgid "OK"
@@ -1661,9 +1719,9 @@ msgid ""
 "We've emailed you instructions for resetting your password. Please check "
 "your inbox (and spam folder) for the reset link."
 msgstr ""
-"Wir haben Ihnen Anweisungen zur Wiederherstellung Ihres Passworts per E-Mail "
-"geschickt. Bitte überprüfen Sie Ihren Posteingang (und den Spam-Ordner) für "
-"den Wiederherstellungslink."
+"Wir haben Ihnen Anweisungen zur Wiederherstellung Ihres Passworts per E-Mail"
+" geschickt. Bitte überprüfen Sie Ihren Posteingang (und den Spam-Ordner) für"
+" den Wiederherstellungslink."
 
 #: .\podcasts\templates\registration\password_reset_form.html:8
 msgid ""

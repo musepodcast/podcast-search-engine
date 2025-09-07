@@ -3,7 +3,13 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.utils.safestring import mark_safe
-from .models import Channel, Episode, Transcript, Chapter, CustomUser, ChannelVisit, EpisodeVisit, SearchQuery, ChannelInteraction, EpisodeInteraction, Comment, Reply, SupportTicket, SupportTicketAttachment
+from .models import (
+    Channel, Episode, Transcript,
+    Chapter, CustomUser, ChannelVisit,
+    EpisodeVisit, SearchQuery, ChannelInteraction, 
+    EpisodeInteraction, Comment, Reply, 
+    SupportTicket, SupportTicketAttachment, ChannelSearchQuery
+)
 from django.utils import timezone
 from axes.handlers.proxy import AxesProxyHandler  
 from django.db.models import OuterRef, Exists
@@ -164,6 +170,12 @@ class SearchQueryAdmin(admin.ModelAdmin):
         'count', 'first_searched', 'last_searched', 'ip_address'
     )
     search_fields = ('query', 'user__username', 'search_in')
+
+@admin.register(ChannelSearchQuery)
+class ChannelSearchQueryAdmin(admin.ModelAdmin):
+    list_display = ('channel', 'query', 'user', 'count', 'last_searched', 'language', 'ip_address')
+    list_filter  = ('channel', 'language')
+    search_fields = ('query', 'user__username', 'channel__channel_title', 'ip_address')
 
 @admin.register(ChannelInteraction)
 class ChannelInteractionAdmin(admin.ModelAdmin):

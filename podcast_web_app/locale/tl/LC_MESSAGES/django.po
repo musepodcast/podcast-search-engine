@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-06 17:50-0500\n"
+"POT-Creation-Date: 2025-09-07 16:40-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -57,14 +57,14 @@ msgstr "O i-paste ang link na ito sa iyong browser:"
 #: .\podcasts\templates\account\email\email_confirmation_message.html:25
 #: .\podcasts\templates\account\email\email_confirmation_message.txt:6
 #: .\podcasts\templates\account\email\email_confirmation_signup_message.html:25
-#: .\podcasts\templates\account\email\email_confirmation_signup_message.txt:8
+#: .\podcasts\templates\account\email\email_confirmation_signup_message.txt:6
 msgid "This link expires in 24 hours."
 msgstr "Ang link na ito ay nagtatapos sa loob ng 24 oras."
 
 #: .\podcasts\templates\account\email\email_confirmation_message.html:29
 #: .\podcasts\templates\account\email\email_confirmation_message.txt:8
 #: .\podcasts\templates\account\email\email_confirmation_signup_message.html:29
-#: .\podcasts\templates\account\email\email_confirmation_signup_message.txt:10
+#: .\podcasts\templates\account\email\email_confirmation_signup_message.txt:8
 msgid "Worm regards,"
 msgstr "Ang mga salamin ng worm,"
 
@@ -73,8 +73,8 @@ msgid ""
 "You're almost done! Confirm your Muse Podcast account by clicking the link "
 "below:"
 msgstr ""
-"Kumpirmahin ang iyong account ng Muse Podcast sa pamamagitan ng pag-click sa "
-"link sa ibaba:"
+"Kumpirmahin ang iyong account ng Muse Podcast sa pamamagitan ng pag-click sa"
+" link sa ibaba:"
 
 #: .\podcasts\templates\account\email\email_confirmation_signup_message.html:6
 msgid "Welcome to Muse Podcast!"
@@ -87,13 +87,14 @@ msgstr ""
 "ibaba:"
 
 #: .\podcasts\templates\account\email\email_confirmation_signup_message.txt:2
+#| msgid ""
+#| "\n"
+#| "Welcome to Muse Podcast! Confirm your account by clicking the link below:\n"
 msgid ""
-"\n"
-"Welcome to Muse Podcast! Confirm your account by clicking the link below:\n"
+"Welcome to Muse Podcast! Confirm your account by clicking the link below:"
 msgstr ""
-"\n"
-"Maligayang pagdating sa Muse Podcast! Kumpirmahin ang iyong account sa "
-"pamamagitan ng pag-click sa link sa ibaba: \n"
+"Maligayang pagdating sa Muse Podcast! Kunfirmahin ang iyong account sa "
+"pamamagitan ng pag-click sa link sa ibaba:"
 
 #: .\podcasts\templates\account\email_confirm.html:6
 msgid "Confirm Your Email"
@@ -103,13 +104,11 @@ msgstr "Kumpirmahin ang Iyong Email"
 #, python-format
 msgid ""
 "\n"
-"      Confirm the email address <strong>%(email)s</strong> to activate your "
-"account.\n"
+"      Confirm the email address <strong>%(email)s</strong> to activate your account.\n"
 "      "
 msgstr ""
 "\n"
-"Kumpirmahin ang email address <strong>%(email)s</strong> upang i-activate "
-"ang iyong account. "
+"Kumpirmahin ang email address <strong>%(email)s</strong> upang i-activate ang iyong account. "
 
 #: .\podcasts\templates\account\email_confirm.html:18
 msgid "Confirm Email"
@@ -168,7 +167,7 @@ msgstr "Sa bahay"
 
 #: .\podcasts\templates\podcasts\base.html:57
 #: .\podcasts\templates\podcasts\channel_list.html:22
-#: .\podcasts\templates\podcasts\channel_list.html:73
+#: .\podcasts\templates\podcasts\channel_list.html:79
 #: .\podcasts\templates\podcasts\channel_list_items.html:27
 #: .\podcasts\templates\podcasts\favorites_list.html:5
 #: .\podcasts\templates\podcasts\favorites_list.html:33
@@ -178,7 +177,7 @@ msgstr "Mga paborito"
 
 #: .\podcasts\templates\podcasts\base.html:58
 #: .\podcasts\templates\podcasts\channel_list.html:28
-#: .\podcasts\templates\podcasts\channel_list.html:77
+#: .\podcasts\templates\podcasts\channel_list.html:83
 #: .\podcasts\templates\podcasts\channel_list_items.html:31
 #: .\podcasts\templates\podcasts\favorites_list.html:38
 #: .\podcasts\templates\podcasts\favorites_list_items.html:29
@@ -189,7 +188,7 @@ msgstr "Mga pahibalo"
 #: .\podcasts\templates\podcasts\base.html:59
 #: .\podcasts\templates\podcasts\bookmarks_list.html:65
 #: .\podcasts\templates\podcasts\bookmarks_list_items.html:57
-#: .\podcasts\templates\podcasts\channel_detail.html:155
+#: .\podcasts\templates\podcasts\channel_detail.html:164
 #: .\podcasts\templates\podcasts\channel_detail_item.html:46
 #: .\podcasts\templates\podcasts\episode_list.html:28
 #: .\podcasts\templates\podcasts\episode_list.html:83
@@ -206,7 +205,8 @@ msgstr "Mga Channel"
 
 #: .\podcasts\templates\podcasts\base.html:61
 #: .\podcasts\templates\podcasts\base.html:158
-#: .\podcasts\templates\podcasts\channel_detail.html:117
+#: .\podcasts\templates\podcasts\channel_detail.html:126
+#: .\podcasts\templates\podcasts\channel_list.html:46
 msgid "Episodes"
 msgstr "Mga Episode"
 
@@ -253,7 +253,7 @@ msgid "Search episodes or channels..."
 msgstr "Maghanap ng mga episode o channel..."
 
 #: .\podcasts\templates\podcasts\base.html:174
-#: .\podcasts\templates\podcasts\channel_detail.html:111
+#: .\podcasts\templates\podcasts\channel_detail.html:120
 msgid "Search"
 msgstr "Paghahanap"
 
@@ -379,9 +379,9 @@ msgstr "Malinaw"
 
 #: .\podcasts\templates\podcasts\bookmarks_list.html:70
 #: .\podcasts\templates\podcasts\bookmarks_list_items.html:62
-#: .\podcasts\templates\podcasts\channel_detail.html:160
+#: .\podcasts\templates\podcasts\channel_detail.html:169
 #: .\podcasts\templates\podcasts\channel_detail_item.html:51
-#: .\podcasts\templates\podcasts\episode_detail.html:196
+#: .\podcasts\templates\podcasts\episode_detail.html:192
 #: .\podcasts\templates\podcasts\episode_list.html:34
 #: .\podcasts\templates\podcasts\episode_list.html:88
 #: .\podcasts\templates\podcasts\episode_list_items.html:59
@@ -392,7 +392,7 @@ msgstr "Mga komento"
 
 #: .\podcasts\templates\podcasts\bookmarks_list.html:75
 #: .\podcasts\templates\podcasts\bookmarks_list_items.html:67
-#: .\podcasts\templates\podcasts\channel_detail.html:164
+#: .\podcasts\templates\podcasts\channel_detail.html:173
 #: .\podcasts\templates\podcasts\channel_detail_item.html:56
 #: .\podcasts\templates\podcasts\episode_list.html:93
 #: .\podcasts\templates\podcasts\episode_list_items.html:64
@@ -405,11 +405,10 @@ msgstr "Rating ng episodyo"
 #: .\podcasts\templates\podcasts\bookmarks_list_items.html:76
 #: .\podcasts\templates\podcasts\channel_detail.html:90
 #: .\podcasts\templates\podcasts\channel_detail.html:91
-#: .\podcasts\templates\podcasts\channel_detail.html:172
+#: .\podcasts\templates\podcasts\channel_detail.html:181
 #: .\podcasts\templates\podcasts\channel_detail_item.html:65
-#: .\podcasts\templates\podcasts\channel_list.html:89
+#: .\podcasts\templates\podcasts\channel_list.html:95
 #: .\podcasts\templates\podcasts\channel_list_items.html:43
-#: .\podcasts\templates\podcasts\episode_detail.html:117
 #: .\podcasts\templates\podcasts\episode_detail.html:118
 #: .\podcasts\templates\podcasts\episode_list.html:102
 #: .\podcasts\templates\podcasts\episode_list_items.html:73
@@ -430,11 +429,11 @@ msgstr "Nag-load ng higit pang mga bookmarked na episodes..."
 
 #: .\podcasts\templates\podcasts\bookmarks_list.html:142
 #: .\podcasts\templates\podcasts\bookmarks_list.html:149
-#: .\podcasts\templates\podcasts\channel_detail.html:197
-#: .\podcasts\templates\podcasts\channel_list.html:108
+#: .\podcasts\templates\podcasts\channel_detail.html:206
+#: .\podcasts\templates\podcasts\channel_list.html:118
 #: .\podcasts\templates\podcasts\episode_list.html:160
 #: .\podcasts\templates\podcasts\episode_list.html:167
-#: .\podcasts\templates\podcasts\favorites_list.html:74
+#: .\podcasts\templates\podcasts\favorites_list.html:79
 #: .\podcasts\templates\podcasts\notifications_list.html:134
 #: .\podcasts\templates\podcasts\notifications_list.html:141
 #: .\podcasts\templates\podcasts\replies_list.html:20
@@ -444,7 +443,7 @@ msgid "End of list..."
 msgstr "Katapusan ng listahan..."
 
 #: .\podcasts\templates\podcasts\channel_detail.html:28
-#: .\podcasts\templates\podcasts\channel_list.html:65
+#: .\podcasts\templates\podcasts\channel_list.html:71
 #: .\podcasts\templates\podcasts\channel_list_items.html:19
 #: .\podcasts\templates\podcasts\favorites_list.html:25
 #: .\podcasts\templates\podcasts\favorites_list_items.html:18
@@ -489,20 +488,28 @@ msgstr "I-rate ang channel na ito"
 msgid "Average rating and number of ratings"
 msgstr "Katumbas ng rating at bilang ng mga rating"
 
-#: .\podcasts\templates\podcasts\channel_detail.html:102
+#: .\podcasts\templates\podcasts\channel_detail.html:98
+#: .\podcasts\templates\podcasts\channel_detail.html:99
+#: .\podcasts\templates\podcasts\channel_list.html:99
+#: .\podcasts\templates\podcasts\channel_list_items.html:47
+#| msgid "Podcast Episodes"
+msgid "Total Episodes"
+msgstr "Ang Kabuuang Mga Episodio"
+
+#: .\podcasts\templates\podcasts\channel_detail.html:111
 msgid "Search episodes in this channel"
 msgstr "Mga episode ng paghahanap sa kanal na ito"
 
-#: .\podcasts\templates\podcasts\channel_detail.html:108
+#: .\podcasts\templates\podcasts\channel_detail.html:117
 msgid "Search episodes in this channel…"
 msgstr "Mga episode ng paghahanap sa channel na ito..."
 
-#: .\podcasts\templates\podcasts\channel_detail.html:185
+#: .\podcasts\templates\podcasts\channel_detail.html:194
 msgid "No episodes available for this channel."
 msgstr "Walang mga episodong magagamit para sa kanal na ito."
 
-#: .\podcasts\templates\podcasts\channel_detail.html:192
-#: .\podcasts\templates\podcasts\channel_detail.html:198
+#: .\podcasts\templates\podcasts\channel_detail.html:201
+#: .\podcasts\templates\podcasts\channel_detail.html:207
 #: .\podcasts\templates\podcasts\episode_list.html:125
 #: .\podcasts\templates\podcasts\search_results_items.html:143
 #: .\podcasts\templates\podcasts\search_results_items.html:154
@@ -579,7 +586,17 @@ msgstr "A → Z"
 msgid "Z → A"
 msgstr "Z → A"
 
-#: .\podcasts\templates\podcasts\channel_list.html:59
+#: .\podcasts\templates\podcasts\channel_list.html:47
+#| msgid "Podcast Episodes"
+msgid "Most episodes"
+msgstr "Karamihan sa mga episode"
+
+#: .\podcasts\templates\podcasts\channel_list.html:48
+#| msgid "Podcast Episodes"
+msgid "Least episodes"
+msgstr "Minimum episodes"
+
+#: .\podcasts\templates\podcasts\channel_list.html:65
 #: .\podcasts\templates\podcasts\channel_list_items.html:13
 #: .\podcasts\templates\podcasts\favorites_list.html:19
 #: .\podcasts\templates\podcasts\favorites_list_items.html:12
@@ -587,20 +604,20 @@ msgstr "Z → A"
 msgid "No image available"
 msgstr "Walang larawan na magagamit"
 
-#: .\podcasts\templates\podcasts\channel_list.html:81
+#: .\podcasts\templates\podcasts\channel_list.html:87
 #: .\podcasts\templates\podcasts\channel_list_items.html:35
 #: .\podcasts\templates\podcasts\favorites_list.html:43
 #: .\podcasts\templates\podcasts\favorites_list_items.html:33
 msgid "Channel Rating"
 msgstr "Paglalarawan ng Channel"
 
-#: .\podcasts\templates\podcasts\channel_list.html:98
+#: .\podcasts\templates\podcasts\channel_list.html:108
 msgid "No channels available."
 msgstr "Walang magagamit na mga channel."
 
-#: .\podcasts\templates\podcasts\channel_list.html:104
-#: .\podcasts\templates\podcasts\channel_list.html:109
-#: .\podcasts\templates\podcasts\favorites_list.html:75
+#: .\podcasts\templates\podcasts\channel_list.html:114
+#: .\podcasts\templates\podcasts\channel_list.html:119
+#: .\podcasts\templates\podcasts\favorites_list.html:80
 #: .\podcasts\templates\podcasts\search_results_ch_items.html:68
 #: .\podcasts\templates\podcasts\search_results_ch_items.html:73
 msgid "Loading more channels..."
@@ -627,16 +644,17 @@ msgid ""
 "episode generation and improve quality for the entire community."
 msgstr ""
 "Kapag nag-click ka sa 'Start Contributing', ang isang liwanag na ahente na "
-"tumatakbo sa iyong makina ay magkuha ng mga bagong entry ng RSS feed para sa "
-"iyong pinili na mga channel, mag-transcribe o mag-translate sa mga magagamit "
-"na transcript, magproseso ng mga ito sa lokal gamit ang iyong CPU / GPU, at "
-"ligtas na ibalik ang mga resulta. Ito ay tumutulong sa amin na mapabilis ang "
-"paglikha ng episode at mapabuti ang kalidad para sa buong komunidad."
+"tumatakbo sa iyong makina ay magkuha ng mga bagong entry ng RSS feed para sa"
+" iyong pinili na mga channel, mag-transcribe o mag-translate sa mga "
+"magagamit na transcript, magproseso ng mga ito sa lokal gamit ang iyong CPU "
+"/ GPU, at ligtas na ibalik ang mga resulta. Ito ay tumutulong sa amin na "
+"mapabilis ang paglikha ng episode at mapabuti ang kalidad para sa buong "
+"komunidad."
 
 #: .\podcasts\templates\podcasts\contribute.html:13
 msgid ""
-"Select which channels you'd like to support or choose 'All Channels' to help "
-"across the platform."
+"Select which channels you'd like to support or choose 'All Channels' to help"
+" across the platform."
 msgstr ""
 "Piliin kung aling mga channel ang nais mong suportahan o piliin ang 'All "
 "Channels' upang makatulong sa buong platform."
@@ -659,9 +677,9 @@ msgid ""
 "Soon, we'll introduce a leaderboard to highlight top contributors and a "
 "rewards system to thank you for your support."
 msgstr ""
-"Sa lalong madaling panahon, ipapakilala namin ang isang leaderboard upang i-"
-"highlight ang mga top contributor at isang sistema ng mga gantimpala upang "
-"pasalamatan ka sa iyong suporta."
+"Sa lalong madaling panahon, ipapakilala namin ang isang leaderboard upang "
+"i-highlight ang mga top contributor at isang sistema ng mga gantimpala upang"
+" pasalamatan ka sa iyong suporta."
 
 #: .\podcasts\templates\podcasts\contribute.html:30
 msgid "Select Channels"
@@ -705,11 +723,16 @@ msgstr ""
 msgid "Disable 2FA"
 msgstr "I-deactivate ang 2FA"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:79
+#: .\podcasts\templates\podcasts\episode_detail.html:40
+#| msgid "No channels available."
+msgid "No channel image"
+msgstr "Walang larawan ng channel"
+
+#: .\podcasts\templates\podcasts\episode_detail.html:80
 msgid "Remove from Bookmarks"
 msgstr "Alisin mula sa mga Bookmark"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:79
+#: .\podcasts\templates\podcasts\episode_detail.html:80
 msgid "Add to Bookmarks"
 msgstr "Magdagdag sa mga Bookmark"
 
@@ -733,31 +756,60 @@ msgstr "I-rate ang episode na ito"
 msgid "Average rating and total ratings"
 msgstr "Katumbas ng rating at kabuuang rating"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:138
+#: .\podcasts\templates\podcasts\episode_detail.html:137
+msgid "Your browser does not support the audio element."
+msgstr "Ang iyong browser ay hindi sumusuporta sa audio element."
+
+#: .\podcasts\templates\podcasts\episode_detail.html:141
 msgid "Audio:"
 msgstr "Audio:"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:151
+#: .\podcasts\templates\podcasts\episode_detail.html:141
+#| msgid "No image available"
+msgid "No audio available"
+msgstr "Walang audio na magagamit"
+
+#: .\podcasts\templates\podcasts\episode_detail.html:149
 msgid "Chapters"
 msgstr "Mga Kabanata"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:158
+#: .\podcasts\templates\podcasts\episode_detail.html:156
 msgid "No chapters available for this episode."
 msgstr "Walang mga kabanata na magagamit para sa episode na ito."
 
-#: .\podcasts\templates\podcasts\episode_detail.html:168
+#: .\podcasts\templates\podcasts\episode_detail.html:165
 msgid "Transcript"
 msgstr "Transcript"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:207
+#: .\podcasts\templates\podcasts\episode_detail.html:183
+#| msgid "No chapters available for this episode."
+msgid "No transcript available for this episode."
+msgstr "Walang transcript available para sa episode na ito."
+
+#: .\podcasts\templates\podcasts\episode_detail.html:198
 msgid "Write a comment..."
 msgstr "Isulat ang isang komento..."
 
-#: .\podcasts\templates\podcasts\episode_detail.html:210
+#: .\podcasts\templates\podcasts\episode_detail.html:201
 msgid "Submit Comment"
 msgstr "Ipadala ang Komento"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:614
+#: .\podcasts\templates\podcasts\episode_detail.html:417
+#| msgid "Remove from Bookmarks"
+msgid "Remove episode from Bookmarks"
+msgstr "Alisin ang episode mula sa Bookmarks"
+
+#: .\podcasts\templates\podcasts\episode_detail.html:423
+#| msgid "Add to Bookmarks"
+msgid "Add episode to Bookmarks"
+msgstr "Magdagdag ng episode sa Bookmarks"
+
+#: .\podcasts\templates\podcasts\episode_detail.html:476
+#| msgid "Most commented"
+msgid "No comments yet."
+msgstr "Walang komento pa."
+
+#: .\podcasts\templates\podcasts\episode_detail.html:540
 msgid "Please enter a comment"
 msgstr "Mangyaring isulat ang isang komento"
 
@@ -798,11 +850,17 @@ msgstr "Hindi kinomento"
 msgid "No episodes available."
 msgstr "Walang mga episodong magagamit."
 
-#: .\podcasts\templates\podcasts\favorites_list.html:63
+#: .\podcasts\templates\podcasts\favorites_list.html:57
+#: .\podcasts\templates\podcasts\favorites_list_items.html:45
+#| msgid "Total Views"
+msgid "Total episodes"
+msgstr "Ang kabuuang mga yugto"
+
+#: .\podcasts\templates\podcasts\favorites_list.html:68
 msgid "No favorite channels found."
 msgstr "Walang paboritong channel na natagpuan."
 
-#: .\podcasts\templates\podcasts\favorites_list.html:69
+#: .\podcasts\templates\podcasts\favorites_list.html:74
 msgid "Loading more favorite channels..."
 msgstr "Pag-load ng higit pang mga paboritong channel..."
 
@@ -896,8 +954,8 @@ msgid ""
 "Currently optimized for desktop browsers, tablets, foldables, and "
 "smartphones. Community contribution and native apps are coming soon!"
 msgstr ""
-"Kasalukuyan na na-optimize para sa mga browser sa desktop, tablet, foldable, "
-"at smartphone. Ang kontribusyon ng komunidad at mga katutubong app ay "
+"Kasalukuyan na na-optimize para sa mga browser sa desktop, tablet, foldable,"
+" at smartphone. Ang kontribusyon ng komunidad at mga katutubong app ay "
 "darating sa lalong madaling panahon!"
 
 #: .\podcasts\templates\podcasts\home.html:47
@@ -923,12 +981,13 @@ msgstr "Paglikha ng mga transcript"
 #: .\podcasts\templates\podcasts\home.html:50
 msgid ""
 "Ingests RSS feeds from any podcast; uses OpenAI Whisper Turbo on an NVIDIA "
-"GPU for fast, high-quality transcription; diarizes speakers and formats with "
-"timestamps."
+"GPU for fast, high-quality transcription; diarizes speakers and formats with"
+" timestamps."
 msgstr ""
 "Nag-inom ng RSS feed mula sa anumang podcast; gumagamit ng OpenAI Whisper "
 "Turbo sa isang NVIDIA GPU para sa mabilis, mataas na kalidad na "
-"transkripsyon; nag-diary ng mga tagapagsalita at format na may mga timestamp."
+"transkripsyon; nag-diary ng mga tagapagsalita at format na may mga "
+"timestamp."
 
 #: .\podcasts\templates\podcasts\home.html:51
 msgid "Chapter Summaries"
@@ -960,8 +1019,8 @@ msgstr "Paghahanap ng Bugtong-Teksto"
 
 #: .\podcasts\templates\podcasts\home.html:53
 msgid ""
-"Powered by Elasticsearch for lightning-fast, fuzzy-match queries; filters by "
-"title, description, channel metadata, or transcript."
+"Powered by Elasticsearch for lightning-fast, fuzzy-match queries; filters by"
+" title, description, channel metadata, or transcript."
 msgstr ""
 "Powered by Elasticsearch para sa flash-madali, fuzzy-match queries; mga "
 "filter sa pamamagitan ng pamagat, paglalarawan, channel metadata, o "
@@ -1029,7 +1088,9 @@ msgstr "Database"
 
 #: .\podcasts\templates\podcasts\home.html:79
 msgid "PostgreSQL | MaraiaDB"
-msgstr "PostgreSQL                                                                                                                                                                                                                                                           "
+msgstr ""
+"PostgreSQL"
+"                                                                                                                                                                                                                                                           "
 
 #: .\podcasts\templates\podcasts\home.html:82
 msgid "Search Engine"
@@ -1251,8 +1312,8 @@ msgid ""
 ", and consent to the collection, anonymized sharing, and sale of data as "
 "described."
 msgstr ""
-", at pahintulot sa pagkolekta, anonymized pagbabahagi, at pagbebenta ng data "
-"tulad ng inilarawan."
+", at pahintulot sa pagkolekta, anonymized pagbabahagi, at pagbebenta ng data"
+" tulad ng inilarawan."
 
 #: .\podcasts\templates\podcasts\signup.html:161
 msgid "Sign Up"
@@ -1395,8 +1456,8 @@ msgstr "Paghahati at Pagbebenta ng Data"
 #: .\podcasts\templates\podcasts\signup.html:214
 #: .\podcasts\templates\socialaccount\signup.html:115
 msgid ""
-"To keep our services free and advertisement-free, Muse Podcast, LLC may sell "
-"aggregated, anonymized data analytics to podcast creators, business "
+"To keep our services free and advertisement-free, Muse Podcast, LLC may sell"
+" aggregated, anonymized data analytics to podcast creators, business "
 "partners, or other third parties. We ensure your privacy by anonymizing "
 "data, meaning your personal identifiable information (like your name or "
 "exact contact details) will never be sold or shared. Your identity is "
@@ -1406,10 +1467,10 @@ msgstr ""
 "Podcast, LLC ay maaaring magbenta ng mga aggregated, anonymized data "
 "analytics sa mga tagalikha ng podcast, mga kasosyo sa negosyo, o iba pang "
 "mga third party. Siguraduhin namin ang iyong privacy sa pamamagitan ng pag-"
-"anonymizing ng data, na nangangahulugang ang iyong personal na nakikilala na "
-"impormasyon (tulad ng iyong pangalan o eksaktong mga detalye ng pakikipag-"
-"ugnayan) ay hindi kailanman mabibili o ibahagi. Ang iyong pagkakakilanlan ay "
-"sinasalin ng isang natatanging, randomized na numero upang mapanatili ang "
+"anonymizing ng data, na nangangahulugang ang iyong personal na nakikilala na"
+" impormasyon (tulad ng iyong pangalan o eksaktong mga detalye ng pakikipag-"
+"ugnayan) ay hindi kailanman mabibili o ibahagi. Ang iyong pagkakakilanlan ay"
+" sinasalin ng isang natatanging, randomized na numero upang mapanatili ang "
 "iyong pagkakakilanlan."
 
 #: .\podcasts\templates\podcasts\signup.html:215
@@ -1422,13 +1483,13 @@ msgstr "Kalihim ng Data"
 #, python-format
 msgid ""
 "Muse Podcast, LLC employs industry-standard practices and technologies to "
-"safeguard your personal information. However, no method of transmission over "
-"the internet or electronic storage is 100%% secure, so while we strive to "
+"safeguard your personal information. However, no method of transmission over"
+" the internet or electronic storage is 100%% secure, so while we strive to "
 "protect your personal information, we cannot guarantee absolute security."
 msgstr ""
 "Muse Podcast, LLC employs industry-standard practices and technologies to "
-"safeguard your personal information. However, no method of transmission over "
-"the internet or electronic storage is 100%% secure, so while we strive to "
+"safeguard your personal information. However, no method of transmission over"
+" the internet or electronic storage is 100%% secure, so while we strive to "
 "protect your personal information, we cannot guarantee absolute security."
 
 #: .\podcasts\templates\podcasts\signup.html:217
@@ -1458,8 +1519,8 @@ msgid ""
 "data at any time. To exercise these rights or if you have questions about "
 "this Privacy Notice, contact us at:"
 msgstr ""
-"Ikaw ay may karapatan upang ma-access, i-correct, o humingi ng pagtanggal ng "
-"iyong personal na data sa anumang oras. Upang gamitin ang mga karapatan na "
+"Ikaw ay may karapatan upang ma-access, i-correct, o humingi ng pagtanggal ng"
+" iyong personal na data sa anumang oras. Upang gamitin ang mga karapatan na "
 "ito o kung mayroon kang mga katanungan tungkol sa Privacy Policy na ito, "
 "makipag-ugnay sa amin sa:"
 
@@ -1548,16 +1609,16 @@ msgstr ""
 
 #: .\podcasts\templates\podcasts\support_ticket.html:161
 msgid ""
-"Your support ticket was unsuccessful, file type incorrect, only (JPG/PNG/"
-"GIF) are accepted."
+"Your support ticket was unsuccessful, file type incorrect, only "
+"(JPG/PNG/GIF) are accepted."
 msgstr ""
-"Ang iyong support ticket ay hindi matagumpay, ang uri ng file ay hindi tama, "
-"lamang (JPG/PNG/GIF) ang tinatanggap."
+"Ang iyong support ticket ay hindi matagumpay, ang uri ng file ay hindi tama,"
+" lamang (JPG/PNG/GIF) ang tinatanggap."
 
 #: .\podcasts\templates\podcasts\support_ticket.html:163
 msgid ""
-"Your support ticket was unsuccessful, file type incorrect (only JPG/PNG/GIF) "
-"and file size is too large (≤ 2 MB)."
+"Your support ticket was unsuccessful, file type incorrect (only JPG/PNG/GIF)"
+" and file size is too large (≤ 2 MB)."
 msgstr ""
 "Ang iyong support ticket ay hindi naging matagumpay, hindi tama ang uri ng "
 "file (JPG/PNG/GIF lamang) at ang laki ng file ay masyadong malaki (≤ 2 MB)."
@@ -1565,12 +1626,12 @@ msgstr ""
 #: .\podcasts\templates\podcasts\support_ticket.html:166
 #, python-format
 msgid ""
-"You’ve reached your limit of %(limit)s open tickets (%(open_count)s/"
-"%(limit)s). Please wait for one to complete or cancel before opening a new "
-"one."
+"You’ve reached your limit of %(limit)s open tickets "
+"(%(open_count)s/%(limit)s). Please wait for one to complete or cancel before"
+" opening a new one."
 msgstr ""
-"Nakatapos na ang iyong limitasyon ng %(limit)s open tickets (%(open_count)s/"
-"%(limit)s)."
+"Nakatapos na ang iyong limitasyon ng %(limit)s open tickets "
+"(%(open_count)s/%(limit)s)."
 
 #: .\podcasts\templates\podcasts\support_ticket.html:183
 msgid "OK"
@@ -1676,8 +1737,8 @@ msgstr ""
 msgid ""
 "Enter your email address and we'll send you a link to reset your password."
 msgstr ""
-"Isulat ang iyong email address at magpadala kami ng isang link upang i-reset "
-"ang iyong password."
+"Isulat ang iyong email address at magpadala kami ng isang link upang i-reset"
+" ang iyong password."
 
 #: .\podcasts\templates\registration\password_reset_form.html:12
 msgid "Send Reset Link"

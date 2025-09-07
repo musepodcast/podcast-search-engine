@@ -40,9 +40,13 @@
               N/A
             {% endif %}
           </span>
-          <span class="d-flex align-items-center" title="{% trans 'Total Views' %}">
+          <span class="d-flex align-items-center me-3" title="{% trans 'Total Views' %}">
             <i class="fa-solid fa-eye" style="font-size: 1rem; margin-right: 0.25rem;"></i>
             {{ channel.total_views|default:"0"|number_format }}
+          </span>
+          <span class="d-flex align-items-center me-3" title="{% trans 'Total Episodes' %}">
+            <i class="fa-solid fa-podcast" style="font-size: 1rem; margin-right: 0.25rem;"></i>
+            {{ channel.episode_count|default:"0"|number_format }}
           </span>
         </div>
         <!-- End new info container -->
