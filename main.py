@@ -2,7 +2,7 @@
 
 from dateutil import parser
 import time
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 import subprocess
 import os
 import yaml  # For handling YAML files
@@ -931,6 +931,49 @@ def process_chunk(chunk, pipeline):
         logging.error(f"Unexpected error processing chunk {chunk}: {e}")
         return None
 
+def _repeat_every(restart_hours, fn, *args, **kwargs):
+    """
+    Re-run `fn(*args, **kwargs)` on a fixed cadence of `restart_hours`.
+    If a run takes longer than the interval, the next run starts immediately,
+    and the cadence is preserved (no drift) using time.monotonic().
+    """
+    interval = float(restart_hours) * 3600.0
+    if interval <= 0:
+        fn(*args, **kwargs)
+        return
+
+    cycle = 1
+    next_tick = time.monotonic()  # start now
+    while True:
+        start_wall = datetime.now().isoformat(timespec='seconds')
+        start_mono = time.monotonic()
+        logging.info(f"=== Cycle {cycle} start @ {start_wall} (interval={restart_hours}h) ===")
+
+        try:
+            fn(*args, **kwargs)
+        except Exception:
+            logging.exception("Cycle crashed; continuing.")
+
+        # Advance next_tick by fixed interval (preserve cadence, avoid drift)
+        next_tick += interval
+        now = time.monotonic()
+        delay = max(0.0, next_tick - now)
+        elapsed = now - start_mono
+        next_wall = (datetime.now() + timedelta(seconds=delay)).isoformat(timespec='seconds')
+        logging.info(
+            f"=== Cycle {cycle} complete in {elapsed/3600:.2f}h. "
+            f"Next run in {delay/3600:.2f}h @ {next_wall} ==="
+        )
+
+        try:
+            time.sleep(delay)
+        except KeyboardInterrupt:
+            logging.info("Received Ctrl+C; exiting cleanly.")
+            break
+
+        cycle += 1
+
+
 def parse_cli_args():
     parser = argparse.ArgumentParser(description="Podcast pipeline runner")
     # Use the mini file instead of master_rss.json
@@ -942,14 +985,20 @@ def parse_cli_args():
     # Limit how many entries per feed to process (0 or absent = ALL)
     parser.add_argument('-n', '--limit', type=int, default=None,
                         help='Max entries per feed (default: all)')
+
+    # NEW: restart hours (e.g. -r 24 runs the whole list every 24 hours)
+    parser.add_argument('-r', '--restart-hours', type=float, default=None,
+                        help='If set, re-run the entire feed list from the top every N hours (e.g., 24).')
+
     args, unknown = parser.parse_known_args()
 
-    # Support your shorthand like "--30"
+    # Support your existing shorthand like "--30"
     for tok in unknown:
         m = re.fullmatch(r'--(\d{1,4})', tok)
         if m:
             args.limit = int(m.group(1))
     return args
+
 
 
 def process_entry(entry, channel_transcript_dir, download_dir, channel_title, pipeline, config, feed_data, channel_summary, channel_author):
@@ -1204,9 +1253,10 @@ def process_entry(entry, channel_transcript_dir, download_dir, channel_title, pi
 
         return combined_data
     except Exception as e:
-        logging.error(f"An error occurred while processing entry '{sanitized_title}': {e}", exc_info=True)      
+        logging.error(f"An error occurred while processing entry '{sanitized_title}': {e}", exc_info=True)
 
-def main(feeds_filename='master_rss.json', limit_per_feed=0):
+# ── 3a) Legacy Main Function ────────────────────────────────
+def run_cycle(feeds_filename='master_rss.json', limit_per_feed=0):
     # pick the feeds file
     master_file = DATABASE_ROOT / "watcher_json" / feeds_filename
     try:
@@ -1298,6 +1348,52 @@ def main(feeds_filename='master_rss.json', limit_per_feed=0):
     except Exception as e:
         logging.error(f"Translation script failed: {e}")
 
+# ── 3b) New main(...) adds optional restart loop ─────────────────────────────
+def main(feeds_filename='master_rss.json', limit_per_feed=0, restart_hours=None):
+    """
+    Run once (default), or repeat from the top every `restart_hours` with a fixed cadence.
+    """
+    # One pass (current behavior)
+    if restart_hours is None or restart_hours <= 0:
+        return run_cycle(feeds_filename, limit_per_feed)
+
+    # Fixed-cadence repeats using time.monotonic() to avoid clock drift
+    interval = float(restart_hours) * 3600.0
+    cycle = 1
+    next_tick = time.monotonic()  # start immediately
+
+    while True:
+        start_wall = datetime.now().isoformat(timespec='seconds')
+        start_mono = time.monotonic()
+        logging.info(
+            f"=== Cycle {cycle} start @ {start_wall} (interval={restart_hours}h) ==="
+        )
+
+        try:
+            run_cycle(feeds_filename, limit_per_feed)
+        except Exception:
+            logging.exception("Cycle crashed; continuing to the next scheduled run.")
+
+        # Preserve cadence: schedule next run exactly interval seconds after the previous tick
+        next_tick += interval
+        now = time.monotonic()
+        delay = max(0.0, next_tick - now)
+        elapsed = now - start_mono
+        next_wall = (datetime.now() + timedelta(seconds=delay)).isoformat(timespec='seconds')
+
+        logging.info(
+            f"=== Cycle {cycle} complete in {elapsed/3600:.2f}h. "
+            f"Next run in {delay/3600:.2f}h @ {next_wall} ==="
+        )
+
+        try:
+            time.sleep(delay)
+        except KeyboardInterrupt:
+            logging.info("Received Ctrl+C; exiting cleanly.")
+            break
+
+        cycle += 1
+
 
 if __name__ == "__main__":
     try:
@@ -1307,7 +1403,19 @@ if __name__ == "__main__":
             or ("master_rss_mini.json" if args.master_rss_mini else "master_rss.json")
         )
         limit = args.limit or 0  # 0/None = ALL
-        main(feeds_filename=feeds_filename, limit_per_feed=limit)
+        restart_hours = args.restart_hours
+
+        logging.info(
+            f"CLI parsed → feeds={feeds_filename}, limit={limit}, restart_hours={restart_hours}"
+        )
+
+        main(
+            feeds_filename=feeds_filename,
+            limit_per_feed=limit,
+            restart_hours=restart_hours
+        )
+
+    except KeyboardInterrupt:
+        logging.info("Interrupted by user; exiting.")
     except Exception as e:
         logging.critical(f"Unhandled exception: {e}", exc_info=True)
-
