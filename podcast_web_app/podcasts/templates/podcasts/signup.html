@@ -112,7 +112,7 @@
             class="btn btn-outline-light toggle-password"
             data-target="id_password1"
             aria-label="{% trans 'Show/Hide password' %}">
-      <i class="fa fa-eye"></i>
+      <i class="fa-solid fa-eye-slash" aria-hidden="true"></i>
     </button>
   </div>
   {{ form.password1.errors }}
@@ -126,7 +126,7 @@
             class="btn btn-outline-light toggle-password"
             data-target="id_password2"
             aria-label="{% trans 'Show/Hide password' %}">
-      <i class="fa fa-eye"></i>
+      <i class="fa-solid fa-eye-slash" aria-hidden="true"></i>
     </button>
   </div>
   {{ form.password2.errors }}
@@ -324,14 +324,23 @@ document.addEventListener("DOMContentLoaded", function() {
       if (!input) return;
       if (input.type === 'password') {
         input.type = 'text';
-        btn.firstElementChild.classList.remove('fa-eye');
-        btn.firstElementChild.classList.add('fa-eye-slash');
-      } else {
-        input.type = 'password';
         btn.firstElementChild.classList.remove('fa-eye-slash');
         btn.firstElementChild.classList.add('fa-eye');
+      } else {
+        input.type = 'password';
+        btn.firstElementChild.classList.remove('fa-eye');
+        btn.firstElementChild.classList.add('fa-eye-slash');
       }
     });
+  });
+
+    // ✅ Set initial icon to match input type on page load
+  toggleButtons.forEach(btn => {
+    const input = document.getElementById(btn.dataset.target);
+    const icon = btn.querySelector('i');
+    if (!input || !icon) return;
+    icon.classList.remove('fa', 'fa-solid', 'fa-eye', 'fa-eye-slash');
+    icon.classList.add('fa-solid', input.type === 'password' ? 'fa-eye-slash' : 'fa-eye');
   });
 
   // Username availability check
