@@ -9,9 +9,17 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get("SECRET_KEY", "django-insecure-default-key")
 
-EPISODE_JSON_BASE = Path(
-    os.environ.get("EPISODE_JSON_BASE", r"C:\Users\isaac\podcast_data\transcripts")
-)
+_env = os.environ.get("EPISODE_JSON_BASE")  # optional override
+
+if _env:
+    # Supports "~", "~user", absolute or relative paths from env
+    EPISODE_JSON_BASE = Path(os.path.expanduser(_env))
+else:
+    # Robust default: home/podcast_data/transcripts
+    EPISODE_JSON_BASE = Path.home() / "podcast_data" / "transcripts"
+
+# Optional: normalize (doesn't fail if it doesn't exist)
+EPISODE_JSON_BASE = EPISODE_JSON_BASE.resolve(strict=False)
 
 # Common settings
 DEBUG = False  # default here, override in dev.py

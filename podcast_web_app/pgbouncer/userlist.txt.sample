@@ -1,0 +1,6 @@
+# Plain auth: "username" "password"
+"postgres" "CHANGE_ME"
+
+# If you ever switch to auth_type=md5 instead of plain, this must be:
+# "postgres" "md5<md5(password + username)>"
+

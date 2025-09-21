@@ -11,6 +11,11 @@ __pycache__/
 *.log
 podcast_web_app/git_instructions.txt
 todolist.txt
+
 # IDE files
 .vscode/
 
+# PgBouncer real configs (keep out of git)
+podcast_web_app/pgbouncer/docker-compose.yml
+podcast_web_app/pgbouncer/pgbouncer.ini
+podcast_web_app/pgbouncer/userlist.txt
