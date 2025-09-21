@@ -119,6 +119,16 @@
             {{ total_episode_views|number_format }}
           </span>
         </div>
+        
+       <a href="/{{ episode.channel.sanitized_channel_title }}/{{ episode.sanitized_episode_title }}/download.json?lang={{ request.LANGUAGE_CODE|default:'en' }}"
+   class="btn-bookmark"
+   download
+   title="{% trans 'Download JSON' %}"
+   aria-label="{% trans 'Download JSON' %}">
+  <i class="fa-solid fa-file-arrow-down" aria-hidden="true"></i>
+  <span class="visually-hidden">{% trans "Download JSON" %}</span>
+</a>
+
 
       </div>
     </div>

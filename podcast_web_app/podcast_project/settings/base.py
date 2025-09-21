@@ -9,6 +9,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get("SECRET_KEY", "django-insecure-default-key")
 
+EPISODE_JSON_BASE = Path(
+    os.environ.get("EPISODE_JSON_BASE", r"C:\Users\isaac\podcast_data\transcripts")
+)
+
 # Common settings
 DEBUG = False  # default here, override in dev.py
 
