@@ -52,8 +52,8 @@ DATABASES = {
         "NAME":     env("DB_NAME"),
         "USER":     env("DB_USER"),
         "PASSWORD": env("DB_PASSWORD"),
-        "HOST":     env("DB_HOST"),
-        "PORT":     env("DB_PORT"),
+        "HOST":     env("PGBOUNCER_HOST"),
+        "PORT":     env("PGBOUNCER_PORT"),
     }
 }
 
