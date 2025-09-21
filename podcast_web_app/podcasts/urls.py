@@ -4,7 +4,8 @@ from django.urls import path
 from . import views
 from .views import (
     SignUpView, ProfileView, ProfileUpdateView, CustomLoginView, 
-    TwoFactorChallengeView, SecureDisable2FAView, ContributeView, toggle_contribute, support_ticket
+    TwoFactorChallengeView, SecureDisable2FAView, ContributeView, 
+    toggle_contribute, support_ticket, episode_download_json_file
 )
 from podcasts.views import locked_out_view
 from django.contrib.auth import views as auth_views
@@ -41,6 +42,8 @@ urlpatterns = [
     path('channel/<int:channel_id>/toggle_follow/', views.toggle_follow, name='toggle_follow'),
     path('channel/<int:channel_id>/toggle_notifications/', views.toggle_notifications, name='toggle_notifications'),
     path('channel/<int:channel_id>/update_rating/', views.update_rating, name='update_rating'),
+    path("channel/<str:sanitized_channel_title>/<str:sanitized_episode_title>/download.json", views.episode_download_json_file, name="episode_download_json"),
+    path("<str:sanitized_channel_title>/<str:sanitized_episode_title>/download.json",     views.episode_download_json_file, name="episode_download_json_alt"),
     path('episode/<int:episode_id>/post_comment/', views.post_comment, name='post_comment'),
     path('episode/<int:episode_id>/comments/', views.get_comments, name='get_comments'),
     path('comment/<int:comment_id>/reaction/', views.comment_reaction, name='comment_reaction'),

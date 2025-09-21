@@ -8,6 +8,7 @@ from django.db.models import (
     OuterRef, Subquery, Value, 
     IntegerField, FloatField
 )
+from pathlib import Path
 from django.db.models.functions import Coalesce
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
@@ -20,11 +21,12 @@ from allauth.account.models import EmailAddress
 from django.conf import settings
 import logging, time
 from collections import Counter
-import re, difflib
+import re, difflib, unicodedata
 import sys
 import json
 import itertools
-from django.http import Http404, HttpResponse, HttpResponseForbidden, JsonResponse
+from django.http import Http404, HttpResponse, HttpResponseForbidden, JsonResponse, FileResponse
+from django.utils.encoding import iri_to_uri
 from .models import (
     Channel, ChannelTranslations, ChannelVisit,
     Episode, EpisodeTranslations, EpisodeVisit,
@@ -78,6 +80,100 @@ from django.shortcuts import render
 from django.utils import timezone
 from axes.models import AccessAttempt
 from axes.conf import settings as axes_settings
+
+# Map locale aliases -> your canonical 2-letter folder/code
+_ALIAS_TO_CODE = {
+    "en": "en", "en-us": "en", "en_gb": "en", "en-gb": "en",
+    "pt": "pt", "pt-br": "pt", "pt_br": "pt",
+    "es": "es", "es-mx": "es", "es_es": "es",
+    "it": "it", "fr": "fr", "ru": "ru", "uk": "uk",
+    "zh": "cn", "zh-cn": "cn", "zh_hans": "cn", "zh-hans": "cn",
+    "zh-tw": "tw", "zh_hant": "tw", "zh-hant": "tw",
+    "cn": "cn", "tw": "tw",
+    "ko": "ko", "ja": "ja", "tr": "tr", "de": "de",
+    "ar": "ar", "hi": "hi", "vi": "vi", "tl": "tl",
+}
+
+def _canon_lang(lang: str) -> str:
+    if not lang:
+        return "en"
+    s = lang.strip().lower().replace("_", "-")
+    return _ALIAS_TO_CODE.get(s, _ALIAS_TO_CODE.get(s.split("-")[0], s.split("-")[0]))
+
+_norm_non_alnum = re.compile(r"[^a-z0-9]+")
+def _norm(s: str) -> str:
+    """Lowercase, strip accents, replace non-alnum with single underscores."""
+    s = unicodedata.normalize("NFKD", s or "")
+    s = "".join(ch for ch in s if not unicodedata.combining(ch))
+    s = s.lower()
+    s = _norm_non_alnum.sub("_", s)
+    return re.sub(r"_+", "_", s).strip("_")
+
+def _truncate_tokens_starts(candidate: str, max_drop: int = 2):
+    """Yield candidate, then with last 1..max_drop tokens dropped (for titles with trailing language words)."""
+    parts = candidate.split("_")
+    for k in range(0, min(max_drop, max(0, len(parts)-1)) + 1):
+        yield "_".join(parts[:len(parts)-k]) if k else candidate
+
+def episode_download_json_file(request, sanitized_channel_title, sanitized_episode_title):
+    # Canonicalize requested language (e.g., pt-br -> pt)
+    req_lang = request.GET.get("lang") or getattr(request, "LANGUAGE_CODE", None) or "en"
+    code = _canon_lang(req_lang)
+
+    base_dir = Path(settings.EPISODE_JSON_BASE)
+    lang_dir = base_dir / sanitized_channel_title / code
+
+    tried = []
+
+    # 1) Exact and suffixed direct hits
+    exact = lang_dir / f"{sanitized_episode_title}.json"
+    tried.append(str(exact))
+    if exact.exists():
+        return FileResponse(open(exact, "rb"), as_attachment=True,
+                           filename=iri_to_uri(f"{sanitized_channel_title}__{code}__{sanitized_episode_title}.json"),
+                           content_type="application/json")
+
+    suffixed = lang_dir / f"{sanitized_episode_title}_{code}.json"
+    tried.append(str(suffixed))
+    if suffixed.exists():
+        return FileResponse(open(suffixed, "rb"), as_attachment=True,
+                           filename=iri_to_uri(f"{sanitized_channel_title}__{code}__{sanitized_episode_title}.json"),
+                           content_type="application/json")
+
+    # 2) Heuristic match: compare normalized stems, allowing for trailing language words
+    target_norm = _norm(sanitized_episode_title)
+    if lang_dir.exists():
+        # Precompute truncated versions of target (drop last 0..2 tokens)
+        target_candidates = list(_truncate_tokens_starts(target_norm, max_drop=2))
+        for f in lang_dir.glob("*.json"):
+            stem_norm = _norm(f.stem)
+
+            # If file has an _<code> suffix, strip it before comparing
+            m = re.match(r"^(.*)_(\w{2,3})$", stem_norm)
+            f_base = m.group(1) if (m and _canon_lang(m.group(2)) == code) else stem_norm
+
+            # Accept if any truncated target equals the file base, or vice versa (prefix-friendly)
+            if any(f_base == tc or f_base.startswith(tc) or tc.startswith(f_base) for tc in target_candidates):
+                return FileResponse(open(f, "rb"), as_attachment=True,
+                                   filename=iri_to_uri(f"{sanitized_channel_title}__{code}__{f.stem}.json"),
+                                   content_type="application/json")
+        tried.append(f"[scanned] {lang_dir}\\*.json")
+
+    # 3) Final fallback to English (unsuffixed or _en) if requested lang missing
+    if code != "en":
+        en_dir = base_dir / sanitized_channel_title / "en"
+        for candidate in [en_dir / f"{sanitized_episode_title}.json",
+                          en_dir / f"{sanitized_episode_title}_en.json"]:
+            tried.append(str(candidate))
+            if candidate.exists():
+                return FileResponse(open(candidate, "rb"), as_attachment=True,
+                                   filename=iri_to_uri(f"{sanitized_channel_title}__en__{sanitized_episode_title}.json"),
+                                   content_type="application/json")
+        tried.append(f"[scanned] {en_dir}\\*.json")
+
+    # Not found — return JSON (avoids saving an HTML 404 as .htm)
+    return JsonResponse({"error": "Episode JSON not found", "tried": tried}, status=404)
+
 
 def _get_client_ip(request):
     xff = request.META.get("HTTP_X_FORWARDED_FOR")
@@ -1245,29 +1341,43 @@ class EpisodeDetailView(LoginRequiredMixin, DetailView):
         slug_ep = self.kwargs['sanitized_episode_title']
         lang    = (get_selected_language(self.request) or 'en').lower().split('-', 1)[0]
 
-        # If you *do* store translated slugs on EpisodeTranslations, this will work; if not, it just falls back.
-        if lang != 'en':
-            tr = EpisodeTranslations.objects.filter(
-                episode__channel__sanitized_channel_title=slug_ch,
-                sanitized_episode_title=slug_ep,  # ok only if present on translations
-                language__startswith=lang,
-                translated=True
-            ).select_related('episode', 'episode__channel').first()
-            if tr:
-                return tr
+        # 1) Try canonical base episode first
+        try:
+            base = Episode.objects.select_related('channel').get(
+                channel__sanitized_channel_title=slug_ch,
+                sanitized_episode_title=slug_ep
+            )
+        except Episode.DoesNotExist:
+            # 2) Try: this slug belongs to ANY translation (any language) in this channel
+            tr_any = (EpisodeTranslations.objects
+                      .select_related('episode','episode__channel')
+                      .filter(episode__channel__sanitized_channel_title=slug_ch,
+                              sanitized_episode_title=slug_ep,
+                              translated=True)
+                      .first())
+            if not tr_any:
+                # 2b) Diacritic-insensitive fallback across all translations in channel
+                norm_target = _norm(slug_ep)
+                tr_any = next(
+                    (tr for tr in EpisodeTranslations.objects
+                                   .select_related('episode','episode__channel')
+                                   .filter(episode__channel__sanitized_channel_title=slug_ch, translated=True)
+                     if _norm(tr.sanitized_episode_title) == norm_target),
+                    None
+                )
+            if not tr_any:
+                raise Http404("No Episode matches the given query.")
+            base = tr_any.episode  # map back to base
 
-        base = get_object_or_404(
-            Episode,
-            channel__sanitized_channel_title=slug_ch,
-            sanitized_episode_title=slug_ep
-        )
+        # Record for later use in context
+        self.base_episode = base
 
+        # 3) Choose display object for current language (if available)
         if lang != 'en':
-            tr = EpisodeTranslations.objects.filter(
-                episode=base,
-                language__startswith=lang,
-                translated=True
-            ).select_related('episode', 'episode__channel').first()
+            tr = (EpisodeTranslations.objects
+                  .select_related('episode','episode__channel')
+                  .filter(episode=base, language__startswith=lang, translated=True)
+                  .first())
             if tr:
                 return tr
 
@@ -1359,6 +1469,8 @@ class EpisodeDetailView(LoginRequiredMixin, DetailView):
         ctx['selected_language'] = lang
         # `episode` in the template is the display object (translated or original)
         ctx['episode']          = disp
+        ctx['base_slug_ch'] = self.base_episode.channel.sanitized_channel_title
+        ctx['base_slug_ep'] = self.base_episode.sanitized_episode_title
         return ctx
 
     def merge_consecutive_speakers(self, segments):
