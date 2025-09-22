@@ -48,7 +48,7 @@ ALLOWED_HOSTS = [
 
 ELASTICSEARCH_DSL = {
     "default": {
-        "hosts": os.environ.get("ES_HOST", "https://localhost:9200"),
+        "hosts": os.environ.get("ES_HOST", "https://127.0.0.1:9200"),
         "http_auth": (
             os.environ.get("ES_USER", "elastic"),
             os.environ.get("ES_PASSWORD", ""),
