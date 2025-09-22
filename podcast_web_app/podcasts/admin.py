@@ -8,7 +8,8 @@ from .models import (
     Chapter, CustomUser, ChannelVisit,
     EpisodeVisit, SearchQuery, ChannelInteraction, 
     EpisodeInteraction, Comment, Reply, 
-    SupportTicket, SupportTicketAttachment, ChannelSearchQuery
+    SupportTicket, SupportTicketAttachment, ChannelSearchQuery,
+    EpisodeDownload
 )
 from django.utils import timezone
 from axes.handlers.proxy import AxesProxyHandler  
@@ -251,3 +252,14 @@ class SupportTicketAdmin(admin.ModelAdmin):
         if change and 'status' in form.changed_data:
             obj.last_reviewed_date = timezone.now()
         super().save_model(request, obj, form, change)
+
+@admin.register(EpisodeDownload)
+class EpisodeDownloadAdmin(admin.ModelAdmin):
+    list_display  = (
+        'user', 'episode', 'language', 'count',
+        'last_downloaded', 'last_ip_address',
+    )
+    list_filter   = ('language', 'episode__channel',)
+    search_fields = ('user__username', 'episode__episode_title', 'last_ip_address', 'last_user_agent', 'last_filename')
+    autocomplete_fields = ('user', 'episode')
+    ordering = ('-last_downloaded',)

@@ -557,3 +557,42 @@ class SupportTicketAttachment(models.Model):
 
     def __str__(self):
         return os.path.basename(self.file.name)
+
+class EpisodeDownload(models.Model):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,  # keep history even if user is deleted
+        null=True, blank=True,
+        related_name="episode_downloads",
+    )
+    episode = models.ForeignKey(
+        'Episode',
+        on_delete=models.CASCADE,
+        related_name="downloads",
+    )
+    language = models.CharField(max_length=16, default="en", db_index=True)
+
+    # Aggregate counters/timestamps
+    count = models.PositiveIntegerField(default=0)
+    first_downloaded = models.DateTimeField(auto_now_add=True)
+    last_downloaded  = models.DateTimeField(auto_now=True)
+
+    # Last known request metadata (useful for audit)
+    last_ip_address  = models.GenericIPAddressField(null=True, blank=True)
+    last_user_agent  = models.TextField(null=True, blank=True)
+    last_filename    = models.TextField(null=True, blank=True)
+    last_file_path   = models.TextField(null=True, blank=True)
+    bytes_served     = models.BigIntegerField(null=True, blank=True)
+
+    class Meta:
+        unique_together = ('user', 'episode', 'language')
+        indexes = [
+            models.Index(fields=['episode', 'language', '-last_downloaded']),
+            models.Index(fields=['user', '-last_downloaded']),
+        ]
+        verbose_name = "Episode Download"
+        verbose_name_plural = "Episode Downloads"
+
+    def __str__(self):
+        who = self.user.username if self.user else "anonymous"
+        return f"{who} → {self.episode.episode_title} [{self.language}] ×{self.count}"

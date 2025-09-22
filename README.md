@@ -50,15 +50,16 @@ Muse is a free, AI-powered podcast search engine. Tired of scouring episode show
 
 ## 🏗️ Architecture & Tech Stack
 
-| Layer               | Technology                                  |
-|---------------------|---------------------------------------------|
-| **Backend**         | Python, Django                              |
-| **Transcription**   | OpenAI Whisper Turbo (GPU-accelerated)      |
-| **Summarization**   | FalconsAI / text_summarization              |
-| **Translation**     | Facebook / nllb-200-distilled-600M          |
-| **Database**        | PostgreSQL, MariaDB                         |
-| **Search Engine**   | Elasticsearch                               |
-| **Frontend**        | Django templates, HTML, CSS, JavaScript     |
-| **Deployment**      | Docker, Ubuntu VM, Windows OS               |
+| Layer                   | Technology                                  |
+|-------------------------|---------------------------------------------|
+| **Backend**             | Python, Django                              |
+| **Transcription**       | OpenAI Whisper Turbo (GPU-accelerated)      |
+| **Summarization**       | FalconsAI / text_summarization              |
+| **Translation**         | Facebook / nllb-200-distilled-600M          |
+| **Connect Pooling**     | PgBouncer                                   |
+| **Database**            | PostgreSQL, MariaDB                         |
+| **Search Engine**       | Elasticsearch                               |
+| **Frontend**            | Django templates, HTML, CSS, JavaScript     |
+| **Deployment**          | Docker, Ubuntu VM, Windows host             |
 
 ---

@@ -34,7 +34,8 @@ from .models import (
     Chapter, ChapterTranslations,
     SearchQuery, ChannelInteraction, EpisodeInteraction,
     Comment, CommentReaction, Reply,
-    SupportTicket, SupportTicketAttachment, ChannelSearchQuery
+    SupportTicket, SupportTicketAttachment, ChannelSearchQuery,
+    EpisodeDownload
 
 )
 from .filters import EpisodeFilter
@@ -73,6 +74,7 @@ from datetime import datetime, timedelta
 from axes.models import AccessAttempt
 from axes.conf import settings as axes_settings
 from django.utils import timezone as tz
+from django.utils.timezone import now
 
 # podcasts/views.py
 from datetime import timedelta
@@ -81,99 +83,189 @@ from django.utils import timezone
 from axes.models import AccessAttempt
 from axes.conf import settings as axes_settings
 
-# Map locale aliases -> your canonical 2-letter folder/code
-_ALIAS_TO_CODE = {
-    "en": "en", "en-us": "en", "en_gb": "en", "en-gb": "en",
-    "pt": "pt", "pt-br": "pt", "pt_br": "pt",
-    "es": "es", "es-mx": "es", "es_es": "es",
-    "it": "it", "fr": "fr", "ru": "ru", "uk": "uk",
-    "zh": "cn", "zh-cn": "cn", "zh_hans": "cn", "zh-hans": "cn",
-    "zh-tw": "tw", "zh_hant": "tw", "zh-hant": "tw",
-    "cn": "cn", "tw": "tw",
-    "ko": "ko", "ja": "ja", "tr": "tr", "de": "de",
-    "ar": "ar", "hi": "hi", "vi": "vi", "tl": "tl",
-}
-
-def _canon_lang(lang: str) -> str:
-    if not lang:
-        return "en"
-    s = lang.strip().lower().replace("_", "-")
-    return _ALIAS_TO_CODE.get(s, _ALIAS_TO_CODE.get(s.split("-")[0], s.split("-")[0]))
-
-_norm_non_alnum = re.compile(r"[^a-z0-9]+")
-def _norm(s: str) -> str:
-    """Lowercase, strip accents, replace non-alnum with single underscores."""
-    s = unicodedata.normalize("NFKD", s or "")
-    s = "".join(ch for ch in s if not unicodedata.combining(ch))
-    s = s.lower()
-    s = _norm_non_alnum.sub("_", s)
-    return re.sub(r"_+", "_", s).strip("_")
-
-def _truncate_tokens_starts(candidate: str, max_drop: int = 2):
-    """Yield candidate, then with last 1..max_drop tokens dropped (for titles with trailing language words)."""
-    parts = candidate.split("_")
-    for k in range(0, min(max_drop, max(0, len(parts)-1)) + 1):
-        yield "_".join(parts[:len(parts)-k]) if k else candidate
-
 def episode_download_json_file(request, sanitized_channel_title, sanitized_episode_title):
-    # Canonicalize requested language (e.g., pt-br -> pt)
-    req_lang = request.GET.get("lang") or getattr(request, "LANGUAGE_CODE", None) or "en"
-    code = _canon_lang(req_lang)
+    """
+    Streams the episode JSON from disk and records a download row.
+    Handles locale aliases (pt-br -> pt), filename suffixes (<title>_<lang>.json),
+    and diacritic-insensitive matching (e.g., Português vs Portugues).
+    Returns JSON 404 (not HTML) when missing so browsers don't save .htm files.
+    """
+    # -------------------- helpers --------------------
+    _ALIAS_TO_CODE = {
+        "en": "en", "en-us": "en", "en_gb": "en", "en-gb": "en",
+        "pt": "pt", "pt-br": "pt", "pt_br": "pt",
+        "es": "es", "es-mx": "es", "es_es": "es",
+        "it": "it", "fr": "fr", "ru": "ru", "uk": "uk",
+        "zh": "cn", "zh-cn": "cn", "zh_hans": "cn", "zh-hans": "cn",
+        "zh-tw": "tw", "zh_hant": "tw", "zh-hant": "tw",
+        "cn": "cn", "tw": "tw",
+        "ko": "ko", "ja": "ja", "tr": "tr", "de": "de",
+        "ar": "ar", "hi": "hi", "vi": "vi", "tl": "tl",
+    }
+    def _canon_lang(lang: str) -> str:
+        if not lang:
+            return "en"
+        s = lang.strip().lower().replace("_", "-")
+        return _ALIAS_TO_CODE.get(s, _ALIAS_TO_CODE.get(s.split("-")[0], s.split("-")[0]))
 
-    base_dir = Path(settings.EPISODE_JSON_BASE)
-    lang_dir = base_dir / sanitized_channel_title / code
+    _norm_non_alnum = re.compile(r"[^a-z0-9]+")
+    def _norm(s: str) -> str:
+        s = unicodedata.normalize("NFKD", s or "")
+        s = "".join(ch for ch in s if not unicodedata.combining(ch))
+        s = s.lower()
+        s = _norm_non_alnum.sub("_", s)
+        return re.sub(r"_+", "_", s).strip("_")
+
+    def _truncate_tokens_starts(candidate: str, max_drop: int = 2):
+        parts = candidate.split("_")
+        yield candidate
+        for k in range(1, min(max_drop, max(0, len(parts)-1)) + 1):
+            yield "_".join(parts[:len(parts)-k])
+
+    def _client_ip(req):
+        xff = req.META.get('HTTP_X_FORWARDED_FOR')
+        return (xff.split(',')[0].strip() if xff else req.META.get('REMOTE_ADDR'))
+
+    # -------------------- language & base dirs --------------------
+    req_lang = (request.GET.get("lang")
+                or getattr(request, "LANGUAGE_CODE", None)
+                or "en")
+    code = _canon_lang(req_lang)  # e.g., en-us -> en, pt-br -> pt
+
+    base_dir = Path(settings.EPISODE_JSON_BASE)  # e.g., C:\Users\isaac\podcast_data\transcripts
+    chan_dir = base_dir / sanitized_channel_title
 
     tried = []
+    if not chan_dir.exists():
+        return JsonResponse({"error": "Channel folder not found",
+                             "tried": [str(chan_dir)]},
+                            status=404)
 
-    # 1) Exact and suffixed direct hits
-    exact = lang_dir / f"{sanitized_episode_title}.json"
-    tried.append(str(exact))
-    if exact.exists():
-        return FileResponse(open(exact, "rb"), as_attachment=True,
-                           filename=iri_to_uri(f"{sanitized_channel_title}__{code}__{sanitized_episode_title}.json"),
-                           content_type="application/json")
+    # Build candidate language dirs:
+    #  - canonical code (e.g. "en")
+    #  - any subdir that equals code or starts with "code-" or "code_"
+    lang_dirs = []
+    primary = chan_dir / code
+    if primary.exists():
+        lang_dirs.append(primary)
 
-    suffixed = lang_dir / f"{sanitized_episode_title}_{code}.json"
-    tried.append(str(suffixed))
-    if suffixed.exists():
-        return FileResponse(open(suffixed, "rb"), as_attachment=True,
-                           filename=iri_to_uri(f"{sanitized_channel_title}__{code}__{sanitized_episode_title}.json"),
-                           content_type="application/json")
+    for p in chan_dir.iterdir():
+        if p.is_dir() and (p.name == code or p.name.startswith(f"{code}-") or p.name.startswith(f"{code}_")):
+            if p not in lang_dirs:
+                lang_dirs.append(p)
 
-    # 2) Heuristic match: compare normalized stems, allowing for trailing language words
-    target_norm = _norm(sanitized_episode_title)
-    if lang_dir.exists():
-        # Precompute truncated versions of target (drop last 0..2 tokens)
-        target_candidates = list(_truncate_tokens_starts(target_norm, max_drop=2))
-        for f in lang_dir.glob("*.json"):
-            stem_norm = _norm(f.stem)
+    # if still empty and code != 'en', fallback to plain 'en'
+    if not lang_dirs and code != "en":
+        en_dir = chan_dir / "en"
+        if en_dir.exists():
+            lang_dirs.append(en_dir)
 
-            # If file has an _<code> suffix, strip it before comparing
-            m = re.match(r"^(.*)_(\w{2,3})$", stem_norm)
-            f_base = m.group(1) if (m and _canon_lang(m.group(2)) == code) else stem_norm
+    # helper: try to locate a file inside a directory
+    def _try_dir(d: Path, served_code: str):
+        # 1) exact
+        exact = d / f"{sanitized_episode_title}.json"
+        tried.append(str(exact))
+        if exact.exists():
+            return exact, served_code
 
-            # Accept if any truncated target equals the file base, or vice versa (prefix-friendly)
-            if any(f_base == tc or f_base.startswith(tc) or tc.startswith(f_base) for tc in target_candidates):
-                return FileResponse(open(f, "rb"), as_attachment=True,
-                                   filename=iri_to_uri(f"{sanitized_channel_title}__{code}__{f.stem}.json"),
-                                   content_type="application/json")
-        tried.append(f"[scanned] {lang_dir}\\*.json")
+        # 2) suffixed with canonical code
+        suff = d / f"{sanitized_episode_title}_{served_code}.json"
+        tried.append(str(suff))
+        if suff.exists():
+            return suff, served_code
 
-    # 3) Final fallback to English (unsuffixed or _en) if requested lang missing
+        # 3) heuristic scan (accent-/punctuation-insensitive)
+        if d.exists():
+            target_norm = _norm(sanitized_episode_title)
+            targets = list(_truncate_tokens_starts(target_norm, max_drop=2))
+            for f in d.glob("*.json"):
+                stem_norm = _norm(f.stem)
+                m = re.match(r"^(.*)_(\w{2,3})$", stem_norm)
+                # If filename has a language suffix, strip it ONLY if it matches served_code canonically
+                f_base = m.group(1) if (m and _canon_lang(m.group(2)) == served_code) else stem_norm
+                if any(f_base == t or f_base.startswith(t) or t.startswith(f_base) for t in targets):
+                    return f, served_code
+            tried.append(f"[scanned] {str(d)}\\*.json")
+        return None, served_code
+
+    # -------------------- search candidate dirs --------------------
+    for d in lang_dirs:
+        # served_code is canonical of req_lang regardless of folder's exact name
+        hit, served_code = _try_dir(d, code)
+        if hit:
+            return _serve_and_log(request, hit, served_code,
+                                  sanitized_channel_title, sanitized_episode_title)
+
+    # last fallback: plain 'en' if not already tried
     if code != "en":
-        en_dir = base_dir / sanitized_channel_title / "en"
-        for candidate in [en_dir / f"{sanitized_episode_title}.json",
-                          en_dir / f"{sanitized_episode_title}_en.json"]:
-            tried.append(str(candidate))
-            if candidate.exists():
-                return FileResponse(open(candidate, "rb"), as_attachment=True,
-                                   filename=iri_to_uri(f"{sanitized_channel_title}__en__{sanitized_episode_title}.json"),
-                                   content_type="application/json")
-        tried.append(f"[scanned] {en_dir}\\*.json")
+        en_dir = chan_dir / "en"
+        if en_dir.exists() and en_dir not in lang_dirs:
+            hit, served_code = _try_dir(en_dir, "en")
+            if hit:
+                return _serve_and_log(request, hit, served_code,
+                                      sanitized_channel_title, sanitized_episode_title)
 
-    # Not found — return JSON (avoids saving an HTML 404 as .htm)
     return JsonResponse({"error": "Episode JSON not found", "tried": tried}, status=404)
 
+
+def _serve_and_log(request, file_path: Path, served_code: str,
+                   sanitized_channel_title: str, sanitized_episode_title: str):
+    """
+    Internal helper: logs the download (EpisodeDownload) and streams the file.
+    """
+    # Pick a friendly download name
+    download_name = f"{sanitized_channel_title}__{served_code}__{sanitized_episode_title}.json"
+
+    # Resolve Episode for logging; if not found by base slug, try translations
+    episode_obj = Episode.objects.filter(
+        channel__sanitized_channel_title=sanitized_channel_title,
+        sanitized_episode_title=sanitized_episode_title
+    ).select_related('channel').first()
+
+    if not episode_obj:
+        tr = EpisodeTranslations.objects.select_related('episode', 'episode__channel').filter(
+            episode__channel__sanitized_channel_title=sanitized_channel_title,
+            sanitized_episode_title=sanitized_episode_title,
+            translated=True
+        ).first()
+        if tr:
+            episode_obj = tr.episode
+
+    # Gather request metadata
+    try:
+        file_size = file_path.stat().st_size
+    except Exception:
+        file_size = None
+
+    user = request.user if getattr(request, "user", None) and request.user.is_authenticated else None
+    ip   = request.META.get('HTTP_X_FORWARDED_FOR', '').split(',')[0].strip() or request.META.get('REMOTE_ADDR')
+    ua   = (request.META.get('HTTP_USER_AGENT') or '')[:1000]
+
+    # Aggregate/update a single row per (user, episode, language)
+    if episode_obj:
+        dl, _ = EpisodeDownload.objects.get_or_create(
+            user=user,
+            episode=episode_obj,
+            language=served_code,
+            defaults={"count": 0}
+        )
+        EpisodeDownload.objects.filter(pk=dl.pk).update(
+            count=F('count') + 1,
+            last_downloaded=now(),
+            last_ip_address=ip,
+            last_user_agent=ua,
+            last_filename=download_name,
+            last_file_path=str(file_path),
+            bytes_served=file_size,
+        )
+
+    # Stream the file
+    return FileResponse(
+        open(file_path, "rb"),
+        as_attachment=True,
+        filename=iri_to_uri(download_name),
+        content_type="application/json",
+    )
 
 def _get_client_ip(request):
     xff = request.META.get("HTTP_X_FORWARDED_FOR")
