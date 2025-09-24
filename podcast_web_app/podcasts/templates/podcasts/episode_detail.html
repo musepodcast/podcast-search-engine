@@ -121,14 +121,17 @@
         </div>
         
        <a href="/{{ episode.channel.sanitized_channel_title }}/{{ episode.sanitized_episode_title }}/download.json?lang={{ request.LANGUAGE_CODE|default:'en' }}"
-   class="btn-bookmark"
-   download
-   title="{% trans 'Download JSON' %}"
-   aria-label="{% trans 'Download JSON' %}">
-  <i class="fa-solid fa-file-arrow-down" aria-hidden="true"></i>
-  <span class="visually-hidden">{% trans "Download JSON" %}</span>
-</a>
+          class="btn-bookmark"
+          download
+          title="{% trans 'Download JSON' %}"
+          aria-label="{% trans 'Download JSON' %}">
+          <i class="fa-solid fa-file-arrow-down" aria-hidden="true"></i>
+          <span class="visually-hidden">{% trans "Download JSON" %}</span>
+        </a>
 
+        <span class="downloads-count" title="{% trans 'Total Downloads' %}">
+          {{ total_downloads|number_format }}
+        </span>
 
       </div>
     </div>
@@ -224,7 +227,8 @@
   .comments-count,
   .total-views,
   .bookmarks-count,
-  .episode-rating-info {
+  .episode-rating-info, 
+  .downloads-count {
     font-size: 1.15rem;
     font-weight: 600;
     color: var(--text-color) !important; /* dark in light mode, light in dark */
