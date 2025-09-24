@@ -1553,6 +1553,24 @@ class EpisodeDetailView(LoginRequiredMixin, DetailView):
         
         ctx['episode_rating'] = interaction.rating or 0
         ctx['star_range']     = range(1,6)
+        ctx['total_downloads'] = (
+            EpisodeDownload.objects
+            .filter(episode=base)
+            .aggregate(total=Sum('count'))['total'] or 0
+        )
+
+        # count for the *current* UI language (canonicalized, e.g., "pt-br" -> "pt")
+        try:
+            canon_lang = _canon_lang(lang)   # reuse your helper from the file
+        except NameError:
+            # fallback if helper isn't in scope
+            canon_lang = (lang or 'en').split('-', 1)[0].lower()
+
+        ctx['downloads_for_lang'] = (
+            EpisodeDownload.objects
+            .filter(episode=base, language=canon_lang)
+            .aggregate(total=Sum('count'))['total'] or 0
+        )
 
         # 4) MERGE & CONTEXT
         ctx['merged_segments'] = self.merge_consecutive_speakers(segments)
