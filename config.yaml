@@ -1,6 +1,6 @@
 summarizer:
   model: "Falconsai/text_summarization"    # Summarization model
-  max_length: 15                  # Increased maximum number of words in the title
+  max_length: 25                  # Increased maximum number of words in the title
   min_length: 4                   # Increased minimum number of words in the title
 
 chapter_generation:
