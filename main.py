@@ -29,6 +29,7 @@ from bs4 import BeautifulSoup  # Imported for clean_html function
 import torch.nn.functional as F
 from pathlib import Path
 import argparse
+import glob
 
 
 BASE = Path(__file__).parent            # …\podcast_news
@@ -90,19 +91,52 @@ except Exception as e:
     sentence_model = None
 
 def convert_to_5min_wav_chunks(input_path, output_dir, chunk_length_ms=5*60*1000):
-    audio = AudioSegment.from_file(input_path)
-    os.makedirs(output_dir, exist_ok=True)
+    """
+    Split input audio to 5-minute PCM WAV chunks **on disk** using ffmpeg -f segment,
+    avoiding loading the whole file into memory.
 
-    chunks = make_chunks(audio, chunk_length_ms)
-    base = os.path.splitext(os.path.basename(input_path))[0]
-    wav_paths = []
+    Returns: list[str] of chunk file paths in time order.
+    """
+    input_path = str(Path(input_path))
+    out_dir = Path(output_dir)
+    out_dir.mkdir(parents=True, exist_ok=True)
 
-    for idx, chunk in enumerate(chunks, start=1):
-        out_path = os.path.join(output_dir, f"{base}_chunk{idx}.wav")
-        chunk.export(out_path, format="wav")
-        wav_paths.append(out_path)
+    base = Path(input_path).stem
+    # 5 minutes in seconds
+    seg_seconds = max(1, int(round(chunk_length_ms / 1000.0)))
 
-    return wav_paths
+    # Output pattern (zero-padded indices)
+    pattern = str(out_dir / f"{base}_chunk%03d.wav")
+
+    # -f segment = split by time
+    # -segment_time N = N seconds per file
+    # -map a:0 = first audio stream
+    # -c:a pcm_s16le = 16-bit PCM WAV
+    # -ar 16000 / -ac 1 are optional if your ASR prefers mono 16 kHz
+    cmd = [
+        "ffmpeg", "-hide_banner", "-loglevel", "error",
+        "-y", "-nostdin",
+        "-i", input_path,
+        "-map", "0:a:0",
+        "-c:a", "pcm_s16le",
+        # uncomment if you want to downsample to save space / speed up ASR
+        # "-ar", "16000",
+        # "-ac", "1",
+        "-f", "segment",
+        "-segment_time", str(seg_seconds),
+        pattern
+    ]
+
+    try:
+        subprocess.run(cmd, check=True)
+    except FileNotFoundError:
+        raise RuntimeError("ffmpeg not found. Put ffmpeg in PATH or set absolute path.")
+    except subprocess.CalledProcessError as e:
+        raise RuntimeError(f"ffmpeg segmenting failed: {e}") from e
+
+    # Collect the outputs; glob sorts lexicographically, which matches %03d order
+    chunks = sorted(glob.glob(str(out_dir / f"{base}_chunk*.wav")))
+    return chunks
 
 # A helper function to split long texts and then average the embeddings.
 def get_embedding(model, text, max_tokens=256):
