@@ -57,6 +57,7 @@ Muse is a free, AI-powered podcast search engine. Tired of scouring episode show
 | **Summarization**          | FalconsAI / text_summarization              |
 | **Translation**            | Facebook / nllb-200-distilled-600M          |
 | **Connection Pooling**     | PgBouncer                                   |
+| **Email Services**         | Mailjet                                     |
 | **Database**               | PostgreSQL, MariaDB                         |
 | **Search Engine**          | Elasticsearch                               |
 | **Frontend**               | Django templates, HTML, CSS, JavaScript     |
