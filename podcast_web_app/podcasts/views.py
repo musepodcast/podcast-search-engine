@@ -1668,6 +1668,22 @@ class EpisodeListView(LoginRequiredMixin, ListView):
         sort, direction = self._parse_sort()
         dir_prefix = '' if direction == 'asc' else '-'
 
+        # --- Subqueries for total downloads ---
+        downloads_sq_base = (
+            EpisodeDownload.objects
+            .filter(episode=OuterRef('pk'))
+            .values('episode')
+            .annotate(total=Sum('count'))
+            .values('total')[:1]
+        )
+        downloads_sq_tr = (
+            EpisodeDownload.objects
+            .filter(episode=OuterRef('episode'))  # note: EpisodeTranslations.episode FK
+            .values('episode')
+            .annotate(total=Sum('count'))
+            .values('total')[:1]
+        )
+
         if lang in ('en', 'en-us'):
             qs = (
                 Episode.objects
@@ -1687,6 +1703,7 @@ class EpisodeListView(LoginRequiredMixin, ListView):
                         distinct=True
                     ),
                     total_episode_views=Coalesce(Sum('episodevisit__count'), 0),
+                    total_downloads=Coalesce(Subquery(downloads_sq_base, output_field=IntegerField()), Value(0)),
                 )
             )
 
@@ -1730,12 +1747,29 @@ class EpisodeListView(LoginRequiredMixin, ListView):
 
             return qs.order_by(*ordering)
 
-        # Non-English path (kept as-is, already ordered by publication_date desc)
+        # Non-English (EpisodeTranslations)
         qs = (
             EpisodeTranslations.objects
             .filter(language=lang, translated=True)
             .select_related('episode__channel')
             .prefetch_related('transcriptstranslations', 'chapterstranslations')
+            .annotate(
+                bookmarks_count=Count(
+                    'episode__episode_interactions',
+                    filter=Q(episode__episode_interactions__bookmarked=True),
+                    distinct=True
+                ),
+                comments_count=Count('episode__comments', distinct=True),
+                ep_avg_rating=Avg('episode__episode_interactions__rating'),
+                ep_rating_count=Count(
+                    'episode__episode_interactions__user',
+                    filter=Q(episode__episode_interactions__rating__isnull=False),
+                    distinct=True
+                ),
+                total_episode_views=Coalesce(Sum('episode__episodevisit__count'), 0),
+                # NEW: total downloads (aggregated on base episode)
+                total_downloads=Coalesce(Subquery(downloads_sq_tr, output_field=IntegerField()), Value(0)),
+            )
             .order_by('-publication_date')
         )
         return qs
@@ -2279,27 +2313,46 @@ class NotificationsListView(LoginRequiredMixin, ListView):
     paginate_by = 10  # Adjust the number per page as desired
 
     def get_queryset(self):
-        # Get IDs of channels that the user has enabled notifications for.
+        # channels this user enabled notifications for
         channel_ids = ChannelInteraction.objects.filter(
             user=self.request.user,
             notifications_enabled=True
         ).values_list('channel_id', flat=True)
-        qs = Episode.objects.filter(channel__id__in=channel_ids).order_by('-publication_date')
-        qs = qs.annotate(
-            bookmarks_count=Count(
-                'episode_interactions',
-                filter=Q(episode_interactions__bookmarked=True),
-                distinct=True
-            ),
-            ep_avg_rating=Avg('episode_interactions__rating'),
-            ep_rating_count=Count(
-                'episode_interactions__rating',
-                distinct=True
-            ),
-            total_episode_views=Sum('episodevisit__count')
+
+        # subquery: total downloads per episode
+        downloads_sq = (
+            EpisodeDownload.objects
+            .filter(episode=OuterRef('pk'))
+            .values('episode')
+            .annotate(total=Sum('count'))
+            .values('total')[:1]
+        )
+
+        qs = (
+            Episode.objects
+            .filter(channel__id__in=channel_ids)
+            .select_related('channel')
+            .order_by('-publication_date')
+            .annotate(
+                bookmarks_count=Count(
+                    'episode_interactions',
+                    filter=Q(episode_interactions__bookmarked=True),
+                    distinct=True
+                ),
+                comments_count=Count('comments', distinct=True),
+                ep_avg_rating=Avg('episode_interactions__rating'),
+                # count users who rated (not distinct rating values)
+                ep_rating_count=Count(
+                    'episode_interactions__user',
+                    filter=Q(episode_interactions__rating__isnull=False),
+                    distinct=True
+                ),
+                total_episode_views=Coalesce(Sum('episodevisit__count'), 0),
+                total_downloads=Coalesce(Subquery(downloads_sq, output_field=IntegerField()), Value(0)),
+            )
         )
         return qs
-
+    
     def get(self, request, *args, **kwargs):
         # Check if an AJAX request asks for a page beyond available pages.
         self.object_list = self.get_queryset()
@@ -2328,24 +2381,45 @@ class BookmarksListView(LoginRequiredMixin, ListView):
     paginate_by = 5
 
     def get_queryset(self):
-        # Get IDs of episodes bookmarked by the user.
+        # Episodes this user bookmarked
         episode_ids = EpisodeInteraction.objects.filter(
             user=self.request.user,
             bookmarked=True
         ).values_list('episode_id', flat=True)
-        qs = Episode.objects.filter(id__in=episode_ids).order_by('-publication_date')
-        qs = qs.annotate(
-            bookmarks_count=Count(
-                'episode_interactions',
-                filter=Q(episode_interactions__bookmarked=True),
-                distinct=True
-            ),
-            ep_avg_rating=Avg('episode_interactions__rating'),
-            ep_rating_count=Count(
-                'episode_interactions__rating',
-                distinct=True
-            ),
-            total_episode_views=Sum('episodevisit__count')
+
+        # Subquery: total downloads per episode
+        downloads_sq = (
+            EpisodeDownload.objects
+            .filter(episode=OuterRef('pk'))
+            .values('episode')
+            .annotate(total=Sum('count'))
+            .values('total')[:1]
+        )
+
+        qs = (
+            Episode.objects
+            .filter(id__in=episode_ids)
+            .select_related('channel')
+            .order_by('-publication_date')
+            .annotate(
+                bookmarks_count=Count(
+                    'episode_interactions',
+                    filter=Q(episode_interactions__bookmarked=True),
+                    distinct=True
+                ),
+                # Count comments once per comment
+                comments_count=Count('comments', distinct=True),
+                ep_avg_rating=Avg('episode_interactions__rating'),
+                # Count of users who rated (fixes “distinct rating values” issue)
+                ep_rating_count=Count(
+                    'episode_interactions__user',
+                    filter=Q(episode_interactions__rating__isnull=False),
+                    distinct=True
+                ),
+                total_episode_views=Coalesce(Sum('episodevisit__count'), 0),
+                # NEW: total downloads
+                total_downloads=Coalesce(Subquery(downloads_sq, output_field=IntegerField()), Value(0)),
+            )
         )
         return qs
 
@@ -2356,7 +2430,6 @@ class BookmarksListView(LoginRequiredMixin, ListView):
             page_number = int(request.GET.get('page', 1))
         except ValueError:
             page_number = 1
-
         if self.request.GET.get('ajax') and page_number > paginator.num_pages:
             return HttpResponse('')
         return super().get(request, *args, **kwargs)
@@ -2365,6 +2438,7 @@ class BookmarksListView(LoginRequiredMixin, ListView):
         if self.request.GET.get('ajax'):
             return render(self.request, 'podcasts/bookmarks_list_items.html', context)
         return super().render_to_response(context, **response_kwargs)
+
 
 class ContributeView(LoginRequiredMixin, TemplateView):
     template_name = 'podcasts/contribute.html'

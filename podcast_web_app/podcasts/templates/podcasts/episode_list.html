@@ -89,7 +89,7 @@
               <i class="fa-solid fa-comment" style="font-size: 1rem; margin-right: 0.25rem;"></i>
               {{ episode.comments_count|default:"0"|number_format }}
             </span>
-
+            <!-- Rating -->
             <span class="d-flex align-items-center me-3" title="{% trans 'Episode Rating' %}">
               <i class="fa-solid fa-star" style="font-size: 1rem; margin-right: 0.25rem;"></i>
               {% if episode.ep_avg_rating %}
@@ -98,10 +98,15 @@
                 N/A
               {% endif %}
             </span>
-
-            <span class="d-flex align-items-center" title="{% trans 'Total Views' %}">
+            <!-- Views -->
+            <span class="d-flex align-items-center me-3" title="{% trans 'Total Views' %}">
               <i class="fa-solid fa-eye" style="font-size: 1rem; margin-right: 0.25rem;"></i>
               {{ episode.total_episode_views|default:"0"|number_format }}
+            </span>
+            <!-- Downloads -->
+            <span class="d-flex align-items-center me-3" title="{% trans 'Downloads' %}">
+              <i class="fa-solid fa-file-arrow-down" style="font-size: 1rem; margin-right: 0.25rem;"></i>
+              {{ episode.total_downloads|default:"0"|number_format }}
             </span>
           </div>
 
