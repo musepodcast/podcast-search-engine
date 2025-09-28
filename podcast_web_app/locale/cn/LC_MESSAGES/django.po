@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-07 16:40-0500\n"
+"POT-Creation-Date: 2025-09-27 18:26-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -81,9 +81,6 @@ msgid "Confirm your account by clicking the button below:"
 msgstr "通过点击下面的按来确认您的帐户:"
 
 #: .\podcasts\templates\account\email\email_confirmation_signup_message.txt:2
-#| msgid ""
-#| "\n"
-#| "Welcome to Muse Podcast! Confirm your account by clicking the link below:\n"
 msgid ""
 "Welcome to Muse Podcast! Confirm your account by clicking the link below:"
 msgstr "欢迎来到Muse Podcast! 点击下面的链接来确认您的帐户:"
@@ -371,7 +368,7 @@ msgstr "显式"
 #: .\podcasts\templates\podcasts\bookmarks_list_items.html:62
 #: .\podcasts\templates\podcasts\channel_detail.html:169
 #: .\podcasts\templates\podcasts\channel_detail_item.html:51
-#: .\podcasts\templates\podcasts\episode_detail.html:192
+#: .\podcasts\templates\podcasts\episode_detail.html:205
 #: .\podcasts\templates\podcasts\episode_list.html:34
 #: .\podcasts\templates\podcasts\episode_list.html:88
 #: .\podcasts\templates\podcasts\episode_list_items.html:59
@@ -409,23 +406,32 @@ msgstr "剧情评级"
 msgid "Total Views"
 msgstr "总观看"
 
-#: .\podcasts\templates\podcasts\bookmarks_list.html:105
+#: .\podcasts\templates\podcasts\bookmarks_list.html:89
+#: .\podcasts\templates\podcasts\bookmarks_list_items.html:81
+#: .\podcasts\templates\podcasts\episode_list.html:107
+#: .\podcasts\templates\podcasts\episode_list_items.html:78
+#: .\podcasts\templates\podcasts\notifications_list.html:87
+#: .\podcasts\templates\podcasts\notifications_list_items.html:80
+msgid "Downloads"
+msgstr "下载"
+
+#: .\podcasts\templates\podcasts\bookmarks_list.html:110
 msgid "No bookmarked episodes available."
 msgstr "没有标记的节目可用."
 
-#: .\podcasts\templates\podcasts\bookmarks_list.html:112
+#: .\podcasts\templates\podcasts\bookmarks_list.html:117
 msgid "Loading more bookmarked episodes..."
 msgstr "我加载了更多标记的集..."
 
-#: .\podcasts\templates\podcasts\bookmarks_list.html:142
-#: .\podcasts\templates\podcasts\bookmarks_list.html:149
+#: .\podcasts\templates\podcasts\bookmarks_list.html:147
+#: .\podcasts\templates\podcasts\bookmarks_list.html:154
 #: .\podcasts\templates\podcasts\channel_detail.html:206
 #: .\podcasts\templates\podcasts\channel_list.html:118
-#: .\podcasts\templates\podcasts\episode_list.html:160
-#: .\podcasts\templates\podcasts\episode_list.html:167
+#: .\podcasts\templates\podcasts\episode_list.html:165
+#: .\podcasts\templates\podcasts\episode_list.html:172
 #: .\podcasts\templates\podcasts\favorites_list.html:79
-#: .\podcasts\templates\podcasts\notifications_list.html:134
-#: .\podcasts\templates\podcasts\notifications_list.html:141
+#: .\podcasts\templates\podcasts\notifications_list.html:139
+#: .\podcasts\templates\podcasts\notifications_list.html:146
 #: .\podcasts\templates\podcasts\replies_list.html:20
 #: .\podcasts\templates\podcasts\search_results_ch_items.html:72
 #: .\podcasts\templates\podcasts\search_results_items.html:153
@@ -482,7 +488,6 @@ msgstr "平均评级和评级数量"
 #: .\podcasts\templates\podcasts\channel_detail.html:99
 #: .\podcasts\templates\podcasts\channel_list.html:99
 #: .\podcasts\templates\podcasts\channel_list_items.html:47
-#| msgid "Podcast Episodes"
 msgid "Total Episodes"
 msgstr "全集集"
 
@@ -500,7 +505,7 @@ msgstr "这个频道没有节目."
 
 #: .\podcasts\templates\podcasts\channel_detail.html:201
 #: .\podcasts\templates\podcasts\channel_detail.html:207
-#: .\podcasts\templates\podcasts\episode_list.html:125
+#: .\podcasts\templates\podcasts\episode_list.html:130
 #: .\podcasts\templates\podcasts\search_results_items.html:143
 #: .\podcasts\templates\podcasts\search_results_items.html:154
 msgid "Loading more episodes..."
@@ -577,12 +582,10 @@ msgid "Z → A"
 msgstr "Z → A"
 
 #: .\podcasts\templates\podcasts\channel_list.html:47
-#| msgid "Podcast Episodes"
 msgid "Most episodes"
 msgstr "大多数事件"
 
 #: .\podcasts\templates\podcasts\channel_list.html:48
-#| msgid "Podcast Episodes"
 msgid "Least episodes"
 msgstr "最少的事件"
 
@@ -697,7 +700,6 @@ msgid "Disable 2FA"
 msgstr "禁用2FA"
 
 #: .\podcasts\templates\podcasts\episode_detail.html:40
-#| msgid "No channels available."
 msgid "No channel image"
 msgstr "没有频道图像"
 
@@ -729,60 +731,66 @@ msgstr "评价这个节目"
 msgid "Average rating and total ratings"
 msgstr "平均评级和总评级"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:137
+#: .\podcasts\templates\podcasts\episode_detail.html:126
+#: .\podcasts\templates\podcasts\episode_detail.html:127
+#: .\podcasts\templates\podcasts\episode_detail.html:129
+msgid "Download JSON"
+msgstr "下载JSON"
+
+#: .\podcasts\templates\podcasts\episode_detail.html:132
+#| msgid "Total Episodes"
+msgid "Total Downloads"
+msgstr "总下载量"
+
+#: .\podcasts\templates\podcasts\episode_detail.html:150
 msgid "Your browser does not support the audio element."
 msgstr "您的浏览器不支持音频元素."
 
-#: .\podcasts\templates\podcasts\episode_detail.html:141
+#: .\podcasts\templates\podcasts\episode_detail.html:154
 msgid "Audio:"
 msgstr "音频:"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:141
-#| msgid "No image available"
+#: .\podcasts\templates\podcasts\episode_detail.html:154
 msgid "No audio available"
 msgstr "无音频可用"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:149
+#: .\podcasts\templates\podcasts\episode_detail.html:162
 msgid "Chapters"
 msgstr "章节"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:156
+#: .\podcasts\templates\podcasts\episode_detail.html:169
 msgid "No chapters available for this episode."
 msgstr "没有本集的章节."
 
-#: .\podcasts\templates\podcasts\episode_detail.html:165
+#: .\podcasts\templates\podcasts\episode_detail.html:178
 msgid "Transcript"
 msgstr "脚本"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:183
-#| msgid "No chapters available for this episode."
+#: .\podcasts\templates\podcasts\episode_detail.html:196
 msgid "No transcript available for this episode."
 msgstr "没有本集的转录."
 
-#: .\podcasts\templates\podcasts\episode_detail.html:198
+#: .\podcasts\templates\podcasts\episode_detail.html:211
 msgid "Write a comment..."
 msgstr "写一个评论..."
 
-#: .\podcasts\templates\podcasts\episode_detail.html:201
+#: .\podcasts\templates\podcasts\episode_detail.html:214
 msgid "Submit Comment"
 msgstr "提交评论"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:417
-#| msgid "Remove from Bookmarks"
+#: .\podcasts\templates\podcasts\episode_detail.html:431
 msgid "Remove episode from Bookmarks"
 msgstr "从标签删除节目"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:423
-#| msgid "Add to Bookmarks"
+#: .\podcasts\templates\podcasts\episode_detail.html:437
 msgid "Add episode to Bookmarks"
 msgstr "将节目添加到标签中"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:476
-#| msgid "Most commented"
+#: .\podcasts\templates\podcasts\episode_detail.html:490
 msgid "No comments yet."
 msgstr "没有评论."
 
-#: .\podcasts\templates\podcasts\episode_detail.html:540
+#: .\podcasts\templates\podcasts\episode_detail.html:554
 msgid "Please enter a comment"
 msgstr "请输入评论"
 
@@ -818,14 +826,13 @@ msgstr "大多数评论者"
 msgid "Least commented"
 msgstr "最少发表评论"
 
-#: .\podcasts\templates\podcasts\episode_list.html:118
-#: .\podcasts\templates\podcasts\episode_list_items.html:88
+#: .\podcasts\templates\podcasts\episode_list.html:123
+#: .\podcasts\templates\podcasts\episode_list_items.html:93
 msgid "No episodes available."
 msgstr "没有节目可用."
 
 #: .\podcasts\templates\podcasts\favorites_list.html:57
 #: .\podcasts\templates\podcasts\favorites_list_items.html:45
-#| msgid "Total Views"
 msgid "Total episodes"
 msgstr "总场合"
 
@@ -1029,42 +1036,59 @@ msgid "Facebook / nllb-200-distilled-600M translation model"
 msgstr "Facebook / nllb-200-distilled-600M翻译模型"
 
 #: .\podcasts\templates\podcasts\home.html:79
+msgid "Connection Pooling"
+msgstr "连接集成"
+
+#: .\podcasts\templates\podcasts\home.html:79
+msgid "PgBouncer"
+msgstr "发射器"
+
+#: .\podcasts\templates\podcasts\home.html:82
+#| msgid "Email Address"
+msgid "Email Services"
+msgstr "电子邮件服务"
+
+#: .\podcasts\templates\podcasts\home.html:82
+msgid "Mailjet"
+msgstr "邮轮飞机"
+
+#: .\podcasts\templates\podcasts\home.html:85
 msgid "Database"
 msgstr "数据库"
 
-#: .\podcasts\templates\podcasts\home.html:79
+#: .\podcasts\templates\podcasts\home.html:85
 msgid "PostgreSQL | MaraiaDB"
 msgstr "在此之前,"
 
-#: .\podcasts\templates\podcasts\home.html:82
+#: .\podcasts\templates\podcasts\home.html:88
 msgid "Search Engine"
 msgstr "搜索引擎"
 
-#: .\podcasts\templates\podcasts\home.html:82
+#: .\podcasts\templates\podcasts\home.html:88
 msgid "Elasticsearch"
 msgstr "弹性搜索"
 
-#: .\podcasts\templates\podcasts\home.html:85
+#: .\podcasts\templates\podcasts\home.html:91
 msgid "Frontend"
 msgstr "前端"
 
-#: .\podcasts\templates\podcasts\home.html:85
+#: .\podcasts\templates\podcasts\home.html:91
 msgid "Django templates | HTML | CSS | JavaScript"
 msgstr "果模板HTML,CSS,JavaScript"
 
-#: .\podcasts\templates\podcasts\home.html:88
+#: .\podcasts\templates\podcasts\home.html:94
 msgid "Deployment"
 msgstr "部署"
 
-#: .\podcasts\templates\podcasts\home.html:88
+#: .\podcasts\templates\podcasts\home.html:94
 msgid "Docker | Ubuntu VM | Windows OS"
 msgstr "达克,乌布图 VM,Windows操作系统"
 
-#: .\podcasts\templates\podcasts\notifications_list.html:97
+#: .\podcasts\templates\podcasts\notifications_list.html:102
 msgid "No notifications available."
 msgstr "没有通知."
 
-#: .\podcasts\templates\podcasts\notifications_list.html:104
+#: .\podcasts\templates\podcasts\notifications_list.html:109
 msgid "Loading more notifications..."
 msgstr "加载更多的通知..."
 
@@ -1134,8 +1158,8 @@ msgid "Save Changes"
 msgstr "保存变更"
 
 #: .\podcasts\templates\podcasts\profile_edit.html:16
-#: .\podcasts\templates\registration\password_change_form.html:7
-#: .\podcasts\templates\registration\password_change_form.html:11
+#: .\podcasts\templates\registration\password_change_form.html:8
+#: .\podcasts\templates\registration\password_change_form.html:79
 msgid "Change Password"
 msgstr "改变密码"
 
@@ -1202,6 +1226,7 @@ msgid "or create an account manually"
 msgstr "或手动创建一个帐户"
 
 #: .\podcasts\templates\podcasts\signup.html:42
+#: .\podcasts\templates\registration\password_change_form.html:12
 msgid "Please fix the errors below."
 msgstr "请修复下面的错误."
 
@@ -1212,6 +1237,9 @@ msgstr "密码"
 
 #: .\podcasts\templates\podcasts\signup.html:114
 #: .\podcasts\templates\podcasts\signup.html:128
+#: .\podcasts\templates\registration\password_change_form.html:37
+#: .\podcasts\templates\registration\password_change_form.html:52
+#: .\podcasts\templates\registration\password_change_form.html:70
 msgid "Show/Hide password"
 msgstr "显示/隐藏密码"
 
@@ -1453,11 +1481,13 @@ msgid ""
 "upon posting."
 msgstr "莫斯播客,LLC保留在任何时候修改本隐私政策的权利."
 
-#: .\podcasts\templates\podcasts\signup.html:377
+#: .\podcasts\templates\podcasts\signup.html:386
+#: .\podcasts\templates\registration\password_change_form.html:152
 msgid "Passwords match"
 msgstr "密码匹配"
 
-#: .\podcasts\templates\podcasts\signup.html:379
+#: .\podcasts\templates\podcasts\signup.html:388
+#: .\podcasts\templates\registration\password_change_form.html:154
 msgid "Passwords do not match"
 msgstr "密码不匹配"
 
@@ -1603,6 +1633,21 @@ msgstr "你的密码已经成功改变."
 #: .\podcasts\templates\registration\password_change_done.html:9
 msgid "Return to Profile"
 msgstr "返回个人资料"
+
+#: .\podcasts\templates\registration\password_change_form.html:31
+#| msgid "Reset Password"
+msgid "Current Password"
+msgstr "目前的密码"
+
+#: .\podcasts\templates\registration\password_change_form.html:46
+#| msgid "Password"
+msgid "New Password"
+msgstr "新的密码"
+
+#: .\podcasts\templates\registration\password_change_form.html:64
+#| msgid "Confirm Password"
+msgid "Confirm New Password"
+msgstr "确认新密码"
 
 #: .\podcasts\templates\registration\password_reset_complete.html:7
 msgid "Password Reset Complete"
