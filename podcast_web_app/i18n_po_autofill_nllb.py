@@ -2,7 +2,7 @@
 # Usage:  python i18n_po_autofill_nllb.py
 import os, re, sys, subprocess
 from pathlib import Path
-from typing import Dict, Tuple
+from typing import Dict, Tuple, List, Any
 
 PROJECT_ROOT = Path(__file__).resolve().parent
 LOCALE_DIR   = PROJECT_ROOT / "locale"
@@ -43,140 +43,171 @@ ensure("datasets")
 
 import polib
 import torch
-from datasets import Dataset
 from transformers import AutoTokenizer, AutoModelForSeq2SeqLM, pipeline
 
-# --------- placeholder/tag protection ----------
+# --------- regexes for structural tokens we must preserve exactly ----------
 PH_NAMED   = re.compile(r"%\([^)]+\)[#0\- +]?\d*(?:\.\d+)?[sdif]")
 PH_SIMPLE  = re.compile(r"%(?:\d+\$)?[#0\- +]?\d*(?:\.\d+)?[sdif]")
 DJ_BRACES  = re.compile(r"{{\s*[^}]+\s*}}")
 HTML_TAG   = re.compile(r"</?[^>]+?>")
 PERC_ESC   = re.compile(r"%%")  # literal percent
+NL_RE      = re.compile(r"(\r\n|\r|\n)")
 
-def protect(text: str) -> Tuple[str, Dict[str,str]]:
-    token_map: Dict[str,str] = {}
-    idx = 0
-    def sub_all(rx, prefix, s):
-        nonlocal idx
-        def repl(m):
-            nonlocal idx
-            token = f"__{prefix}{idx}__"
-            token_map[token] = m.group(0)
-            idx += 1
-            return token
-        return rx.sub(repl, s)
-    s = text
-    s = sub_all(PERC_ESC, "PERC", s)
-    s = sub_all(PH_NAMED, "PHN",  s)
-    s = sub_all(PH_SIMPLE,"PHS",  s)
-    s = sub_all(DJ_BRACES,"DJB",  s)
-    s = sub_all(HTML_TAG, "TAG",  s)
-    return s, token_map
+# Unified splitter that *keeps* the tokens (capturing group)
+STRUCT_RX = re.compile(
+    r"("                                   # capture so split keeps tokens
+    r"(?:\r\n|\r|\n)"                       # newline tokens
+    r"|%%"                                  # literal percent
+    r"|%\([^)]+\)[#0\- +]?\d*(?:\.\d+)?[sdif]"   # named printf
+    r"|%(?:\d+\$)?[#0\- +]?\d*(?:\.\d+)?[sdif]"  # simple printf
+    r"|{{\s*[^}]+\s*}}"                     # django braces
+    r"|</?[^>]+?>"                          # html-like tags
+    r")"
+)
 
-def restore(text: str, token_map: Dict[str,str]) -> str:
-    for k,v in token_map.items():
-        text = text.replace(k, v)
-    return text
+def is_struct_token(piece: str) -> bool:
+    return bool(STRUCT_RX.fullmatch(piece))
 
-# ---------- NEW: translate preserving newlines ----------
-NL_RE = re.compile(r"(\r\n|\r|\n)")
+def count_struct(src: str) -> Dict[str, int]:
+    return {
+        "nl": len(re.findall(r"\r\n|\r|\n", src)),
+        "perc": len(PERC_ESC.findall(src)),
+        "ph_named": len(PH_NAMED.findall(src)),
+        "ph_simple": len(PH_SIMPLE.findall(src)),
+        "dj": len(DJ_BRACES.findall(src)),
+        "html": len(HTML_TAG.findall(src)),
+    }
 
-def _translate_one_chunk(chunk: str, tx_pipe, tokenizer, max_gen_len=256):
-    # chunk has NO newline characters
-    if not chunk or not chunk.strip():
-        return chunk
-    protected, tmap = protect(chunk)
-    out = tx_pipe(protected, max_length=max_gen_len)[0]["translation_text"]
-    out = restore(out, tmap)
-    # forbid accidental newlines inside a line (don’t add/remove lines)
-    out = NL_RE.sub(" ", out)
-    return out
+def structure_equal(a: str, b: str) -> bool:
+    return count_struct(a) == count_struct(b)
 
-def translate_text_preserving_newlines(text: str, tx_pipe, tokenizer) -> str:
+def translate_preserving_structure_batched(
+    text: str,
+    tx_pipe,
+    max_gen_len: int = 256,
+    batch_size: int = 16
+) -> str:
     """
-    Translate while keeping the exact count and placement of newline tokens.
+    Split into structural tokens and free-text spans. Copy tokens verbatim.
+    Batch-translate only free-text spans. Strip accidental newlines produced
+    by the model within a free-text span to avoid changing line counts.
     """
     if not text:
         return text
-    parts = NL_RE.split(text)  # keeps separators
-    out_parts = []
-    for p in parts:
+
+    parts: List[str] = STRUCT_RX.split(text)
+    # Collect indices of translatable spans
+    to_tx_indices: List[int] = []
+    to_tx_payload: List[str] = []
+    for idx, p in enumerate(parts):
         if not p:
             continue
-        if NL_RE.fullmatch(p):
-            # Keep newline token exactly as in source
-            out_parts.append(p)
+        if is_struct_token(p):
+            continue
+        # If it's purely whitespace, keep as-is (no need to translate)
+        if p.strip() == "":
+            continue
+        to_tx_indices.append(idx)
+        to_tx_payload.append(p)
+
+    # Run batched translation for payload (if any)
+    translations: List[str] = []
+    if to_tx_payload:
+        # HuggingFace pipeline supports list input + batch_size
+        raw_out = tx_pipe(to_tx_payload, max_length=max_gen_len, batch_size=batch_size)
+        # Normalize to list of strings
+        translations = [o["translation_text"] for o in raw_out]
+
+    # Rebuild the parts with translated content
+    out_parts = parts[:]  # shallow copy
+    t_i = 0
+    for idx in to_tx_indices:
+        # For safety, handle length mismatches gracefully
+        if t_i >= len(translations):
+            new_text = to_tx_payload[t_i] if t_i < len(to_tx_payload) else parts[idx]
         else:
-            out_parts.append(_translate_one_chunk(p, tx_pipe, tokenizer))
+            new_text = translations[t_i]
+        # Do not allow accidental newlines in a span
+        new_text = NL_RE.sub(" ", new_text)
+        out_parts[idx] = new_text
+        t_i += 1
+
+    # Now we have a string with identical structural tokens
     return "".join(out_parts)
 
-# (kept for rare very long one-liners; not used on multiline strings anymore)
-def translate_text(text: str, tx_pipe, tokenizer, max_gen_len=256, chunk_tok=220, batch_size=16) -> str:
-    if not text or not text.strip():
-        return text
-    protected, tmap = protect(text)
-
-    tokens = tokenizer.encode(protected, add_special_tokens=True)
-    if len(tokens) <= chunk_tok:
-        out = tx_pipe(protected, max_length=max_gen_len)[0]["translation_text"]
-        return restore(out, tmap)
-
-    chunks = []
-    for i in range(0, len(tokens), chunk_tok):
-        chunk = tokenizer.decode(tokens[i:i+chunk_tok], skip_special_tokens=True)
-        chunks.append(chunk)
-    ds = Dataset.from_dict({"text": chunks})
-
-    def translate_batch(batch):
-        res = tx_pipe(batch["text"], max_length=max_gen_len, batch_size=batch_size)
-        return {"translation": [r["translation_text"] for r in res]}
-
-    ds_t = ds.map(translate_batch, batched=True, batch_size=batch_size)
-    joined = " ".join(ds_t["translation"])
-    return restore(joined, tmap)
-
 # ---------- PO entry handling ----------
-def translate_entry(entry: polib.POEntry, tx_pipe, tokenizer, lang_code: str, nplurals: int):
+def translate_entry(entry: polib.POEntry, tx_pipe, lang_code: str, nplurals: int) -> bool:
+    """
+    Translate a POEntry while preserving placeholders/newlines/tags exactly.
+    If the translated string changes structure, fall back to source and mark fuzzy.
+    Returns True if the entry was modified.
+    """
     if entry.obsolete:
         return False
+
     changed = False
 
-    # Decide translator based on presence of newlines
     def tx(s: str) -> str:
-        if NL_RE.search(s or ""):
-            return translate_text_preserving_newlines(s, tx_pipe, tokenizer)
-        return translate_text(s, tx_pipe, tokenizer)
+        return translate_preserving_structure_batched(s or "", tx_pipe)
+
+    # Helper to ensure we don't accidentally clear 'fuzzy' when we need it
+    def add_fuzzy(e: polib.POEntry):
+        if "fuzzy" not in e.flags:
+            e.flags.append("fuzzy")
+
+    def remove_fuzzy(e: polib.POEntry):
+        e.flags = [f for f in e.flags if f != "fuzzy"]
 
     if not entry.msgid_plural:
-        # singular
-        if "fuzzy" in entry.flags or not entry.msgstr:
-            entry.msgstr = tx(entry.msgid)
-            if "fuzzy" in entry.flags:
-                entry.flags = [f for f in entry.flags if f != "fuzzy"]
+        # Singular
+        if ("fuzzy" in entry.flags) or (not entry.msgstr):
+            candidate = tx(entry.msgid)
+            if not structure_equal(candidate, entry.msgid):
+                # keep it safe: use source and keep fuzzy so humans can inspect later
+                entry.msgstr = entry.msgid
+                add_fuzzy(entry)
+            else:
+                entry.msgstr = candidate
+                remove_fuzzy(entry)
             changed = True
     else:
-        # plural: translate both forms; keep same newline pattern as their sources
+        # Plural
         singular_tx = tx(entry.msgid)
         plural_tx   = tx(entry.msgid_plural)
 
-        # ensure the expected plural slots exist
+        singular_ok = structure_equal(singular_tx, entry.msgid)
+        plural_ok   = structure_equal(plural_tx, entry.msgid_plural)
+
+        # ensure plural slots exist
         if not entry.msgstr_plural:
             for i in range(nplurals):
                 entry.msgstr_plural[i] = ""
 
         updated_any = False
         for i in range(nplurals):
+            # Conventional: index 0 is "one" form (maps to msgid), others to msgid_plural
             desired = singular_tx if i == 0 else plural_tx
+            desired_ok = singular_ok if i == 0 else plural_ok
+
             if ("fuzzy" in entry.flags) or (entry.msgstr_plural.get(i, "") == ""):
-                entry.msgstr_plural[i] = desired
-                updated_any = True
+                if desired_ok:
+                    entry.msgstr_plural[i] = desired
+                    updated_any = True
+                else:
+                    # fallback: copy original English to keep structure valid
+                    entry.msgstr_plural[i] = entry.msgid if i == 0 else entry.msgid_plural
+                    add_fuzzy(entry)
+                    updated_any = True
+
         if updated_any:
-            if "fuzzy" in entry.flags:
-                entry.flags = [f for f in entry.flags if f != "fuzzy"]
+            # Only clear fuzzy if both forms structurally matched
+            if singular_ok and plural_ok:
+                remove_fuzzy(entry)
             changed = True
 
     return changed
 
+# ---------- helpers ----------
 def run(cmd):
     print(">", " ".join(str(c) for c in cmd))
     subprocess.check_call(cmd, cwd=str(PROJECT_ROOT))
@@ -188,6 +219,7 @@ def ensure_po_for(lang: str):
              "--ignore=venv", "--ignore=node_modules", "--ignore=static"])
     return po_path
 
+# ---------- main ----------
 def main():
     # 1) Ensure catalogs exist, then refresh all
     for lang in SITE_LANGS:
@@ -214,8 +246,14 @@ def main():
             continue
 
         print(f"[{lang}] Translating PO with tgt_lang={tgt} …")
-        tx_pipe = pipeline("translation", model=model, tokenizer=tokenizer,
-                           src_lang=SRC_LANG, tgt_lang=tgt, device=device)
+        tx_pipe = pipeline(
+            "translation",
+            model=model,
+            tokenizer=tokenizer,
+            src_lang=SRC_LANG,
+            tgt_lang=tgt,
+            device=device
+        )
 
         po_path = LOCALE_DIR / lang / "LC_MESSAGES" / "django.po"
         if not po_path.exists():
@@ -239,7 +277,7 @@ def main():
             needs = ("fuzzy" in e.flags) or \
                     (not e.msgid_plural and not e.msgstr) or \
                     (e.msgid_plural and any(v == "" for v in e.msgstr_plural.values()))
-            if needs and translate_entry(e, tx_pipe, tokenizer, lang, nplurals):
+            if needs and translate_entry(e, tx_pipe, lang, nplurals):
                 changed += 1
 
         if changed:

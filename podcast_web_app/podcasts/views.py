@@ -1505,6 +1505,7 @@ class EpisodeDetailView(LoginRequiredMixin, DetailView):
             ).order_by('segment_time')
 
         # -- CHAPTERS: fetch both translations & originals --
+        # -- CHAPTERS: fetch both translations & originals --
         if isinstance(disp, EpisodeTranslations):
             ch_qs = ChapterTranslations.objects.filter(
                 episodetranslations=disp,
@@ -1515,19 +1516,39 @@ class EpisodeDetailView(LoginRequiredMixin, DetailView):
         else:
             ch_qs = Chapter.objects.filter(episode=base)
 
-        # Now convert to a list and sort by parsing the “HH:MM:SS” (or “MM:SS”) string:
-        def _to_seconds(ts):
-            parts = [int(p) for p in ts.split(':')]
+        # Helpers
+        def _to_seconds(ts: str) -> int:
+            # Accept "HH:MM:SS", "MM:SS", or "SS"
+            parts = [int(p) for p in (ts or "0").split(':')]
             if len(parts) == 3:
                 h, m, s = parts
             elif len(parts) == 2:
                 h, m, s = 0, parts[0], parts[1]
             else:
                 h, m, s = 0, 0, parts[0]
-            return h*3600 + m*60 + s
+            return h * 3600 + m * 60 + s
 
-        chapters = list(ch_qs)             # evaluate the QuerySet
-        chapters.sort(key=lambda c: _to_seconds(c.chapter_time))
+        def _fmt_hms(total_seconds: int) -> str:
+            if total_seconds < 0:
+                total_seconds = 0
+            h = total_seconds // 3600
+            m = (total_seconds % 3600) // 60
+            s = total_seconds % 60
+            return f"{h:02d}:{m:02d}:{s:02d}"
+
+        chapters = list(ch_qs)
+        chapters.sort(key=lambda c: _to_seconds(c.chapter_time or "0"))
+
+        # Normalize display to hh:mm:ss so it matches segment time style
+        for c in chapters:
+            try:
+                secs = _to_seconds(c.chapter_time or "0")
+                # mutate the instance's field for display; template already uses chapter.chapter_time
+                c.chapter_time = _fmt_hms(secs)
+            except Exception:
+                # If anything is weird, at least force a safe hh:mm:ss
+                c.chapter_time = "00:00:00"
+
 
         # 3) USER INTERACTION + AGGREGATES
         interaction, _ = EpisodeInteraction.objects.get_or_create(

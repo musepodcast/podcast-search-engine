@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-07 16:40-0500\n"
+"POT-Creation-Date: 2025-09-27 18:26-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -81,9 +81,6 @@ msgid "Confirm your account by clicking the button below:"
 msgstr "Confirme a sua conta clicando no botão abaixo:"
 
 #: .\podcasts\templates\account\email\email_confirmation_signup_message.txt:2
-#| msgid ""
-#| "\n"
-#| "Welcome to Muse Podcast! Confirm your account by clicking the link below:\n"
 msgid ""
 "Welcome to Muse Podcast! Confirm your account by clicking the link below:"
 msgstr ""
@@ -372,7 +369,7 @@ msgstr "Explícito"
 #: .\podcasts\templates\podcasts\bookmarks_list_items.html:62
 #: .\podcasts\templates\podcasts\channel_detail.html:169
 #: .\podcasts\templates\podcasts\channel_detail_item.html:51
-#: .\podcasts\templates\podcasts\episode_detail.html:192
+#: .\podcasts\templates\podcasts\episode_detail.html:205
 #: .\podcasts\templates\podcasts\episode_list.html:34
 #: .\podcasts\templates\podcasts\episode_list.html:88
 #: .\podcasts\templates\podcasts\episode_list_items.html:59
@@ -410,23 +407,32 @@ msgstr "Classificação de episódios"
 msgid "Total Views"
 msgstr "Visualizações totais"
 
-#: .\podcasts\templates\podcasts\bookmarks_list.html:105
+#: .\podcasts\templates\podcasts\bookmarks_list.html:89
+#: .\podcasts\templates\podcasts\bookmarks_list_items.html:81
+#: .\podcasts\templates\podcasts\episode_list.html:107
+#: .\podcasts\templates\podcasts\episode_list_items.html:78
+#: .\podcasts\templates\podcasts\notifications_list.html:87
+#: .\podcasts\templates\podcasts\notifications_list_items.html:80
+msgid "Downloads"
+msgstr "Descargas"
+
+#: .\podcasts\templates\podcasts\bookmarks_list.html:110
 msgid "No bookmarked episodes available."
 msgstr "Não há episódios marcados disponíveis."
 
-#: .\podcasts\templates\podcasts\bookmarks_list.html:112
+#: .\podcasts\templates\podcasts\bookmarks_list.html:117
 msgid "Loading more bookmarked episodes..."
 msgstr "Carregar mais episódios marcados..."
 
-#: .\podcasts\templates\podcasts\bookmarks_list.html:142
-#: .\podcasts\templates\podcasts\bookmarks_list.html:149
+#: .\podcasts\templates\podcasts\bookmarks_list.html:147
+#: .\podcasts\templates\podcasts\bookmarks_list.html:154
 #: .\podcasts\templates\podcasts\channel_detail.html:206
 #: .\podcasts\templates\podcasts\channel_list.html:118
-#: .\podcasts\templates\podcasts\episode_list.html:160
-#: .\podcasts\templates\podcasts\episode_list.html:167
+#: .\podcasts\templates\podcasts\episode_list.html:165
+#: .\podcasts\templates\podcasts\episode_list.html:172
 #: .\podcasts\templates\podcasts\favorites_list.html:79
-#: .\podcasts\templates\podcasts\notifications_list.html:134
-#: .\podcasts\templates\podcasts\notifications_list.html:141
+#: .\podcasts\templates\podcasts\notifications_list.html:139
+#: .\podcasts\templates\podcasts\notifications_list.html:146
 #: .\podcasts\templates\podcasts\replies_list.html:20
 #: .\podcasts\templates\podcasts\search_results_ch_items.html:72
 #: .\podcasts\templates\podcasts\search_results_items.html:153
@@ -483,7 +489,6 @@ msgstr "Classificação média e número de classificações"
 #: .\podcasts\templates\podcasts\channel_detail.html:99
 #: .\podcasts\templates\podcasts\channel_list.html:99
 #: .\podcasts\templates\podcasts\channel_list_items.html:47
-#| msgid "Podcast Episodes"
 msgid "Total Episodes"
 msgstr "Episódios Totais"
 
@@ -501,7 +506,7 @@ msgstr "Não há episódios disponíveis para este canal."
 
 #: .\podcasts\templates\podcasts\channel_detail.html:201
 #: .\podcasts\templates\podcasts\channel_detail.html:207
-#: .\podcasts\templates\podcasts\episode_list.html:125
+#: .\podcasts\templates\podcasts\episode_list.html:130
 #: .\podcasts\templates\podcasts\search_results_items.html:143
 #: .\podcasts\templates\podcasts\search_results_items.html:154
 msgid "Loading more episodes..."
@@ -578,12 +583,10 @@ msgid "Z → A"
 msgstr "Z → A"
 
 #: .\podcasts\templates\podcasts\channel_list.html:47
-#| msgid "Podcast Episodes"
 msgid "Most episodes"
 msgstr "A maioria dos episódios"
 
 #: .\podcasts\templates\podcasts\channel_list.html:48
-#| msgid "Podcast Episodes"
 msgid "Least episodes"
 msgstr "Menos episódios"
 
@@ -712,7 +715,6 @@ msgid "Disable 2FA"
 msgstr "Desativar 2FA"
 
 #: .\podcasts\templates\podcasts\episode_detail.html:40
-#| msgid "No channels available."
 msgid "No channel image"
 msgstr "Sem imagem de canal"
 
@@ -744,60 +746,66 @@ msgstr "Classifica este episódio"
 msgid "Average rating and total ratings"
 msgstr "Classificação média e classificações totais"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:137
+#: .\podcasts\templates\podcasts\episode_detail.html:126
+#: .\podcasts\templates\podcasts\episode_detail.html:127
+#: .\podcasts\templates\podcasts\episode_detail.html:129
+msgid "Download JSON"
+msgstr "Descarregar JSON"
+
+#: .\podcasts\templates\podcasts\episode_detail.html:132
+#| msgid "Total Episodes"
+msgid "Total Downloads"
+msgstr "Total de downloads"
+
+#: .\podcasts\templates\podcasts\episode_detail.html:150
 msgid "Your browser does not support the audio element."
 msgstr "O seu navegador não suporta o elemento de áudio."
 
-#: .\podcasts\templates\podcasts\episode_detail.html:141
+#: .\podcasts\templates\podcasts\episode_detail.html:154
 msgid "Audio:"
 msgstr "Áudio:"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:141
-#| msgid "No image available"
+#: .\podcasts\templates\podcasts\episode_detail.html:154
 msgid "No audio available"
 msgstr "Nenhum áudio disponível"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:149
+#: .\podcasts\templates\podcasts\episode_detail.html:162
 msgid "Chapters"
 msgstr "Capítulos"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:156
+#: .\podcasts\templates\podcasts\episode_detail.html:169
 msgid "No chapters available for this episode."
 msgstr "Não há capítulos disponíveis para este episódio."
 
-#: .\podcasts\templates\podcasts\episode_detail.html:165
+#: .\podcasts\templates\podcasts\episode_detail.html:178
 msgid "Transcript"
 msgstr "Transcrição"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:183
-#| msgid "No chapters available for this episode."
+#: .\podcasts\templates\podcasts\episode_detail.html:196
 msgid "No transcript available for this episode."
 msgstr "Não há transcrição disponível para este episódio."
 
-#: .\podcasts\templates\podcasts\episode_detail.html:198
+#: .\podcasts\templates\podcasts\episode_detail.html:211
 msgid "Write a comment..."
 msgstr "Escreva um comentário..."
 
-#: .\podcasts\templates\podcasts\episode_detail.html:201
+#: .\podcasts\templates\podcasts\episode_detail.html:214
 msgid "Submit Comment"
 msgstr "Enviar comentário"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:417
-#| msgid "Remove from Bookmarks"
+#: .\podcasts\templates\podcasts\episode_detail.html:431
 msgid "Remove episode from Bookmarks"
 msgstr "Remover episódios de Bookmarks"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:423
-#| msgid "Add to Bookmarks"
+#: .\podcasts\templates\podcasts\episode_detail.html:437
 msgid "Add episode to Bookmarks"
 msgstr "Adicionar episódio aos marcadores"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:476
-#| msgid "Most commented"
+#: .\podcasts\templates\podcasts\episode_detail.html:490
 msgid "No comments yet."
 msgstr "Ainda não há comentários."
 
-#: .\podcasts\templates\podcasts\episode_detail.html:540
+#: .\podcasts\templates\podcasts\episode_detail.html:554
 msgid "Please enter a comment"
 msgstr "Por favor, insira um comentário"
 
@@ -833,14 +841,13 @@ msgstr "A maioria dos comentários"
 msgid "Least commented"
 msgstr "Menos comentados"
 
-#: .\podcasts\templates\podcasts\episode_list.html:118
-#: .\podcasts\templates\podcasts\episode_list_items.html:88
+#: .\podcasts\templates\podcasts\episode_list.html:123
+#: .\podcasts\templates\podcasts\episode_list_items.html:93
 msgid "No episodes available."
 msgstr "Não há episódios disponíveis."
 
 #: .\podcasts\templates\podcasts\favorites_list.html:57
 #: .\podcasts\templates\podcasts\favorites_list_items.html:45
-#| msgid "Total Views"
 msgid "Total episodes"
 msgstr "Episódios totais"
 
@@ -1070,42 +1077,59 @@ msgid "Facebook / nllb-200-distilled-600M translation model"
 msgstr "Facebook / nllb-200-destilado-600M modelo de tradução"
 
 #: .\podcasts\templates\podcasts\home.html:79
+msgid "Connection Pooling"
+msgstr "Reunião de conexões"
+
+#: .\podcasts\templates\podcasts\home.html:79
+msgid "PgBouncer"
+msgstr "PgBouncer"
+
+#: .\podcasts\templates\podcasts\home.html:82
+#| msgid "Email Address"
+msgid "Email Services"
+msgstr "Serviços de e-mail"
+
+#: .\podcasts\templates\podcasts\home.html:82
+msgid "Mailjet"
+msgstr "Jato de correio"
+
+#: .\podcasts\templates\podcasts\home.html:85
 msgid "Database"
 msgstr "Base de dados"
 
-#: .\podcasts\templates\podcasts\home.html:79
+#: .\podcasts\templates\podcasts\home.html:85
 msgid "PostgreSQL | MaraiaDB"
 msgstr "PostgreSQL , MaraiaDB ."
 
-#: .\podcasts\templates\podcasts\home.html:82
+#: .\podcasts\templates\podcasts\home.html:88
 msgid "Search Engine"
 msgstr "Motor de pesquisa"
 
-#: .\podcasts\templates\podcasts\home.html:82
+#: .\podcasts\templates\podcasts\home.html:88
 msgid "Elasticsearch"
 msgstr "Pesquisa elástica"
 
-#: .\podcasts\templates\podcasts\home.html:85
+#: .\podcasts\templates\podcasts\home.html:91
 msgid "Frontend"
 msgstr "Frontend"
 
-#: .\podcasts\templates\podcasts\home.html:85
+#: .\podcasts\templates\podcasts\home.html:91
 msgid "Django templates | HTML | CSS | JavaScript"
 msgstr "Templates de Django HTML CSS JavaScript"
 
-#: .\podcasts\templates\podcasts\home.html:88
+#: .\podcasts\templates\podcasts\home.html:94
 msgid "Deployment"
 msgstr "A implantação"
 
-#: .\podcasts\templates\podcasts\home.html:88
+#: .\podcasts\templates\podcasts\home.html:94
 msgid "Docker | Ubuntu VM | Windows OS"
 msgstr "Docker Ubuntu VM Windows OS"
 
-#: .\podcasts\templates\podcasts\notifications_list.html:97
+#: .\podcasts\templates\podcasts\notifications_list.html:102
 msgid "No notifications available."
 msgstr "Não há notificações disponíveis."
 
-#: .\podcasts\templates\podcasts\notifications_list.html:104
+#: .\podcasts\templates\podcasts\notifications_list.html:109
 msgid "Loading more notifications..."
 msgstr "Carregar mais notificações..."
 
@@ -1175,8 +1199,8 @@ msgid "Save Changes"
 msgstr "Salvar alterações"
 
 #: .\podcasts\templates\podcasts\profile_edit.html:16
-#: .\podcasts\templates\registration\password_change_form.html:7
-#: .\podcasts\templates\registration\password_change_form.html:11
+#: .\podcasts\templates\registration\password_change_form.html:8
+#: .\podcasts\templates\registration\password_change_form.html:79
 msgid "Change Password"
 msgstr "Mudança de senha"
 
@@ -1243,6 +1267,7 @@ msgid "or create an account manually"
 msgstr "ou criar uma conta manualmente"
 
 #: .\podcasts\templates\podcasts\signup.html:42
+#: .\podcasts\templates\registration\password_change_form.html:12
 msgid "Please fix the errors below."
 msgstr "Por favor, corrija os erros abaixo."
 
@@ -1253,6 +1278,9 @@ msgstr "Senha"
 
 #: .\podcasts\templates\podcasts\signup.html:114
 #: .\podcasts\templates\podcasts\signup.html:128
+#: .\podcasts\templates\registration\password_change_form.html:37
+#: .\podcasts\templates\registration\password_change_form.html:52
+#: .\podcasts\templates\registration\password_change_form.html:70
 msgid "Show/Hide password"
 msgstr "Mostrar/Esconde a senha"
 
@@ -1458,16 +1486,22 @@ msgstr "Segurança de dados"
 
 #: .\podcasts\templates\podcasts\signup.html:216
 #: .\podcasts\templates\socialaccount\signup.html:117
+#, fuzzy, python-format
+#| msgid ""
+#| "Muse Podcast, LLC employs industry-standard practices and technologies to "
+#| "safeguard your personal information. However, no method of transmission over"
+#| " the internet or electronic storage is 100%% secure, so while we strive to "
+#| "protect your personal information, we cannot guarantee absolute security."
 msgid ""
 "Muse Podcast, LLC employs industry-standard practices and technologies to "
 "safeguard your personal information. However, no method of transmission over"
 " the internet or electronic storage is 100%% secure, so while we strive to "
 "protect your personal information, we cannot guarantee absolute security."
 msgstr ""
-"A Muse Podcast, LLC emprega práticas e tecnologias padrão do setor para "
-"proteger suas informações pessoais. No entanto, nenhum método de transmissão"
-" pela internet ou armazenamento eletrônico é 100% seguro, por isso, embora "
-"nos esforçemos para proteger suas informações pessoais, não podemos garantir a segurança absoluta."
+"Muse Podcast, LLC employs industry-standard practices and technologies to "
+"safeguard your personal information. However, no method of transmission over"
+" the internet or electronic storage is 100%% secure, so while we strive to "
+"protect your personal information, we cannot guarantee absolute security."
 
 #: .\podcasts\templates\podcasts\signup.html:217
 #: .\podcasts\templates\socialaccount\signup.html:118
@@ -1516,11 +1550,13 @@ msgstr ""
 "Privacidade a qualquer momento. As alterações serão publicadas no nosso site"
 " e entrarão em vigor imediatamente após a publicação."
 
-#: .\podcasts\templates\podcasts\signup.html:377
+#: .\podcasts\templates\podcasts\signup.html:386
+#: .\podcasts\templates\registration\password_change_form.html:152
 msgid "Passwords match"
 msgstr "Passwords correspondentes"
 
-#: .\podcasts\templates\podcasts\signup.html:379
+#: .\podcasts\templates\podcasts\signup.html:388
+#: .\podcasts\templates\registration\password_change_form.html:154
 msgid "Passwords do not match"
 msgstr "As senhas não coincidem"
 
@@ -1675,6 +1711,21 @@ msgstr "A sua senha foi alterada com sucesso."
 #: .\podcasts\templates\registration\password_change_done.html:9
 msgid "Return to Profile"
 msgstr "Voltar ao perfil"
+
+#: .\podcasts\templates\registration\password_change_form.html:31
+#| msgid "Reset Password"
+msgid "Current Password"
+msgstr "Password atual"
+
+#: .\podcasts\templates\registration\password_change_form.html:46
+#| msgid "Password"
+msgid "New Password"
+msgstr "Nova senha"
+
+#: .\podcasts\templates\registration\password_change_form.html:64
+#| msgid "Confirm Password"
+msgid "Confirm New Password"
+msgstr "Confirmar a nova senha"
 
 #: .\podcasts\templates\registration\password_reset_complete.html:7
 msgid "Password Reset Complete"
