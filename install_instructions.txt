@@ -97,21 +97,30 @@ python -m pip install --upgrade virtualenv
 python -m virtualenv --python="$py213" .venv312
 
 # 11
-pip install -r requirements.txt --no-deps
+.\.venv312\Scripts\activate.ps1
 
 # 12
-New-Item .env
+pip install -r requirements.txt --no-deps
 
 # 13
+New-Item .env
+
+# 14
 # Create account on huggingface and go to link for pyannote model
 # https://huggingface.co/pyannote/speaker-diarization-3.1
 # Accept pyannote/segmentation-3.0 user conditions
 # Accept pyannote/speaker-diarization-3.1 user conditions
 # Create access token at hf.co/settings/tokens.
-# Take the access token created and put that in your .env file
+# Take the access token created and put that in your .env file like in the .env.sample
 # PYANNOTE_AUTH_TOKEN=hf_...
 
-# 14 
+# 15
+# Create a file called master_rss.json or use the master_rss.json.sample and rename it to master_rss.json
+# Move that file into podcast_data/watcher_json/master_rss.json
+mv master_rss.json.sample ~/podcast_data/watcher_json/master_rss.json
+
+# 16 
 # Run the transcribe python scripts from audio files via the rss feed
 python main.py
+
 

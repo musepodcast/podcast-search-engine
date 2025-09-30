@@ -161,6 +161,7 @@ tokenizers==0.21.0
 # ---- PyTorch stack: pin versions, but see note below ----
 torch==2.5.1
 torchaudio==2.5.1
+torch_pitch_shift==1.2.5
 torch-audiomentations==0.11.1
 torchmetrics==1.4.3
 torchvision==0.20.1
