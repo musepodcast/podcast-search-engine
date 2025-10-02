@@ -9,17 +9,18 @@ from pathlib import Path
 import logging
 from logging.handlers import RotatingFileHandler
 from datetime import datetime
-
+from django.utils import timezone
+from zoneinfo import ZoneInfo
 import psycopg2
 from bs4 import BeautifulSoup
-from dateutil import parser
+from dateutil import parser as duparser
 from utils import sanitize_filename
 
 # watcher.py lives here:
-BASE = Path(__file__).parent            # C:\Users\isaac\podcast_news   
+BASE = Path(__file__).parent        
 # sibling folder where all of your artifacts now live:
 DATABASE_ROOT = BASE.parent / "podcast_data"
-WEBAPP = os.path.join(BASE, 'podcast_web_app')             # .../isaac/podcast_news/podcast_web_app
+WEBAPP = os.path.join(BASE, 'podcast_web_app')          
 sys.path.insert(0, WEBAPP)
 
 # tell Django which settings to use
@@ -38,6 +39,8 @@ from elastic_transport import SecurityWarning
 from urllib3.exceptions import InsecureRequestWarning
 from django.utils.deprecation import RemovedInDjango60Warning
 import urllib3
+
+SITE_TZ = ZoneInfo("America/Chicago")
 
 ## Silence ES’s SecurityWarning about TLS+verify_certs=False
 warnings.filterwarnings("ignore", category=SecurityWarning)
@@ -166,11 +169,31 @@ def safe_parse_int(val):
         return None
 
 
-def safe_parse_date(val):
+def normalize_pub_date(raw: str):
+    """
+    Parse many date formats (ISO/RFC2822/etc).
+    Return an aware datetime in UTC, or None.
+    """
+    if not raw:
+        return None
     try:
-        return parser.isoparse(val)
+        dt = duparser.parse(raw)  # handles ISO + RSS pubDate formats
     except Exception:
         return None
+
+    # If the parsed datetime is naive, decide what it *means* and attach tz.
+    # Choose ONE of these branches based on your data semantics:
+
+    # A) If your raw date strings are meant to be *UTC* when tz is missing:
+    # if dt.tzinfo is None:
+    #     dt = dt.replace(tzinfo=timezone.utc)
+
+    # B) If your raw date strings are meant to be *America/Chicago* when tz is missing:
+    if dt.tzinfo is None:
+        dt = dt.replace(tzinfo=SITE_TZ)
+
+    # Finally, store in UTC
+    return dt.astimezone(timezone.utc)
 
 
 def normalize_duration(dur):
@@ -442,7 +465,7 @@ def process_one_file(conn, json_path: Path):
             'channel_id': ch_id,
             'episode_title': meta.get('episode_title'),
             'sanitized_episode_title': sanitize_filename(meta.get('episode_title') or ''),
-            'publication_date': safe_parse_date(meta.get('publication_date')),
+            'publication_date': normalize_pub_date(meta.get('publication_date')),
             'duration': normalize_duration(meta.get('duration')),
             'episode_number': safe_parse_int(meta.get('episode_number')),
             'explicit': meta.get('explicit'),
@@ -506,7 +529,7 @@ def process_one_file(conn, json_path: Path):
             'episode_id': master_id,
             'episode_title': meta.get('episode_title'),
             'sanitized_episode_title': sanitize_filename(meta.get('episode_title') or ''),
-            'publication_date': safe_parse_date(meta.get('publication_date')),
+            'publication_date': normalize_pub_date(meta.get('publication_date')),
             'duration': normalize_duration(meta.get('duration')),
             'episode_number': safe_parse_int(meta.get('episode_number')),
             'explicit': meta.get('explicit'),
