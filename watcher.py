@@ -9,12 +9,12 @@ from pathlib import Path
 import logging
 from logging.handlers import RotatingFileHandler
 from datetime import datetime
-from django.utils import timezone
 from zoneinfo import ZoneInfo
 import psycopg2
 from bs4 import BeautifulSoup
 from dateutil import parser as duparser
 from utils import sanitize_filename
+from datetime import timezone as dt_timezone
 
 # watcher.py lives here:
 BASE = Path(__file__).parent        
@@ -170,30 +170,13 @@ def safe_parse_int(val):
 
 
 def normalize_pub_date(raw: str):
-    """
-    Parse many date formats (ISO/RFC2822/etc).
-    Return an aware datetime in UTC, or None.
-    """
     if not raw:
         return None
-    try:
-        dt = duparser.parse(raw)  # handles ISO + RSS pubDate formats
-    except Exception:
-        return None
-
-    # If the parsed datetime is naive, decide what it *means* and attach tz.
-    # Choose ONE of these branches based on your data semantics:
-
-    # A) If your raw date strings are meant to be *UTC* when tz is missing:
-    # if dt.tzinfo is None:
-    #     dt = dt.replace(tzinfo=timezone.utc)
-
-    # B) If your raw date strings are meant to be *America/Chicago* when tz is missing:
+    dt = duparser.parse(raw)
     if dt.tzinfo is None:
+        # choose what naive means for your data; here we treat it as Central wall time
         dt = dt.replace(tzinfo=SITE_TZ)
-
-    # Finally, store in UTC
-    return dt.astimezone(timezone.utc)
+    return dt.astimezone(dt_timezone.utc)
 
 
 def normalize_duration(dur):
