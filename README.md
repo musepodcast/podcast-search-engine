@@ -4,6 +4,11 @@
 
 **Website:** https://musepodcast.com
 
+[![Stars](https://img.shields.io/github/stars/musepodcast/podcast-search-engine?style=social)](https://github.com/musepodcast/podcast-search-engine/stargazers)
+[![Forks](https://img.shields.io/github/forks/musepodcast/podcast-search-engine?style=social)](https://github.com/musepodcast/podcast-search-engine/forks)
+[![Issues](https://img.shields.io/github/issues/musepodcast/podcast-search-engine)](https://github.com/musepodcast/podcast-search-engine/issues)
+
+
 **Donations:** [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/R6R01HY3FF)
 ---
 
