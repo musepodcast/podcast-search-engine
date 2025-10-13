@@ -85,8 +85,8 @@
           
 
           <!-- Theme toggle -->
-          <button id="themeToggleBtn" class="btn btn-link p-0" title="{% trans 'Toggle Theme' %}">
-            <img src="{% static 'podcasts/images/yin-yang.png' %}" alt="{% trans 'Toggle Theme' %}" class="theme-toggle-icon"/>
+          <button id="themeToggleBtn" class="btn btn-link p-0" title="{% trans 'Light and Dark Mode' %}" aria-label="{% trans 'Light and Dark Mode' %}">
+            <i id="themeToggleIcon" class="fa-solid fa-moon fa-lg"></i>
           </button>
 
           <!-- Profile Dropdown -->
@@ -610,16 +610,36 @@
       });
     })();
 
-    // theme toggle
-    (function(){
-      const html = document.documentElement;
-      const btn  = document.getElementById('themeToggleBtn');
-      html.setAttribute('data-theme', localStorage.getItem('theme')||'dark');
-      btn.addEventListener('click', ()=>{
-        const next = html.getAttribute('data-theme')==='light'?'dark':'light';
+    (function () {
+      const html   = document.documentElement;
+      const btn    = document.getElementById('themeToggleBtn');
+      const iconEl = document.getElementById('themeToggleIcon');
+
+      const saved = localStorage.getItem('theme') || 'dark';
+      html.setAttribute('data-theme', saved);
+      setIcon(saved);
+
+      btn.addEventListener('click', () => {
+        const current = html.getAttribute('data-theme') || 'dark';
+        const next = current === 'dark' ? 'light' : 'dark';
         html.setAttribute('data-theme', next);
         localStorage.setItem('theme', next);
+        setIcon(next);
       });
+
+      function setIcon(theme) {
+        if (theme === 'dark') {
+          iconEl.classList.remove('fa-sun', 'sunny');
+          iconEl.classList.add('fa-moon');
+          iconEl.setAttribute('aria-label', '{{ _("Switch to light mode") }}');
+          btn.title = '{{ _("Switch to light mode") }}';
+        } else {
+          iconEl.classList.remove('fa-moon');
+          iconEl.classList.add('fa-sun', 'sunny'); // golden sun 🌞
+          iconEl.setAttribute('aria-label', '{{ _("Switch to dark mode") }}');
+          btn.title = '{{ _("Switch to dark mode") }}';
+        }
+      }
     })();
 
     // search-type toggle logic
