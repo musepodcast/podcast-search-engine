@@ -181,17 +181,16 @@ input[type="text"], .form-control {
 input[type="text"]::placeholder { color: var(--muted-color); }
 .form-check-label { color: var(--text-color); }
 
-/* Theme toggle */
-.theme-toggle-icon {
-  width: 30px; height: 30px;
-  color: var(--yin-yang-color);
-  transition: color .3s ease, fill .3s ease;
+#themeToggleBtn i {
+  color: var(--list-text);
+  transition: color .2s ease;
 }
-#themeToggleBtn {
-  background-color: transparent; border: none; cursor: pointer;
-  padding: 8px; border-radius: 50%; transition: background-color .3s ease;
+#themeToggleBtn i.sunny {
+  color: #f1c40f; /* golden */
 }
-#themeToggleBtn:hover { background-color: var(--hover-overlay); }
+
+
+
 
 /* Logo / favicon in title */
 .site-title::before {
