@@ -190,8 +190,6 @@ input[type="text"]::placeholder { color: var(--muted-color); }
 }
 
 
-
-
 /* Logo / favicon in title */
 .site-title::before {
   content: "";
@@ -294,6 +292,77 @@ Create Account button uses theme tokens
 
   box-shadow: none; /* calmer focus */
 }
+/* =========================================================
+   Guest Disabled
+   ========================================================= */
+/* Keep the disabled look, but allow clicks so the toast can trigger */
+#episode-rating-container[aria-disabled="true"] .star-icon,
+#rating-container[aria-disabled="true"] .star-icon {
+  cursor: not-allowed;
+  opacity: .6;
+  /* allow the click so JS can intercept and show toast */
+  pointer-events: auto !important;
+}
+
+/* Safety: ensure anything marked as .is-guest still receives clicks */
+#episode-actions .is-guest,
+#episode-actions .is-guest * {
+  pointer-events: auto !important;
+}
+
+/* Guest-disabled look & feel */
+.is-guest {
+  cursor: not-allowed !important;
+  opacity: 0.6;
+}
+
+/* Disabled guest styling for buttons (if not already present) */
+.btn-follow[disabled],
+.btn-notification[disabled] {
+  cursor: not-allowed;
+  opacity: .6;
+}
+
+.btn-bookmark[disabled],
+.btn-comment[disabled] {
+  cursor: not-allowed;
+  opacity: .6;
+}
+
+.guest-dim {
+  opacity: .45;
+  filter: grayscale(100%);
+  cursor: not-allowed;
+}
+
+.guest-toast {
+  position: fixed;
+  left: 50%;
+  top: 25%;
+  transform: translateX(-50%);
+  max-width: 90vw;
+  background: var(--list-bg);
+  color: var(--list-text);
+  border: 1px solid var(--border-color);
+  padding: 10px 14px;
+  border-radius: 999px;
+  box-shadow: 0 8px 24px rgba(0,0,0,.25);
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  z-index: 2000;
+  font-size: .95rem;
+}
+.guest-toast a.guest-toast-link {
+  color: var(--link-color);
+  font-weight: 600;
+  text-decoration: none;
+}
+.guest-toast a.guest-toast-link:hover { text-decoration: underline; }
+.guest-toast-show { display: flex !important; animation: toastFadeIn .18s ease; }
+@keyframes toastFadeIn { from { opacity: 0; transform: translateX(-50%) translateY(6px);} to { opacity: 1; transform: translateX(-50%) translateY(0);} }
+
+
 
 /* =========================================================
    LANGUAGE SELECTOR

@@ -43,7 +43,8 @@
     .lang-dropdown .form-check-input { accent-color: var(--lang-btn-text); }
   </style>
 </head>
-<body class="d-flex flex-column min-vh-100">
+<body class="d-flex flex-column min-vh-100"
+  data-authenticated="{{ request.user.is_authenticated|yesno:'true,false' }}">
   <header class="p-3">
     <div class="container">
       <!-- Top Row -->
@@ -54,9 +55,22 @@
           </h1>
           <nav class="mt-2">
             <a href="{% url 'podcasts:home' %}" class="nav-link d-inline me-3">{% trans "Home" %}</a>
-            <a href="{% url 'podcasts:favorites' %}" class="nav-link d-inline me-3">{% trans "Favorites" %}</a>
-            <a href="{% url 'podcasts:notifications' %}" class="nav-link d-inline me-3">{% trans "Notifications" %}</a>
-            <a href="{% url 'podcasts:bookmarks' %}" class="nav-link d-inline me-3">{% trans "Bookmarks" %}</a>
+            <a href="{% url 'podcasts:favorites' %}"
+              class="nav-link d-inline me-3 {% if not request.user.is_authenticated %}guest-dim{% endif %}"
+              data-requires-auth>
+              {% trans "Favorites" %}
+            </a>
+            <a href="{% url 'podcasts:notifications' %}"
+                class="nav-link d-inline me-3 {% if not request.user.is_authenticated %}guest-dim{% endif %}"
+                data-requires-auth>
+                {% trans "Notifications" %}
+            </a>
+
+            <a href="{% url 'podcasts:bookmarks' %}"
+                class="nav-link d-inline me-3 {% if not request.user.is_authenticated %}guest-dim{% endif %}"
+                data-requires-auth>
+                {% trans "Bookmarks" %}
+            </a>
             <a href="{% url 'podcasts:channel_list' %}" class="nav-link d-inline me-3">{% trans "Channels" %}</a>
             <a href="{% url 'podcasts:episode_list' %}" class="nav-link d-inline me-3">{% trans "Episodes" %}</a>
           </nav>
@@ -145,7 +159,8 @@
       </div>
 
       <!-- Search Form -->
-      <div class="search-form mb-4">
+      <div class="search-form mb-4 {% if not request.user.is_authenticated %}guest-dim{% endif %}"
+            data-requires-auth>
         <form method="get" action="{% url 'podcasts:search_results' %}" class="d-flex flex-column">
 
           {# Search-type toggle #}
@@ -169,9 +184,14 @@
           {# Search box #}
           <div class="input-group mb-3">
             <input type="text" name="q" class="form-control"
-                   placeholder="{% trans 'Search episodes or channels...' %}"
-                   value="{{ request.GET.q|default:'' }}" required>
-            <button class="btn btn-primary" type="submit">{% trans "Search" %}</button>
+                  placeholder="{% trans 'Search episodes or channels...' %}"
+                  value="{{ request.GET.q|default:'' }}"
+                  {% if not request.user.is_authenticated %}disabled aria-disabled="true" tabindex="-1"{% endif %}
+                  required>
+            <button class="btn btn-primary" type="submit"
+                    {% if not request.user.is_authenticated %}disabled aria-disabled="true" tabindex="-1"{% endif %}>
+              {% trans "Search" %}
+            </button>
           </div>
 
           {# Episode filters #}
@@ -567,6 +587,13 @@
   </button>
 </div>
 
+<div id="guest-notice" class="guest-toast" role="status" aria-live="polite" style="display:none">
+  <span>{% trans "Please sign in to complete this action." %}</span>
+  <a href="{% url 'podcasts:login' %}?next={{ request.get_full_path|urlencode }}" class="guest-toast-link">
+    {% trans "Sign in" %}
+  </a>
+</div>
+
 <footer class="pt-2 pb-5 text-center">
   <!-- Contact Me -->
   <div class="contact-me mb-2">
@@ -749,6 +776,38 @@ document.addEventListener('DOMContentLoaded', () => {
   nextBtn.addEventListener('click', () => scrollToMatch(current+1));
   prevBtn.addEventListener('click', () => scrollToMatch(current-1));
 });
+
+(function(){
+  const authed = document.body.getAttribute('data-authenticated') === 'true';
+
+  function showGuestNotice() {
+    const el = document.getElementById('guest-notice');
+    if (!el) return;
+    el.classList.add('guest-toast-show');
+    clearTimeout(showGuestNotice._t);
+    showGuestNotice._t = setTimeout(() => el.classList.remove('guest-toast-show'), 2800);
+  }
+
+  if (!authed) {
+    // Disable form controls inside any requires-auth region
+    document.querySelectorAll('[data-requires-auth]').forEach(block => {
+      block.querySelectorAll('input, select, textarea, button').forEach(el => {
+        el.disabled = true;
+        el.setAttribute('aria-disabled', 'true');
+        el.setAttribute('tabindex', '-1');
+      });
+    });
+
+    // Intercept clicks on any requires-auth region (links, containers, etc.)
+    document.addEventListener('click', (e) => {
+      const needsAuth = e.target.closest('[data-requires-auth]');
+      if (!needsAuth) return;
+      e.preventDefault();
+      e.stopPropagation();
+      showGuestNotice();
+    }, true); // capture to ensure we catch early
+  }
+})();
   </script>
 
   <!-- GLOBAL SEARCH STYLES -->

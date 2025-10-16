@@ -161,7 +161,7 @@ class Episode(models.Model):
                         raise ValidationError({'categories': 'Each category must be a string.'})
 
 class ChannelVisit(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.CASCADE)
     channel = models.ForeignKey(Channel, on_delete=models.CASCADE)
     count = models.PositiveIntegerField(default=0)
     last_visited = models.DateTimeField(auto_now=True)
@@ -169,10 +169,11 @@ class ChannelVisit(models.Model):
     last_ip_address = models.GenericIPAddressField(null=True, blank=True)  # new field
 
     def __str__(self):
-        return f"{self.user.username} - {self.channel.channel_title}"
-
+        who = self.user.username if self.user_id else "guest"
+        return f"{who} - {self.channel.channel_title}"
+    
 class EpisodeVisit(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.CASCADE)
     episode = models.ForeignKey(Episode, on_delete=models.CASCADE)
     count = models.PositiveIntegerField(default=0)
     last_visited = models.DateTimeField(auto_now=True)
@@ -180,7 +181,8 @@ class EpisodeVisit(models.Model):
     last_ip_address = models.GenericIPAddressField(null=True, blank=True)  # new field
     
     def __str__(self):
-        return f"{self.user.username} - {self.episode.episode_title}"
+        who = self.user.username if self.user_id else "guest"
+        return f"{who} - {self.episode.episode_title}"
     
 class SearchQuery(models.Model):
     user = models.ForeignKey(
@@ -228,7 +230,7 @@ class ChannelSearchQuery(models.Model):
         verbose_name_plural = 'Channel Search Queries'
 
     def __str__(self):
-        who = self.user.username if self.user else 'anonymous'
+        who = self.user.username if self.user_id else "guest"
         return f"[{self.channel.channel_title}] {self.query} by {who}"
 
 

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-27 18:26-0500\n"
+"POT-Creation-Date: 2025-10-15 20:56-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -150,15 +150,15 @@ msgstr "Trở lại Login"
 msgid "Podcast Search Engine"
 msgstr "Podcast Search Engine"
 
-#: .\podcasts\templates\podcasts\base.html:53
+#: .\podcasts\templates\podcasts\base.html:54
 msgid "Muse"
 msgstr "Muse"
 
-#: .\podcasts\templates\podcasts\base.html:56
+#: .\podcasts\templates\podcasts\base.html:57
 msgid "Home"
 msgstr "Nhà"
 
-#: .\podcasts\templates\podcasts\base.html:57
+#: .\podcasts\templates\podcasts\base.html:61
 #: .\podcasts\templates\podcasts\channel_list.html:22
 #: .\podcasts\templates\podcasts\channel_list.html:79
 #: .\podcasts\templates\podcasts\channel_list_items.html:27
@@ -168,7 +168,7 @@ msgstr "Nhà"
 msgid "Favorites"
 msgstr "Những người yêu thích"
 
-#: .\podcasts\templates\podcasts\base.html:58
+#: .\podcasts\templates\podcasts\base.html:66
 #: .\podcasts\templates\podcasts\channel_list.html:28
 #: .\podcasts\templates\podcasts\channel_list.html:83
 #: .\podcasts\templates\podcasts\channel_list_items.html:31
@@ -178,7 +178,7 @@ msgstr "Những người yêu thích"
 msgid "Notifications"
 msgstr "Thông báo"
 
-#: .\podcasts\templates\podcasts\base.html:59
+#: .\podcasts\templates\podcasts\base.html:72
 #: .\podcasts\templates\podcasts\bookmarks_list.html:65
 #: .\podcasts\templates\podcasts\bookmarks_list_items.html:57
 #: .\podcasts\templates\podcasts\channel_detail.html:164
@@ -191,144 +191,143 @@ msgstr "Thông báo"
 msgid "Bookmarks"
 msgstr "Bookmarks"
 
-#: .\podcasts\templates\podcasts\base.html:60
-#: .\podcasts\templates\podcasts\base.html:164
+#: .\podcasts\templates\podcasts\base.html:74
+#: .\podcasts\templates\podcasts\base.html:179
 msgid "Channels"
 msgstr "Kênh"
 
-#: .\podcasts\templates\podcasts\base.html:61
-#: .\podcasts\templates\podcasts\base.html:158
+#: .\podcasts\templates\podcasts\base.html:75
+#: .\podcasts\templates\podcasts\base.html:173
 #: .\podcasts\templates\podcasts\channel_detail.html:126
 #: .\podcasts\templates\podcasts\channel_list.html:46
 msgid "Episodes"
 msgstr "Tập phim"
 
-#: .\podcasts\templates\podcasts\base.html:88
-#: .\podcasts\templates\podcasts\base.html:89
-msgid "Toggle Theme"
-msgstr "Chuyển đổi chủ đề"
+#: .\podcasts\templates\podcasts\base.html:102
+msgid "Light and Dark Mode"
+msgstr "Chế độ ánh sáng và tối"
 
-#: .\podcasts\templates\podcasts\base.html:98
+#: .\podcasts\templates\podcasts\base.html:112
 msgid "Profile"
 msgstr "Profile"
 
-#: .\podcasts\templates\podcasts\base.html:103
+#: .\podcasts\templates\podcasts\base.html:117
 msgid "See Profile"
 msgstr "Xem hồ sơ"
 
-#: .\podcasts\templates\podcasts\base.html:106
+#: .\podcasts\templates\podcasts\base.html:120
 msgid "See Replies"
 msgstr "Xem Câu trả lời"
 
-#: .\podcasts\templates\podcasts\base.html:119
-#: .\podcasts\templates\podcasts\base.html:493
+#: .\podcasts\templates\podcasts\base.html:133
+#: .\podcasts\templates\podcasts\base.html:513
 msgid "Support Me"
 msgstr "Hãy hỗ trợ tôi"
 
-#: .\podcasts\templates\podcasts\base.html:126
+#: .\podcasts\templates\podcasts\base.html:140
 msgid "Support Ticket"
 msgstr "Vé hỗ trợ"
 
-#: .\podcasts\templates\podcasts\base.html:131
+#: .\podcasts\templates\podcasts\base.html:145
 msgid "Contribute"
 msgstr "Tham gia"
 
-#: .\podcasts\templates\podcasts\base.html:136
+#: .\podcasts\templates\podcasts\base.html:150
 msgid "Sign Out"
 msgstr "Đăng ký"
 
-#: .\podcasts\templates\podcasts\base.html:140
+#: .\podcasts\templates\podcasts\base.html:154
 msgid "Sign In"
 msgstr "Đăng nhập"
 
-#: .\podcasts\templates\podcasts\base.html:172
+#: .\podcasts\templates\podcasts\base.html:187
 msgid "Search episodes or channels..."
 msgstr "Tìm kiếm tập phim hoặc kênh..."
 
-#: .\podcasts\templates\podcasts\base.html:174
+#: .\podcasts\templates\podcasts\base.html:193
 #: .\podcasts\templates\podcasts\channel_detail.html:120
 msgid "Search"
 msgstr "Tìm kiếm"
 
-#: .\podcasts\templates\podcasts\base.html:189
-#: .\podcasts\templates\podcasts\base.html:383
+#: .\podcasts\templates\podcasts\base.html:209
+#: .\podcasts\templates\podcasts\base.html:403
 msgid "Channel Title"
 msgstr "Tiêu đề kênh"
 
-#: .\podcasts\templates\podcasts\base.html:195
+#: .\podcasts\templates\podcasts\base.html:215
 msgid "Episode Title"
 msgstr "Tiêu đề tập phim"
 
-#: .\podcasts\templates\podcasts\base.html:201
+#: .\podcasts\templates\podcasts\base.html:221
 msgid "Episode Description"
 msgstr "Mô tả tập phim"
 
-#: .\podcasts\templates\podcasts\base.html:207
+#: .\podcasts\templates\podcasts\base.html:227
 msgid "Transcript Text"
 msgstr "Văn bản bản ghi chép"
 
-#: .\podcasts\templates\podcasts\base.html:214
-#: .\podcasts\templates\podcasts\base.html:402
+#: .\podcasts\templates\podcasts\base.html:234
+#: .\podcasts\templates\podcasts\base.html:422
 msgid "Language"
 msgstr "Ngôn ngữ"
 
-#: .\podcasts\templates\podcasts\base.html:294
+#: .\podcasts\templates\podcasts\base.html:314
 msgid "Date"
 msgstr "Ngày"
 
-#: .\podcasts\templates\podcasts\base.html:302
+#: .\podcasts\templates\podcasts\base.html:322
 msgid "Anytime"
 msgstr "Bất cứ lúc nào"
 
-#: .\podcasts\templates\podcasts\base.html:308
+#: .\podcasts\templates\podcasts\base.html:328
 msgid "Past Day"
 msgstr "Ngày qua"
 
-#: .\podcasts\templates\podcasts\base.html:314
+#: .\podcasts\templates\podcasts\base.html:334
 msgid "Past Week"
 msgstr "Tuần qua"
 
-#: .\podcasts\templates\podcasts\base.html:320
+#: .\podcasts\templates\podcasts\base.html:340
 msgid "Past Month"
 msgstr "Tháng qua"
 
-#: .\podcasts\templates\podcasts\base.html:326
+#: .\podcasts\templates\podcasts\base.html:346
 msgid "Past Year"
 msgstr "Năm qua"
 
-#: .\podcasts\templates\podcasts\base.html:332
+#: .\podcasts\templates\podcasts\base.html:352
 msgid "Past 2 Years"
 msgstr "2 năm qua"
 
-#: .\podcasts\templates\podcasts\base.html:338
+#: .\podcasts\templates\podcasts\base.html:358
 msgid "Past 3 Years"
 msgstr "3 năm qua"
 
-#: .\podcasts\templates\podcasts\base.html:344
+#: .\podcasts\templates\podcasts\base.html:364
 msgid "Past 4 Years"
 msgstr "4 năm qua"
 
-#: .\podcasts\templates\podcasts\base.html:350
+#: .\podcasts\templates\podcasts\base.html:370
 msgid "Past 5 Years"
 msgstr "5 năm qua"
 
-#: .\podcasts\templates\podcasts\base.html:356
+#: .\podcasts\templates\podcasts\base.html:376
 msgid "Past 10 Years"
 msgstr "10 năm qua"
 
-#: .\podcasts\templates\podcasts\base.html:362
+#: .\podcasts\templates\podcasts\base.html:382
 msgid "Past 15 Years"
 msgstr "15 năm qua"
 
-#: .\podcasts\templates\podcasts\base.html:389
+#: .\podcasts\templates\podcasts\base.html:409
 msgid "Channel Author"
 msgstr "Tác giả kênh"
 
-#: .\podcasts\templates\podcasts\base.html:395
+#: .\podcasts\templates\podcasts\base.html:415
 msgid "Channel Summary"
 msgstr "Khót tóm tắt kênh"
 
-#: .\podcasts\templates\podcasts\base.html:498
+#: .\podcasts\templates\podcasts\base.html:518
 #: .\podcasts\templates\podcasts\signup.html:175
 #: .\podcasts\templates\podcasts\signup.html:229
 #: .\podcasts\templates\podcasts\support_ticket.html:148
@@ -337,9 +336,32 @@ msgstr "Khót tóm tắt kênh"
 msgid "Close"
 msgstr "Gần"
 
-#: .\podcasts\templates\podcasts\base.html:573
+#: .\podcasts\templates\podcasts\base.html:591
+#: .\podcasts\templates\podcasts\channel_detail.html:207
+#: .\podcasts\templates\podcasts\episode_detail.html:265
+msgid "Please sign in to complete this action."
+msgstr "Vui lòng đăng nhập để hoàn thành hành động này."
+
+#: .\podcasts\templates\podcasts\base.html:593
+#: .\podcasts\templates\podcasts\channel_detail.html:208
+#: .\podcasts\templates\podcasts\episode_detail.html:266
+#| msgid "Sign In"
+msgid "Sign in"
+msgstr "Đăng nhập"
+
+#: .\podcasts\templates\podcasts\base.html:600
 msgid "Contact Me"
 msgstr "Liên hệ với tôi"
+
+#: .\podcasts\templates\podcasts\base.html:661
+#: .\podcasts\templates\podcasts\base.html:662
+msgid "Switch to light mode"
+msgstr "Chuyển sang chế độ ánh sáng"
+
+#: .\podcasts\templates\podcasts\base.html:666
+#: .\podcasts\templates\podcasts\base.html:667
+msgid "Switch to dark mode"
+msgstr "Chuyển sang chế độ tối"
 
 #: .\podcasts\templates\podcasts\bookmarks_list.html:6
 msgid "Bookmarked Episodes"
@@ -374,7 +396,7 @@ msgstr "Rõ ràng"
 #: .\podcasts\templates\podcasts\bookmarks_list_items.html:62
 #: .\podcasts\templates\podcasts\channel_detail.html:169
 #: .\podcasts\templates\podcasts\channel_detail_item.html:51
-#: .\podcasts\templates\podcasts\episode_detail.html:205
+#: .\podcasts\templates\podcasts\episode_detail.html:243
 #: .\podcasts\templates\podcasts\episode_list.html:34
 #: .\podcasts\templates\podcasts\episode_list.html:88
 #: .\podcasts\templates\podcasts\episode_list_items.html:59
@@ -396,13 +418,11 @@ msgstr "Đánh giá tập phim"
 
 #: .\podcasts\templates\podcasts\bookmarks_list.html:84
 #: .\podcasts\templates\podcasts\bookmarks_list_items.html:76
-#: .\podcasts\templates\podcasts\channel_detail.html:90
-#: .\podcasts\templates\podcasts\channel_detail.html:91
 #: .\podcasts\templates\podcasts\channel_detail.html:181
 #: .\podcasts\templates\podcasts\channel_detail_item.html:65
 #: .\podcasts\templates\podcasts\channel_list.html:95
 #: .\podcasts\templates\podcasts\channel_list_items.html:43
-#: .\podcasts\templates\podcasts\episode_detail.html:118
+#: .\podcasts\templates\podcasts\episode_detail.html:147
 #: .\podcasts\templates\podcasts\episode_list.html:102
 #: .\podcasts\templates\podcasts\episode_list_items.html:73
 #: .\podcasts\templates\podcasts\favorites_list.html:52
@@ -431,7 +451,7 @@ msgstr "Lắp thêm các tập được đánh dấu..."
 
 #: .\podcasts\templates\podcasts\bookmarks_list.html:147
 #: .\podcasts\templates\podcasts\bookmarks_list.html:154
-#: .\podcasts\templates\podcasts\channel_detail.html:206
+#: .\podcasts\templates\podcasts\channel_detail.html:213
 #: .\podcasts\templates\podcasts\channel_list.html:118
 #: .\podcasts\templates\podcasts\episode_list.html:165
 #: .\podcasts\templates\podcasts\episode_list.html:172
@@ -453,49 +473,47 @@ msgstr "Kết thúc danh sách..."
 msgid "by"
 msgstr "qua"
 
-#: .\podcasts\templates\podcasts\channel_detail.html:43
+#: .\podcasts\templates\podcasts\channel_detail.html:47
+#| msgid "Add to Favorites"
+msgid "Sign in to add favorites"
+msgstr "Nhập vào để thêm yêu thích"
+
+#: .\podcasts\templates\podcasts\channel_detail.html:48
 msgid "Remove from Favorites"
 msgstr "Tháo khỏi Favorites"
 
-#: .\podcasts\templates\podcasts\channel_detail.html:43
+#: .\podcasts\templates\podcasts\channel_detail.html:48
 msgid "Add to Favorites"
 msgstr "Thêm vào Favorites"
 
-#: .\podcasts\templates\podcasts\channel_detail.html:51
-msgid "Number of Favorites"
-msgstr "Số người yêu thích"
+#: .\podcasts\templates\podcasts\channel_detail.html:61
+#| msgid "Loading more notifications..."
+msgid "Sign in to enable notifications"
+msgstr "Đăng nhập để kích hoạt thông báo"
 
-#: .\podcasts\templates\podcasts\channel_detail.html:59
+#: .\podcasts\templates\podcasts\channel_detail.html:62
 msgid "Remove from Notifications"
 msgstr "Xóa khỏi Thông báo"
 
-#: .\podcasts\templates\podcasts\channel_detail.html:59
+#: .\podcasts\templates\podcasts\channel_detail.html:62
 msgid "Add to Notifications"
 msgstr "Thêm vào Thông báo"
 
-#: .\podcasts\templates\podcasts\channel_detail.html:67
-msgid "Number of Notifications"
-msgstr "Số thông báo"
+#: .\podcasts\templates\podcasts\channel_detail.html:80
+#: .\podcasts\templates\podcasts\channel_detail.html:84
+#: .\podcasts\templates\podcasts\episode_detail.html:132
+#| msgid "Sign in with X"
+msgid "Sign in to rate"
+msgstr "Đăng nhập vào tỷ lệ"
 
-#: .\podcasts\templates\podcasts\channel_detail.html:77
-#: .\podcasts\templates\podcasts\episode_detail.html:103
+#: .\podcasts\templates\podcasts\channel_detail.html:80
+#: .\podcasts\templates\podcasts\episode_detail.html:122
 msgid "Update your rating"
 msgstr "Cập nhật xếp hạng của bạn"
 
-#: .\podcasts\templates\podcasts\channel_detail.html:79
+#: .\podcasts\templates\podcasts\channel_detail.html:84
 msgid "Rate this channel"
 msgstr "Đánh giá kênh này"
-
-#: .\podcasts\templates\podcasts\channel_detail.html:83
-msgid "Average rating and number of ratings"
-msgstr "Điểm đánh giá trung bình và số điểm đánh giá"
-
-#: .\podcasts\templates\podcasts\channel_detail.html:98
-#: .\podcasts\templates\podcasts\channel_detail.html:99
-#: .\podcasts\templates\podcasts\channel_list.html:99
-#: .\podcasts\templates\podcasts\channel_list_items.html:47
-msgid "Total Episodes"
-msgstr "Tổng tập"
 
 #: .\podcasts\templates\podcasts\channel_detail.html:111
 msgid "Search episodes in this channel"
@@ -510,7 +528,7 @@ msgid "No episodes available for this channel."
 msgstr "Không có tập nào cho kênh này."
 
 #: .\podcasts\templates\podcasts\channel_detail.html:201
-#: .\podcasts\templates\podcasts\channel_detail.html:207
+#: .\podcasts\templates\podcasts\channel_detail.html:214
 #: .\podcasts\templates\podcasts\episode_list.html:130
 #: .\podcasts\templates\podcasts\search_results_items.html:143
 #: .\podcasts\templates\podcasts\search_results_items.html:154
@@ -609,6 +627,11 @@ msgstr "Không có hình ảnh"
 #: .\podcasts\templates\podcasts\favorites_list_items.html:33
 msgid "Channel Rating"
 msgstr "Đánh giá kênh"
+
+#: .\podcasts\templates\podcasts\channel_list.html:99
+#: .\podcasts\templates\podcasts\channel_list_items.html:47
+msgid "Total Episodes"
+msgstr "Tổng tập"
 
 #: .\podcasts\templates\podcasts\channel_list.html:108
 msgid "No channels available."
@@ -726,94 +749,108 @@ msgstr "Thiết lập 2FA"
 msgid "No channel image"
 msgstr "Không hình ảnh kênh"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:80
+#: .\podcasts\templates\podcasts\episode_detail.html:82
 msgid "Remove from Bookmarks"
 msgstr "Xóa khỏi Bookmarks"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:80
+#: .\podcasts\templates\podcasts\episode_detail.html:82
 msgid "Add to Bookmarks"
 msgstr "Thêm vào Bookmarks"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:87
+#: .\podcasts\templates\podcasts\episode_detail.html:92
+#| msgid "Sign in with Google"
+msgid "Sign in to bookmark"
+msgstr "Nhập vào Bookmark"
+
+#: .\podcasts\templates\podcasts\episode_detail.html:96
 msgid "Number of Bookmarks"
 msgstr "Số lượng Bookmarks"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:92
+#: .\podcasts\templates\podcasts\episode_detail.html:102
 msgid "Comment"
 msgstr "Nhận xét"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:95
+#: .\podcasts\templates\podcasts\episode_detail.html:108
+#| msgid "Sign in with Google"
+msgid "Sign in to comment"
+msgstr "Đăng nhập để bình luận"
+
+#: .\podcasts\templates\podcasts\episode_detail.html:113
 msgid "Number of Comments"
 msgstr "Số bình luận"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:105
+#: .\podcasts\templates\podcasts\episode_detail.html:124
 msgid "Rate this episode"
 msgstr "Đánh giá tập này"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:111
+#: .\podcasts\templates\podcasts\episode_detail.html:139
 msgid "Average rating and total ratings"
 msgstr "Chỉ số trung bình và chỉ số tổng thể"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:126
-#: .\podcasts\templates\podcasts\episode_detail.html:127
-#: .\podcasts\templates\podcasts\episode_detail.html:129
+#: .\podcasts\templates\podcasts\episode_detail.html:157
+#: .\podcasts\templates\podcasts\episode_detail.html:158
+#: .\podcasts\templates\podcasts\episode_detail.html:160
 msgid "Download JSON"
 msgstr "Tải JSON"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:132
-#| msgid "Total Episodes"
+#: .\podcasts\templates\podcasts\episode_detail.html:165
+#| msgid "Download JSON"
+msgid "Sign in to download JSON"
+msgstr "Nhập vào để tải xuống JSON"
+
+#: .\podcasts\templates\podcasts\episode_detail.html:170
 msgid "Total Downloads"
 msgstr "Tổng tải xuống"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:150
+#: .\podcasts\templates\podcasts\episode_detail.html:188
 msgid "Your browser does not support the audio element."
 msgstr "trình duyệt của bạn không hỗ trợ phần tử âm thanh."
 
-#: .\podcasts\templates\podcasts\episode_detail.html:154
+#: .\podcasts\templates\podcasts\episode_detail.html:192
 msgid "Audio:"
 msgstr "Âm thanh:"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:154
+#: .\podcasts\templates\podcasts\episode_detail.html:192
 msgid "No audio available"
 msgstr "Không có âm thanh"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:162
+#: .\podcasts\templates\podcasts\episode_detail.html:200
 msgid "Chapters"
 msgstr "Chương"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:169
+#: .\podcasts\templates\podcasts\episode_detail.html:207
 msgid "No chapters available for this episode."
 msgstr "Không có chương nào có sẵn cho tập này."
 
-#: .\podcasts\templates\podcasts\episode_detail.html:178
+#: .\podcasts\templates\podcasts\episode_detail.html:216
 msgid "Transcript"
 msgstr "Bản ghi chép"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:196
+#: .\podcasts\templates\podcasts\episode_detail.html:234
 msgid "No transcript available for this episode."
 msgstr "Không có bản ghi có sẵn cho tập này."
 
-#: .\podcasts\templates\podcasts\episode_detail.html:211
+#: .\podcasts\templates\podcasts\episode_detail.html:249
 msgid "Write a comment..."
 msgstr "Hãy viết bình luận..."
 
-#: .\podcasts\templates\podcasts\episode_detail.html:214
+#: .\podcasts\templates\podcasts\episode_detail.html:252
 msgid "Submit Comment"
 msgstr "Đưa ra bình luận"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:431
+#: .\podcasts\templates\podcasts\episode_detail.html:480
 msgid "Remove episode from Bookmarks"
 msgstr "Xóa tập phim từ Bookmarks"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:437
+#: .\podcasts\templates\podcasts\episode_detail.html:486
 msgid "Add episode to Bookmarks"
 msgstr "Thêm tập vào Bookmarks"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:490
+#: .\podcasts\templates\podcasts\episode_detail.html:550
 msgid "No comments yet."
 msgstr "Vẫn chưa có bình luận."
 
-#: .\podcasts\templates\podcasts\episode_detail.html:554
+#: .\podcasts\templates\podcasts\episode_detail.html:614
 msgid "Please enter a comment"
 msgstr "Vui lòng nhập bình luận"
 
@@ -902,15 +939,11 @@ msgstr "Muse Podcast Search Engine"
 msgid "License: GPL v3"
 msgstr "Giấy phép: GPL v3"
 
-#: .\podcasts\templates\podcasts\home.html:25
-msgid "https://github.com/musepodcast/podcast-search-engine"
-msgstr "https://github.com/musepodcast/podcast-search-engine"
-
-#: .\podcasts\templates\podcasts\home.html:35
+#: .\podcasts\templates\podcasts\home.html:37
 msgid "🚀 About"
 msgstr " Về"
 
-#: .\podcasts\templates\podcasts\home.html:36
+#: .\podcasts\templates\podcasts\home.html:38
 msgid ""
 "Muse is a free, AI-powered podcast search engine. Tired of scouring episode "
 "show notes for bits of information, we built a platform where you can:"
@@ -919,7 +952,7 @@ msgstr ""
 "với việc tìm kiếm các ghi chú chương trình cho các đoạn thông tin, chúng tôi"
 " đã xây dựng một nền tảng nơi bạn có thể:"
 
-#: .\podcasts\templates\podcasts\home.html:38
+#: .\podcasts\templates\podcasts\home.html:40
 msgid ""
 "🔍 Search any podcast by keyword (titles, descriptions, or transcript "
 "content)"
@@ -927,17 +960,17 @@ msgstr ""
 "🔍 Tìm kiếm bất kỳ podcast nào theo từ khóa (tựa, mô tả hoặc nội dung bản "
 "sao)"
 
-#: .\podcasts\templates\podcasts\home.html:39
+#: .\podcasts\templates\podcasts\home.html:41
 msgid "📄 View full, time-stamped transcripts (speaker-diarized and formatted)"
 msgstr ""
 " Xem bản ghi đầy đủ, được đánh dấu thời gian (được ghi âm và định dạng trên "
 "loa)"
 
-#: .\podcasts\templates\podcasts\home.html:40
+#: .\podcasts\templates\podcasts\home.html:42
 msgid "✍️ Read AI-generated chapter summaries"
 msgstr "✍️ Đọc bản tóm tắt chương được tạo ra bởi AI"
 
-#: .\podcasts\templates\podcasts\home.html:41
+#: .\podcasts\templates\podcasts\home.html:43
 msgid ""
 "🌐 Find podcasts in 17 different languages natively transcribed or AI "
 "translated"
@@ -945,16 +978,16 @@ msgstr ""
 " Tìm podcast trong 17 ngôn ngữ khác nhau được sao chép bản địa hoặc được AI "
 "dịch"
 
-#: .\podcasts\templates\podcasts\home.html:42
+#: .\podcasts\templates\podcasts\home.html:44
 msgid "🎧 Click through to listen at the exact moment a topic is discussed"
 msgstr ""
 " Nhấp vào để lắng nghe vào thời điểm chính xác mà một chủ đề được thảo luận"
 
-#: .\podcasts\templates\podcasts\home.html:43
+#: .\podcasts\templates\podcasts\home.html:45
 msgid "🆕 Discover new channels or episodes based on your interests"
 msgstr " Khám phá các kênh hoặc tập phim mới dựa trên sở thích của bạn"
 
-#: .\podcasts\templates\podcasts\home.html:45
+#: .\podcasts\templates\podcasts\home.html:47
 msgid ""
 "Currently optimized for desktop browsers, tablets, foldables, and "
 "smartphones. Community contribution and native apps are coming soon!"
@@ -962,15 +995,15 @@ msgstr ""
 "Hiện nay được tối ưu hóa cho các trình duyệt máy tính để bàn, máy tính bảng,"
 " đồ đạc gấp và điện thoại thông minh."
 
-#: .\podcasts\templates\podcasts\home.html:47
+#: .\podcasts\templates\podcasts\home.html:49
 msgid "🌟 Key Features"
 msgstr " Các đặc điểm chính"
 
-#: .\podcasts\templates\podcasts\home.html:49
+#: .\podcasts\templates\podcasts\home.html:51
 msgid "Account Signup & Management"
 msgstr "Tài khoản Đăng ký & Quản lý"
 
-#: .\podcasts\templates\podcasts\home.html:49
+#: .\podcasts\templates\podcasts\home.html:51
 msgid ""
 "Create a free account to save searches, bookmark episodes, and track "
 "listening history."
@@ -978,11 +1011,11 @@ msgstr ""
 "Tạo một tài khoản miễn phí để lưu tìm kiếm, đánh dấu các tập phim và theo "
 "dõi lịch sử nghe."
 
-#: .\podcasts\templates\podcasts\home.html:50
+#: .\podcasts\templates\podcasts\home.html:52
 msgid "Transcript Generation"
 msgstr "Tạo bản sao"
 
-#: .\podcasts\templates\podcasts\home.html:50
+#: .\podcasts\templates\podcasts\home.html:52
 msgid ""
 "Ingests RSS feeds from any podcast; uses OpenAI Whisper Turbo on an NVIDIA "
 "GPU for fast, high-quality transcription; diarizes speakers and formats with"
@@ -992,11 +1025,11 @@ msgstr ""
 " Turbo trên một GPU NVIDIA để sao chép nhanh, chất lượng cao; ghi nhật ký "
 "loa và định dạng với dấu thời gian."
 
-#: .\podcasts\templates\podcasts\home.html:51
+#: .\podcasts\templates\podcasts\home.html:53
 msgid "Chapter Summaries"
 msgstr "Kết luận của chương"
 
-#: .\podcasts\templates\podcasts\home.html:51
+#: .\podcasts\templates\podcasts\home.html:53
 msgid ""
 "Generates concise summaries of each transcript segment using FalconsAI text-"
 "summarization."
@@ -1004,11 +1037,11 @@ msgstr ""
 "Tạo bản tóm tắt ngắn gọn của mỗi phân đoạn bản ghi bằng cách sử dụng bản tóm"
 " tắt văn bản của FalconsAI."
 
-#: .\podcasts\templates\podcasts\home.html:52
+#: .\podcasts\templates\podcasts\home.html:54
 msgid "Transcript Translations"
 msgstr "Các bản dịch bản sao"
 
-#: .\podcasts\templates\podcasts\home.html:52
+#: .\podcasts\templates\podcasts\home.html:54
 msgid ""
 "Takes podcasts and translates them into 17 different languages using "
 "nllb-200-distilled-600M translation model."
@@ -1016,11 +1049,11 @@ msgstr ""
 "Thu thập podcast và dịch chúng sang 17 ngôn ngữ khác nhau bằng cách sử dụng "
 "nllb-200-distilled-600M mô hình dịch."
 
-#: .\podcasts\templates\podcasts\home.html:53
+#: .\podcasts\templates\podcasts\home.html:55
 msgid "Full-Text Search"
 msgstr "Tìm kiếm toàn văn bản"
 
-#: .\podcasts\templates\podcasts\home.html:53
+#: .\podcasts\templates\podcasts\home.html:55
 msgid ""
 "Powered by Elasticsearch for lightning-fast, fuzzy-match queries; filters by"
 " title, description, channel metadata, or transcript."
@@ -1028,11 +1061,11 @@ msgstr ""
 "Được hỗ trợ bởi Elasticsearch cho các truy vấn phù hợp nhanh chóng, mờ mờ; "
 "lọc theo tiêu đề, mô tả, metadata kênh hoặc bản sao."
 
-#: .\podcasts\templates\podcasts\home.html:54
+#: .\podcasts\templates\podcasts\home.html:56
 msgid "Flexible Playback"
 msgstr "Chơi lại linh hoạt"
 
-#: .\podcasts\templates\podcasts\home.html:54
+#: .\podcasts\templates\podcasts\home.html:56
 msgid ""
 "Jump directly to the moment a keyword appears in the audio player on the "
 "website."
@@ -1040,96 +1073,95 @@ msgstr ""
 "Nhảy thẳng vào khoảnh khắc một từ khóa xuất hiện trong trình phát âm trên "
 "trang web."
 
-#: .\podcasts\templates\podcasts\home.html:57
+#: .\podcasts\templates\podcasts\home.html:59
 msgid "🏗️ Architecture & Tech Stack"
 msgstr "️ Thiết kế & Tech Stack"
 
-#: .\podcasts\templates\podcasts\home.html:61
+#: .\podcasts\templates\podcasts\home.html:63
 msgid "Layer"
 msgstr "Lớp"
 
-#: .\podcasts\templates\podcasts\home.html:62
+#: .\podcasts\templates\podcasts\home.html:64
 msgid "Technology"
 msgstr "Công nghệ"
 
-#: .\podcasts\templates\podcasts\home.html:67
+#: .\podcasts\templates\podcasts\home.html:69
 msgid "Backend"
 msgstr "Backend"
 
-#: .\podcasts\templates\podcasts\home.html:67
+#: .\podcasts\templates\podcasts\home.html:69
 msgid "Python, Django"
 msgstr "Python, Django"
 
-#: .\podcasts\templates\podcasts\home.html:70
+#: .\podcasts\templates\podcasts\home.html:72
 msgid "Transcription"
 msgstr "Phiên bản"
 
-#: .\podcasts\templates\podcasts\home.html:70
+#: .\podcasts\templates\podcasts\home.html:72
 msgid "OpenAI Whisper Turbo (GPU-accelerated)"
 msgstr "OpenAI Whisper Turbo (GPU tăng tốc)"
 
-#: .\podcasts\templates\podcasts\home.html:73
+#: .\podcasts\templates\podcasts\home.html:75
 msgid "Summarization"
 msgstr "Tóm lại"
 
-#: .\podcasts\templates\podcasts\home.html:73
+#: .\podcasts\templates\podcasts\home.html:75
 msgid "FalconsAI / text_summarization"
 msgstr "FalconsAI / text_summary"
 
-#: .\podcasts\templates\podcasts\home.html:76
+#: .\podcasts\templates\podcasts\home.html:78
 msgid "Translation"
 msgstr "Tiến dịch"
 
-#: .\podcasts\templates\podcasts\home.html:76
+#: .\podcasts\templates\podcasts\home.html:78
 msgid "Facebook / nllb-200-distilled-600M translation model"
 msgstr "Facebook / nllb-200-distilled-600M mô hình dịch"
 
-#: .\podcasts\templates\podcasts\home.html:79
+#: .\podcasts\templates\podcasts\home.html:81
 msgid "Connection Pooling"
 msgstr "Kết hợp kết nối"
 
-#: .\podcasts\templates\podcasts\home.html:79
+#: .\podcasts\templates\podcasts\home.html:81
 msgid "PgBouncer"
 msgstr "PgBouncer"
 
-#: .\podcasts\templates\podcasts\home.html:82
-#| msgid "Email Address"
+#: .\podcasts\templates\podcasts\home.html:84
 msgid "Email Services"
 msgstr "Dịch vụ email"
 
-#: .\podcasts\templates\podcasts\home.html:82
+#: .\podcasts\templates\podcasts\home.html:84
 msgid "Mailjet"
 msgstr "Máy phản lực"
 
-#: .\podcasts\templates\podcasts\home.html:85
+#: .\podcasts\templates\podcasts\home.html:87
 msgid "Database"
 msgstr "Cơ sở dữ liệu"
 
-#: .\podcasts\templates\podcasts\home.html:85
+#: .\podcasts\templates\podcasts\home.html:87
 msgid "PostgreSQL | MaraiaDB"
 msgstr "PostgreSQL , MaraiaDB"
 
-#: .\podcasts\templates\podcasts\home.html:88
+#: .\podcasts\templates\podcasts\home.html:90
 msgid "Search Engine"
 msgstr "Công cụ tìm kiếm"
 
-#: .\podcasts\templates\podcasts\home.html:88
+#: .\podcasts\templates\podcasts\home.html:90
 msgid "Elasticsearch"
 msgstr "Tìm kiếm linh hoạt"
 
-#: .\podcasts\templates\podcasts\home.html:91
+#: .\podcasts\templates\podcasts\home.html:93
 msgid "Frontend"
 msgstr "Frontend"
 
-#: .\podcasts\templates\podcasts\home.html:91
+#: .\podcasts\templates\podcasts\home.html:93
 msgid "Django templates | HTML | CSS | JavaScript"
 msgstr "Các mẫu Django HTML CSS JavaScript"
 
-#: .\podcasts\templates\podcasts\home.html:94
+#: .\podcasts\templates\podcasts\home.html:96
 msgid "Deployment"
 msgstr "Việc triển khai"
 
-#: .\podcasts\templates\podcasts\home.html:94
+#: .\podcasts\templates\podcasts\home.html:96
 msgid "Docker | Ubuntu VM | Windows OS"
 msgstr "Docker, Ubuntu, hệ điều hành Windows"
 
@@ -1714,17 +1746,14 @@ msgid "Return to Profile"
 msgstr "Trở lại Profile"
 
 #: .\podcasts\templates\registration\password_change_form.html:31
-#| msgid "Reset Password"
 msgid "Current Password"
 msgstr "Mật khẩu hiện tại"
 
 #: .\podcasts\templates\registration\password_change_form.html:46
-#| msgid "Password"
 msgid "New Password"
 msgstr "Mật khẩu mới"
 
 #: .\podcasts\templates\registration\password_change_form.html:64
-#| msgid "Confirm Password"
 msgid "Confirm New Password"
 msgstr "Xác nhận mật khẩu mới"
 
@@ -1833,6 +1862,21 @@ msgstr "Nhập OTP"
 #: .\podcasts\templates\two_factor\core\otp.html:9
 msgid "Submit OTP"
 msgstr "Gửi OTP"
+
+#~ msgid "Toggle Theme"
+#~ msgstr "Chuyển đổi chủ đề"
+
+#~ msgid "Number of Favorites"
+#~ msgstr "Số người yêu thích"
+
+#~ msgid "Number of Notifications"
+#~ msgstr "Số thông báo"
+
+#~ msgid "Average rating and number of ratings"
+#~ msgstr "Điểm đánh giá trung bình và số điểm đánh giá"
+
+#~ msgid "https://github.com/musepodcast/podcast-search-engine"
+#~ msgstr "https://github.com/musepodcast/podcast-search-engine"
 
 #~ msgid "Docker, NVIDIA GPU passthrough, Ubuntu VM"
 #~ msgstr "Docker, NVIDIA GPU thông qua, Ubuntu VM"
