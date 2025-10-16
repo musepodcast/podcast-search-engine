@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-27 18:26-0500\n"
+"POT-Creation-Date: 2025-10-15 20:56-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -144,15 +144,15 @@ msgstr "로그인으로 돌아가"
 msgid "Podcast Search Engine"
 msgstr "팟캐스트 검색 엔진"
 
-#: .\podcasts\templates\podcasts\base.html:53
+#: .\podcasts\templates\podcasts\base.html:54
 msgid "Muse"
 msgstr "무즈"
 
-#: .\podcasts\templates\podcasts\base.html:56
+#: .\podcasts\templates\podcasts\base.html:57
 msgid "Home"
 msgstr "가정"
 
-#: .\podcasts\templates\podcasts\base.html:57
+#: .\podcasts\templates\podcasts\base.html:61
 #: .\podcasts\templates\podcasts\channel_list.html:22
 #: .\podcasts\templates\podcasts\channel_list.html:79
 #: .\podcasts\templates\podcasts\channel_list_items.html:27
@@ -162,7 +162,7 @@ msgstr "가정"
 msgid "Favorites"
 msgstr "즐겨찾기"
 
-#: .\podcasts\templates\podcasts\base.html:58
+#: .\podcasts\templates\podcasts\base.html:66
 #: .\podcasts\templates\podcasts\channel_list.html:28
 #: .\podcasts\templates\podcasts\channel_list.html:83
 #: .\podcasts\templates\podcasts\channel_list_items.html:31
@@ -172,7 +172,7 @@ msgstr "즐겨찾기"
 msgid "Notifications"
 msgstr "통지"
 
-#: .\podcasts\templates\podcasts\base.html:59
+#: .\podcasts\templates\podcasts\base.html:72
 #: .\podcasts\templates\podcasts\bookmarks_list.html:65
 #: .\podcasts\templates\podcasts\bookmarks_list_items.html:57
 #: .\podcasts\templates\podcasts\channel_detail.html:164
@@ -185,144 +185,143 @@ msgstr "통지"
 msgid "Bookmarks"
 msgstr "북마크"
 
-#: .\podcasts\templates\podcasts\base.html:60
-#: .\podcasts\templates\podcasts\base.html:164
+#: .\podcasts\templates\podcasts\base.html:74
+#: .\podcasts\templates\podcasts\base.html:179
 msgid "Channels"
 msgstr "채널"
 
-#: .\podcasts\templates\podcasts\base.html:61
-#: .\podcasts\templates\podcasts\base.html:158
+#: .\podcasts\templates\podcasts\base.html:75
+#: .\podcasts\templates\podcasts\base.html:173
 #: .\podcasts\templates\podcasts\channel_detail.html:126
 #: .\podcasts\templates\podcasts\channel_list.html:46
 msgid "Episodes"
 msgstr "에피소드"
 
-#: .\podcasts\templates\podcasts\base.html:88
-#: .\podcasts\templates\podcasts\base.html:89
-msgid "Toggle Theme"
-msgstr "테마 전환"
+#: .\podcasts\templates\podcasts\base.html:102
+msgid "Light and Dark Mode"
+msgstr "빛과 어두운 모드"
 
-#: .\podcasts\templates\podcasts\base.html:98
+#: .\podcasts\templates\podcasts\base.html:112
 msgid "Profile"
 msgstr "프로파일"
 
-#: .\podcasts\templates\podcasts\base.html:103
+#: .\podcasts\templates\podcasts\base.html:117
 msgid "See Profile"
 msgstr "프로필 참조"
 
-#: .\podcasts\templates\podcasts\base.html:106
+#: .\podcasts\templates\podcasts\base.html:120
 msgid "See Replies"
 msgstr "답변 참조"
 
-#: .\podcasts\templates\podcasts\base.html:119
-#: .\podcasts\templates\podcasts\base.html:493
+#: .\podcasts\templates\podcasts\base.html:133
+#: .\podcasts\templates\podcasts\base.html:513
 msgid "Support Me"
 msgstr "저를 지지 하십시오"
 
-#: .\podcasts\templates\podcasts\base.html:126
+#: .\podcasts\templates\podcasts\base.html:140
 msgid "Support Ticket"
 msgstr "지원 티켓"
 
-#: .\podcasts\templates\podcasts\base.html:131
+#: .\podcasts\templates\podcasts\base.html:145
 msgid "Contribute"
 msgstr "기여"
 
-#: .\podcasts\templates\podcasts\base.html:136
+#: .\podcasts\templates\podcasts\base.html:150
 msgid "Sign Out"
 msgstr "회원가입"
 
-#: .\podcasts\templates\podcasts\base.html:140
+#: .\podcasts\templates\podcasts\base.html:154
 msgid "Sign In"
 msgstr "로그인"
 
-#: .\podcasts\templates\podcasts\base.html:172
+#: .\podcasts\templates\podcasts\base.html:187
 msgid "Search episodes or channels..."
 msgstr "에피소드 또는 채널 검색..."
 
-#: .\podcasts\templates\podcasts\base.html:174
+#: .\podcasts\templates\podcasts\base.html:193
 #: .\podcasts\templates\podcasts\channel_detail.html:120
 msgid "Search"
 msgstr "검색"
 
-#: .\podcasts\templates\podcasts\base.html:189
-#: .\podcasts\templates\podcasts\base.html:383
+#: .\podcasts\templates\podcasts\base.html:209
+#: .\podcasts\templates\podcasts\base.html:403
 msgid "Channel Title"
 msgstr "채널 제목"
 
-#: .\podcasts\templates\podcasts\base.html:195
+#: .\podcasts\templates\podcasts\base.html:215
 msgid "Episode Title"
 msgstr "에피소드 제목"
 
-#: .\podcasts\templates\podcasts\base.html:201
+#: .\podcasts\templates\podcasts\base.html:221
 msgid "Episode Description"
 msgstr "에피소드 설명"
 
-#: .\podcasts\templates\podcasts\base.html:207
+#: .\podcasts\templates\podcasts\base.html:227
 msgid "Transcript Text"
 msgstr "트랜스크립트 텍스트"
 
-#: .\podcasts\templates\podcasts\base.html:214
-#: .\podcasts\templates\podcasts\base.html:402
+#: .\podcasts\templates\podcasts\base.html:234
+#: .\podcasts\templates\podcasts\base.html:422
 msgid "Language"
 msgstr "언어"
 
-#: .\podcasts\templates\podcasts\base.html:294
+#: .\podcasts\templates\podcasts\base.html:314
 msgid "Date"
 msgstr "날짜"
 
-#: .\podcasts\templates\podcasts\base.html:302
+#: .\podcasts\templates\podcasts\base.html:322
 msgid "Anytime"
 msgstr "언제든지"
 
-#: .\podcasts\templates\podcasts\base.html:308
+#: .\podcasts\templates\podcasts\base.html:328
 msgid "Past Day"
 msgstr "지난 하루"
 
-#: .\podcasts\templates\podcasts\base.html:314
+#: .\podcasts\templates\podcasts\base.html:334
 msgid "Past Week"
 msgstr "지난 주"
 
-#: .\podcasts\templates\podcasts\base.html:320
+#: .\podcasts\templates\podcasts\base.html:340
 msgid "Past Month"
 msgstr "지난 달"
 
-#: .\podcasts\templates\podcasts\base.html:326
+#: .\podcasts\templates\podcasts\base.html:346
 msgid "Past Year"
 msgstr "지난해"
 
-#: .\podcasts\templates\podcasts\base.html:332
+#: .\podcasts\templates\podcasts\base.html:352
 msgid "Past 2 Years"
 msgstr "지난 2년"
 
-#: .\podcasts\templates\podcasts\base.html:338
+#: .\podcasts\templates\podcasts\base.html:358
 msgid "Past 3 Years"
 msgstr "지난 3년"
 
-#: .\podcasts\templates\podcasts\base.html:344
+#: .\podcasts\templates\podcasts\base.html:364
 msgid "Past 4 Years"
 msgstr "지난 4년"
 
-#: .\podcasts\templates\podcasts\base.html:350
+#: .\podcasts\templates\podcasts\base.html:370
 msgid "Past 5 Years"
 msgstr "지난 5년"
 
-#: .\podcasts\templates\podcasts\base.html:356
+#: .\podcasts\templates\podcasts\base.html:376
 msgid "Past 10 Years"
 msgstr "지난 10년"
 
-#: .\podcasts\templates\podcasts\base.html:362
+#: .\podcasts\templates\podcasts\base.html:382
 msgid "Past 15 Years"
 msgstr "지난 15년"
 
-#: .\podcasts\templates\podcasts\base.html:389
+#: .\podcasts\templates\podcasts\base.html:409
 msgid "Channel Author"
 msgstr "채널 저자"
 
-#: .\podcasts\templates\podcasts\base.html:395
+#: .\podcasts\templates\podcasts\base.html:415
 msgid "Channel Summary"
 msgstr "채널 요약"
 
-#: .\podcasts\templates\podcasts\base.html:498
+#: .\podcasts\templates\podcasts\base.html:518
 #: .\podcasts\templates\podcasts\signup.html:175
 #: .\podcasts\templates\podcasts\signup.html:229
 #: .\podcasts\templates\podcasts\support_ticket.html:148
@@ -331,9 +330,32 @@ msgstr "채널 요약"
 msgid "Close"
 msgstr "가까이"
 
-#: .\podcasts\templates\podcasts\base.html:573
+#: .\podcasts\templates\podcasts\base.html:591
+#: .\podcasts\templates\podcasts\channel_detail.html:207
+#: .\podcasts\templates\podcasts\episode_detail.html:265
+msgid "Please sign in to complete this action."
+msgstr "이 작업을 완료하기 위해 로그인하세요."
+
+#: .\podcasts\templates\podcasts\base.html:593
+#: .\podcasts\templates\podcasts\channel_detail.html:208
+#: .\podcasts\templates\podcasts\episode_detail.html:266
+#| msgid "Sign In"
+msgid "Sign in"
+msgstr "로그인"
+
+#: .\podcasts\templates\podcasts\base.html:600
 msgid "Contact Me"
 msgstr "연락해 주십시오."
+
+#: .\podcasts\templates\podcasts\base.html:661
+#: .\podcasts\templates\podcasts\base.html:662
+msgid "Switch to light mode"
+msgstr "빛 모드로 전환"
+
+#: .\podcasts\templates\podcasts\base.html:666
+#: .\podcasts\templates\podcasts\base.html:667
+msgid "Switch to dark mode"
+msgstr "어두운 모드로 전환"
 
 #: .\podcasts\templates\podcasts\bookmarks_list.html:6
 msgid "Bookmarked Episodes"
@@ -368,7 +390,7 @@ msgstr "명시적"
 #: .\podcasts\templates\podcasts\bookmarks_list_items.html:62
 #: .\podcasts\templates\podcasts\channel_detail.html:169
 #: .\podcasts\templates\podcasts\channel_detail_item.html:51
-#: .\podcasts\templates\podcasts\episode_detail.html:205
+#: .\podcasts\templates\podcasts\episode_detail.html:243
 #: .\podcasts\templates\podcasts\episode_list.html:34
 #: .\podcasts\templates\podcasts\episode_list.html:88
 #: .\podcasts\templates\podcasts\episode_list_items.html:59
@@ -390,13 +412,11 @@ msgstr "에피소드 시청률"
 
 #: .\podcasts\templates\podcasts\bookmarks_list.html:84
 #: .\podcasts\templates\podcasts\bookmarks_list_items.html:76
-#: .\podcasts\templates\podcasts\channel_detail.html:90
-#: .\podcasts\templates\podcasts\channel_detail.html:91
 #: .\podcasts\templates\podcasts\channel_detail.html:181
 #: .\podcasts\templates\podcasts\channel_detail_item.html:65
 #: .\podcasts\templates\podcasts\channel_list.html:95
 #: .\podcasts\templates\podcasts\channel_list_items.html:43
-#: .\podcasts\templates\podcasts\episode_detail.html:118
+#: .\podcasts\templates\podcasts\episode_detail.html:147
 #: .\podcasts\templates\podcasts\episode_list.html:102
 #: .\podcasts\templates\podcasts\episode_list_items.html:73
 #: .\podcasts\templates\podcasts\favorites_list.html:52
@@ -425,7 +445,7 @@ msgstr "더 많은 에피소드를 로드하고 있습니다."
 
 #: .\podcasts\templates\podcasts\bookmarks_list.html:147
 #: .\podcasts\templates\podcasts\bookmarks_list.html:154
-#: .\podcasts\templates\podcasts\channel_detail.html:206
+#: .\podcasts\templates\podcasts\channel_detail.html:213
 #: .\podcasts\templates\podcasts\channel_list.html:118
 #: .\podcasts\templates\podcasts\episode_list.html:165
 #: .\podcasts\templates\podcasts\episode_list.html:172
@@ -447,49 +467,47 @@ msgstr "목록 끝..."
 msgid "by"
 msgstr "~에 의해"
 
-#: .\podcasts\templates\podcasts\channel_detail.html:43
+#: .\podcasts\templates\podcasts\channel_detail.html:47
+#| msgid "Add to Favorites"
+msgid "Sign in to add favorites"
+msgstr "즐겨찾기를 추가하기 위해 로그인하세요"
+
+#: .\podcasts\templates\podcasts\channel_detail.html:48
 msgid "Remove from Favorites"
 msgstr "즐겨찾기 중 삭제"
 
-#: .\podcasts\templates\podcasts\channel_detail.html:43
+#: .\podcasts\templates\podcasts\channel_detail.html:48
 msgid "Add to Favorites"
 msgstr "즐겨찾기 에 추가"
 
-#: .\podcasts\templates\podcasts\channel_detail.html:51
-msgid "Number of Favorites"
-msgstr "즐겨찾기 수"
+#: .\podcasts\templates\podcasts\channel_detail.html:61
+#| msgid "Loading more notifications..."
+msgid "Sign in to enable notifications"
+msgstr "알림을 활성화하기 위해 로그인하세요"
 
-#: .\podcasts\templates\podcasts\channel_detail.html:59
+#: .\podcasts\templates\podcasts\channel_detail.html:62
 msgid "Remove from Notifications"
 msgstr "알림에서 삭제"
 
-#: .\podcasts\templates\podcasts\channel_detail.html:59
+#: .\podcasts\templates\podcasts\channel_detail.html:62
 msgid "Add to Notifications"
 msgstr "알림에 추가"
 
-#: .\podcasts\templates\podcasts\channel_detail.html:67
-msgid "Number of Notifications"
-msgstr "통지 번호"
+#: .\podcasts\templates\podcasts\channel_detail.html:80
+#: .\podcasts\templates\podcasts\channel_detail.html:84
+#: .\podcasts\templates\podcasts\episode_detail.html:132
+#| msgid "Sign in with X"
+msgid "Sign in to rate"
+msgstr "요금에 로그인"
 
-#: .\podcasts\templates\podcasts\channel_detail.html:77
-#: .\podcasts\templates\podcasts\episode_detail.html:103
+#: .\podcasts\templates\podcasts\channel_detail.html:80
+#: .\podcasts\templates\podcasts\episode_detail.html:122
 msgid "Update your rating"
 msgstr "평가를 업데이트"
 
-#: .\podcasts\templates\podcasts\channel_detail.html:79
+#: .\podcasts\templates\podcasts\channel_detail.html:84
 msgid "Rate this channel"
 msgstr "이 채널을 시청하세요"
-
-#: .\podcasts\templates\podcasts\channel_detail.html:83
-msgid "Average rating and number of ratings"
-msgstr "평균 등급 및 등급 수"
-
-#: .\podcasts\templates\podcasts\channel_detail.html:98
-#: .\podcasts\templates\podcasts\channel_detail.html:99
-#: .\podcasts\templates\podcasts\channel_list.html:99
-#: .\podcasts\templates\podcasts\channel_list_items.html:47
-msgid "Total Episodes"
-msgstr "전체 에피소드"
 
 #: .\podcasts\templates\podcasts\channel_detail.html:111
 msgid "Search episodes in this channel"
@@ -504,7 +522,7 @@ msgid "No episodes available for this channel."
 msgstr "이 채널에는 에피소드가 없습니다."
 
 #: .\podcasts\templates\podcasts\channel_detail.html:201
-#: .\podcasts\templates\podcasts\channel_detail.html:207
+#: .\podcasts\templates\podcasts\channel_detail.html:214
 #: .\podcasts\templates\podcasts\episode_list.html:130
 #: .\podcasts\templates\podcasts\search_results_items.html:143
 #: .\podcasts\templates\podcasts\search_results_items.html:154
@@ -603,6 +621,11 @@ msgstr "이미지가 없습니다"
 #: .\podcasts\templates\podcasts\favorites_list_items.html:33
 msgid "Channel Rating"
 msgstr "채널 등급"
+
+#: .\podcasts\templates\podcasts\channel_list.html:99
+#: .\podcasts\templates\podcasts\channel_list_items.html:47
+msgid "Total Episodes"
+msgstr "전체 에피소드"
 
 #: .\podcasts\templates\podcasts\channel_list.html:108
 msgid "No channels available."
@@ -704,94 +727,108 @@ msgstr "2FA를 비활성화"
 msgid "No channel image"
 msgstr "채널 이미지가 없습니다"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:80
+#: .\podcasts\templates\podcasts\episode_detail.html:82
 msgid "Remove from Bookmarks"
 msgstr "북마크에서 삭제"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:80
+#: .\podcasts\templates\podcasts\episode_detail.html:82
 msgid "Add to Bookmarks"
 msgstr "북마크에 추가"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:87
+#: .\podcasts\templates\podcasts\episode_detail.html:92
+#| msgid "Sign in with Google"
+msgid "Sign in to bookmark"
+msgstr "북마크에 로그인"
+
+#: .\podcasts\templates\podcasts\episode_detail.html:96
 msgid "Number of Bookmarks"
 msgstr "북마크 수"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:92
+#: .\podcasts\templates\podcasts\episode_detail.html:102
 msgid "Comment"
 msgstr "댓글"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:95
+#: .\podcasts\templates\podcasts\episode_detail.html:108
+#| msgid "Sign in with Google"
+msgid "Sign in to comment"
+msgstr "댓글에 로그인하세요"
+
+#: .\podcasts\templates\podcasts\episode_detail.html:113
 msgid "Number of Comments"
 msgstr "의견 수"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:105
+#: .\podcasts\templates\podcasts\episode_detail.html:124
 msgid "Rate this episode"
 msgstr "이 에피소드를 시청하세요"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:111
+#: .\podcasts\templates\podcasts\episode_detail.html:139
 msgid "Average rating and total ratings"
 msgstr "평균 등급 및 전체 등급"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:126
-#: .\podcasts\templates\podcasts\episode_detail.html:127
-#: .\podcasts\templates\podcasts\episode_detail.html:129
+#: .\podcasts\templates\podcasts\episode_detail.html:157
+#: .\podcasts\templates\podcasts\episode_detail.html:158
+#: .\podcasts\templates\podcasts\episode_detail.html:160
 msgid "Download JSON"
 msgstr "JSON를 다운로드"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:132
-#| msgid "Total Episodes"
+#: .\podcasts\templates\podcasts\episode_detail.html:165
+#| msgid "Download JSON"
+msgid "Sign in to download JSON"
+msgstr "JSON를 다운로드 하기 위해 로그인"
+
+#: .\podcasts\templates\podcasts\episode_detail.html:170
 msgid "Total Downloads"
 msgstr "전체 다운로드"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:150
+#: .\podcasts\templates\podcasts\episode_detail.html:188
 msgid "Your browser does not support the audio element."
 msgstr "귀하의 브라우저는 오디오 요소를 지원하지 않습니다."
 
-#: .\podcasts\templates\podcasts\episode_detail.html:154
+#: .\podcasts\templates\podcasts\episode_detail.html:192
 msgid "Audio:"
 msgstr "오디오:"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:154
+#: .\podcasts\templates\podcasts\episode_detail.html:192
 msgid "No audio available"
 msgstr "오디오가 없습니다"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:162
+#: .\podcasts\templates\podcasts\episode_detail.html:200
 msgid "Chapters"
 msgstr "챕터"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:169
+#: .\podcasts\templates\podcasts\episode_detail.html:207
 msgid "No chapters available for this episode."
 msgstr "이 에피소드에는 장이 없습니다."
 
-#: .\podcasts\templates\podcasts\episode_detail.html:178
+#: .\podcasts\templates\podcasts\episode_detail.html:216
 msgid "Transcript"
 msgstr "대본"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:196
+#: .\podcasts\templates\podcasts\episode_detail.html:234
 msgid "No transcript available for this episode."
 msgstr "이 에피소드에 대한 기록은 없습니다."
 
-#: .\podcasts\templates\podcasts\episode_detail.html:211
+#: .\podcasts\templates\podcasts\episode_detail.html:249
 msgid "Write a comment..."
 msgstr "댓글 좀 써..."
 
-#: .\podcasts\templates\podcasts\episode_detail.html:214
+#: .\podcasts\templates\podcasts\episode_detail.html:252
 msgid "Submit Comment"
 msgstr "댓글 제출"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:431
+#: .\podcasts\templates\podcasts\episode_detail.html:480
 msgid "Remove episode from Bookmarks"
 msgstr "북마크에서 에피소드를 삭제"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:437
+#: .\podcasts\templates\podcasts\episode_detail.html:486
 msgid "Add episode to Bookmarks"
 msgstr "북마크에 에피소드를 추가"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:490
+#: .\podcasts\templates\podcasts\episode_detail.html:550
 msgid "No comments yet."
 msgstr "아직 댓글은 없습니다."
 
-#: .\podcasts\templates\podcasts\episode_detail.html:554
+#: .\podcasts\templates\podcasts\episode_detail.html:614
 msgid "Please enter a comment"
 msgstr "댓글을 달아 주시기 바랍니다"
 
@@ -879,73 +916,69 @@ msgstr "뮤즈 팟캐스트 검색 엔진"
 msgid "License: GPL v3"
 msgstr "라이선스: GPL v3"
 
-#: .\podcasts\templates\podcasts\home.html:25
-msgid "https://github.com/musepodcast/podcast-search-engine"
-msgstr "[http://github.com/musepodcast/podcast-search-engine]"
-
-#: .\podcasts\templates\podcasts\home.html:35
+#: .\podcasts\templates\podcasts\home.html:37
 msgid "🚀 About"
 msgstr " 에 관한 것"
 
-#: .\podcasts\templates\podcasts\home.html:36
+#: .\podcasts\templates\podcasts\home.html:38
 msgid ""
 "Muse is a free, AI-powered podcast search engine. Tired of scouring episode "
 "show notes for bits of information, we built a platform where you can:"
 msgstr "무즈는 무료, 인공지능 기반의 포드캐스트 검색 엔진입니다."
 
-#: .\podcasts\templates\podcasts\home.html:38
+#: .\podcasts\templates\podcasts\home.html:40
 msgid ""
 "🔍 Search any podcast by keyword (titles, descriptions, or transcript "
 "content)"
 msgstr "🔍 모든 포드캐스트를 키워드 ( 제목, 설명, 번역 내용) 에 따라 검색"
 
-#: .\podcasts\templates\podcasts\home.html:39
+#: .\podcasts\templates\podcasts\home.html:41
 msgid "📄 View full, time-stamped transcripts (speaker-diarized and formatted)"
 msgstr " 시간표로 작성된 전록을 볼 수 있습니다. (스피커에 의해 기호화 되어 있고 형식화 되어 있습니다.)"
 
-#: .\podcasts\templates\podcasts\home.html:40
+#: .\podcasts\templates\podcasts\home.html:42
 msgid "✍️ Read AI-generated chapter summaries"
 msgstr "✍️ 인공지능으로 생성된 장의 요약을 읽어보세요"
 
-#: .\podcasts\templates\podcasts\home.html:41
+#: .\podcasts\templates\podcasts\home.html:43
 msgid ""
 "🌐 Find podcasts in 17 different languages natively transcribed or AI "
 "translated"
 msgstr " 모국어로 번역된 17개의 다른 언어로 팟캐스트를 찾거나 인공지능으로 번역한"
 
-#: .\podcasts\templates\podcasts\home.html:42
+#: .\podcasts\templates\podcasts\home.html:44
 msgid "🎧 Click through to listen at the exact moment a topic is discussed"
 msgstr " 특정 주제가 논의되는 정확한 순간에 클릭하여 들을 수 있습니다."
 
-#: .\podcasts\templates\podcasts\home.html:43
+#: .\podcasts\templates\podcasts\home.html:45
 msgid "🆕 Discover new channels or episodes based on your interests"
 msgstr " 관심사에 따라 새로운 채널이나 에피소드를 발견하세요"
 
-#: .\podcasts\templates\podcasts\home.html:45
+#: .\podcasts\templates\podcasts\home.html:47
 msgid ""
 "Currently optimized for desktop browsers, tablets, foldables, and "
 "smartphones. Community contribution and native apps are coming soon!"
 msgstr "현재 데스크톱 브라우저, 태블릿, 폴더블 및 스마트폰에 최적화되어 있습니다. 커뮤니티 기여 및 네이티브 앱은 곧 출시됩니다!"
 
-#: .\podcasts\templates\podcasts\home.html:47
+#: .\podcasts\templates\podcasts\home.html:49
 msgid "🌟 Key Features"
 msgstr " 주요 특징"
 
-#: .\podcasts\templates\podcasts\home.html:49
+#: .\podcasts\templates\podcasts\home.html:51
 msgid "Account Signup & Management"
 msgstr "계정 등록 및 관리"
 
-#: .\podcasts\templates\podcasts\home.html:49
+#: .\podcasts\templates\podcasts\home.html:51
 msgid ""
 "Create a free account to save searches, bookmark episodes, and track "
 "listening history."
 msgstr "검색, 북마크 에피소드 저장 및 듣기 역사를 추적하기 위해 무료 계정을 생성하십시오."
 
-#: .\podcasts\templates\podcasts\home.html:50
+#: .\podcasts\templates\podcasts\home.html:52
 msgid "Transcript Generation"
 msgstr "번역본 세대"
 
-#: .\podcasts\templates\podcasts\home.html:50
+#: .\podcasts\templates\podcasts\home.html:52
 msgid ""
 "Ingests RSS feeds from any podcast; uses OpenAI Whisper Turbo on an NVIDIA "
 "GPU for fast, high-quality transcription; diarizes speakers and formats with"
@@ -954,31 +987,31 @@ msgstr ""
 "모든 팟캐스트에서 RSS 피드를 흡수하고, NVIDIA GPU에서 OpenAI Whisper Turbo를 사용하여 빠르고 고품질의 변환을"
 " 수행하고, 시간표로 스피커와 포맷을 일간지화합니다."
 
-#: .\podcasts\templates\podcasts\home.html:51
+#: .\podcasts\templates\podcasts\home.html:53
 msgid "Chapter Summaries"
 msgstr "장 요약"
 
-#: .\podcasts\templates\podcasts\home.html:51
+#: .\podcasts\templates\podcasts\home.html:53
 msgid ""
 "Generates concise summaries of each transcript segment using FalconsAI text-"
 "summarization."
 msgstr "FalconsAI 텍스트 요약을 사용하여 각 트랜스크립트 세그먼트의 간결한 요약을 생성합니다."
 
-#: .\podcasts\templates\podcasts\home.html:52
+#: .\podcasts\templates\podcasts\home.html:54
 msgid "Transcript Translations"
 msgstr "표본 번역"
 
-#: .\podcasts\templates\podcasts\home.html:52
+#: .\podcasts\templates\podcasts\home.html:54
 msgid ""
 "Takes podcasts and translates them into 17 different languages using "
 "nllb-200-distilled-600M translation model."
 msgstr "팟캐스트를 촬영하고 nllb-200-distilled-600M 번역 모델을 사용하여 17개의 다른 언어로 번역합니다."
 
-#: .\podcasts\templates\podcasts\home.html:53
+#: .\podcasts\templates\podcasts\home.html:55
 msgid "Full-Text Search"
 msgstr "전체 텍스트 검색"
 
-#: .\podcasts\templates\podcasts\home.html:53
+#: .\podcasts\templates\podcasts\home.html:55
 msgid ""
 "Powered by Elasticsearch for lightning-fast, fuzzy-match queries; filters by"
 " title, description, channel metadata, or transcript."
@@ -986,106 +1019,105 @@ msgstr ""
 "번개속, 흐릿하게 일치하는 쿼리를 위한 Elasticsearch에 의해 작동합니다. 제목, 설명, 채널 메타데이터 또는 기록에 의해 "
 "필터."
 
-#: .\podcasts\templates\podcasts\home.html:54
+#: .\podcasts\templates\podcasts\home.html:56
 msgid "Flexible Playback"
 msgstr "유연한 재생"
 
-#: .\podcasts\templates\podcasts\home.html:54
+#: .\podcasts\templates\podcasts\home.html:56
 msgid ""
 "Jump directly to the moment a keyword appears in the audio player on the "
 "website."
 msgstr "웹 사이트의 오디오 플레이어에서 키워드가 표시되는 순간 바로 점프하십시오."
 
-#: .\podcasts\templates\podcasts\home.html:57
+#: .\podcasts\templates\podcasts\home.html:59
 msgid "🏗️ Architecture & Tech Stack"
 msgstr "️ 아키텍처 & 테크 스택"
 
-#: .\podcasts\templates\podcasts\home.html:61
+#: .\podcasts\templates\podcasts\home.html:63
 msgid "Layer"
 msgstr "계층"
 
-#: .\podcasts\templates\podcasts\home.html:62
+#: .\podcasts\templates\podcasts\home.html:64
 msgid "Technology"
 msgstr "기술"
 
-#: .\podcasts\templates\podcasts\home.html:67
+#: .\podcasts\templates\podcasts\home.html:69
 msgid "Backend"
 msgstr "백엔드"
 
-#: .\podcasts\templates\podcasts\home.html:67
+#: .\podcasts\templates\podcasts\home.html:69
 msgid "Python, Django"
 msgstr "파이썬, 고"
 
-#: .\podcasts\templates\podcasts\home.html:70
+#: .\podcasts\templates\podcasts\home.html:72
 msgid "Transcription"
 msgstr "발음"
 
-#: .\podcasts\templates\podcasts\home.html:70
+#: .\podcasts\templates\podcasts\home.html:72
 msgid "OpenAI Whisper Turbo (GPU-accelerated)"
 msgstr "OpenAI 와이스퍼 터보 (GPU 가속화)"
 
-#: .\podcasts\templates\podcasts\home.html:73
+#: .\podcasts\templates\podcasts\home.html:75
 msgid "Summarization"
 msgstr "요약"
 
-#: .\podcasts\templates\podcasts\home.html:73
+#: .\podcasts\templates\podcasts\home.html:75
 msgid "FalconsAI / text_summarization"
 msgstr "FalconsAI / text_summarization"
 
-#: .\podcasts\templates\podcasts\home.html:76
+#: .\podcasts\templates\podcasts\home.html:78
 msgid "Translation"
 msgstr "번역"
 
-#: .\podcasts\templates\podcasts\home.html:76
+#: .\podcasts\templates\podcasts\home.html:78
 msgid "Facebook / nllb-200-distilled-600M translation model"
 msgstr "페이스북 / nllb-200-distilled-600M 번역 모델"
 
-#: .\podcasts\templates\podcasts\home.html:79
+#: .\podcasts\templates\podcasts\home.html:81
 msgid "Connection Pooling"
 msgstr "연결 집합"
 
-#: .\podcasts\templates\podcasts\home.html:79
+#: .\podcasts\templates\podcasts\home.html:81
 msgid "PgBouncer"
 msgstr "PgBouncer"
 
-#: .\podcasts\templates\podcasts\home.html:82
-#| msgid "Email Address"
+#: .\podcasts\templates\podcasts\home.html:84
 msgid "Email Services"
 msgstr "이메일 서비스"
 
-#: .\podcasts\templates\podcasts\home.html:82
+#: .\podcasts\templates\podcasts\home.html:84
 msgid "Mailjet"
 msgstr "메일 제트"
 
-#: .\podcasts\templates\podcasts\home.html:85
+#: .\podcasts\templates\podcasts\home.html:87
 msgid "Database"
 msgstr "데이터베이스"
 
-#: .\podcasts\templates\podcasts\home.html:85
+#: .\podcasts\templates\podcasts\home.html:87
 msgid "PostgreSQL | MaraiaDB"
 msgstr "그레이스QL 이후 마리아DB"
 
-#: .\podcasts\templates\podcasts\home.html:88
+#: .\podcasts\templates\podcasts\home.html:90
 msgid "Search Engine"
 msgstr "검색 엔진"
 
-#: .\podcasts\templates\podcasts\home.html:88
+#: .\podcasts\templates\podcasts\home.html:90
 msgid "Elasticsearch"
 msgstr "탄력적 검색"
 
-#: .\podcasts\templates\podcasts\home.html:91
+#: .\podcasts\templates\podcasts\home.html:93
 msgid "Frontend"
 msgstr "프론트엔드"
 
-#: .\podcasts\templates\podcasts\home.html:91
+#: .\podcasts\templates\podcasts\home.html:93
 msgid "Django templates | HTML | CSS | JavaScript"
 msgstr "고 템플릿 HTML CSS 자바스크립트"
 
-#: .\podcasts\templates\podcasts\home.html:94
+#: .\podcasts\templates\podcasts\home.html:96
 msgid "Deployment"
 msgstr "배포"
 
-#: .\podcasts\templates\podcasts\home.html:94
+#: .\podcasts\templates\podcasts\home.html:96
 msgid "Docker | Ubuntu VM | Windows OS"
 msgstr "도커 Ubuntu VM 윈도우 운영체제"
 
@@ -1649,17 +1681,14 @@ msgid "Return to Profile"
 msgstr "프로파일로 돌아가"
 
 #: .\podcasts\templates\registration\password_change_form.html:31
-#| msgid "Reset Password"
 msgid "Current Password"
 msgstr "현재 비밀번호"
 
 #: .\podcasts\templates\registration\password_change_form.html:46
-#| msgid "Password"
 msgid "New Password"
 msgstr "새로운 비밀번호"
 
 #: .\podcasts\templates\registration\password_change_form.html:64
-#| msgid "Confirm Password"
 msgid "Confirm New Password"
 msgstr "새로운 비밀번호 확인"
 
@@ -1760,6 +1789,21 @@ msgstr "OTP를 입력"
 #: .\podcasts\templates\two_factor\core\otp.html:9
 msgid "Submit OTP"
 msgstr "OTP를 제출"
+
+#~ msgid "Toggle Theme"
+#~ msgstr "테마 전환"
+
+#~ msgid "Number of Favorites"
+#~ msgstr "즐겨찾기 수"
+
+#~ msgid "Number of Notifications"
+#~ msgstr "통지 번호"
+
+#~ msgid "Average rating and number of ratings"
+#~ msgstr "평균 등급 및 등급 수"
+
+#~ msgid "https://github.com/musepodcast/podcast-search-engine"
+#~ msgstr "[http://github.com/musepodcast/podcast-search-engine]"
 
 #~ msgid "Docker, NVIDIA GPU passthrough, Ubuntu VM"
 #~ msgstr "도커, NVIDIA GPU 패스트, 우분투 VM"

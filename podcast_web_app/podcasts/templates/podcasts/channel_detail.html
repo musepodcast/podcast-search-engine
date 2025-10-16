@@ -33,77 +33,77 @@
                     {{ channel.channel_summary|clean_html }}
                 </p>
             {% endif %}
-            {% if user.is_authenticated %}
+
             <!-- Buttons Section: Follow, Notification, Rating -->
-            <div class="d-flex gap-2 mt-2 align-items-center flex-wrap">
-                {# Follow (Favorites) button using heart icons #}
-                <button id="follow-btn" 
-                        data-channel-id="{{ channel.id }}"
-                        class="follow-btn {% if has_followed_channel %}btn-following{% else %}btn-follow{% endif %}"
-                        title="{% if has_followed_channel %}{% trans 'Remove from Favorites' %}{% else %}{% trans 'Add to Favorites' %}{% endif %}">
-                    {% if has_followed_channel %}
-                        <i class="fa-solid fa-heart"></i>
+            {# Buttons Section: Follow, Notification, Rating — render for everyone #}
+            <div class="d-flex gap-2 mt-2 align-items-center flex-wrap"
+                id="channel-actions"
+                data-authenticated="{{ is_authenticated|yesno:'true,false' }}">
+
+              {# Follow (Favorites) #}
+              <button id="follow-btn"
+                      data-channel-id="{{ channel.id }}"
+                      class="follow-btn {% if has_followed_channel %}btn-following{% else %}btn-follow{% endif %}{% if not is_authenticated %} is-guest{% endif %}"
+                      {% if not is_authenticated %}aria-disabled="true" tabindex="-1" title="{% trans 'Sign in to add favorites' %}"{% else %}
+                      title="{% if has_followed_channel %}{% trans 'Remove from Favorites' %}{% else %}{% trans 'Add to Favorites' %}{% endif %}"{% endif %}>
+                {% if has_followed_channel %}
+                  <i class="fa-solid fa-heart"></i>
+                {% else %}
+                  <i class="fa-regular fa-heart"></i>
+                {% endif %}
+              </button>
+              <span class="favorites-count">{{ favorites_count|number_format }}</span>
+
+              {# Notifications #}
+              <button id="notify-btn"
+                      data-channel-id="{{ channel.id }}"
+                      class="notify-btn {% if receive_notifications %}btn-notification-active{% else %}btn-notification{% endif %}{% if not is_authenticated %} is-guest{% endif %}"
+                      {% if not is_authenticated %}aria-disabled="true" tabindex="-1" title="{% trans 'Sign in to enable notifications' %}"{% else %}
+                      title="{% if receive_notifications %}{% trans 'Remove from Notifications' %}{% else %}{% trans 'Add to Notifications' %}{% endif %}"{% endif %}>
+                {% if receive_notifications %}
+                  <i class="fa-solid fa-bell"></i>
+                {% else %}
+                  <i class="fa-regular fa-bell"></i>
+                {% endif %}
+              </button>
+              <span class="notifications-count">{{ notifications_count|number_format }}</span>
+
+              {# Stars #}
+              <div class="d-flex align-items-center gap-2">
+                <div id="rating-container"
+                    data-channel-id="{{ channel.id }}"
+                    class="{% if not is_authenticated %}is-guest{% endif %}">
+                  {% for star in star_range %}
+                    {% if channel_rating and channel_rating >= star %}
+                      <i class="fa fa-star star-icon star-active"
+                        data-star="{{ star }}"
+                        {% if not is_authenticated %}title="{% trans 'Sign in to rate' %}"{% else %}title="{% trans 'Update your rating' %}"{% endif %}></i>
                     {% else %}
-                        <i class="fa-regular fa-heart"></i>
+                      <i class="fa fa-star star-icon"
+                        data-star="{{ star }}"
+                        {% if not is_authenticated %}title="{% trans 'Sign in to rate' %}"{% else %}title="{% trans 'Rate this channel' %}"{% endif %}></i>
                     {% endif %}
-                </button>
-                <!-- Favorites Count -->
-                <span class="favorites-count" title="{% trans 'Number of Favorites' %}">
-                    {{ favorites_count|number_format }}
+                  {% endfor %}
+                </div>
+                <span class="channel-rating-info">
+                  {{ avg_rating|floatformat:1 }} ({{ rating_count|number_format }})
                 </span>
+              </div>
 
-                {# Notification button using Font Awesome icons #}
-                <button id="notify-btn" 
-                        data-channel-id="{{ channel.id }}"
-                        class="notify-btn {% if receive_notifications %}btn-notification-active{% else %}btn-notification{% endif %}"
-                        title="{% if receive_notifications %}{% trans 'Remove from Notifications' %}{% else %}{% trans 'Add to Notifications' %}{% endif %}">
-                    {% if receive_notifications %}
-                        <i class="fa-solid fa-bell"></i>
-                    {% else %}
-                        <i class="fa-regular fa-bell"></i>
-                    {% endif %}
-                </button>
-                <!-- Notifications Count -->
-                <span class="notifications-count" title="{% trans 'Number of Notifications' %}">
-                    {{ notifications_count|number_format }}
-                </span>
+              {# Views / Episodes (always visible) #}
+              <div class="d-flex align-items-center gap-2">
+                <i class="fa-solid fa-eye" style="font-size:1.25rem;"></i>
+                <span class="total-views">{{ total_views|number_format }}</span>
+              </div>
+              <div class="d-flex align-items-center gap-2">
+                <i class="fa-solid fa-podcast" style="font-size:1.25rem;"></i>
+                <span class="total-episodes">{{ channel.total_episodes|default:"0"|number_format }}</span>
+              </div>
 
 
-                <!-- Rating Container with Star Ratings and Aggregated Rating Info -->
-                <div class="d-flex align-items-center gap-2">
-                    <div id="rating-container" data-channel-id="{{ channel.id }}">
-                        {% for star in star_range %}
-                            {% if channel_rating >= star %}
-                                <i class="fa fa-star star-icon star-active" data-star="{{ star }}" title="{% trans 'Update your rating' %}"></i>
-                            {% else %}
-                                <i class="fa fa-star star-icon" data-star="{{ star }}" title="{% trans 'Rate this channel' %}"></i>
-                            {% endif %}
-                        {% endfor %}
-                    </div>
-                    <span class="channel-rating-info" title="{% trans 'Average rating and number of ratings' %}">
-                        {{ avg_rating|floatformat:1 }} ({{ rating_count|number_format }})
-                    </span>
-                </div>
-
-                 <!-- NEW: Total Views with Solid Eye Icon -->
-                <div class="d-flex align-items-center gap-2">
-                    <i class="fa-solid fa-eye" title="{% trans 'Total Views' %}" style="font-size: 1.25rem;"></i>
-                    <span class="total-views" title="{% trans 'Total Views' %}">
-                        {{ total_views|number_format }}
-                    </span>
-                </div>
-
-                <!-- NEW: Total Episodes with Podcast Icon -->
-                <div class="d-flex align-items-center gap-2">
-                    <i class="fa-solid fa-podcast" title="{% trans 'Total Episodes' %}" style="font-size: 1.25rem;"></i>
-                    <span class="total-episodes" title="{% trans 'Total Episodes' %}">
-                         {{ channel.total_episodes|default:"0"|number_format }}
-                    </span>
-                </div>
 
                 
             </div>
-            {% endif %}
         </div>
     </div>
 </div>
@@ -199,6 +199,13 @@
 <!-- Loading spinner/message for episodes -->
 <div id="loading-spinner" style="display: none; text-align: center; margin: 1rem 0;">
     <p>{% trans "Loading more episodes..." %}</p>
+</div>
+
+<!-- Guest notice toast (re-used sitewide) -->
+<div id="guest-notice" class="guest-toast" style="display:none;">
+  <i class="fa-regular fa-circle-question"></i>
+  <span>{% trans "Please sign in to complete this action." %}</span>
+  <a class="guest-toast-link" href="{% url 'podcasts:login' %}">{% trans "Sign in" %}</a>
 </div>
 
 <!-- Translated strings for JavaScript -->
@@ -394,132 +401,176 @@
       color: var(--accent);          /* themed: purple in light, gold in dark */
 }
 
+
 </style>
 
 <!-- AJAX & Button Behavior JavaScript -->
 <script>
 // Helper: Get CSRF token from cookie
 function getCookie(name) {
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        const cookies = document.cookie.split(';');
-        for (const cookie of cookies) {
-            const c = cookie.trim();
-            if (c.startsWith(name + '=')) {
-                cookieValue = decodeURIComponent(c.substring(name.length + 1));
-                break;
-            }
-        }
+  let cookieValue = null;
+  if (document.cookie && document.cookie !== '') {
+    const cookies = document.cookie.split(';');
+    for (const cookie of cookies) {
+      const c = cookie.trim();
+      if (c.startsWith(name + '=')) {
+        cookieValue = decodeURIComponent(c.substring(name.length + 1));
+        break;
+      }
     }
-    return cookieValue;
+  }
+  return cookieValue;
 }
 
 const csrftoken = getCookie('csrftoken');
 
-// Toggle Follow (Favorites) using heart icon
-document.getElementById("follow-btn").addEventListener("click", function() {
-    const channelId = this.getAttribute('data-channel-id');
-    const btn = this; // cache button reference
-    fetch(`/channel/${channelId}/toggle_follow/`, {
-        method: "POST",
-        headers: {
-          "X-CSRFToken": csrftoken,
-          "Content-Type": "application/json"
-        },
-    })
-    .then(response => response.json())
-    .then(data => {
-        const icon = btn.querySelector("i");
-        if (data.followed) {
-            btn.classList.remove("btn-follow");
-            btn.classList.add("btn-following");
-            // Switch from outline to solid heart icon.
-            icon.classList.remove("fa-regular");
-            icon.classList.add("fa-solid");
-            // Update tooltip.
-            btn.title = "Remove from Favorites";
-        } else {
-            btn.classList.remove("btn-following");
-            btn.classList.add("btn-follow");
-            // Switch from solid to outline heart icon.
-            icon.classList.remove("fa-solid");
-            icon.classList.add("fa-regular");
-            // Update tooltip.
-            btn.title = "Add to Favorites";
-        }
-    })
-    .catch(error => console.error("Error toggling favorites:", error));
-});
-
-// Toggle Notifications button
-document.getElementById("notify-btn").addEventListener("click", function() {
+/* -------------------------
+   Follow (Favorites) toggle
+   ------------------------- */
+const followBtn = document.getElementById("follow-btn");
+if (followBtn) {
+  followBtn.addEventListener("click", function () {
     const channelId = this.getAttribute('data-channel-id');
     const btn = this;
-    fetch(`/channel/${channelId}/toggle_notifications/`, {
-        method: "POST",
-        headers: {
-          "X-CSRFToken": csrftoken,
-          "Content-Type": "application/json"
-        },
+
+    fetch(`/channel/${channelId}/toggle_follow/`, {
+      method: "POST",
+      headers: {
+        "X-CSRFToken": csrftoken,
+        "Content-Type": "application/json"
+      },
     })
     .then(response => response.json())
     .then(data => {
-        const icon = btn.querySelector("i");
-        if (data.notifications_enabled) {
-            btn.classList.remove("btn-notification");
-            btn.classList.add("btn-notification-active");
-            // Update icon: switch from regular (outline) to solid bell.
-            icon.classList.remove("fa-regular");
-            icon.classList.add("fa-solid");
-            // Update tooltip text.
-            btn.title = "Remove from Notifications";
-        } else {
-            btn.classList.remove("btn-notification-active");
-            btn.classList.add("btn-notification");
-            // Update icon: switch from solid to regular (outline) bell.
-            icon.classList.remove("fa-solid");
-            icon.classList.add("fa-regular");
-            // Update tooltip text.
-            btn.title = "Add to Notifications";
-        }
+      const icon = btn.querySelector("i");
+      if (data.followed) {
+        btn.classList.remove("btn-follow");
+        btn.classList.add("btn-following");
+        icon.classList.remove("fa-regular");
+        icon.classList.add("fa-solid");
+        btn.title = "Remove from Favorites";
+      } else {
+        btn.classList.remove("btn-following");
+        btn.classList.add("btn-follow");
+        icon.classList.remove("fa-solid");
+        icon.classList.add("fa-regular");
+        btn.title = "Add to Favorites";
+      }
+    })
+    .catch(error => console.error("Error toggling favorites:", error));
+  });
+}
+
+/* ---------------------
+   Notifications toggle
+   --------------------- */
+const notifyBtn = document.getElementById("notify-btn");
+if (notifyBtn) {
+  notifyBtn.addEventListener("click", function () {
+    const channelId = this.getAttribute('data-channel-id');
+    const btn = this;
+
+    fetch(`/channel/${channelId}/toggle_notifications/`, {
+      method: "POST",
+      headers: {
+        "X-CSRFToken": csrftoken,
+        "Content-Type": "application/json"
+      },
+    })
+    .then(response => response.json())
+    .then(data => {
+      const icon = btn.querySelector("i");
+      if (data.notifications_enabled) {
+        btn.classList.remove("btn-notification");
+        btn.classList.add("btn-notification-active");
+        icon.classList.remove("fa-regular");
+        icon.classList.add("fa-solid");
+        btn.title = "Remove from Notifications";
+      } else {
+        btn.classList.remove("btn-notification-active");
+        btn.classList.add("btn-notification");
+        icon.classList.remove("fa-solid");
+        icon.classList.add("fa-regular");
+        btn.title = "Add to Notifications";
+      }
     })
     .catch(error => console.error("Error toggling notifications:", error));
-});
+  });
+}
 
-// Event: Set Rating via Star Clicks (remains unchanged)
-document.querySelectorAll("#rating-container .star-icon").forEach(function(starElem) {
-    starElem.addEventListener("click", function() {
-        const rating = this.getAttribute("data-star");
-        const channelId = document.getElementById("rating-container").getAttribute("data-channel-id");
-        const formData = new FormData();
-        formData.append('rating', rating);
-        
-        fetch(`/channel/${channelId}/update_rating/`, {
-            method: "POST",
-            headers: {
-              "X-CSRFToken": csrftoken,
-            },
-            body: formData,
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.rating) {
-                document.querySelectorAll("#rating-container .star-icon").forEach(function(el) {
-                    if (parseInt(el.getAttribute("data-star")) <= data.rating) {
-                        el.classList.add("star-active");
-                    } else {
-                        el.classList.remove("star-active");
-                    }
-                });
-            } else if (data.error) {
-                console.error("Rating error:", data.error);
+/* ---------------
+   Star rating set
+   --------------- */
+// Only bind if the authenticated version of the container exists
+const ratingContainer = document.querySelector('#rating-container[data-channel-id]');
+if (ratingContainer) {
+  document.querySelectorAll('#rating-container[data-channel-id] .star-icon').forEach(function (starElem) {
+    starElem.addEventListener("click", function () {
+      const rating = this.getAttribute("data-star");
+      const channelId = ratingContainer.getAttribute("data-channel-id");
+
+      const formData = new FormData();
+      formData.append('rating', rating);
+
+      fetch(`/channel/${channelId}/update_rating/`, {
+        method: "POST",
+        headers: { "X-CSRFToken": csrftoken },
+        body: formData,
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.rating) {
+          document.querySelectorAll('#rating-container[data-channel-id] .star-icon').forEach(function (el) {
+            if (parseInt(el.getAttribute("data-star")) <= data.rating) {
+              el.classList.add("star-active");
+            } else {
+              el.classList.remove("star-active");
             }
-        })
-        .catch(error => console.error("Error updating rating:", error));
+          });
+        } else if (data.error) {
+          console.error("Rating error:", data.error);
+        }
+      })
+      .catch(error => console.error("Error updating rating:", error));
     });
-});
+  });
+}
 
+  function showGuestNotice() {
+    const el = document.getElementById('guest-notice');
+    if (!el) return;
+    el.classList.add('guest-toast-show');
+    clearTimeout(showGuestNotice._t);
+    showGuestNotice._t = setTimeout(() => {
+      el.classList.remove('guest-toast-show');
+    }, 2800);
+  }
+
+  (function(){
+    const area = document.getElementById('channel-actions');
+    if (!area) return;
+    const authed = area.getAttribute('data-authenticated') === 'true';
+    if (authed) return;
+
+    // Block clicks on guest-only controls and show toast instead
+    area.addEventListener('click', (e) => {
+      if (e.target.closest('.is-guest')) {
+        e.preventDefault();
+        e.stopPropagation();
+        showGuestNotice();
+      }
+    });
+
+    // Also block keyboard activation on guest-only controls
+    area.addEventListener('keydown', (e) => {
+      if ((e.key === 'Enter' || e.key === ' ') && e.target.closest('.is-guest')) {
+        e.preventDefault();
+        showGuestNotice();
+      }
+    });
+  })();
 </script>
+
 
  
 {% endblock %}

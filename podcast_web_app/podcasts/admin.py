@@ -174,9 +174,13 @@ class SearchQueryAdmin(admin.ModelAdmin):
 
 @admin.register(ChannelSearchQuery)
 class ChannelSearchQueryAdmin(admin.ModelAdmin):
-    list_display = ('channel', 'query', 'user', 'count', 'last_searched', 'language', 'ip_address')
+    list_display = ('channel', 'query', 'who', 'count', 'last_searched', 'language', 'ip_address')
     list_filter  = ('channel', 'language')
     search_fields = ('query', 'user__username', 'channel__channel_title', 'ip_address')
+
+    @admin.display(description='User')
+    def who(self, obj):
+        return obj.user.username if obj.user_id else 'guest'
 
 @admin.register(ChannelInteraction)
 class ChannelInteractionAdmin(admin.ModelAdmin):

@@ -82,6 +82,8 @@ from django.shortcuts import render
 from django.utils import timezone
 from axes.models import AccessAttempt
 from axes.conf import settings as axes_settings
+from django.db import transaction
+
 
 def episode_download_json_file(request, sanitized_channel_title, sanitized_episode_title):
     """
@@ -357,6 +359,29 @@ def toggle_contribute(request):
     user.save()
     return JsonResponse({"is_contributing": user.is_contributing})
 
+GUEST_USERNAME = "guest"
+
+def get_guest_user():
+    User = get_user_model()
+    user = User.objects.filter(username=GUEST_USERNAME).first()
+    if user:
+        return user
+    # Create a disabled guest account the first time we need it
+    with transaction.atomic():
+        user, created = User.objects.get_or_create(
+            username=GUEST_USERNAME,
+            defaults={
+                "email": "guest@example.invalid",  # non-routable TLD
+                "is_active": False,
+            }
+        )
+        if created:
+            try:
+                user.set_unusable_password()
+                user.save(update_fields=["password"])
+            except Exception:
+                pass
+    return user
 
 User = get_user_model()
 
@@ -752,7 +777,7 @@ class HomeView(TemplateView):
     template_name = 'podcasts/home.html'
 
 
-class ChannelListView(LoginRequiredMixin, ListView):
+class ChannelListView(ListView):
     login_url = reverse_lazy('podcasts:home')
     template_name = 'podcasts/channel_list.html'
     context_object_name = 'channels'
@@ -906,7 +931,7 @@ def _norm_lang(request):
 
 
 
-class ChannelDetailView(LoginRequiredMixin, DetailView):
+class ChannelDetailView(DetailView):
     login_url           = reverse_lazy('podcasts:home')
     template_name       = 'podcasts/channel_detail.html'
     context_object_name = 'channel'
@@ -1062,9 +1087,7 @@ class ChannelDetailView(LoginRequiredMixin, DetailView):
         if isinstance(disp, Channel):
             base = disp
         else:
-            base = get_object_or_404(
-                Channel, sanitized_channel_title=disp.sanitized_channel_title
-            )
+            base = get_object_or_404(Channel, sanitized_channel_title=disp.sanitized_channel_title)
             base.channel_title   = disp.channel_title
             base.channel_summary = disp.channel_summary
             base.channel_author  = getattr(disp, 'channel_author', base.channel_author)
@@ -1072,13 +1095,22 @@ class ChannelDetailView(LoginRequiredMixin, DetailView):
         self.base_channel    = base
         self.display_channel = disp
 
-        if request.user.is_authenticated and request.GET.get('ajax') != '1':
-            ip = request.META.get('HTTP_X_FORWARDED_FOR', '').split(',')[0] or request.META.get('REMOTE_ADDR')
-            visit, _ = ChannelVisit.objects.get_or_create(user=request.user, channel=base)
-            visit.count          += 1
-            visit.last_visited    = timezone.now()
-            visit.last_ip_address = ip
-            visit.save()
+        # Count a view for both signed-in users and guests (skip AJAX partials)
+        if request.GET.get('ajax') != '1':
+            xff = request.META.get('HTTP_X_FORWARDED_FOR', '')
+            ip  = (xff.split(',')[0].strip() if xff else request.META.get('REMOTE_ADDR'))
+            user_obj = request.user if request.user.is_authenticated else get_guest_user()
+
+            visit, _ = ChannelVisit.objects.get_or_create(
+                user=user_obj,
+                channel=base,
+                defaults={'count': 0}
+            )
+            ChannelVisit.objects.filter(pk=visit.pk).update(
+                count=F('count') + 1,
+                last_visited=timezone.now(),
+                last_ip_address=ip,   # ✅ this field exists in your model
+            )
 
         return super().dispatch(request, *args, **kwargs)
 
@@ -1089,16 +1121,31 @@ class ChannelDetailView(LoginRequiredMixin, DetailView):
         lang = get_selected_language(self.request)
 
         ctx['channel'] = self.display_channel if not isinstance(self.display_channel, Channel) else base
+        # Always provide a simple flag the template can trust
+        ctx['is_authenticated'] = bool(getattr(self.request.user, 'is_authenticated', False))
 
-        # toggles & aggregates
-        interaction, _ = ChannelInteraction.objects.get_or_create(user=self.request.user, channel=base)
+        # ---- defaults for guests ----
+        has_followed_channel   = False
+        receive_notifications  = False
+        channel_rating         = None
+
+        # only touch ChannelInteraction for authenticated users
+        if ctx['is_authenticated']:
+            interaction, _ = ChannelInteraction.objects.get_or_create(
+                user=self.request.user, channel=base
+            )
+            has_followed_channel  = interaction.followed
+            receive_notifications = interaction.notifications_enabled
+            channel_rating        = interaction.rating
+
+        # toggles & aggregates (counts visible to everyone)
         ctx.update({
-            'has_followed_channel':  interaction.followed,
-            'receive_notifications': interaction.notifications_enabled,
-            'channel_rating':        interaction.rating,
+            'has_followed_channel':  has_followed_channel,
+            'receive_notifications': receive_notifications,
+            'channel_rating':        channel_rating,
             'star_range':            range(1, 6),
-            'favorites_count':     ChannelInteraction.objects.filter(channel=base, followed=True).count(),
-            'notifications_count': ChannelInteraction.objects.filter(channel=base, notifications_enabled=True).count(),
+            'favorites_count':       ChannelInteraction.objects.filter(channel=base, followed=True).count(),
+            'notifications_count':   ChannelInteraction.objects.filter(channel=base, notifications_enabled=True).count(),
         })
         rating_stats = ChannelInteraction.objects.filter(channel=base, rating__isnull=False)\
                          .aggregate(avg_rating=Avg('rating'), rating_count=Count('rating'))
@@ -1399,7 +1446,7 @@ class ChannelDetailView(LoginRequiredMixin, DetailView):
 
 
 
-class EpisodeDetailView(LoginRequiredMixin, DetailView):
+class EpisodeDetailView(DetailView):
     login_url           = reverse_lazy('podcasts:home')
     template_name       = 'podcasts/episode_detail.html'
     context_object_name = 'episode'
@@ -1410,24 +1457,31 @@ class EpisodeDetailView(LoginRequiredMixin, DetailView):
             base = disp
         else:
             base = disp.episode
-            # so your template’s `episode.channel` still works
+            # keep template compatibility
             disp.channel = base.channel
 
         self.base_episode    = base
         self.display_episode = disp
 
-        # record a view
-        if request.user.is_authenticated and request.GET.get('ajax') != '1':
-            xff = request.META.get('HTTP_X_FORWARDED_FOR')
-            ip  = xff.split(',')[0].strip() if xff else request.META.get('REMOTE_ADDR')
-            visit, _ = EpisodeVisit.objects.get_or_create(user=request.user, episode=base)
-            # avoid race by using F()
-            visit.count           = F('count') + 1
-            visit.last_visited    = timezone.now()
-            visit.last_ip_address = ip
-            visit.save()
+        # ✅ Count a view for both guests and signed-in users (skip AJAX partials)
+        if request.GET.get('ajax') != '1':
+            xff = request.META.get('HTTP_X_FORWARDED_FOR', '')
+            ip  = (xff.split(',')[0].strip() if xff else request.META.get('REMOTE_ADDR'))
+            user_obj = request.user if request.user.is_authenticated else get_guest_user()
+
+            visit, _ = EpisodeVisit.objects.get_or_create(
+                user=user_obj,
+                episode=base,
+                defaults={'count': 0}
+            )
+            EpisodeVisit.objects.filter(pk=visit.pk).update(
+                count=F('count') + 1,
+                last_visited=timezone.now(),
+                last_ip_address=ip,   # matches your models.py
+            )
 
         return super().dispatch(request, *args, **kwargs)
+
     def get_object(self):
         slug_ch = self.kwargs['sanitized_channel_title']
         slug_ep = self.kwargs['sanitized_episode_title']
@@ -1493,19 +1547,15 @@ class EpisodeDetailView(LoginRequiredMixin, DetailView):
                 episodetranslations=disp,
                 language=lang
             ).order_by('segment_time')
-            if tr_qs.exists():
-                segments = tr_qs
-            else:
-                segments = Transcript.objects.filter(
-                    episode=base
-                ).order_by('segment_time')
+            segments = tr_qs if tr_qs.exists() else Transcript.objects.filter(
+                episode=base
+            ).order_by('segment_time')
         else:
             segments = Transcript.objects.filter(
                 episode=base
             ).order_by('segment_time')
 
-        # -- CHAPTERS: fetch both translations & originals --
-        # -- CHAPTERS: fetch both translations & originals --
+        # 2) CHAPTERS (translated first, fallback to originals)
         if isinstance(disp, EpisodeTranslations):
             ch_qs = ChapterTranslations.objects.filter(
                 episodetranslations=disp,
@@ -1516,9 +1566,8 @@ class EpisodeDetailView(LoginRequiredMixin, DetailView):
         else:
             ch_qs = Chapter.objects.filter(episode=base)
 
-        # Helpers
+        # Helpers to normalize times
         def _to_seconds(ts: str) -> int:
-            # Accept "HH:MM:SS", "MM:SS", or "SS"
             parts = [int(p) for p in (ts or "0").split(':')]
             if len(parts) == 3:
                 h, m, s = parts
@@ -1538,53 +1587,39 @@ class EpisodeDetailView(LoginRequiredMixin, DetailView):
 
         chapters = list(ch_qs)
         chapters.sort(key=lambda c: _to_seconds(c.chapter_time or "0"))
-
-        # Normalize display to hh:mm:ss so it matches segment time style
         for c in chapters:
             try:
-                secs = _to_seconds(c.chapter_time or "0")
-                # mutate the instance's field for display; template already uses chapter.chapter_time
-                c.chapter_time = _fmt_hms(secs)
+                c.chapter_time = _fmt_hms(_to_seconds(c.chapter_time or "0"))
             except Exception:
-                # If anything is weird, at least force a safe hh:mm:ss
                 c.chapter_time = "00:00:00"
 
-
-        # 3) USER INTERACTION + AGGREGATES
-        interaction, _ = EpisodeInteraction.objects.get_or_create(
-            user=self.request.user,
-            episode=base
-        )
-        ctx['is_bookmarked']      = interaction.bookmarked
-        ctx['bookmarks_count']    = EpisodeInteraction.objects.filter(
+        # 3) USER INTERACTION + AGGREGATES (guest-safe)
+        # counts for everyone
+        ctx['bookmarks_count'] = EpisodeInteraction.objects.filter(
             episode=base, bookmarked=True
         ).count()
         ctx['comments_count'] = base.comments.count()
 
         stats = EpisodeInteraction.objects.filter(
-            episode=base,
-            rating__isnull=False
+            episode=base, rating__isnull=False
         ).aggregate(avg=Avg('rating'), cnt=Count('rating'))
-        ctx['ep_avg_rating']      = stats['avg'] or 0
-        ctx['ep_rating_count']    = stats['cnt'] or 0
+        ctx['ep_avg_rating']   = stats['avg'] or 0
+        ctx['ep_rating_count'] = stats['cnt'] or 0
 
         ctx['total_episode_views'] = EpisodeVisit.objects.filter(
             episode=base
         ).aggregate(total=Sum('count'))['total'] or 0
-        
-        ctx['episode_rating'] = interaction.rating or 0
-        ctx['star_range']     = range(1,6)
+
         ctx['total_downloads'] = (
             EpisodeDownload.objects
             .filter(episode=base)
             .aggregate(total=Sum('count'))['total'] or 0
         )
 
-        # count for the *current* UI language (canonicalized, e.g., "pt-br" -> "pt")
+        # per-language downloads
         try:
-            canon_lang = _canon_lang(lang)   # reuse your helper from the file
+            canon_lang = _canon_lang(lang)
         except NameError:
-            # fallback if helper isn't in scope
             canon_lang = (lang or 'en').split('-', 1)[0].lower()
 
         ctx['downloads_for_lang'] = (
@@ -1593,16 +1628,30 @@ class EpisodeDetailView(LoginRequiredMixin, DetailView):
             .aggregate(total=Sum('count'))['total'] or 0
         )
 
-        # 4) MERGE & CONTEXT
-        ctx['merged_segments'] = self.merge_consecutive_speakers(segments)
-        ctx['chapters']        = chapters
-        ctx['post_episode_id'] = self.base_episode.id
+        # per-user toggles only if authenticated
+        if self.request.user.is_authenticated:
+            ei = EpisodeInteraction.objects.filter(user=self.request.user, episode=base).first()
+            if not ei:
+                # don't create rows unless needed; default flags
+                ctx['is_bookmarked']  = False
+                ctx['episode_rating'] = 0
+            else:
+                ctx['is_bookmarked']  = bool(ei.bookmarked)
+                ctx['episode_rating'] = ei.rating or 0
+        else:
+            ctx['is_bookmarked']  = False
+            ctx['episode_rating'] = 0
+
+        ctx['star_range']        = range(1, 6)
+        ctx['merged_segments']   = self.merge_consecutive_speakers(segments)
+        ctx['chapters']          = chapters
+        ctx['post_episode_id']   = self.base_episode.id
         ctx['selected_language'] = lang
-        # `episode` in the template is the display object (translated or original)
-        ctx['episode']          = disp
-        ctx['base_slug_ch'] = self.base_episode.channel.sanitized_channel_title
-        ctx['base_slug_ep'] = self.base_episode.sanitized_episode_title
+        ctx['episode']           = disp
+        ctx['base_slug_ch']      = self.base_episode.channel.sanitized_channel_title
+        ctx['base_slug_ep']      = self.base_episode.sanitized_episode_title
         return ctx
+
 
     def merge_consecutive_speakers(self, segments):
         merged = []
@@ -1664,7 +1713,7 @@ class EpisodeDetailView(LoginRequiredMixin, DetailView):
 
 
 
-class EpisodeListView(LoginRequiredMixin, ListView):
+class EpisodeListView(ListView):
     login_url = reverse_lazy('podcasts:home')
     template_name = 'podcasts/episode_list.html'
     context_object_name = 'episodes'
