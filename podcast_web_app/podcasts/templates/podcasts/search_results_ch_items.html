@@ -45,8 +45,8 @@
             </p>
           {% endif %}
 
-           {% with hs=channel.channel_summary|highlight_sentence:q %}
-            <p class="summary-clamp mb-0">
+          {% with hs=channel.channel_summary|highlight_sentence:q %}
+            <p class="summary-clamp mb-2">
               {% if hs %}
                 {{ hs|safe }}
               {% else %}
@@ -54,6 +54,38 @@
               {% endif %}
             </p>
           {% endwith %}
+
+          <!-- Aggregated Data -->
+          <div class="d-flex align-items-center flex-wrap mt-1">
+            <span class="d-flex align-items-center me-3" title="{% trans 'Favorites' %}">
+              <i class="fa-solid fa-heart" style="font-size:1rem; margin-right:.25rem;"></i>
+              {{ channel.favorites_count|default:"0"|number_format }}
+            </span>
+
+            <span class="d-flex align-items-center me-3" title="{% trans 'Notifications' %}">
+              <i class="fa-solid fa-bell" style="font-size:1rem; margin-right:.25rem;"></i>
+              {{ channel.notifications_count|default:"0"|number_format }}
+            </span>
+
+            <span class="d-flex align-items-center me-3" title="{% trans 'Channel Rating' %}">
+              <i class="fa-solid fa-star" style="font-size:1rem; margin-right:.25rem;"></i>
+              {% if channel.avg_rating %}
+                {{ channel.avg_rating|floatformat:1 }} ({{ channel.rating_count|default:"0"|number_format }})
+              {% else %}
+                N/A
+              {% endif %}
+            </span>
+
+            <span class="d-flex align-items-center me-3" title="{% trans 'Total Views' %}">
+              <i class="fa-solid fa-eye" style="font-size:1rem; margin-right:.25rem;"></i>
+              {{ channel.total_views|default:"0"|number_format }}
+            </span>
+
+            <span class="d-flex align-items-center me-3" title="{% trans 'Total Episodes' %}">
+              <i class="fa-solid fa-podcast" style="font-size:1rem; margin-right:.25rem;"></i>
+              {{ channel.episode_count|default:"0"|number_format }}
+            </span>
+          </div>
         </div>
       </div>
     </a>
