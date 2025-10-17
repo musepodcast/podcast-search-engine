@@ -1927,14 +1927,16 @@ class SearchResultsView(LoginRequiredMixin, ListView):
         if search_type == 'channels':
             wants = self.request.GET.getlist('search_in')
             filters = []
-            if 'channel_title'  in wants:
+            if 'channel_title' in wants:
                 filters.append(Q(channel_title__icontains=q))
             if 'channel_author' in wants:
                 filters.append(Q(channel_author__icontains=q))
-            if 'channel_summary'in wants:
+            if 'channel_summary' in wants:
                 filters.append(Q(channel_summary__icontains=q))
 
             chans = Channel.objects.all()
+
+            # text filters
             if filters:
                 combined = filters.pop()
                 for f in filters:
@@ -1943,39 +1945,60 @@ class SearchResultsView(LoginRequiredMixin, ListView):
             else:
                 chans = chans.filter(channel_title__icontains=q)
 
+            # ── subqueries to avoid join duplication ─────────────────────────────
+            visits_sq = (
+                ChannelVisit.objects
+                .filter(channel=OuterRef('pk'))
+                .values('channel')
+                .annotate(total=Sum('count'))
+                .values('total')[:1]
+            )
+            episodes_sq = (
+                Episode.objects
+                .filter(channel=OuterRef('pk'))
+                .values('channel')
+                .annotate(c=Count('*'))
+                .values('c')[:1]
+            )
+
+            # ── aggregate annotations (match ChannelListView) ────────────────────
+            chans = (
+                chans
+                .annotate(
+                    total_views=Coalesce(Subquery(visits_sq, output_field=IntegerField()), 0),
+                    episode_count=Coalesce(Subquery(episodes_sq, output_field=IntegerField()), 0),
+
+                    # NOTE: use the correct related name: channel_interactions
+                    favorites_count=Count(
+                        'channel_interactions',
+                        filter=Q(channel_interactions__followed=True),
+                        distinct=True,
+                    ),
+                    notifications_count=Count(
+                        'channel_interactions',
+                        filter=Q(channel_interactions__notifications_enabled=True),
+                        distinct=True,
+                    ),
+                    avg_rating=Avg('channel_interactions__rating'),
+                    rating_count=Count(
+                        'channel_interactions__user',
+                        filter=Q(channel_interactions__rating__isnull=False),
+                        distinct=True,
+                    ),
+                )
+                # .distinct() not needed since we didn't join Episodes directly
+            )
+
+            # keep the payload lean if you like
+            chans = chans.only(
+                'id', 'channel_title', 'channel_author', 'channel_summary',
+                'channel_image_url', 'sanitized_channel_title'
+            )
+
             paginator = Paginator(chans, page_size)
             page_num  = int(self.request.GET.get('page', 1))
             page_obj  = paginator.get_page(page_num)
             return paginator, page_obj, list(page_obj.object_list), page_obj.has_other_pages()
-
-        # 3) EPISODES branch: decide ORM vs ES
-        if search_type == 'episodes':
-            wants     = set(self.request.GET.getlist('search_in'))
-            orm_fields = {'episode_title', 'description', 'channel_title'}
-            transcript_fields = {self.SEGMENT_FIELD, self.SEGMENT_ALIAS_FIELD, self.TRANSCRIPTS_FIELD}
-
-            # a) If the user only wants episode‑level fields (no transcripts), do pure‑ORM
-            if wants & orm_fields and wants.isdisjoint(transcript_fields):
-                filters = []
-                if 'episode_title' in wants:
-                    filters.append(Q(episode_title__icontains=q))
-                if 'description' in wants:
-                    filters.append(Q(description__icontains=q))
-                if 'channel_title' in wants:
-                    filters.append(Q(channel__channel_title__icontains=q))
-
-                if filters:
-                    combined   = filters.pop()
-                    for f in filters:
-                        combined |= f
-                    episodes_qs = Episode.objects.filter(combined).distinct()
-                else:
-                    episodes_qs = Episode.objects.filter(episode_title__icontains=q)
-
-                paginator = Paginator(episodes_qs, page_size)
-                page_num  = int(self.request.GET.get('page', 1))
-                page_obj  = paginator.get_page(page_num)
-                return paginator, page_obj, list(page_obj.object_list), page_obj.has_other_pages()
 
 
         # 4) FULL-TEXT / ELASTICSEARCH branch
