@@ -1888,8 +1888,8 @@ class EpisodeListView(ListView):
 
 class SearchResultsView(LoginRequiredMixin, ListView):
     login_url = 'podcasts:home'
-   
-       #––– Make these match your <input value="…"> in the form –––
+
+    # ––– Make these match your <input value="…"> in the form –––
     SEGMENT_FIELD        = 'segment_text'
     SEGMENT_ALIAS_FIELD  = 'transcript_text'
     TRANSCRIPTS_FIELD    = 'transcripts'
@@ -1903,19 +1903,37 @@ class SearchResultsView(LoginRequiredMixin, ListView):
         from .models import Episode
         return Episode.objects.none()
 
+    # ---------- helper: annotate Episode queryset with aggregates ----------
+    def _with_episode_stats(self, qs):
+        downloads_sq = (
+            EpisodeDownload.objects
+            .filter(episode=OuterRef('pk'))
+            .values('episode')
+            .annotate(total=Sum('count'))
+            .values('total')[:1]
+        )
+        return (
+            qs.annotate(
+                bookmarks_count=Count(
+                    'episode_interactions',
+                    filter=Q(episode_interactions__bookmarked=True),
+                    distinct=True
+                ),
+                comments_count=Count('comments', distinct=True),
+                ep_avg_rating=Avg('episode_interactions__rating'),
+                ep_rating_count=Count(
+                    'episode_interactions__user',
+                    filter=Q(episode_interactions__rating__isnull=False),
+                    distinct=True
+                ),
+                total_episode_views=Coalesce(Sum('episodevisit__count'), 0),
+                total_downloads=Coalesce(Subquery(downloads_sq, output_field=IntegerField()), Value(0)),
+            )
+        )
+
     def paginate_queryset(self, qs, page_size):
         from .models import Episode
 
-        """
-        1. If no `q`, fall back to default ListView pagination.
-        2. If `search_type=='channels'`, do a pure-ORM filter on Channel.
-        3. If `search_type=='episodes'` and any episode-fields are checked,
-           mirror the channel logic with Q-filters on Episode (including channel title).
-        4. Otherwise (full-text search), branch:
-           a) Transcript-only ES query if only transcript fields checked.
-           b) Multi-match ES query across EpisodeDocument.
-        """
- 
         q           = (self.request.GET.get('q', '') or '').strip()
         search_type = self.request.GET.get('search_type', 'episodes')
 
@@ -1923,7 +1941,7 @@ class SearchResultsView(LoginRequiredMixin, ListView):
         if not q:
             return super().paginate_queryset(qs, page_size)
 
-        # 2) CHANNELS branch (unchanged)
+        # 2) CHANNELS branch (unchanged except using correct related name)
         if search_type == 'channels':
             wants = self.request.GET.getlist('search_in')
             filters = []
@@ -1936,7 +1954,6 @@ class SearchResultsView(LoginRequiredMixin, ListView):
 
             chans = Channel.objects.all()
 
-            # text filters
             if filters:
                 combined = filters.pop()
                 for f in filters:
@@ -1945,7 +1962,6 @@ class SearchResultsView(LoginRequiredMixin, ListView):
             else:
                 chans = chans.filter(channel_title__icontains=q)
 
-            # ── subqueries to avoid join duplication ─────────────────────────────
             visits_sq = (
                 ChannelVisit.objects
                 .filter(channel=OuterRef('pk'))
@@ -1961,14 +1977,11 @@ class SearchResultsView(LoginRequiredMixin, ListView):
                 .values('c')[:1]
             )
 
-            # ── aggregate annotations (match ChannelListView) ────────────────────
             chans = (
                 chans
                 .annotate(
                     total_views=Coalesce(Subquery(visits_sq, output_field=IntegerField()), 0),
                     episode_count=Coalesce(Subquery(episodes_sq, output_field=IntegerField()), 0),
-
-                    # NOTE: use the correct related name: channel_interactions
                     favorites_count=Count(
                         'channel_interactions',
                         filter=Q(channel_interactions__followed=True),
@@ -1986,34 +1999,32 @@ class SearchResultsView(LoginRequiredMixin, ListView):
                         distinct=True,
                     ),
                 )
-                # .distinct() not needed since we didn't join Episodes directly
+            ).only(
+                'id', 'channel_title', 'channel_author', 'channel_summary',
+                'channel_image_url', 'sanitized_channel_title'
             )
-
-            # keep the payload lean if you like
+            # inside SearchResultsView.paginate_queryset(...), channels branch — just before paginator
             chans = chans.only(
                 'id', 'channel_title', 'channel_author', 'channel_summary',
                 'channel_image_url', 'sanitized_channel_title'
             )
+
+            # ✅ add a stable ordering to silence UnorderedObjectListWarning
+            chans = chans.order_by('channel_title', 'id')
 
             paginator = Paginator(chans, page_size)
             page_num  = int(self.request.GET.get('page', 1))
             page_obj  = paginator.get_page(page_num)
             return paginator, page_obj, list(page_obj.object_list), page_obj.has_other_pages()
 
-
-        # 4) FULL-TEXT / ELASTICSEARCH branch
-
-        # 4a) Optional date window
+        # 4) FULL-TEXT / ELASTICSEARCH (episodes)
         date_filter = self.request.GET.get('search_date', 'anytime')
         window = None
         if date_filter != 'anytime':
             days = int(date_filter)
-            window = (
-                timezone.timedelta(hours=24)
-                if days == 24
-                else timezone.timedelta(days=days)
-            )
-        # —— insert this block —— 
+            window = (timezone.timedelta(hours=24) if days == 24
+                      else timezone.timedelta(days=days))
+
         selected = set(self.request.GET.getlist('search_in'))
         transcript_only = [
             {self.SEGMENT_FIELD},
@@ -2021,20 +2032,16 @@ class SearchResultsView(LoginRequiredMixin, ListView):
             {self.TRANSCRIPTS_FIELD},
         ]
 
-        # ─── 4b) Transcript‑only ES query with phrase‑boost + recency sort ───
-        # (replace your existing transcript‑only block with this)
-
+        # 4b) Transcript-only ES query with phrase boost, then annotate
         selected = set(self.request.GET.getlist('search_in'))
         transcript_only = [{self.SEGMENT_FIELD}, {self.SEGMENT_ALIAS_FIELD}, {self.TRANSCRIPTS_FIELD}]
 
         if selected in transcript_only:
-            # 1) Pagination math
             page      = int(self.request.GET.get('page', 1))
             page_size = self.paginate_by
             start     = (page - 1) * page_size
             end       = start + page_size
 
-            # 2) Build the function_score: broad match + phrase boost
             broad_q  = ES_Q('match',        segment_text={'query': q, 'operator': 'or'})
             phrase_q = ES_Q('match_phrase', segment_text={'query': q})
 
@@ -2047,16 +2054,14 @@ class SearchResultsView(LoginRequiredMixin, ListView):
                     boost_mode='sum',
                     score_mode='sum'
                 )
-                # collapse segments into one hit per episode
                 .params(collapse={
                     'field': 'episode_id',
                     'inner_hits': {'name': 'top_segment', 'size': 1}
                 })
-                # sort by ES score only (we’ll tie‑break in Python)
                 .sort({'_score': 'desc'})
+                .extra(track_total_hits=True)
             )
 
-            # 3) Optional date window on the nested episode.publication_date
             if window:
                 tsearch = tsearch.filter(
                     'nested',
@@ -2068,38 +2073,30 @@ class SearchResultsView(LoginRequiredMixin, ListView):
                     }}
                 )
 
-            # 4) Execute the collapsed, scored query
             resp = tsearch[start:end].execute()
+            hits = resp.hits.hits
+            scored_ids = [(hit['_source']['episode_id'], hit['_score']) for hit in hits]
 
-            # 5) Extract episode IDs + ES‐scores
-            hits      = resp.hits.hits
-            scored_ids = [
-                (hit['_source']['episode_id'], hit['_score'])
-                for hit in hits
-            ]
+            # Pull & annotate, exclude empty channel slugs to avoid NoReverseMatch
+            episode_qs = self._with_episode_stats(
+                Episode.objects.filter(id__in=[eid for eid, _ in scored_ids])
+            ).select_related('channel') \
+             .prefetch_related('transcripts') \
+             .exclude(channel__sanitized_channel_title__isnull=True) \
+             .exclude(channel__sanitized_channel_title='')
 
-            # 6) Bulk fetch those Episode objects
-            episode_objs = Episode.objects.filter(
-                id__in=[eid for eid, _ in scored_ids]
-            ).select_related('channel').prefetch_related('transcripts')
-            id_map = {e.id: e for e in episode_objs}
+            id_map = {e.id: e for e in episode_qs}
 
-            # 7) Sort in Python by (ES score desc, publication_date desc)
-            scored_eps = [
-                (id_map[eid], score)
-                for eid, score in scored_ids
-                if eid in id_map
-            ]
+            scored_eps = [(id_map.get(eid), score) for eid, score in scored_ids if id_map.get(eid)]
             scored_eps.sort(
                 key=lambda pair: (
-                    -pair[1],                                 # higher score first
-                    -pair[0].publication_date.timestamp()     # newer date first
+                    -pair[1],
+                    -pair[0].publication_date.timestamp() if pair[0].publication_date else 0
                 )
             )
             page_list = [ep for ep, _ in scored_eps]
 
-            # 8) Paginate & return
-            total     = resp.hits.total.value
+            total     = resp.hits.total.value if hasattr(resp.hits, "total") else len(scored_eps)
             paginator = Paginator(range(total), page_size)
             try:
                 page_obj = paginator.page(page)
@@ -2108,23 +2105,11 @@ class SearchResultsView(LoginRequiredMixin, ListView):
 
             return paginator, page_obj, page_list, page_obj.has_other_pages()
 
-
-
-
-
-        # 4c) Multi‑match ES query with phrase boosting + date sort
-        from podcasts.search.documents import EpisodeDocument
-
+        # 4c) Multi-match ES across EpisodeDocument, then annotate
         es = EpisodeDocument.search()
-
-        # date‑window filter
         if window:
-            es = es.filter(
-                'range',
-                publication_date={'gte': timezone.now() - window}
-            )
+            es = es.filter('range', publication_date={'gte': timezone.now() - window})
 
-        # fields to search
         fields = [
             'episode_title',
             'description',
@@ -2134,39 +2119,17 @@ class SearchResultsView(LoginRequiredMixin, ListView):
             'full_transcript',
         ]
 
-        # 1) any-term multi-match
-        broad_q  = ES_Q(
-            'multi_match',
-            query=q,
-            fields=fields,
-            type='best_fields',
-            operator='or'
-        )
+        broad_q  = ES_Q('multi_match', query=q, fields=fields, type='best_fields', operator='or')
+        phrase_q = ES_Q('multi_match', query=q, fields=fields, type='phrase')
 
-        # 2) exact-phrase multi-match
-        phrase_q = ES_Q(
-            'multi_match',
-            query=q,
-            fields=fields,
-            type='phrase'
-        )
-
-        # 3) wrap in function_score to boost phrase hits
         es = es.query(
             'function_score',
             query=broad_q,
-            functions=[{
-                'filter': phrase_q,
-                'weight': 10
-            }],
+            functions=[{'filter': phrase_q, 'weight': 10}],
             boost_mode='sum',
             score_mode='sum'
-        )
+        ).sort({'_score': 'desc'}, {'publication_date': 'desc'})
 
-        # sort: 1) score (phrase first), 2) publication_date
-        es = es.sort({'_score': 'desc'}, {'publication_date': 'desc'})
-
-        # count + slice + execute
         total = es.count()
         page  = int(self.request.GET.get('page', 1))
         start = (page - 1) * page_size
@@ -2175,13 +2138,13 @@ class SearchResultsView(LoginRequiredMixin, ListView):
         resp = es[start:end].execute()
         ids  = [int(hit.meta.id) for hit in resp]
 
-        # ORM pull + paginate
-        episodes = (
-            Episode.objects
-                .filter(id__in=ids)
-                .select_related('channel')
-                .prefetch_related('transcripts')
-        )
+        episodes = self._with_episode_stats(
+            Episode.objects.filter(id__in=ids)
+        ).select_related('channel') \
+         .prefetch_related('transcripts') \
+         .exclude(channel__sanitized_channel_title__isnull=True) \
+         .exclude(channel__sanitized_channel_title='')
+
         id_map    = {e.id: e for e in episodes}
         page_list = [id_map[i] for i in ids if i in id_map]
 
@@ -2193,9 +2156,7 @@ class SearchResultsView(LoginRequiredMixin, ListView):
 
         return paginator, page_obj, page_list, page_obj.has_other_pages()
 
-
     def _compute_suggestions(self, q, limit=10):
-        # your existing episode‐based trigram code
         sims = (
             Episode.objects
                    .annotate(sim=TrigramSimilarity('episode_title', q))
@@ -2218,7 +2179,6 @@ class SearchResultsView(LoginRequiredMixin, ListView):
         return results
 
     def _compute_channel_suggestions(self, q, limit=10):
-        # new channel‐based trigram code
         sims = (
             Channel.objects
                    .annotate(sim=TrigramSimilarity('channel_title', q))
@@ -2258,15 +2218,12 @@ class SearchResultsView(LoginRequiredMixin, ListView):
             else:
                 ctx['did_you_mean'] = self._compute_suggestions(q)
 
-       
-
         return ctx
-    
+
     def get_context_object_name(self, object_list):
         if self.request.GET.get('search_type') == 'channels':
             return 'channels'
         return super().get_context_object_name(object_list)
-
 
     def render_to_response(self, context, **response_kwargs):
         search_type = self.request.GET.get('search_type','episodes')
@@ -2276,16 +2233,12 @@ class SearchResultsView(LoginRequiredMixin, ListView):
             tpl = ( search_type=='channels'
                     and 'podcasts/search_results_ch_items.html'
                     or 'podcasts/search_results_items.html' )
-            #logger.debug("→ Rendering AJAX with template %r", tpl)
             return render(self.request, tpl, context)
 
         tpl = ( search_type=='channels'
                 and 'podcasts/search_results_ch.html'
                 or 'podcasts/search_results.html' )
-        #logger.debug("→ Rendering non-AJAX with template %r", tpl)
         return render(self.request, tpl, context)
-
-
 
     def get(self, request, *args, **kwargs):
         # record non-AJAX searches
@@ -2321,6 +2274,7 @@ class SearchResultsView(LoginRequiredMixin, ListView):
             return HttpResponse('', status=200)
 
         return super().get(request, *args, **kwargs)
+
 
 
 class FavoritesListView(LoginRequiredMixin, ListView):
