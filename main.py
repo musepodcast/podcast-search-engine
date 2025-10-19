@@ -119,7 +119,6 @@ def convert_to_5min_wav_chunks(input_path, output_dir, chunk_length_ms=5*60*1000
         "-i", input_path,
         "-map", "0:a:0",
         "-c:a", "pcm_s16le",
-        # uncomment if you want to downsample to save space / speed up ASR
         # "-ar", "16000",
         # "-ac", "1",
         "-f", "segment",
@@ -655,117 +654,165 @@ def is_title_unique(new_title, chapters, model, similarity_threshold=0.6):
         logging.error(f"Error in uniqueness check: {e}", exc_info=True)
         return False
 
-def clean_title(title):
+# ===== Concise, Title-Cased, Sponsor-Filtered Chaptering (no profanity scrub) =====
+
+SMALL_WORDS = {"a","an","and","as","at","but","by","for","in","nor","of","on","or","per","so","the","to","via"}
+PRONOUN_STARTS = tuple(["i ", "i’m", "im ", "you ", "we ", "they "])  # lowercased compare
+
+# Common sponsor phrases to skip as chapters
+SPONSOR_PATTERNS = [
+    r"\bthis episode is brought to\b",
+    r"\bsponsored by\b",
+    r"\bpromo code\b",
+    r"\buse code\b",
+    r"\bvisit\s+\S+\.com\b",
+    r"\bgo to\s+\S+\.com\b",
+    r"\bour sponsor(s)?\b",
+    r"\bad\b\s*(break|read)\b",
+    r"\bhappy dad\b",
+    r"\bfarmers dog\b",
+    r"\bmanscaped\b",
+]
+
+def titlecase_compact(s: str) -> str:
+    s = re.sub(r"\s+", " ", s.strip())
+    words = s.split(" ")
+    if not words:
+        return s
+    out = []
+    for i, w in enumerate(words):
+        lw = w.lower()
+        if i != 0 and lw in SMALL_WORDS:
+            out.append(lw)
+        else:
+            out.append(w[:1].upper() + w[1:])
+    return " ".join(out)
+
+def is_sponsor_segment(text: str) -> bool:
+    t = " " + text.lower() + " "
+    for pat in SPONSOR_PATTERNS:
+        if re.search(pat, t):
+            return True
+    return False
+
+def compact_title_from_text(text: str, min_words=4, max_words=8) -> str:
     """
-    Clean the chapter title by removing unwanted characters,
-    ensuring proper punctuation and capitalization.
-    
-    Parameters:
-    - title (str): The chapter title to clean.
-    
-    Returns:
-    - str: Cleaned chapter title.
+    Fallback when the abstractive model meanders:
+    - pull top noun chunks / proper nouns via spaCy if available,
+    - else take informative words,
+    - clamp to [min_words, max_words] and Title Case.
+    """
+    text = re.sub(r"[\.\!\?]+", " ", text)
+    text = re.sub(r"\s+", " ", text).strip()
+    phrases = []
+
+    if nlp:
+        doc = nlp(text)
+        # prefer proper nouns first, then noun chunks
+        proper = [t.text for t in doc if t.pos_ == "PROPN"]
+        noun_chunks = [nc.text for nc in getattr(doc, "noun_chunks", [])]
+        candidates = proper + noun_chunks
+        seen = set()
+        for c in candidates:
+            c = c.strip()
+            if c and c.lower() not in seen and 2 <= len(c.split()) <= 5:
+                seen.add(c.lower())
+                phrases.append(c)
+    else:
+        toks = [w for w in re.findall(r"[A-Za-z0-9']+", text) if len(w) > 2]
+        phrases = toks[:max_words]
+
+    if phrases:
+        draft = f"{phrases[0]} — {phrases[1]}" if len(phrases) >= 2 else phrases[0]
+    else:
+        draft = text
+
+    words = draft.split()
+    if len(words) > max_words:
+        draft = " ".join(words[:max_words])
+    if len(words) < min_words:
+        src_words = re.findall(r"[A-Za-z0-9']+", text)
+        needed = min_words - len(words)
+        draft = (draft + " " + " ".join(src_words[:needed])).strip()
+
+    return titlecase_compact(draft)
+
+def preprocess_text(text):
+    """
+    Clean filler, normalize spaces, strip bracketed asides; DO NOT scrub profanity.
     """
     try:
-        # Remove unwanted characters except for periods, hyphens, and apostrophes
-        title = re.sub(r'[^\w\s\.-]', '', title)
-        
-        # Ensure the title ends with a period if not already punctuated
-        if not title.endswith('.'):
-            title += '.'
-        
-        # Capitalize the first letter of the title
-        title = title.capitalize()
-        
+        fillers = ['uh', 'um', 'you know', 'like', 'sort of', 'kind of']
+        pattern = re.compile(r'\b(' + '|'.join(map(re.escape, fillers)) + r')\b', flags=re.I)
+        text = pattern.sub('', text)
+        text = re.sub(r"[\[\(].*?[\]\)]", " ", text)  # [laughter], (applause), etc.
+        text = re.sub(r"[^\w\s\-\':\.]", " ", text)
+        text = re.sub(r"\s+", " ", text).strip()
+        return text
+    except Exception as e:
+        logging.error(f"Error preprocessing text: {e}", exc_info=True)
+        return text
+
+def clean_title(title):
+    """
+    Normalize: cut messy endings, Title Case (no trailing period forcing).
+    """
+    try:
+        title = title.strip().strip('"').strip("'")
+        if re.search(r"[\.!?]\s", title):
+            title = re.split(r"[\.!?]\s", title)[0]
+        title = re.sub(r"\s+", " ", title).strip()
+        title = titlecase_compact(title)
         return title
     except Exception as e:
         logging.error(f"Error cleaning title '{title}': {e}", exc_info=True)
-        return title  # Return the original title if cleaning fails
+        return title
 
 def is_title_valid(title, config):
     """
-    Validate the generated chapter title based on predefined criteria.
-    
-    Parameters:
-    - title (str): The chapter title to validate.
-    - config (dict): Configuration parameters from config.yaml.
-    
-    Returns:
-    - bool: True if the title is valid, False otherwise.
+    Enforce concise, topical titles; avoid first-person rambles and sponsor reads.
     """
     try:
-        # Check for minimum word count
-        word_count = len(title.split())
-        if word_count < config['summarizer']['min_length']:
-            logging.debug(f"Title '{title}' rejected for insufficient word count: {word_count} words.")
+        t = title.strip()
+        t_low = t.lower()
+        rules = config.get('chapter_generation', {}).get('title', {})
+        min_words = int(rules.get('min_words', 4))
+        max_words = int(rules.get('max_words', 8))
+
+        wc = len(t.split())
+        if wc < min_words or wc > max_words:
             return False
-        
-        # Check for excessive punctuation (allowing periods, hyphens, and apostrophes)
-        if re.search(r'[^\w\s\.-]', title):
-            logging.debug(f"Title '{title}' rejected for containing unwanted characters.")
+
+        if t_low.startswith(PRONOUN_STARTS):
             return False
-        
-        # Check for presence of at least one noun or named entity
-        # This requires spaCy's NLP pipeline to be initialized
+
+        if is_sponsor_segment(t):
+            return False
+
         if nlp:
-            doc = nlp(title)
-            has_noun = any(token.pos_ in ['NOUN', 'PROPN'] for token in doc)
-            if not has_noun:
-                logging.debug(f"Title '{title}' rejected for lacking nouns or proper nouns.")
+            doc = nlp(t)
+            if not any(tok.pos_ in ('NOUN','PROPN') for tok in doc):
                 return False
-        else:
-            logging.warning("spaCy model is not available for POS tagging.")
-        
+
         return True
     except Exception as e:
         logging.error(f"Error validating title '{title}': {e}", exc_info=True)
         return False  # Reject the title if validation fails
 
-def preprocess_text(text):
-    """
-    Preprocess the input text by removing filler words and unnecessary spaces.
-    
-    Parameters:
-    - text (str): The text to preprocess.
-    
-    Returns:
-    - str: Cleaned text.
-    """
-    try:
-        # Remove filler words like "uh", "um", "like", "you know"
-        fillers = ['uh', 'um', 'like', 'you know']
-        pattern = re.compile(r'\b(' + '|'.join(fillers) + r')\b', flags=re.I)
-        text = pattern.sub('', text)
-        
-        # Remove extra spaces
-        text = re.sub(' +', ' ', text)
-        
-        return text.strip()
-    except Exception as e:
-        logging.error(f"Error preprocessing text: {e}", exc_info=True)
-        return text  # Return the original text if preprocessing fails
-
 def verify_entities(title, segment_text):
     """
     Verify that the entities in the title are present in the segment text.
-    
-    Parameters:
-    - title (str): The chapter title.
-    - segment_text (str): The original transcript segment.
-    
-    Returns:
-    - bool: True if entities are verified, False otherwise.
     """
     if not nlp:
         logging.warning("spaCy model is not available for entity verification.")
-        return True  # Skip verification if spaCy is not available
+        return True
     try:
         title_doc = nlp(title)
         segment_doc = nlp(segment_text)
         title_entities = set([ent.text.lower() for ent in title_doc.ents])
         segment_entities = set([ent.text.lower() for ent in segment_doc.ents])
         if not title_entities:
-            return True  # No entities to verify
+            return True
         verified = bool(title_entities & segment_entities)
         logging.debug(f"Entity verification: {verified} for title '{title}'")
         return verified
@@ -775,60 +822,64 @@ def verify_entities(title, segment_text):
 
 def generate_chapter_title(segment_text, config=None):
     """
-    Generate a descriptive chapter title from a segment's text using the summarizer.
-    
-    Parameters:
-    - segment_text (str): The text of the transcript segment.
-    - config (dict): Configuration parameters from config.yaml.
-    
-    Returns:
-    - str or None: Generated chapter title if valid, None otherwise.
+    Generate a concise, topic-style chapter title (4–8 words).
+    Skips sponsor segments. Uses summarizer → compact → validate → fallback NP builder.
     """
     try:
         if not summarizer:
             logging.error("Summarization pipeline is not available.")
             return None
 
-        # Preprocess text
+        rules = config.get('chapter_generation', {}).get('title', {}) if config else {}
+        min_words = int(rules.get('min_words', 4))
+        max_words = int(rules.get('max_words', 8))
+        drop_sponsors = bool(rules.get('drop_sponsor_segments', True))
+
+        if not segment_text or not segment_text.strip():
+            return None
+        if drop_sponsors and is_sponsor_segment(segment_text):
+            logging.info("Skipping sponsor segment for chapter generation.")
+            return None
+
         segment_text = preprocess_text(segment_text)
 
-        # Truncate text if too long (adjust max_length as needed)
-        max_input_length = 1024  # or use summarizer.model.config.max_position_embeddings if available
+        # Truncate input for focus
+        max_input_length = 1024
         if len(segment_text) > max_input_length:
             segment_text = segment_text[:max_input_length]
 
-        # Generate summary using the summarizer with enhanced parameters to reduce hallucinations
-        summary = summarizer(
+        # Summarize succinctly
+        raw = summarizer(
             segment_text,
             max_length=config['summarizer']['max_length'],
             min_length=config['summarizer']['min_length'],
             do_sample=False,
-            num_beams=6,  # Increased from 4 to allow more beams for better accuracy
-            no_repeat_ngram_size=3,  # Increased from 2 to reduce repetition
-            length_penalty=2.0,  # Encourages shorter summaries
+            num_beams=4,
+            no_repeat_ngram_size=3,
+            length_penalty=2.0,
             early_stopping=True
         )[0]['summary_text']
-        
-        # Clean and format title
-        title = clean_title(summary)
-        
-        # Validate the title
+
+        draft = re.sub(r"\s+", " ", raw.strip())
+        words = draft.split()
+        if len(words) > max_words:
+            draft = " ".join(words[:max_words])
+        if len(words) < min_words or draft.lower().startswith(PRONOUN_STARTS):
+            draft = compact_title_from_text(segment_text, min_words=min_words, max_words=max_words)
+
+        title = clean_title(draft)
+
+        # Relevance sanity check
+        title_similarity = compute_similarity(sentence_model, title, segment_text) if sentence_model else 1.0
+        if title_similarity < 0.20:
+            title = clean_title(compact_title_from_text(segment_text, min_words=min_words, max_words=max_words))
+
         if not is_title_valid(title, config):
-            logging.debug(f"Invalid chapter title generated: '{title}'. Skipping.")
             return None
-        
-        # Additional similarity check between title and segment to ensure relevance
-        title_similarity = compute_similarity(sentence_model, title, segment_text)
-        if title_similarity < 0.2:  # Threshold can be adjusted based on experimentation
-            logging.debug(f"Title '{title}' has low similarity ({title_similarity}) with segment. Skipping.")
-            return None
-        
-        # Verify entities to reduce hallucinations
+
         if not verify_entities(title, segment_text):
-            logging.debug(f"Entities in title '{title}' are not present in segment. Skipping.")
             return None
-        
-        logging.debug(f"Generated Chapter Title: {title} with similarity {title_similarity}")
+
         return title
     except Exception as e:
         logging.error(f"Error generating chapter title: {e}", exc_info=True)
@@ -891,12 +942,15 @@ def add_chapters_to_transcript(transcript_json_path, config):
                 break
             start_time = segments[start_segment_idx].get('start', 0)  # Start time in seconds
 
-            if idx == 0:
-                # The first aggregation window corresponds to the beginning, already covered by "Intro"
-                # Depending on your preference, you can choose to skip or include it
-                # Here, we'll process it normally to generate a chapter
-                pass  # No action needed
+            # Sponsor skip gate BEFORE any similarity/summary work
+            rules = config.get('chapter_generation', {}).get('title', {})
+            if bool(rules.get('drop_sponsor_segments', True)) and is_sponsor_segment(aggregated_text):
+                logging.info("Skipping sponsor/advertising window.")
+                continue
 
+            if idx == 0:
+                # process normally if you want a chapter right after intro
+                pass
             else:
                 # Compute similarity with the previous aggregation window
                 similarity = compute_similarity(sentence_model, aggregated_texts[idx], aggregated_texts[idx -1])
@@ -1020,9 +1074,17 @@ def parse_cli_args():
     parser.add_argument('-n', '--limit', type=int, default=None,
                         help='Max entries per feed (default: all)')
 
-    # NEW: restart hours (e.g. -r 24 runs the whole list every 24 hours)
+    # NEW: restart interval (prefer seconds for test convenience; hours still supported)
     parser.add_argument('-r', '--restart-hours', type=float, default=None,
-                        help='If set, re-run the entire feed list from the top every N hours (e.g., 24).')
+                        help='If set, re-run the entire feed list from the top every N hours.')
+    parser.add_argument('--restart-seconds', type=float, default=None,
+                        help='Like --restart-hours, but in seconds (useful for testing).')
+
+    # TEST-ONLY simulation knobs to avoid long real runs
+    parser.add_argument('--simulate-feed-secs', type=float, default=0.0,
+                        help='TEST ONLY: sleep this many seconds at the start of each feed to simulate work.')
+    parser.add_argument('--simulate-entry-secs', type=float, default=0.0,
+                        help='TEST ONLY: sleep this many seconds for each entry to simulate work.')
 
     args, unknown = parser.parse_known_args()
 
@@ -1070,8 +1132,8 @@ def process_entry(entry, channel_transcript_dir, download_dir, channel_title, pi
                 return  # Skip to the next entry
         else:
             logging.info(f"MP3 file already exists: {mp3_file_path}")
-                # Create fixed-length WAV chunks directly from the MP3
 
+        # Create fixed-length WAV chunks directly from the MP3
         chunks = convert_to_5min_wav_chunks(
             mp3_file_path,
             download_dir,
@@ -1289,8 +1351,16 @@ def process_entry(entry, channel_transcript_dir, download_dir, channel_title, pi
     except Exception as e:
         logging.error(f"An error occurred while processing entry '{sanitized_title}': {e}", exc_info=True)
 
-# ── 3a) Legacy Main Function ────────────────────────────────
-def run_cycle(feeds_filename='master_rss.json', limit_per_feed=0):
+# ── 3a) Legacy Main Function — NOW deadline-aware and testable ──────────────
+def run_cycle(feeds_filename='master_rss.json', limit_per_feed=0,
+              deadline_mono=None, simulate_feed_secs=0.0, simulate_entry_secs=0.0):
+    """
+    Returns True if the entire feeds list was processed (full pass),
+    or False if aborted early due to time budget (deadline_mono).
+    """
+    def _deadline_hit():
+        return (deadline_mono is not None) and (time.monotonic() >= deadline_mono)
+
     # pick the feeds file
     master_file = DATABASE_ROOT / "watcher_json" / feeds_filename
     try:
@@ -1298,7 +1368,7 @@ def run_cycle(feeds_filename='master_rss.json', limit_per_feed=0):
             master = json.load(f)
     except FileNotFoundError:
         logging.critical(f"Could not find {master_file}; run update_master_rss.py first.")
-        return
+        return True  # treat as "full" so we don't loop forever on a missing file
 
     logging.info(f"🔧 Feeds file: {master_file.name} | Entry limit per feed: "
                  f"{'ALL' if not limit_per_feed or limit_per_feed <= 0 else limit_per_feed}")
@@ -1313,14 +1383,24 @@ def run_cycle(feeds_filename='master_rss.json', limit_per_feed=0):
     diarization_pipeline = initialize_diarization_pipeline()
     if not diarization_pipeline:
         logging.critical("Diarization pipeline failed to initialize. Exiting.")
-        return
+        return False
 
     if not summarizer:
         logging.critical("Summarization pipeline is not available. Exiting.")
-        return
+        return False
 
-    for feed_url in podcast_feeds:
-        logging.info(f"Processing feed: {feed_url}")
+    full_pass = True  # assume success unless we abort early
+
+    for feed_idx, feed_url in enumerate(podcast_feeds, start=1):
+        if _deadline_hit():
+            logging.warning(f"⏰ Time budget exhausted before feed {feed_idx}/{len(podcast_feeds)}; aborting pass.")
+            full_pass = False
+            break
+
+        if simulate_feed_secs > 0:
+            time.sleep(simulate_feed_secs)
+
+        logging.info(f"[{feed_idx}/{len(podcast_feeds)}] Processing feed: {feed_url}")
 
         feed = parse_feed(feed_url)
         if not feed:
@@ -1333,7 +1413,6 @@ def run_cycle(feeds_filename='master_rss.json', limit_per_feed=0):
             failed_feeds.append(feed_url)
             continue
 
-        # Parse metadata once per feed
         feed_data = parse_podcast_feed(feed_url)
         if not feed_data:
             logging.error(f"Failed to parse feed data for: {feed_url}")
@@ -1351,9 +1430,6 @@ def run_cycle(feeds_filename='master_rss.json', limit_per_feed=0):
         channel_transcript_dir = os.path.join(base_transcript_dir, sanitized_channel_title, source_lang)
         os.makedirs(channel_transcript_dir, exist_ok=True)
 
-        logging.info(f"Number of entries found: {len(entries)}")
-
-        # >>> HERE is the per-feed limit <<<
         if limit_per_feed and limit_per_feed > 0:
             entries_to_process = entries[:limit_per_feed]
         else:
@@ -1361,12 +1437,25 @@ def run_cycle(feeds_filename='master_rss.json', limit_per_feed=0):
 
         logging.info(f"Will process {len(entries_to_process)} entries for this feed.")
 
-        for entry in entries_to_process:
+        for entry_idx, entry in enumerate(entries_to_process, start=1):
+            if _deadline_hit():
+                logging.warning(
+                    f"⏰ Time budget exhausted mid-feed on entry {entry_idx}/{len(entries_to_process)}; aborting pass."
+                )
+                full_pass = False
+                break
+
+            if simulate_entry_secs > 0:
+                time.sleep(simulate_entry_secs)
+
             logging.debug(f"Starting processing for entry: {entry.get('title', 'No Title')}")
             process_entry(
                 entry, channel_transcript_dir, download_dir, channel_title,
                 diarization_pipeline, config, feed_data, channel_summary, channel_author
             )
+
+        if not full_pass:
+            break
 
     failed_dir = DATABASE_ROOT / "watcher_json"
     failed_dir.mkdir(parents=True, exist_ok=True)
@@ -1375,48 +1464,65 @@ def run_cycle(feeds_filename='master_rss.json', limit_per_feed=0):
         json.dump(failed_feeds, f, indent=2, ensure_ascii=False)
     logging.info(f"Saved {len(failed_feeds)} failed feeds to {failed_file}")
 
-    logging.info("All feeds processed. Running translation script...")
-    try:
-        subprocess.run(["python", "translate.py"], check=True)
-        logging.info("Translation script completed successfully.")
-    except Exception as e:
-        logging.error(f"Translation script failed: {e}")
+    # Only run translate when we actually finished the whole pass
+    if full_pass:
+        logging.info("All feeds processed. Running translation script...")
+        try:
+            subprocess.run(["python", "translate.py"], check=True)
+            logging.info("Translation script completed successfully.")
+        except Exception as e:
+            logging.error(f"Translation script failed: {e}")
+    else:
+        logging.info("Partial pass; skipping translation this cycle.")
 
-# ── 3b) New main(...) adds optional restart loop ─────────────────────────────
-def main(feeds_filename='master_rss.json', limit_per_feed=0, restart_hours=None):
+    return full_pass
+
+# ── 3b) New main(...) with hard deadline + fixed cadence ────────────────────
+def main(feeds_filename='master_rss.json', limit_per_feed=0, interval_seconds=None,
+         simulate_feed_secs=0.0, simulate_entry_secs=0.0):
     """
-    Run once (default), or repeat from the top every `restart_hours` with a fixed cadence.
+    Run once (default), or repeat from the top every `interval_seconds`.
+    Each cycle has a hard time budget: once the deadline hits, the pass aborts
+    and the next cycle restarts from the top of the feeds file.
     """
     # One pass (current behavior)
-    if restart_hours is None or restart_hours <= 0:
-        return run_cycle(feeds_filename, limit_per_feed)
+    if not interval_seconds or interval_seconds <= 0:
+        _ = run_cycle(feeds_filename, limit_per_feed,
+                      deadline_mono=None,
+                      simulate_feed_secs=simulate_feed_secs,
+                      simulate_entry_secs=simulate_entry_secs)
+        return
 
-    # Fixed-cadence repeats using time.monotonic() to avoid clock drift
-    interval = float(restart_hours) * 3600.0
     cycle = 1
-    next_tick = time.monotonic()  # start immediately
-
+    next_tick = time.monotonic()  # schedule-based cadence
     while True:
         start_wall = datetime.now().isoformat(timespec='seconds')
         start_mono = time.monotonic()
-        logging.info(
-            f"=== Cycle {cycle} start @ {start_wall} (interval={restart_hours}h) ==="
-        )
+        deadline_mono = start_mono + interval_seconds
+
+        logging.info(f"=== Cycle {cycle} start @ {start_wall} (budget={interval_seconds/3600:.2f}h) ===")
 
         try:
-            run_cycle(feeds_filename, limit_per_feed)
+            full_pass = run_cycle(
+                feeds_filename,
+                limit_per_feed,
+                deadline_mono=deadline_mono,
+                simulate_feed_secs=simulate_feed_secs,
+                simulate_entry_secs=simulate_entry_secs
+            )
         except Exception:
             logging.exception("Cycle crashed; continuing to the next scheduled run.")
+            full_pass = False
 
-        # Preserve cadence: schedule next run exactly interval seconds after the previous tick
-        next_tick += interval
+        # Keep fixed cadence relative to prior scheduled tick
+        next_tick += interval_seconds
         now = time.monotonic()
         delay = max(0.0, next_tick - now)
         elapsed = now - start_mono
         next_wall = (datetime.now() + timedelta(seconds=delay)).isoformat(timespec='seconds')
 
         logging.info(
-            f"=== Cycle {cycle} complete in {elapsed/3600:.2f}h. "
+            f"=== Cycle {cycle} complete in {elapsed/3600:.2f}h (full_pass={full_pass}). "
             f"Next run in {delay/3600:.2f}h @ {next_wall} ==="
         )
 
@@ -1437,16 +1543,30 @@ if __name__ == "__main__":
             or ("master_rss_mini.json" if args.master_rss_mini else "master_rss.json")
         )
         limit = args.limit or 0  # 0/None = ALL
-        restart_hours = args.restart_hours
+
+        # Resolve restart interval (seconds has priority if both provided)
+        if args.restart_seconds is not None and args.restart_hours is not None:
+            logging.warning("Both --restart-hours and --restart-seconds provided; using seconds.")
+
+        if args.restart_seconds is not None:
+            interval_seconds = float(args.restart_seconds)
+        elif args.restart_hours is not None:
+            interval_seconds = float(args.restart_hours) * 3600.0
+        else:
+            interval_seconds = None
 
         logging.info(
-            f"CLI parsed → feeds={feeds_filename}, limit={limit}, restart_hours={restart_hours}"
+            f"CLI parsed → feeds={feeds_filename}, limit={limit}, "
+            f"interval_seconds={interval_seconds}, simulate_feed_secs={args.simulate_feed_secs}, "
+            f"simulate_entry_secs={args.simulate_entry_secs}"
         )
 
         main(
             feeds_filename=feeds_filename,
             limit_per_feed=limit,
-            restart_hours=restart_hours
+            interval_seconds=interval_seconds,
+            simulate_feed_secs=args.simulate_feed_secs,
+            simulate_entry_secs=args.simulate_entry_secs
         )
 
     except KeyboardInterrupt:
