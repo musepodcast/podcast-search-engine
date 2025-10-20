@@ -658,21 +658,138 @@ def is_title_unique(new_title, chapters, model, similarity_threshold=0.6):
 
 SMALL_WORDS = {"a","an","and","as","at","but","by","for","in","nor","of","on","or","per","so","the","to","via"}
 PRONOUN_STARTS = tuple(["i ", "i’m", "im ", "you ", "we ", "they "])  # lowercased compare
+BOUNDARY_TOKENS = {'.', '!', '?', '…', '—', '–', ';', ':'}
+TRAILING_BAD = {
+    # Coordinators / discourse
+    "and","or","but","so","yet","nor",
+
+    # Prepositions & particles
+    "to","of","for","with","without","about","above","across","after","against",
+    "along","among","around","as","at","before","behind","below","beneath",
+    "beside","besides","between","beyond","by","down","during","except","from",
+    "in","inside","into","like","near","off","on","onto","out","outside","over",
+    "past","per","since","through","throughout","till","toward","towards",
+    "under","underneath","until","up","upon","via","within","versus","vs",
+
+    # Subordinators / WH-words / comparatives
+    "that","which","who","whom","whose","what","when","where","why","how",
+    "if","though","although","because","unless","while","whereas","than",
+
+    # Determiners / quantifiers
+    "a","an","the","this","that","these","those","each","every","either",
+    "neither","some","any","no","none","both","few","many","much","more",
+    "most","several","such","another","other","others","own",
+
+    # Pronouns
+    "i","you","we","they","he","she","it","me","us","them","him","her",
+    "my","your","our","their","mine","yours","ours","theirs","his","hers","its",
+
+    # Auxiliaries / copula
+    "am","is","are","was","were","be","been","being",
+    "do","does","did","doing",
+    "have","has","had","having",
+
+    # Modals
+    "will","would","shall","should","can","could","may","might","must",
+
+    # Negation
+    "not","n't",
+
+    # Contractions (ASCII & curly apostrophes)
+    "i'm","you're","we're","they're","he's","she's","it's","that's","there's","who's",
+    "i've","you've","we've","they've","would've","could've","should've","must've",
+    "i'd","you'd","we'd","they'd","he'd","she'd","it'd","there'd",
+    "i'll","you'll","we'll","they'll","he'll","she'll","it'll","there'll",
+    "'s","'re","'ve","'d","'ll","’s","’re","’ve","’d","’ll",
+
+    # Misc. weak enders
+    "etc","&"
+}
 
 # Common sponsor phrases to skip as chapters
 SPONSOR_PATTERNS = [
-    r"\bthis episode is brought to\b",
+    r"\bthis episode (is|was)\s+(brought to you by|brought to|presented by)\b",
     r"\bsponsored by\b",
-    r"\bpromo code\b",
-    r"\buse code\b",
-    r"\bvisit\s+\S+\.com\b",
-    r"\bgo to\s+\S+\.com\b",
-    r"\bour sponsor(s)?\b",
-    r"\bad\b\s*(break|read)\b",
-    r"\bhappy dad\b",
-    r"\bfarmers dog\b",
+    r"\bad(vertisement)?\s*(break|read)?\b",
+    r"\bpromo\s*code\b",
+    r"\b(use|enter)\s+code\s+[A-Za-z0-9\-]+\b",
+    r"\bhappy\s+dad\b",
+    r"\bfarmers?\s+dog\b",
     r"\bmanscaped\b",
+    r"\bnord\s?vpn\b",
+    r"\bsquarespace\b",
+    r"\baudible\b",
+    r"\bshopify\b",
+    r"\bbetterhelp\b",
+    r"\b(raid\s+shadow\s+legends|raycon|hellofresh)\b",
+    r"\bchumba\s+casino\b",
 ]
+
+DOMAIN_RE = re.compile(r"\b([a-z0-9\-]+\.)+(com|net|org|io|co|tv|fm)\b", re.I)
+URLISH_RE = re.compile(r"https?://|www\.", re.I)
+CTA_RE = re.compile(r"\b(click|tap|visit|use|enter|subscribe|follow|download|learn more|shop now)\b", re.I)
+
+def aggregate_segments_with_stride(segments, window_size=30, stride=None):
+    """
+    Aggregate segments with overlap to create more candidate windows.
+    Default stride is half the window size.
+    Returns: list[dict] with {"text": str, "start": float}
+    """
+    if not segments:
+        return []
+
+    if stride is None or stride <= 0:
+        stride = max(1, window_size // 2)
+
+    windows = []
+    i = 0
+    while i < len(segments):
+        window = segments[i:i + window_size]
+        if not window:
+            break
+        text = " ".join(seg.get("text", "") for seg in window).strip()
+        start = float(window[0].get("start", 0.0))
+        windows.append({"text": text, "start": start})
+        if i + window_size >= len(segments):
+            break
+        i += stride
+    return windows
+
+
+def clamp_to_complete_phrase(text: str, min_words: int, max_words: int) -> str:
+    """
+    Prefer the first full sentence; if too long, cut at a natural boundary (., !, ?)
+    within a small headroom past max_words. Trim dangling function words at the end.
+    """
+    t = re.sub(r'\s+', ' ', text or '').strip()
+    if not t:
+        return t
+
+    # 1) take the first full sentence if we can
+    if nltk:
+        sents = nltk.sent_tokenize(t)
+    else:
+        sents = re.split(r'(?<=[\.\!\?])\s+', t)
+    first = (sents[0] if sents else t).strip()
+
+    words = first.split()
+    if min_words <= len(words) <= max_words:
+        while words and words[-1].lower() in TRAILING_BAD:
+            words.pop()
+        return ' '.join(words)
+
+    # 2) too long → search for punctuation boundary inside a headroom window
+    window_words = t.split()
+    window = ' '.join(window_words[:max_words + 8])  # small headroom to find punctuation
+    m = re.search(r'(.+?[\.\!\?])(\s|$)', window)
+    candidate = (m.group(1) if m else ' '.join(window_words[:max_words])).strip()
+
+    cand_words = candidate.split()
+    while cand_words and cand_words[-1].lower() in TRAILING_BAD:
+        cand_words.pop()
+    if len(cand_words) < min_words:
+        cand_words = window_words[:min_words]
+    return ' '.join(cand_words)
 
 def titlecase_compact(s: str) -> str:
     s = re.sub(r"\s+", " ", s.strip())
@@ -689,18 +806,23 @@ def titlecase_compact(s: str) -> str:
     return " ".join(out)
 
 def is_sponsor_segment(text: str) -> bool:
-    t = " " + text.lower() + " "
+    t = " " + (text or "").lower() + " "
     for pat in SPONSOR_PATTERNS:
-        if re.search(pat, t):
+        if re.search(pat, t, flags=re.I):
             return True
     return False
+
+def is_promotional_title(title: str) -> bool:
+    """Reject titles that *look* like ad reads."""
+    t = title.strip().lower()
+    return is_sponsor_segment(t)
 
 def compact_title_from_text(text: str, min_words=4, max_words=8) -> str:
     """
     Fallback when the abstractive model meanders:
-    - pull top noun chunks / proper nouns via spaCy if available,
-    - else take informative words,
-    - clamp to [min_words, max_words] and Title Case.
+    - prefer proper-noun phrases / noun chunks,
+    - avoid dangling fragments,
+    - clamp to complete phrase and Title Case.
     """
     text = re.sub(r"[\.\!\?]+", " ", text)
     text = re.sub(r"\s+", " ", text).strip()
@@ -708,14 +830,13 @@ def compact_title_from_text(text: str, min_words=4, max_words=8) -> str:
 
     if nlp:
         doc = nlp(text)
-        # prefer proper nouns first, then noun chunks
         proper = [t.text for t in doc if t.pos_ == "PROPN"]
         noun_chunks = [nc.text for nc in getattr(doc, "noun_chunks", [])]
         candidates = proper + noun_chunks
         seen = set()
         for c in candidates:
             c = c.strip()
-            if c and c.lower() not in seen and 2 <= len(c.split()) <= 5:
+            if c and c.lower() not in seen and 2 <= len(c.split()) <= 6:
                 seen.add(c.lower())
                 phrases.append(c)
     else:
@@ -723,18 +844,17 @@ def compact_title_from_text(text: str, min_words=4, max_words=8) -> str:
         phrases = toks[:max_words]
 
     if phrases:
-        draft = f"{phrases[0]} — {phrases[1]}" if len(phrases) >= 2 else phrases[0]
+        left = phrases[0]
+        right = phrases[1] if len(phrases) >= 2 else ""
+        # only join when both sides look like solid phrases
+        if right and 2 <= len(left.split()) <= 6 and 2 <= len(right.split()) <= 6:
+            draft = f"{left}: {right}"
+        else:
+            draft = left
     else:
         draft = text
 
-    words = draft.split()
-    if len(words) > max_words:
-        draft = " ".join(words[:max_words])
-    if len(words) < min_words:
-        src_words = re.findall(r"[A-Za-z0-9']+", text)
-        needed = min_words - len(words)
-        draft = (draft + " " + " ".join(src_words[:needed])).strip()
-
+    draft = clamp_to_complete_phrase(draft, min_words, max_words)
     return titlecase_compact(draft)
 
 def preprocess_text(text):
@@ -755,15 +875,12 @@ def preprocess_text(text):
 
 def clean_title(title):
     """
-    Normalize: cut messy endings, Title Case (no trailing period forcing).
+    Normalize spacing and Title Case (do NOT force dropping punctuation or add periods).
     """
     try:
-        title = title.strip().strip('"').strip("'")
-        if re.search(r"[\.!?]\s", title):
-            title = re.split(r"[\.!?]\s", title)[0]
+        title = (title or "").strip().strip('"').strip("'")
         title = re.sub(r"\s+", " ", title).strip()
-        title = titlecase_compact(title)
-        return title
+        return titlecase_compact(title)
     except Exception as e:
         logging.error(f"Error cleaning title '{title}': {e}", exc_info=True)
         return title
@@ -821,10 +938,6 @@ def verify_entities(title, segment_text):
         return False
 
 def generate_chapter_title(segment_text, config=None):
-    """
-    Generate a concise, topic-style chapter title (4–8 words).
-    Skips sponsor segments. Uses summarizer → compact → validate → fallback NP builder.
-    """
     try:
         if not summarizer:
             logging.error("Summarization pipeline is not available.")
@@ -837,6 +950,7 @@ def generate_chapter_title(segment_text, config=None):
 
         if not segment_text or not segment_text.strip():
             return None
+
         if drop_sponsors and is_sponsor_segment(segment_text):
             logging.info("Skipping sponsor segment for chapter generation.")
             return None
@@ -860,19 +974,35 @@ def generate_chapter_title(segment_text, config=None):
             early_stopping=True
         )[0]['summary_text']
 
-        draft = re.sub(r"\s+", " ", raw.strip())
+        # Ensure we end a sentence (finish the thought), then compact
+        raw = re.sub(r"\s+", " ", raw.strip())
+        # If the model stopped mid-sentence, cut back to last terminal punctuation.
+        if not re.search(r"[\.!?]$", raw):
+            cut = re.search(r".*[\.!?]", raw)
+            if cut:
+                raw = cut.group(0)
+
+        draft = raw
         words = draft.split()
         if len(words) > max_words:
             draft = " ".join(words[:max_words])
-        if len(words) < min_words or draft.lower().startswith(PRONOUN_STARTS):
+
+        if len(draft.split()) < min_words or draft.lower().startswith(PRONOUN_STARTS):
             draft = compact_title_from_text(segment_text, min_words=min_words, max_words=max_words)
 
         title = clean_title(draft)
+
+        # Hard block promo-ish titles
+        if is_promotional_title(title):
+            logging.debug(f"Rejecting promotional-looking title: {title}")
+            return None
 
         # Relevance sanity check
         title_similarity = compute_similarity(sentence_model, title, segment_text) if sentence_model else 1.0
         if title_similarity < 0.20:
             title = clean_title(compact_title_from_text(segment_text, min_words=min_words, max_words=max_words))
+            if is_promotional_title(title):
+                return None
 
         if not is_title_valid(title, config):
             return None
@@ -883,7 +1013,8 @@ def generate_chapter_title(segment_text, config=None):
         return title
     except Exception as e:
         logging.error(f"Error generating chapter title: {e}", exc_info=True)
-        return None  # Return None to indicate failure
+        return None
+
 
 def aggregate_segments_non_overlapping(segments, window_size=5):
     """
@@ -904,16 +1035,15 @@ def aggregate_segments_non_overlapping(segments, window_size=5):
     return aggregated_texts
 
 def add_chapters_to_transcript(transcript_json_path, config):
-    """
-    Add chapters to the transcript JSON based on summarization.
-    
-    Parameters:
-    - transcript_json_path (str): Path to the transcript JSON file.
-    - config (dict): Configuration parameters.
-    """
     similarity_threshold = config['chapter_generation']['similarity_threshold']
     max_chapters = config['chapter_generation']['max_chapters']
     aggregation_window_size = config['chapter_generation']['aggregation_window_size']
+    title_rules = config.get('chapter_generation', {}).get('title', {})
+    drop_sponsors = bool(title_rules.get('drop_sponsor_segments', True))
+
+    # timing guards (still honored; gentler handling of the first window)
+    min_first_chapter_sec = int(title_rules.get('min_first_chapter_sec', 90))
+    min_gap_sec = int(title_rules.get('min_gap_sec', 45))
 
     try:
         with open(transcript_json_path, 'r', encoding='utf-8') as f:
@@ -926,78 +1056,95 @@ def add_chapters_to_transcript(transcript_json_path, config):
             logging.warning("No segments found in transcript.")
             return
 
-        # Add "Intro" as the first chapter
-        chapters.append({
-            'title': 'Intro',
-            'time': '0:00'
-        })
-        logging.info(f"Added chapter: 'Intro' at 0:00")
+        # Always add Intro @ 0:00
+        chapters.append({'title': 'Intro', 'time': '0:00'})
+        last_chapter_start_sec = 0.0
+        logging.info("Added chapter: 'Intro' at 0:00")
 
-        # Aggregate texts using non-overlapping windows
-        aggregated_texts = aggregate_segments_non_overlapping(segments, window_size=aggregation_window_size)
+        # Overlapping windows: more chances to find solid topics even with large windows
+        windows = aggregate_segments_with_stride(
+            segments,
+            window_size=aggregation_window_size,
+            stride=max(1, aggregation_window_size // 2),
+        )
+        logging.debug(f"Aggregated into {len(windows)} overlapping windows "
+                      f"(size={aggregation_window_size}, stride={max(1, aggregation_window_size // 2)}).")
 
-        for idx, aggregated_text in enumerate(aggregated_texts):
-            start_segment_idx = idx * aggregation_window_size
-            if start_segment_idx >= len(segments):
-                break
-            start_time = segments[start_segment_idx].get('start', 0)  # Start time in seconds
+        skipped = {"sponsor":0, "similarity":0, "invalid_title":0, "duplicate":0, "too_close":0}
 
-            # Sponsor skip gate BEFORE any similarity/summary work
-            rules = config.get('chapter_generation', {}).get('title', {})
-            if bool(rules.get('drop_sponsor_segments', True)) and is_sponsor_segment(aggregated_text):
-                logging.info("Skipping sponsor/advertising window.")
+        for idx, win in enumerate(windows):
+            aggregated_text = win["text"]
+            start_time = float(win["start"])
+
+            if not aggregated_text:
                 continue
 
-            if idx == 0:
-                # process normally if you want a chapter right after intro
-                pass
-            else:
-                # Compute similarity with the previous aggregation window
-                similarity = compute_similarity(sentence_model, aggregated_texts[idx], aggregated_texts[idx -1])
+            # Gentle handling for the very first *content* chapter:
+            # If the first window starts before min_first_chapter_sec, pin it forward to that mark
+            # (instead of skipping the whole window).
+            if idx == 0 and start_time < min_first_chapter_sec:
+                start_time = float(min_first_chapter_sec)
 
-                logging.debug(f"Aggregated Text {idx}: Similarity with previous: {similarity}")
+            # After the first window, enforce min_first_chapter_sec normally
+            if idx > 0 and start_time < min_first_chapter_sec:
+                continue
 
-                if similarity < similarity_threshold:
-                    # Generate chapter title using summarizer
-                    title = generate_chapter_title(aggregated_text, config=config)
+            # Sponsor skip (window text)
+            if drop_sponsors and is_sponsor_segment(aggregated_text):
+                skipped["sponsor"] += 1
+                continue
 
-                    if not title:
-                        # Title was invalid or generation failed
-                        logging.debug(f"Skipped adding chapter due to invalid title.")
-                        continue
+            # Avoid clustering; ensure gap from last chapter
+            if (start_time - last_chapter_start_sec) < min_gap_sec:
+                skipped["too_close"] += 1
+                continue
 
-                    # Check for uniqueness against all existing titles
-                    if not is_title_unique(title, chapters, sentence_model, similarity_threshold=0.6):
-                        logging.debug(f"Skipped adding chapter due to similarity with existing titles: '{title}'")
-                        continue
+            # Similarity gate (vs previous window text) – but allow long gaps to force a chapter
+            attempt = True
+            if idx > 0:
+                prev_text = windows[idx - 1]["text"]
+                sim = compute_similarity(sentence_model, aggregated_text, prev_text)
+                logging.debug(f"[win {idx}] Similarity vs prev: {sim:.3f} (threshold={similarity_threshold})")
+                if sim >= similarity_threshold and (start_time - last_chapter_start_sec) < (min_gap_sec * 2):
+                    attempt = False
+                    skipped["similarity"] += 1
 
-                    # Convert start_time to mm:ss
-                    minutes = int(start_time // 60)
-                    seconds = int(start_time % 60)
-                    timestamp = f"{minutes}:{seconds:02d}"
+            if not attempt:
+                continue
 
-                    chapters.append({
-                        'title': title,
-                        'time': timestamp
-                    })
+            title = generate_chapter_title(aggregated_text, config=config)
+            if not title:
+                skipped["invalid_title"] += 1
+                continue
 
-                    logging.info(f"Added chapter: '{title}' at {timestamp}")
+            if not is_title_unique(title, chapters, sentence_model, similarity_threshold=0.6):
+                skipped["duplicate"] += 1
+                continue
 
-                    # Check if max_chapters limit is reached
-                    if len(chapters) >= max_chapters:
-                        logging.info(f"Reached maximum number of chapters: {max_chapters}")
-                        break
+            minutes = int(start_time // 60)
+            seconds = int(start_time % 60)
+            timestamp = f"{minutes}:{seconds:02d}"
 
-        # Add chapters to data
+            chapters.append({'title': title, 'time': timestamp})
+            last_chapter_start_sec = start_time
+            logging.info(f"Added chapter: '{title}' at {timestamp}")
+
+            if len(chapters) >= max_chapters:
+                logging.info(f"Reached maximum number of chapters: {max_chapters}")
+                break
+
+        logging.info(f"Chaptering skipped: {skipped}")
+
         data['chapters'] = chapters
-
-        # Save updated JSON
         with open(transcript_json_path, 'w', encoding='utf-8') as f:
             json.dump(data, f, indent=4, ensure_ascii=False)
         logging.info(f"Chapters added successfully to {transcript_json_path}")
 
     except Exception as e:
         logging.error(f"Failed to add chapters: {e}", exc_info=True)
+
+
+
 
 def process_chunk(chunk, pipeline):
     """

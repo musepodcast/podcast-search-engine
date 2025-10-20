@@ -1,17 +1,20 @@
 summarizer:
   model: "Falconsai/text_summarization"
-  max_length: 35
+  max_length: 32
   min_length: 6
 
 chapter_generation:
-  similarity_threshold: 0.30
+  similarity_threshold: 0.60
   max_chapters: 60
-  aggregation_window_size: 30
+  aggregation_window_size: 40
   title:
-    min_words: 4
-    max_words: 12
+    min_words: 5
+    max_words: 10
     case: "title"
     drop_sponsor_segments: true
+    force_first_window: true
+    min_first_chapter_sec: 90   
+    min_gap_sec: 90             
 
 
 gpu:
