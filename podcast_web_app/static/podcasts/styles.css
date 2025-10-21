@@ -596,6 +596,27 @@ Create Account button uses theme tokens
   outline-offset: 2px;
 }
 
+.btn.btn-secondary {
+  --bs-btn-color: var(--accent);
+  --bs-btn-bg: var(--accent-contrast);
+  --bs-btn-border-color: var(--accent-contrast);
+
+  --bs-btn-hover-color: var(--accent);
+  --bs-btn-hover-bg: var(--accent-contrast);
+  --bs-btn-hover-border-color: var(--accent-contrast);
+
+  --bs-btn-active-color: var(--accent);
+  --bs-btn-active-bg: var(--accent-contrast);
+  --bs-btn-active-border-color: var(--accent-contrast);
+
+  /* optional: calm the default bright focus ring */
+  box-shadow: none;
+}
+.btn.btn-secondary:focus-visible {
+  outline: 2px solid var(--control-focus-ring);
+  outline-offset: 2px;
+}
+
 /* Checkboxes / Radios (filter toggles) */
 .form-check-input {
   background-color: var(--list-bg);
