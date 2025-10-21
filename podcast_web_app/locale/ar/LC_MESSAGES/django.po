@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-15 20:56-0500\n"
+"POT-Creation-Date: 2025-10-20 20:36-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -162,6 +162,7 @@ msgstr "الصفحة الرئيسية"
 #: .\podcasts\templates\podcasts\favorites_list.html:5
 #: .\podcasts\templates\podcasts\favorites_list.html:33
 #: .\podcasts\templates\podcasts\favorites_list_items.html:25
+#: .\podcasts\templates\podcasts\search_results_ch_items.html:60
 msgid "Favorites"
 msgstr "المفضلة"
 
@@ -172,6 +173,7 @@ msgstr "المفضلة"
 #: .\podcasts\templates\podcasts\favorites_list.html:38
 #: .\podcasts\templates\podcasts\favorites_list_items.html:29
 #: .\podcasts\templates\podcasts\notifications_list.html:6
+#: .\podcasts\templates\podcasts\search_results_ch_items.html:65
 msgid "Notifications"
 msgstr "الإشعارات"
 
@@ -185,16 +187,18 @@ msgstr "الإشعارات"
 #: .\podcasts\templates\podcasts\episode_list_items.html:54
 #: .\podcasts\templates\podcasts\notifications_list.html:63
 #: .\podcasts\templates\podcasts\notifications_list_items.html:56
+#: .\podcasts\templates\podcasts\search_results_items.html:46
+#: .\podcasts\templates\podcasts\search_results_items.html:126
 msgid "Bookmarks"
 msgstr "الإشارات المرجعية"
 
 #: .\podcasts\templates\podcasts\base.html:74
-#: .\podcasts\templates\podcasts\base.html:179
+#: .\podcasts\templates\podcasts\base.html:180
 msgid "Channels"
 msgstr "القنوات"
 
 #: .\podcasts\templates\podcasts\base.html:75
-#: .\podcasts\templates\podcasts\base.html:173
+#: .\podcasts\templates\podcasts\base.html:174
 #: .\podcasts\templates\podcasts\channel_detail.html:126
 #: .\podcasts\templates\podcasts\channel_list.html:46
 msgid "Episodes"
@@ -217,7 +221,7 @@ msgid "See Replies"
 msgstr "عرض الردود"
 
 #: .\podcasts\templates\podcasts\base.html:133
-#: .\podcasts\templates\podcasts\base.html:513
+#: .\podcasts\templates\podcasts\base.html:514
 msgid "Support Me"
 msgstr "ادعمني"
 
@@ -229,102 +233,102 @@ msgstr "تذكرة الدعم"
 msgid "Contribute"
 msgstr "المساهمة"
 
-#: .\podcasts\templates\podcasts\base.html:150
+#: .\podcasts\templates\podcasts\base.html:151
 msgid "Sign Out"
 msgstr "تسجيل الخروج"
 
-#: .\podcasts\templates\podcasts\base.html:154
+#: .\podcasts\templates\podcasts\base.html:155
 msgid "Sign In"
 msgstr "تسجيل الدخول"
 
-#: .\podcasts\templates\podcasts\base.html:187
+#: .\podcasts\templates\podcasts\base.html:188
 msgid "Search episodes or channels..."
 msgstr "البحث في الحلقات أو القنوات..."
 
-#: .\podcasts\templates\podcasts\base.html:193
+#: .\podcasts\templates\podcasts\base.html:194
 #: .\podcasts\templates\podcasts\channel_detail.html:120
 msgid "Search"
 msgstr "بحث"
 
-#: .\podcasts\templates\podcasts\base.html:209
-#: .\podcasts\templates\podcasts\base.html:403
+#: .\podcasts\templates\podcasts\base.html:210
+#: .\podcasts\templates\podcasts\base.html:404
 msgid "Channel Title"
 msgstr "عنوان القناة"
 
-#: .\podcasts\templates\podcasts\base.html:215
+#: .\podcasts\templates\podcasts\base.html:216
 msgid "Episode Title"
 msgstr "الحلقة عنوان"
 
-#: .\podcasts\templates\podcasts\base.html:221
+#: .\podcasts\templates\podcasts\base.html:222
 msgid "Episode Description"
 msgstr "وصف الحلقة"
 
-#: .\podcasts\templates\podcasts\base.html:227
+#: .\podcasts\templates\podcasts\base.html:228
 msgid "Transcript Text"
 msgstr "نص النص"
 
-#: .\podcasts\templates\podcasts\base.html:234
-#: .\podcasts\templates\podcasts\base.html:422
+#: .\podcasts\templates\podcasts\base.html:235
+#: .\podcasts\templates\podcasts\base.html:423
 msgid "Language"
 msgstr "اللغة"
 
-#: .\podcasts\templates\podcasts\base.html:314
+#: .\podcasts\templates\podcasts\base.html:315
 msgid "Date"
 msgstr "التاريخ"
 
-#: .\podcasts\templates\podcasts\base.html:322
+#: .\podcasts\templates\podcasts\base.html:323
 msgid "Anytime"
 msgstr "في أي وقت"
 
-#: .\podcasts\templates\podcasts\base.html:328
+#: .\podcasts\templates\podcasts\base.html:329
 msgid "Past Day"
 msgstr "اليوم الماضي"
 
-#: .\podcasts\templates\podcasts\base.html:334
+#: .\podcasts\templates\podcasts\base.html:335
 msgid "Past Week"
 msgstr "الأسبوع الماضي"
 
-#: .\podcasts\templates\podcasts\base.html:340
+#: .\podcasts\templates\podcasts\base.html:341
 msgid "Past Month"
 msgstr "الشهر الماضي"
 
-#: .\podcasts\templates\podcasts\base.html:346
+#: .\podcasts\templates\podcasts\base.html:347
 msgid "Past Year"
 msgstr "العام الماضي"
 
-#: .\podcasts\templates\podcasts\base.html:352
+#: .\podcasts\templates\podcasts\base.html:353
 msgid "Past 2 Years"
 msgstr "العامان الماضي"
 
-#: .\podcasts\templates\podcasts\base.html:358
+#: .\podcasts\templates\podcasts\base.html:359
 msgid "Past 3 Years"
 msgstr "الثلاث سنوات الماضية"
 
-#: .\podcasts\templates\podcasts\base.html:364
+#: .\podcasts\templates\podcasts\base.html:365
 msgid "Past 4 Years"
 msgstr "السنوات الماضية"
 
-#: .\podcasts\templates\podcasts\base.html:370
+#: .\podcasts\templates\podcasts\base.html:371
 msgid "Past 5 Years"
 msgstr "الخمس سنوات لسنوات"
 
-#: .\podcasts\templates\podcasts\base.html:376
+#: .\podcasts\templates\podcasts\base.html:377
 msgid "Past 10 Years"
 msgstr "السنوات العشر العشر"
 
-#: .\podcasts\templates\podcasts\base.html:382
+#: .\podcasts\templates\podcasts\base.html:383
 msgid "Past 15 Years"
 msgstr "السنوات الخمس عشرة الماضية"
 
-#: .\podcasts\templates\podcasts\base.html:409
+#: .\podcasts\templates\podcasts\base.html:410
 msgid "Channel Author"
 msgstr "مصدر القناة"
 
-#: .\podcasts\templates\podcasts\base.html:415
+#: .\podcasts\templates\podcasts\base.html:416
 msgid "Channel Summary"
 msgstr "خلاصة القناة"
 
-#: .\podcasts\templates\podcasts\base.html:518
+#: .\podcasts\templates\podcasts\base.html:519
 #: .\podcasts\templates\podcasts\signup.html:175
 #: .\podcasts\templates\podcasts\signup.html:229
 #: .\podcasts\templates\podcasts\support_ticket.html:148
@@ -333,30 +337,29 @@ msgstr "خلاصة القناة"
 msgid "Close"
 msgstr "إغلاق"
 
-#: .\podcasts\templates\podcasts\base.html:591
+#: .\podcasts\templates\podcasts\base.html:592
 #: .\podcasts\templates\podcasts\channel_detail.html:207
 #: .\podcasts\templates\podcasts\episode_detail.html:265
 msgid "Please sign in to complete this action."
 msgstr "من فضلك تسجيل الدخول لإكمال هذا الإجراء."
 
-#: .\podcasts\templates\podcasts\base.html:593
+#: .\podcasts\templates\podcasts\base.html:594
 #: .\podcasts\templates\podcasts\channel_detail.html:208
 #: .\podcasts\templates\podcasts\episode_detail.html:266
-#| msgid "Sign In"
 msgid "Sign in"
 msgstr "تسجيل الدخول"
 
-#: .\podcasts\templates\podcasts\base.html:600
+#: .\podcasts\templates\podcasts\base.html:601
 msgid "Contact Me"
 msgstr "اتصل بي"
 
-#: .\podcasts\templates\podcasts\base.html:661
 #: .\podcasts\templates\podcasts\base.html:662
+#: .\podcasts\templates\podcasts\base.html:663
 msgid "Switch to light mode"
 msgstr "انقل إلى وضع الضوء"
 
-#: .\podcasts\templates\podcasts\base.html:666
 #: .\podcasts\templates\podcasts\base.html:667
+#: .\podcasts\templates\podcasts\base.html:668
 msgid "Switch to dark mode"
 msgstr "انقل إلى الوضع المظلم"
 
@@ -371,8 +374,8 @@ msgstr "الحلقات المسجلة"
 #: .\podcasts\templates\podcasts\episode_list_items.html:31
 #: .\podcasts\templates\podcasts\notifications_list.html:41
 #: .\podcasts\templates\podcasts\notifications_list_items.html:34
-#: .\podcasts\templates\podcasts\search_results_items.html:35
-#: .\podcasts\templates\podcasts\search_results_items.html:98
+#: .\podcasts\templates\podcasts\search_results_items.html:31
+#: .\podcasts\templates\podcasts\search_results_items.html:112
 msgid "from"
 msgstr "بواسطة"
 
@@ -384,8 +387,8 @@ msgstr "بواسطة"
 #: .\podcasts\templates\podcasts\episode_list_items.html:46
 #: .\podcasts\templates\podcasts\notifications_list.html:56
 #: .\podcasts\templates\podcasts\notifications_list_items.html:49
-#: .\podcasts\templates\podcasts\search_results_items.html:49
-#: .\podcasts\templates\podcasts\search_results_items.html:112
+#: .\podcasts\templates\podcasts\search_results_items.html:41
+#: .\podcasts\templates\podcasts\search_results_items.html:122
 msgid "Explicit"
 msgstr "صريح"
 
@@ -399,6 +402,8 @@ msgstr "صريح"
 #: .\podcasts\templates\podcasts\episode_list_items.html:59
 #: .\podcasts\templates\podcasts\notifications_list.html:68
 #: .\podcasts\templates\podcasts\notifications_list_items.html:61
+#: .\podcasts\templates\podcasts\search_results_items.html:50
+#: .\podcasts\templates\podcasts\search_results_items.html:130
 msgid "Comments"
 msgstr "التعليقات"
 
@@ -410,6 +415,8 @@ msgstr "التعليقات"
 #: .\podcasts\templates\podcasts\episode_list_items.html:64
 #: .\podcasts\templates\podcasts\notifications_list.html:73
 #: .\podcasts\templates\podcasts\notifications_list_items.html:66
+#: .\podcasts\templates\podcasts\search_results_items.html:54
+#: .\podcasts\templates\podcasts\search_results_items.html:134
 msgid "Episode Rating"
 msgstr "تصنيف الحلقات"
 
@@ -426,6 +433,9 @@ msgstr "تصنيف الحلقات"
 #: .\podcasts\templates\podcasts\favorites_list_items.html:41
 #: .\podcasts\templates\podcasts\notifications_list.html:82
 #: .\podcasts\templates\podcasts\notifications_list_items.html:75
+#: .\podcasts\templates\podcasts\search_results_ch_items.html:79
+#: .\podcasts\templates\podcasts\search_results_items.html:60
+#: .\podcasts\templates\podcasts\search_results_items.html:140
 msgid "Total Views"
 msgstr "إجمالي المشاهدات"
 
@@ -435,6 +445,8 @@ msgstr "إجمالي المشاهدات"
 #: .\podcasts\templates\podcasts\episode_list_items.html:78
 #: .\podcasts\templates\podcasts\notifications_list.html:87
 #: .\podcasts\templates\podcasts\notifications_list_items.html:80
+#: .\podcasts\templates\podcasts\search_results_items.html:64
+#: .\podcasts\templates\podcasts\search_results_items.html:144
 msgid "Downloads"
 msgstr "التنزيل"
 
@@ -456,8 +468,8 @@ msgstr "تحميل المزيد من الحلقات المسجلة..."
 #: .\podcasts\templates\podcasts\notifications_list.html:139
 #: .\podcasts\templates\podcasts\notifications_list.html:146
 #: .\podcasts\templates\podcasts\replies_list.html:20
-#: .\podcasts\templates\podcasts\search_results_ch_items.html:72
-#: .\podcasts\templates\podcasts\search_results_items.html:153
+#: .\podcasts\templates\podcasts\search_results_ch_items.html:104
+#: .\podcasts\templates\podcasts\search_results_items.html:187
 msgid "End of list..."
 msgstr "نهاية القائمة..."
 
@@ -471,7 +483,6 @@ msgid "by"
 msgstr "بواسطة"
 
 #: .\podcasts\templates\podcasts\channel_detail.html:47
-#| msgid "Add to Favorites"
 msgid "Sign in to add favorites"
 msgstr "تسجيل الدخول لإضافة المفضلة"
 
@@ -484,7 +495,6 @@ msgid "Add to Favorites"
 msgstr "إضافة إلى المفضلة"
 
 #: .\podcasts\templates\podcasts\channel_detail.html:61
-#| msgid "Loading more notifications..."
 msgid "Sign in to enable notifications"
 msgstr "تسجيل الدخول لتمكين الإخطارات"
 
@@ -499,7 +509,6 @@ msgstr "إضافة إلى الإشعارات"
 #: .\podcasts\templates\podcasts\channel_detail.html:80
 #: .\podcasts\templates\podcasts\channel_detail.html:84
 #: .\podcasts\templates\podcasts\episode_detail.html:132
-#| msgid "Sign in with X"
 msgid "Sign in to rate"
 msgstr "تسجيل الدخول لتسجيل الدخول"
 
@@ -527,8 +536,8 @@ msgstr "لا توجد حلقات متاحة لهذا القناة"
 #: .\podcasts\templates\podcasts\channel_detail.html:201
 #: .\podcasts\templates\podcasts\channel_detail.html:214
 #: .\podcasts\templates\podcasts\episode_list.html:130
-#: .\podcasts\templates\podcasts\search_results_items.html:143
-#: .\podcasts\templates\podcasts\search_results_items.html:154
+#: .\podcasts\templates\podcasts\search_results_items.html:178
+#: .\podcasts\templates\podcasts\search_results_items.html:188
 msgid "Loading more episodes..."
 msgstr "جاري تحميل المزيد من الحلقات..."
 
@@ -622,11 +631,13 @@ msgstr "لا توجد صورة متاحة"
 #: .\podcasts\templates\podcasts\channel_list_items.html:35
 #: .\podcasts\templates\podcasts\favorites_list.html:43
 #: .\podcasts\templates\podcasts\favorites_list_items.html:33
+#: .\podcasts\templates\podcasts\search_results_ch_items.html:70
 msgid "Channel Rating"
 msgstr "تقييم القناة"
 
 #: .\podcasts\templates\podcasts\channel_list.html:99
 #: .\podcasts\templates\podcasts\channel_list_items.html:47
+#: .\podcasts\templates\podcasts\search_results_ch_items.html:84
 msgid "Total Episodes"
 msgstr "مجموع الحلقات"
 
@@ -637,8 +648,8 @@ msgstr "لا توجد أشياء كثيرة."
 #: .\podcasts\templates\podcasts\channel_list.html:114
 #: .\podcasts\templates\podcasts\channel_list.html:119
 #: .\podcasts\templates\podcasts\favorites_list.html:80
-#: .\podcasts\templates\podcasts\search_results_ch_items.html:68
-#: .\podcasts\templates\podcasts\search_results_ch_items.html:73
+#: .\podcasts\templates\podcasts\search_results_ch_items.html:100
+#: .\podcasts\templates\podcasts\search_results_ch_items.html:105
 msgid "Loading more channels..."
 msgstr "جاري تحميل المزيد من القنوات..."
 
@@ -747,7 +758,6 @@ msgid "Add to Bookmarks"
 msgstr "إضافة إلى الإشارات المرجعية"
 
 #: .\podcasts\templates\podcasts\episode_detail.html:92
-#| msgid "Sign in with Google"
 msgid "Sign in to bookmark"
 msgstr "تسجيل الدخول إلى علامة التسجيل"
 
@@ -760,7 +770,6 @@ msgid "Comment"
 msgstr "تعليق"
 
 #: .\podcasts\templates\podcasts\episode_detail.html:108
-#| msgid "Sign in with Google"
 msgid "Sign in to comment"
 msgstr "تسجيل الدخول للتعليق"
 
@@ -783,7 +792,6 @@ msgid "Download JSON"
 msgstr "تحميل JSON"
 
 #: .\podcasts\templates\podcasts\episode_detail.html:165
-#| msgid "Download JSON"
 msgid "Sign in to download JSON"
 msgstr "تسجيل الدخول لتنزيل JSON"
 
@@ -915,23 +923,27 @@ msgid "Login"
 msgstr "تسجيل الدخول"
 
 #: .\podcasts\templates\podcasts\home.html:12
+msgid "Guest"
+msgstr "ضيف"
+
+#: .\podcasts\templates\podcasts\home.html:13
 #: .\podcasts\templates\podcasts\signup.html:7
 msgid "Create Account"
 msgstr "إنشاء حساب"
 
-#: .\podcasts\templates\podcasts\home.html:19
+#: .\podcasts\templates\podcasts\home.html:21
 msgid "Muse Podcast Search Engine"
 msgstr "محرك البحث في موز بودكاست"
 
-#: .\podcasts\templates\podcasts\home.html:22
+#: .\podcasts\templates\podcasts\home.html:24
 msgid "License: GPL v3"
 msgstr "الترخيص: GPL v3"
 
-#: .\podcasts\templates\podcasts\home.html:37
+#: .\podcasts\templates\podcasts\home.html:39
 msgid "🚀 About"
 msgstr " حول"
 
-#: .\podcasts\templates\podcasts\home.html:38
+#: .\podcasts\templates\podcasts\home.html:40
 msgid ""
 "Muse is a free, AI-powered podcast search engine. Tired of scouring episode "
 "show notes for bits of information, we built a platform where you can:"
@@ -940,7 +952,7 @@ msgstr ""
 "من مسح ملاحظات عرض الحلقات للحصول على بعض المعلومات، قمنا ببناء منصة حيث "
 "يمكنك:"
 
-#: .\podcasts\templates\podcasts\home.html:40
+#: .\podcasts\templates\podcasts\home.html:42
 msgid ""
 "🔍 Search any podcast by keyword (titles, descriptions, or transcript "
 "content)"
@@ -948,15 +960,15 @@ msgstr ""
 "🔍 البحث عن أي البودكاست حسب الكلمات الرئيسية (الألقاب، والوصف، أو محتوى "
 "النسخة)"
 
-#: .\podcasts\templates\podcasts\home.html:41
+#: .\podcasts\templates\podcasts\home.html:43
 msgid "📄 View full, time-stamped transcripts (speaker-diarized and formatted)"
 msgstr " عرض النصوص الكاملة المختومة بالتوقيت (مختومة ومتصوّرة من المتحدثين)"
 
-#: .\podcasts\templates\podcasts\home.html:42
+#: .\podcasts\templates\podcasts\home.html:44
 msgid "✍️ Read AI-generated chapter summaries"
 msgstr "✍️ قراءة ملخصات الفصول التي تم إنشاؤها بواسطة الذكاء الاصطناعي"
 
-#: .\podcasts\templates\podcasts\home.html:43
+#: .\podcasts\templates\podcasts\home.html:45
 msgid ""
 "🌐 Find podcasts in 17 different languages natively transcribed or AI "
 "translated"
@@ -964,15 +976,15 @@ msgstr ""
 " العثور على البودكاستات في 17 لغة مختلفة النسخة الأصلية أو ترجمة الذكاء "
 "الاصطناعي"
 
-#: .\podcasts\templates\podcasts\home.html:44
+#: .\podcasts\templates\podcasts\home.html:46
 msgid "🎧 Click through to listen at the exact moment a topic is discussed"
 msgstr " انقر هنا لتستمع في اللحظة المحددة التي يتم فيها مناقشة الموضوع"
 
-#: .\podcasts\templates\podcasts\home.html:45
+#: .\podcasts\templates\podcasts\home.html:47
 msgid "🆕 Discover new channels or episodes based on your interests"
 msgstr " اكتشاف قنوات أو حلقات جديدة بناء على اهتماماتك"
 
-#: .\podcasts\templates\podcasts\home.html:47
+#: .\podcasts\templates\podcasts\home.html:49
 msgid ""
 "Currently optimized for desktop browsers, tablets, foldables, and "
 "smartphones. Community contribution and native apps are coming soon!"
@@ -980,15 +992,15 @@ msgstr ""
 "يتم تحسينه حاليًا لمصفحات سطح المكتب والأجهزة اللوحية والملفات المزدوجة "
 "والهواتف الذكية. مساهمة المجتمع والتطبيقات الأصلية قادمة قريبًا!"
 
-#: .\podcasts\templates\podcasts\home.html:49
+#: .\podcasts\templates\podcasts\home.html:51
 msgid "🌟 Key Features"
 msgstr " خصائص رئيسية"
 
-#: .\podcasts\templates\podcasts\home.html:51
+#: .\podcasts\templates\podcasts\home.html:53
 msgid "Account Signup & Management"
 msgstr "تسجيل الحساب وإدارته"
 
-#: .\podcasts\templates\podcasts\home.html:51
+#: .\podcasts\templates\podcasts\home.html:53
 msgid ""
 "Create a free account to save searches, bookmark episodes, and track "
 "listening history."
@@ -996,11 +1008,11 @@ msgstr ""
 "قم بإنشاء حساب مجاني لتخزين عمليات البحث و إشارة الحلقات و تتبع تاريخ "
 "الاستماع"
 
-#: .\podcasts\templates\podcasts\home.html:52
+#: .\podcasts\templates\podcasts\home.html:54
 msgid "Transcript Generation"
 msgstr "إنتاج النسخة"
 
-#: .\podcasts\templates\podcasts\home.html:52
+#: .\podcasts\templates\podcasts\home.html:54
 msgid ""
 "Ingests RSS feeds from any podcast; uses OpenAI Whisper Turbo on an NVIDIA "
 "GPU for fast, high-quality transcription; diarizes speakers and formats with"
@@ -1009,22 +1021,22 @@ msgstr ""
 "يستخدم OpenAI Whisper Turbo على GPU NVIDIA لنسخ سريعة عالية الجودة؛ يذكر "
 "المتحدثين والتنسيقات مع طوابع زمنية."
 
-#: .\podcasts\templates\podcasts\home.html:53
+#: .\podcasts\templates\podcasts\home.html:55
 msgid "Chapter Summaries"
 msgstr "خلاصة الفصل"
 
-#: .\podcasts\templates\podcasts\home.html:53
+#: .\podcasts\templates\podcasts\home.html:55
 msgid ""
 "Generates concise summaries of each transcript segment using FalconsAI text-"
 "summarization."
 msgstr ""
 "يقوم بتوليد ملخصات موجزة لكل قطاع من النصوص باستخدام ملخص النص من FalconsAI."
 
-#: .\podcasts\templates\podcasts\home.html:54
+#: .\podcasts\templates\podcasts\home.html:56
 msgid "Transcript Translations"
 msgstr "ترجمات النسخة"
 
-#: .\podcasts\templates\podcasts\home.html:54
+#: .\podcasts\templates\podcasts\home.html:56
 msgid ""
 "Takes podcasts and translates them into 17 different languages using "
 "nllb-200-distilled-600M translation model."
@@ -1032,11 +1044,11 @@ msgstr ""
 "يأخذ البودكاستات ويترجمها إلى 17 لغة مختلفة باستخدام نموذج ترجمة "
 "nllb-200-distilled-600M."
 
-#: .\podcasts\templates\podcasts\home.html:55
+#: .\podcasts\templates\podcasts\home.html:57
 msgid "Full-Text Search"
 msgstr "البحث عن النص الكامل"
 
-#: .\podcasts\templates\podcasts\home.html:55
+#: .\podcasts\templates\podcasts\home.html:57
 msgid ""
 "Powered by Elasticsearch for lightning-fast, fuzzy-match queries; filters by"
 " title, description, channel metadata, or transcript."
@@ -1044,11 +1056,11 @@ msgstr ""
 "مدفوعة بواسطة Elasticsearch لاستفسارات سريعة البرق ، ومضطربة مطابقة ؛ مرشحات"
 " عن طريق العنوان ، والوصف ، و metadata القناة ، أو النسخة."
 
-#: .\podcasts\templates\podcasts\home.html:56
+#: .\podcasts\templates\podcasts\home.html:58
 msgid "Flexible Playback"
 msgstr "إعادة تشغيل مرنة"
 
-#: .\podcasts\templates\podcasts\home.html:56
+#: .\podcasts\templates\podcasts\home.html:58
 msgid ""
 "Jump directly to the moment a keyword appears in the audio player on the "
 "website."
@@ -1056,95 +1068,95 @@ msgstr ""
 "قفز مباشرة إلى اللحظة التي تظهر فيها كلمة رئيسية في مشغل الصوت على موقع "
 "الويب."
 
-#: .\podcasts\templates\podcasts\home.html:59
+#: .\podcasts\templates\podcasts\home.html:61
 msgid "🏗️ Architecture & Tech Stack"
 msgstr "️ الهندسة المعمارية والتكنولوجيا"
 
-#: .\podcasts\templates\podcasts\home.html:63
+#: .\podcasts\templates\podcasts\home.html:65
 msgid "Layer"
 msgstr "الطبقة"
 
-#: .\podcasts\templates\podcasts\home.html:64
+#: .\podcasts\templates\podcasts\home.html:66
 msgid "Technology"
 msgstr "التكنولوجيا"
 
-#: .\podcasts\templates\podcasts\home.html:69
+#: .\podcasts\templates\podcasts\home.html:71
 msgid "Backend"
 msgstr "الخلفية"
 
-#: .\podcasts\templates\podcasts\home.html:69
+#: .\podcasts\templates\podcasts\home.html:71
 msgid "Python, Django"
 msgstr "(بايثون) ، (دجانغو)"
 
-#: .\podcasts\templates\podcasts\home.html:72
+#: .\podcasts\templates\podcasts\home.html:74
 msgid "Transcription"
 msgstr "النسخة"
 
-#: .\podcasts\templates\podcasts\home.html:72
+#: .\podcasts\templates\podcasts\home.html:74
 msgid "OpenAI Whisper Turbo (GPU-accelerated)"
 msgstr "OpenAI Whisper Turbo (GPU المتسارع)"
 
-#: .\podcasts\templates\podcasts\home.html:75
+#: .\podcasts\templates\podcasts\home.html:77
 msgid "Summarization"
 msgstr "المختصرة"
 
-#: .\podcasts\templates\podcasts\home.html:75
+#: .\podcasts\templates\podcasts\home.html:77
 msgid "FalconsAI / text_summarization"
 msgstr "FalconsAI / text_summary"
 
-#: .\podcasts\templates\podcasts\home.html:78
+#: .\podcasts\templates\podcasts\home.html:80
 msgid "Translation"
 msgstr "ترجمة"
 
-#: .\podcasts\templates\podcasts\home.html:78
+#: .\podcasts\templates\podcasts\home.html:80
 msgid "Facebook / nllb-200-distilled-600M translation model"
 msgstr "نموذج ترجمة فيسبوك / nllb-200-distilled-600M"
 
-#: .\podcasts\templates\podcasts\home.html:81
+#: .\podcasts\templates\podcasts\home.html:83
 msgid "Connection Pooling"
 msgstr "تجميع الاتصالات"
 
-#: .\podcasts\templates\podcasts\home.html:81
+#: .\podcasts\templates\podcasts\home.html:83
 msgid "PgBouncer"
 msgstr "PgBouncer"
 
-#: .\podcasts\templates\podcasts\home.html:84
+#: .\podcasts\templates\podcasts\home.html:86
 msgid "Email Services"
 msgstr "خدمات البريد الإلكتروني"
 
-#: .\podcasts\templates\podcasts\home.html:84
+#: .\podcasts\templates\podcasts\home.html:86
 msgid "Mailjet"
 msgstr "طائرة بريد"
 
-#: .\podcasts\templates\podcasts\home.html:87
+#: .\podcasts\templates\podcasts\home.html:89
 msgid "Database"
 msgstr "قاعدة البيانات"
 
-#: .\podcasts\templates\podcasts\home.html:87
+#: .\podcasts\templates\podcasts\home.html:89
 msgid "PostgreSQL | MaraiaDB"
 msgstr "ما بعد الكمبيوتر الرقمي"
 
-#: .\podcasts\templates\podcasts\home.html:90
+#: .\podcasts\templates\podcasts\home.html:92
 msgid "Search Engine"
 msgstr "محرك البحث"
 
-#: .\podcasts\templates\podcasts\home.html:90
+#: .\podcasts\templates\podcasts\home.html:92
 msgid "Elasticsearch"
 msgstr "البحث المرن"
 
-#: .\podcasts\templates\podcasts\home.html:93
+#: .\podcasts\templates\podcasts\home.html:95
 msgid "Frontend"
 msgstr "الجهة الأمامية"
 
-#: .\podcasts\templates\podcasts\home.html:93
+#: .\podcasts\templates\podcasts\home.html:95
 msgid "Django templates | HTML | CSS | JavaScript"
 msgstr "نماذج جيانجو HTML CSS جاوا سكريبت"
 
-#: .\podcasts\templates\podcasts\home.html:96
+#: .\podcasts\templates\podcasts\home.html:98
 msgid "Deployment"
 msgstr "التنفيذ"
 
-#: .\podcasts\templates\podcasts\home.html:96
+#: .\podcasts\templates\podcasts\home.html:98
 msgid "Docker | Ubuntu VM | Windows OS"
 msgstr "دوكر Ubuntu VM ويندوز نظام التشغيل"
 
@@ -1269,15 +1281,20 @@ msgstr "القنوات المتطابقة"
 msgid "No image"
 msgstr "لا صورة"
 
-#: .\podcasts\templates\podcasts\search_results_ch_items.html:62
+#: .\podcasts\templates\podcasts\search_results_ch_items.html:94
 msgid "No channels found matching your search."
 msgstr "لا توجد قنوات تطابق بحثك"
 
-#: .\podcasts\templates\podcasts\search_results_items.html:136
+#: .\podcasts\templates\podcasts\search_results_items.html:24
+#| msgid "No image available"
+msgid "No Title Available"
+msgstr "لا يوجد عنوان متاح"
+
+#: .\podcasts\templates\podcasts\search_results_items.html:171
 msgid "No episodes found matching your search."
 msgstr "لم يتم العثور على حلقات تطابق بحثك."
 
-#: .\podcasts\templates\podcasts\search_results_items.html:137
+#: .\podcasts\templates\podcasts\search_results_items.html:172
 msgid "Try different keywords or check your spelling."
 msgstr "حاول استخدام كلمات رئيسية مختلفة أو تحقق من تهجئتك."
 
