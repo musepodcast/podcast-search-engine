@@ -2561,3 +2561,90 @@ def support_ticket(request):
         'limit':      limit,
     })
 
+@login_required
+@require_POST
+def update_episode_rating(request, episode_id):
+    """
+    Accept either Episode.pk (base) OR EpisodeTranslations.pk (display).
+    Always normalize to the base Episode for storage & aggregation.
+    Returns: {"rating": int, "avg_rating": float, "rating_count": int}
+    """
+    # 1) Parse rating (1..5)
+    try:
+        # handles FormData or JSON
+        rating = request.POST.get('rating') or (request.body and __import__('json').loads(request.body).get('rating'))
+        rating = int(rating)
+        if rating < 1 or rating > 5:
+            raise ValueError
+    except Exception:
+        return JsonResponse({"error": "Invalid rating"}, status=400)
+
+    # 2) Normalize episode id to the base Episode
+    from podcasts.models import Episode, EpisodeTranslations, EpisodeInteraction  # adjust import path
+    base = None
+    try:
+        base = Episode.objects.select_related('channel').get(pk=episode_id)
+    except Episode.DoesNotExist:
+        try:
+            tr = EpisodeTranslations.objects.select_related('episode', 'episode__channel').get(pk=episode_id)
+            base = tr.episode
+        except EpisodeTranslations.DoesNotExist:
+            raise Http404("Episode not found")
+
+    # 3) Upsert user's interaction row
+    ei, _ = EpisodeInteraction.objects.get_or_create(user=request.user, episode=base, defaults={"rating": rating})
+    if ei.rating != rating:
+        ei.rating = rating
+        ei.save(update_fields=["rating"])
+
+    # 4) Aggregate fresh numbers
+    agg = EpisodeInteraction.objects.filter(episode=base, rating__isnull=False).aggregate(
+        avg=Avg('rating'), cnt=Count('rating')
+    )
+    avg_rating   = float(agg['avg'] or 0.0)  # ensure JSON numbers, not Decimals/None
+    rating_count = int(agg['cnt'] or 0)
+
+    # 5) Respond
+    return JsonResponse({
+        "rating": rating,
+        "avg_rating": avg_rating,
+        "rating_count": rating_count,
+    })
+
+@login_required
+@require_POST
+def update_channel_rating(request, channel_id):
+    ch = get_object_or_404(Channel, pk=channel_id)
+    try:
+        rating = request.POST.get('rating') or (request.body and json.loads(request.body).get('rating'))
+        rating = int(rating)
+        if rating < 1 or rating > 5:
+            raise ValueError
+    except Exception:
+        return JsonResponse({"error": "Invalid rating"}, status=400)
+
+    ei, _ = ChannelInteraction.objects.get_or_create(user=request.user, channel=ch, defaults={"rating": rating})
+    if ei.rating != rating:
+        ei.rating = rating
+        ei.save(update_fields=["rating"])
+
+    agg = ChannelInteraction.objects.filter(channel=ch, rating__isnull=False).aggregate(
+        avg=Avg('rating'), cnt=Count('rating')
+    )
+    return JsonResponse({
+        "rating": rating,
+        "avg_rating": float(agg["avg"] or 0.0),
+        "rating_count": int(agg["cnt"] or 0),
+    })
+
+@login_required
+@require_POST
+def channel_rating_summary(request, channel_id):
+    ch = get_object_or_404(Channel, pk=channel_id)
+    agg = ChannelInteraction.objects.filter(channel=ch, rating__isnull=False).aggregate(
+        avg=Avg('rating'), cnt=Count('rating')
+    )
+    return JsonResponse({
+        "avg_rating": float(agg["avg"] or 0.0),
+        "rating_count": int(agg["cnt"] or 0),
+    })

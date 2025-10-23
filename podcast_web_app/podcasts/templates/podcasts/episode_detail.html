@@ -116,7 +116,7 @@
 
         <!-- Star rating -->
         {% if request.user.is_authenticated %}
-          <div id="episode-rating-container" data-episode-id="{{ episode.id }}">
+          <div id="episode-rating-container" data-episode-id="{{ post_episode_id }}">
             {% for star in star_range %}
               {% if episode_rating >= star %}
                 <i class="fa fa-star star-icon star-active" data-star="{{ star }}" title="{% trans 'Update your rating' %}"></i>
@@ -151,14 +151,16 @@
       
         <!-- DOWNLOADS -->
         {% if request.user.is_authenticated %}
-          <a href="/{{ episode.channel.sanitized_channel_title }}/{{ episode.sanitized_episode_title }}/download.json?lang={{ request.LANGUAGE_CODE|default:'en' }}"
-            class="btn-bookmark"
-            download
-            title="{% trans 'Download JSON' %}"
-            aria-label="{% trans 'Download JSON' %}">
-            <i class="fa-solid fa-file-arrow-down" aria-hidden="true"></i>
-            <span class="visually-hidden">{% trans "Download JSON" %}</span>
-          </a>
+        <a href="/{{ episode.channel.sanitized_channel_title }}/{{ episode.sanitized_episode_title }}/download.json?lang={{ request.LANGUAGE_CODE|default:'en' }}"
+          class="btn-bookmark"
+          data-episode-id="{{ episode.id }}"
+          download
+          title="{% trans 'Download JSON' %}"
+          aria-label="{% trans 'Download JSON' %}">
+          <i class="fa-solid fa-file-arrow-down" aria-hidden="true"></i>
+          <span class="visually-hidden">{% trans "Download JSON" %}</span>
+        </a>
+
           {% else %}
             <button class="btn-bookmark is-guest guest-dim"
                     type="button"
@@ -384,6 +386,47 @@
   .mention-highlight { color: #0b5ed7; font-weight: bold; }
 </style>
 
+<script>
+  function formatNumber(n) {
+    return (typeof n === "number")
+      ? n.toLocaleString()
+      : (parseInt(String(n).replace(/,/g,''), 10) || 0).toLocaleString();
+  }
+  function setText(sel, text) {
+    const el = document.querySelector(sel);
+    if (el) el.textContent = text;
+  }
+</script>
+
+<script>
+  function num(x) {
+    if (x == null) return NaN;
+    if (typeof x === "number") return x;
+    // tolerate "3.7", "3,7", "1,234.5"
+    const s = String(x).trim();
+    const normalized = s.includes('.') && s.includes(',')
+      ? s.replace(/,/g, '')          // "1,234.5" -> "1234.5"
+      : s.replace(',', '.');         // "3,7" -> "3.7"
+    const v = parseFloat(normalized);
+    return Number.isFinite(v) ? v : NaN;
+  }
+
+  function pickRatingPayload(d) {
+    // accept several possible key names from backend
+    const avg = num(d.avg_rating ?? d.average_rating ?? d.ep_avg_rating ?? d.avg ?? d.average);
+    const count = num(d.rating_count ?? d.total_ratings ?? d.ep_rating_count ?? d.count ?? d.total);
+    return { avg, count };
+  }
+
+  function refreshRatingSummary({ avg, count }) {
+    if (!Number.isNaN(avg) && !Number.isNaN(count)) {
+      setText(".episode-rating-info", `${avg.toFixed(1)} (${formatNumber(count)})`);
+      return true;
+    }
+    return false;
+  }
+</script>
+
 
 <!-- BEHAVIOR -->
 <script>
@@ -485,6 +528,18 @@
           icon.classList.add("fa-regular");
           this.title = "{% trans 'Add episode to Bookmarks' %}";
         }
+
+        // ▼ NEW: refresh the visible count
+        if (typeof data.bookmarks_count === "number") {
+          setText(".bookmarks-count", formatNumber(data.bookmarks_count));
+        } else {
+          // fallback optimistic bump
+          const el = document.querySelector(".bookmarks-count");
+          if (el) {
+            const current = parseInt((el.textContent||"0").replace(/,/g,''),10) || 0;
+            el.textContent = formatNumber(current + (data.bookmarked ? 1 : -1));
+          }
+        }
       })
       .catch(err => console.error("Error toggling bookmark:", err));
     });
@@ -509,6 +564,7 @@
         })
         .then(r => r.json())
         .then(data => {
+          // keep your star toggling
           if (data.rating) {
             ratingWrap.querySelectorAll(".star-icon").forEach(function(el) {
               if (parseInt(el.getAttribute("data-star")) <= data.rating) {
@@ -518,12 +574,61 @@
               }
             });
           }
+
+          // NEW: accept strings/alt keys and coerce to numbers
+          const payload = pickRatingPayload(data);
+          if (refreshRatingSummary(payload)) return;
+
+          // Fallback: if update endpoint didn't return summary,
+          // fetch a small summary endpoint (add this view if you don't have it)
+          fetch(`/episode/${episodeId}/rating_summary.json`, { headers: { "Accept":"application/json" }})
+            .then(r => r.ok ? r.json() : Promise.reject())
+            .then(summary => {
+              const p = pickRatingPayload(summary);
+              refreshRatingSummary(p);
+            })
+            .catch(() => { /* ignore */ });
         })
         .catch(err => console.error("Error updating rating:", err));
       });
     });
   }
 }
+
+
+
+// Download counter
+(function wireDownloadCounter(){
+  const dl = document.querySelector('a[download][data-episode-id]');
+  if (!dl) return;
+
+  dl.addEventListener('click', function() {
+    const episodeId = this.getAttribute('data-episode-id');
+
+    // Optimistic UI bump
+    const countEl = document.querySelector(".downloads-count");
+    if (countEl) {
+      const current = parseInt((countEl.textContent||"0").replace(/,/g,''),10) || 0;
+      countEl.textContent = formatNumber(current + 1);
+    }
+
+    // Non-blocking ping
+    const url = `/episode/${episodeId}/download_ping/`;
+    const body = JSON.stringify({ ts: Date.now() });
+
+    if (navigator.sendBeacon) {
+      const blob = new Blob([body], { type: "application/json" });
+      navigator.sendBeacon(url, blob); // no CSRF headers possible here
+    } else {
+      fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "X-CSRFToken": csrftoken },
+        body,
+        keepalive: true
+      }).catch(()=>{ /* ignore */ });
+    }
+  });
+})();
 
   // 3) Comments modal (bind only if the authed trigger exists)
 {
