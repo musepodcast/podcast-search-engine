@@ -98,11 +98,7 @@
               <div class="d-flex align-items-center gap-2">
                 <i class="fa-solid fa-podcast" style="font-size:1.25rem;"></i>
                 <span class="total-episodes">{{ channel.total_episodes|default:"0" }}</span>
-              </div>
-
-
-
-                
+              </div>  
             </div>
         </div>
     </div>
@@ -448,15 +444,27 @@ if (followBtn) {
         btn.classList.add("btn-following");
         icon.classList.remove("fa-regular");
         icon.classList.add("fa-solid");
-        btn.title = "Remove from Favorites";
+        btn.title = "{% trans 'Remove from Favorites' %}";
       } else {
         btn.classList.remove("btn-following");
         btn.classList.add("btn-follow");
         icon.classList.remove("fa-solid");
         icon.classList.add("fa-regular");
-        btn.title = "Add to Favorites";
+        btn.title = "{% trans 'Add to Favorites' %}";
+      }
+
+      // ▼ NEW: refresh visible favorites count (prefer server, else optimistic)
+      const el = document.querySelector(".favorites-count");
+      if (el) {
+        if (typeof data.favorites_count === "number") {
+          el.textContent = formatNumber(data.favorites_count);
+        } else {
+          const cur = parseInt((el.textContent||"0").replace(/,/g,''),10) || 0;
+          el.textContent = formatNumber(cur + (data.followed ? 1 : -1));
+        }
       }
     })
+
     .catch(error => console.error("Error toggling favorites:", error));
   });
 }
@@ -485,15 +493,27 @@ if (notifyBtn) {
         btn.classList.add("btn-notification-active");
         icon.classList.remove("fa-regular");
         icon.classList.add("fa-solid");
-        btn.title = "Remove from Notifications";
+        btn.title = "{% trans 'Remove from Notifications' %}";
       } else {
         btn.classList.remove("btn-notification-active");
         btn.classList.add("btn-notification");
         icon.classList.remove("fa-solid");
         icon.classList.add("fa-regular");
-        btn.title = "Add to Notifications";
+        btn.title = "{% trans 'Add to Notifications' %}";
+      }
+
+      // ▼ NEW: refresh visible notifications count (prefer server, else optimistic)
+      const el = document.querySelector(".notifications-count");
+      if (el) {
+        if (typeof data.notifications_count === "number") {
+          el.textContent = formatNumber(data.notifications_count);
+        } else {
+          const cur = parseInt((el.textContent||"0").replace(/,/g,''),10) || 0;
+          el.textContent = formatNumber(cur + (data.notifications_enabled ? 1 : -1));
+        }
       }
     })
+
     .catch(error => console.error("Error toggling notifications:", error));
   });
 }
@@ -530,7 +550,19 @@ if (ratingContainer) {
         } else if (data.error) {
           console.error("Rating error:", data.error);
         }
+
+        // ▼ NEW: refresh "avg (count)" summary; tolerate variant keys/strings
+        const payload = pickChannelRatingPayload(data);
+        if (refreshChannelRatingSummary(payload)) return;
+
+        // Fallback: fetch a light summary endpoint if POST doesn't include it
+        const channelId = ratingContainer.getAttribute("data-channel-id");
+        fetch(`/channel/${channelId}/rating_summary.json`, { headers: { "Accept":"application/json" }})
+          .then(r => r.ok ? r.json() : Promise.reject())
+          .then(summary => refreshChannelRatingSummary(pickChannelRatingPayload(summary)))
+          .catch(() => {});
       })
+
       .catch(error => console.error("Error updating rating:", error));
     });
   });
@@ -571,6 +603,40 @@ if (ratingContainer) {
   })();
 </script>
 
+<script>
+  function formatNumber(n) {
+    return (typeof n === "number")
+      ? n.toLocaleString()
+      : (parseInt(String(n).replace(/,/g,''), 10) || 0).toLocaleString();
+  }
+  function setText(sel, text) {
+    const el = document.querySelector(sel);
+    if (el) el.textContent = text;
+  }
+  // tolerate numeric strings / alt keys
+  function num(x) {
+    if (x == null) return NaN;
+    if (typeof x === "number") return x;
+    const s = String(x).trim();
+    const normalized = s.includes('.') && s.includes(',')
+      ? s.replace(/,/g, '')
+      : s.replace(',', '.');
+    const v = parseFloat(normalized);
+    return Number.isFinite(v) ? v : NaN;
+  }
+  function pickChannelRatingPayload(d) {
+    const avg   = num(d.avg_rating ?? d.average_rating ?? d.avg ?? d.average);
+    const count = num(d.rating_count ?? d.total_ratings ?? d.count ?? d.total);
+    return { avg, count };
+  }
+  function refreshChannelRatingSummary({ avg, count }) {
+    if (!Number.isNaN(avg) && !Number.isNaN(count)) {
+      setText(".channel-rating-info", `${avg.toFixed(1)} (${formatNumber(count)})`);
+      return true;
+    }
+    return false;
+  }
+</script>
 
  
 {% endblock %}
