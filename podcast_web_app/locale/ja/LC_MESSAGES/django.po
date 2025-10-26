@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-20 20:36-0500\n"
+"POT-Creation-Date: 2025-10-26 16:12-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -177,7 +177,7 @@ msgstr "通知"
 #: .\podcasts\templates\podcasts\base.html:72
 #: .\podcasts\templates\podcasts\bookmarks_list.html:65
 #: .\podcasts\templates\podcasts\bookmarks_list_items.html:57
-#: .\podcasts\templates\podcasts\channel_detail.html:164
+#: .\podcasts\templates\podcasts\channel_detail.html:160
 #: .\podcasts\templates\podcasts\channel_detail_item.html:46
 #: .\podcasts\templates\podcasts\episode_list.html:28
 #: .\podcasts\templates\podcasts\episode_list.html:83
@@ -196,7 +196,7 @@ msgstr "チャンネル"
 
 #: .\podcasts\templates\podcasts\base.html:75
 #: .\podcasts\templates\podcasts\base.html:174
-#: .\podcasts\templates\podcasts\channel_detail.html:126
+#: .\podcasts\templates\podcasts\channel_detail.html:122
 #: .\podcasts\templates\podcasts\channel_list.html:46
 msgid "Episodes"
 msgstr "エピソード"
@@ -243,7 +243,7 @@ msgid "Search episodes or channels..."
 msgstr "エピソードまたはチャンネルを検索..."
 
 #: .\podcasts\templates\podcasts\base.html:194
-#: .\podcasts\templates\podcasts\channel_detail.html:120
+#: .\podcasts\templates\podcasts\channel_detail.html:116
 msgid "Search"
 msgstr "検索"
 
@@ -335,14 +335,14 @@ msgid "Close"
 msgstr "近く"
 
 #: .\podcasts\templates\podcasts\base.html:592
-#: .\podcasts\templates\podcasts\channel_detail.html:207
-#: .\podcasts\templates\podcasts\episode_detail.html:265
+#: .\podcasts\templates\podcasts\channel_detail.html:203
+#: .\podcasts\templates\podcasts\episode_detail.html:285
 msgid "Please sign in to complete this action."
 msgstr "このアクションを完了するためにサインインしてください."
 
 #: .\podcasts\templates\podcasts\base.html:594
-#: .\podcasts\templates\podcasts\channel_detail.html:208
-#: .\podcasts\templates\podcasts\episode_detail.html:266
+#: .\podcasts\templates\podcasts\channel_detail.html:204
+#: .\podcasts\templates\podcasts\episode_detail.html:286
 msgid "Sign in"
 msgstr "サインインする"
 
@@ -391,9 +391,9 @@ msgstr "明示的"
 
 #: .\podcasts\templates\podcasts\bookmarks_list.html:70
 #: .\podcasts\templates\podcasts\bookmarks_list_items.html:62
-#: .\podcasts\templates\podcasts\channel_detail.html:169
+#: .\podcasts\templates\podcasts\channel_detail.html:165
 #: .\podcasts\templates\podcasts\channel_detail_item.html:51
-#: .\podcasts\templates\podcasts\episode_detail.html:243
+#: .\podcasts\templates\podcasts\episode_detail.html:263
 #: .\podcasts\templates\podcasts\episode_list.html:34
 #: .\podcasts\templates\podcasts\episode_list.html:88
 #: .\podcasts\templates\podcasts\episode_list_items.html:59
@@ -406,7 +406,7 @@ msgstr "コメント"
 
 #: .\podcasts\templates\podcasts\bookmarks_list.html:75
 #: .\podcasts\templates\podcasts\bookmarks_list_items.html:67
-#: .\podcasts\templates\podcasts\channel_detail.html:173
+#: .\podcasts\templates\podcasts\channel_detail.html:169
 #: .\podcasts\templates\podcasts\channel_detail_item.html:56
 #: .\podcasts\templates\podcasts\episode_list.html:93
 #: .\podcasts\templates\podcasts\episode_list_items.html:64
@@ -419,7 +419,7 @@ msgstr "エピソード 評価"
 
 #: .\podcasts\templates\podcasts\bookmarks_list.html:84
 #: .\podcasts\templates\podcasts\bookmarks_list_items.html:76
-#: .\podcasts\templates\podcasts\channel_detail.html:181
+#: .\podcasts\templates\podcasts\channel_detail.html:177
 #: .\podcasts\templates\podcasts\channel_detail_item.html:65
 #: .\podcasts\templates\podcasts\channel_list.html:95
 #: .\podcasts\templates\podcasts\channel_list_items.html:43
@@ -457,7 +457,7 @@ msgstr "記録されたエピソードを 読み込み..."
 
 #: .\podcasts\templates\podcasts\bookmarks_list.html:147
 #: .\podcasts\templates\podcasts\bookmarks_list.html:154
-#: .\podcasts\templates\podcasts\channel_detail.html:213
+#: .\podcasts\templates\podcasts\channel_detail.html:209
 #: .\podcasts\templates\podcasts\channel_list.html:118
 #: .\podcasts\templates\podcasts\episode_list.html:165
 #: .\podcasts\templates\podcasts\episode_list.html:172
@@ -484,10 +484,12 @@ msgid "Sign in to add favorites"
 msgstr "好きなものを追加するにはサインインする"
 
 #: .\podcasts\templates\podcasts\channel_detail.html:48
+#: .\podcasts\templates\podcasts\channel_detail.html:447
 msgid "Remove from Favorites"
 msgstr "好きな物から削除する"
 
 #: .\podcasts\templates\podcasts\channel_detail.html:48
+#: .\podcasts\templates\podcasts\channel_detail.html:453
 msgid "Add to Favorites"
 msgstr "お気に入り に 追加"
 
@@ -496,10 +498,12 @@ msgid "Sign in to enable notifications"
 msgstr "通知を有効にするためにサインインする"
 
 #: .\podcasts\templates\podcasts\channel_detail.html:62
+#: .\podcasts\templates\podcasts\channel_detail.html:496
 msgid "Remove from Notifications"
 msgstr "通知から削除する"
 
 #: .\podcasts\templates\podcasts\channel_detail.html:62
+#: .\podcasts\templates\podcasts\channel_detail.html:502
 msgid "Add to Notifications"
 msgstr "通知に追加する"
 
@@ -518,20 +522,20 @@ msgstr "評価を更新する"
 msgid "Rate this channel"
 msgstr "このチャンネルを評価する"
 
-#: .\podcasts\templates\podcasts\channel_detail.html:111
+#: .\podcasts\templates\podcasts\channel_detail.html:107
 msgid "Search episodes in this channel"
 msgstr "このチャンネルで検索エピソード"
 
-#: .\podcasts\templates\podcasts\channel_detail.html:117
+#: .\podcasts\templates\podcasts\channel_detail.html:113
 msgid "Search episodes in this channel…"
 msgstr "このチャンネルでの捜索エピソード..."
 
-#: .\podcasts\templates\podcasts\channel_detail.html:194
+#: .\podcasts\templates\podcasts\channel_detail.html:190
 msgid "No episodes available for this channel."
 msgstr "このチャンネルにはエピソードはありません."
 
-#: .\podcasts\templates\podcasts\channel_detail.html:201
-#: .\podcasts\templates\podcasts\channel_detail.html:214
+#: .\podcasts\templates\podcasts\channel_detail.html:197
+#: .\podcasts\templates\podcasts\channel_detail.html:210
 #: .\podcasts\templates\podcasts\episode_list.html:130
 #: .\podcasts\templates\podcasts\search_results_items.html:178
 #: .\podcasts\templates\podcasts\search_results_items.html:188
@@ -772,69 +776,79 @@ msgstr "このエピソードを評価する"
 msgid "Average rating and total ratings"
 msgstr "平均評価と総評価"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:157
 #: .\podcasts\templates\podcasts\episode_detail.html:158
-#: .\podcasts\templates\podcasts\episode_detail.html:160
+#: .\podcasts\templates\podcasts\episode_detail.html:159
+#: .\podcasts\templates\podcasts\episode_detail.html:161
 msgid "Download JSON"
 msgstr "JSONをダウンロードする"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:165
+#: .\podcasts\templates\podcasts\episode_detail.html:167
 msgid "Sign in to download JSON"
 msgstr "JSONをダウンロードするにはログインします"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:170
+#: .\podcasts\templates\podcasts\episode_detail.html:172
 msgid "Total Downloads"
 msgstr "ダウンロード総数"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:188
+#: .\podcasts\templates\podcasts\episode_detail.html:190
 msgid "Your browser does not support the audio element."
 msgstr "あなたのブラウザはオーディオ要素をサポートしていません."
 
-#: .\podcasts\templates\podcasts\episode_detail.html:192
+#: .\podcasts\templates\podcasts\episode_detail.html:194
 msgid "Audio:"
 msgstr "音声:"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:192
+#: .\podcasts\templates\podcasts\episode_detail.html:194
 msgid "No audio available"
 msgstr "音声はありません"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:200
+#: .\podcasts\templates\podcasts\episode_detail.html:203
 msgid "Chapters"
 msgstr "章"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:207
+#: .\podcasts\templates\podcasts\episode_detail.html:210
+msgid "Jump to"
+msgstr "飛び降りる"
+
+#: .\podcasts\templates\podcasts\episode_detail.html:215
 msgid "No chapters available for this episode."
 msgstr "このエピソードには章がありません"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:216
+#: .\podcasts\templates\podcasts\episode_detail.html:226
+#: .\podcasts\templates\podcasts\episode_detail.html:255
 msgid "Transcript"
 msgstr "トランスクリプト"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:234
+#: .\podcasts\templates\podcasts\episode_detail.html:246
 msgid "No transcript available for this episode."
 msgstr "このエピソードには収録がありません"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:249
+#: .\podcasts\templates\podcasts\episode_detail.html:254
+#| msgid "Audio:"
+msgid "Audio"
+msgstr "音声"
+
+#: .\podcasts\templates\podcasts\episode_detail.html:269
 msgid "Write a comment..."
 msgstr "コメントを書いて..."
 
-#: .\podcasts\templates\podcasts\episode_detail.html:252
+#: .\podcasts\templates\podcasts\episode_detail.html:272
 msgid "Submit Comment"
 msgstr "コメントを投稿する"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:480
+#: .\podcasts\templates\podcasts\episode_detail.html:834
 msgid "Remove episode from Bookmarks"
 msgstr "ブックマークからエピソードを削除"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:486
+#: .\podcasts\templates\podcasts\episode_detail.html:840
 msgid "Add episode to Bookmarks"
 msgstr "ブックマークにエピソードを追加する"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:550
+#: .\podcasts\templates\podcasts\episode_detail.html:966
 msgid "No comments yet."
 msgstr "まだコメントはない"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:614
+#: .\podcasts\templates\podcasts\episode_detail.html:1030
 msgid "Please enter a comment"
 msgstr "コメントを入力してください"
 
@@ -1257,7 +1271,6 @@ msgid "No channels found matching your search."
 msgstr "検索に一致するチャンネルは見つかりませんでした"
 
 #: .\podcasts\templates\podcasts\search_results_items.html:24
-#| msgid "No image available"
 msgid "No Title Available"
 msgstr "タイトルはありません"
 

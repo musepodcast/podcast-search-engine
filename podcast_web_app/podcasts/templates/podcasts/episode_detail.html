@@ -198,12 +198,18 @@
 </div>
 
 <!-- CHAPTERS -->
+<!-- CHAPTERS -->
 <div class="section-container mb-4">
   <h3>{% trans "Chapters" %}</h3>
-  <ul class="list-group">
+  <ul class="list-group" id="chapters">
     {% for chapter in chapters %}
       <li class="list-group-item">
-        <strong>{{ chapter.chapter_time }}:</strong> {{ chapter.chapter_title }}
+        <a href="#t={{ chapter.chapter_time }}" 
+           class="chapter-link"
+           data-t="{{ chapter.chapter_time }}"
+           title="{% trans 'Jump to' %} {{ chapter.chapter_time }}">
+          <strong>{{ chapter.chapter_time }}:</strong> {{ chapter.chapter_title }}
+        </a>
       </li>
     {% empty %}
       <li class="list-group-item">{% trans "No chapters available for this episode." %}</li>
@@ -211,15 +217,19 @@
   </ul>
 </div>
 
+
 <hr style="border-top: 2px solid var(--list-hover-bg); margin: 2rem 0;">
 
 <!-- TRANSCRIPT -->
+<!-- TRANSCRIPT -->
 <div class="section-container mb-4">
   <h3>{% trans "Transcript" %}</h3>
-  <div class="transcript">
+  <div class="transcript" id="transcript">
     {% if merged_segments %}
       {% for segment in merged_segments %}
-        <div class="segment mb-3">
+        <div class="segment mb-3"
+             data-start="{{ segment.start_seconds|default:segment.combined_time }}"  {# accepts "90" or "01:30" #}
+             id="seg-{{ forloop.counter }}">  {# stable anchor if you want #}
           <div class="segment-header mb-1">
             <span class="time">{{ segment.combined_time }}</span>
             {% if segment.speaker %}
@@ -235,6 +245,14 @@
     {% else %}
       <p>{% trans "No transcript available for this episode." %}</p>
     {% endif %}
+  </div>
+</div>
+
+<!-- Jump menu (hidden by default) -->
+<div id="jump-menu" style="display:none; position:fixed; z-index:1200;">
+  <div class="jump-menu-card">
+    <button type="button" data-action="audio" class="jump-menu-btn">{% trans "Audio" %}</button> 
+    <button type="button" data-action="transcript" class="jump-menu-btn">{% trans "Transcript" %}</button>
   </div>
 </div>
 
@@ -384,7 +402,298 @@
   #mention-suggestions .suggestion-item { padding: 8px 12px; cursor: pointer; color: #0b5ed7; }
   #mention-suggestions .suggestion-item:hover { background-color: rgba(255,255,255,0.1); }
   .mention-highlight { color: #0b5ed7; font-weight: bold; }
+
+  #jump-menu {
+  display:none; position:fixed; z-index:1200;
+  pointer-events: auto; /* <— ensure it's interactive */
+}
+
+  #jump-menu .jump-menu-card {
+  background: var(--background-color);
+  color: var(--text-color);
+  border: 1px solid color-mix(in srgb, var(--text-color) 20%, transparent);
+  border-radius: 10px;
+  box-shadow: 0 10px 24px rgba(0,0,0,.28);
+  padding: .5rem;
+  display: grid;
+  gap: .5rem;
+  min-width: 160px;
+}
+
+  #jump-menu .jump-menu-btn {
+    background: var(--chip-bg);
+    color: var(--chip-text);
+    border: 1px solid var(--chip-border);
+    border-radius: 8px;
+    padding: .5rem .75rem;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  #jump-menu .jump-menu-btn:hover { filter: brightness(.95); }
+
+  /* existing highlight class from earlier step */
+  .segment--active {
+    outline: 2px solid var(--chip-text);
+    background: color-mix(in srgb, var(--chip-bg) 15%, transparent);
+    border-radius: 8px;
+    transition: background .25s ease;
+  }
+
+  /* make timestamps look clickable */
+  .segment .time { cursor: pointer; text-decoration: underline dotted; }
+  .segment .time:hover { text-decoration: underline; }
+
+  /* highlight the audio player briefly so users see where they landed */
+  .audio-highlight {
+    outline: 2px solid var(--chip-text);
+    border-radius: 8px;
+    animation: audioPulse 1.2s ease 2;
+  }
+  @keyframes audioPulse {
+    0%   { box-shadow: 0 0 0 0 rgba(0,0,0,0.0); }
+    50%  { box-shadow: 0 0 0 6px color-mix(in srgb, var(--chip-bg) 35%, transparent); }
+    100% { box-shadow: 0 0 0 0 rgba(0,0,0,0.0); }
+  }
+
+
+
 </style>
+
+<script>
+  (function(){
+    const audio = document.querySelector('audio');
+    const chaptersUL = document.getElementById('chapters');
+    const transcriptEl = document.getElementById('transcript');
+    const menu = document.getElementById('jump-menu');
+    let activeSeg = null;
+
+  function parseTimeToSeconds(t) {
+    if (t == null) return NaN;
+    const s = String(t).trim();
+
+    // Strip leading "#t=" or "t="
+    const cleaned = s.replace(/^#?t=/i, '');
+
+    // If it's a pure number (seconds)
+    if (/^\d+(?:\.\d+)?$/.test(cleaned)) return parseFloat(cleaned);
+
+    // Find the FIRST time-like token (handles MM:SS or HH:MM:SS)
+    const m = cleaned.match(/(?:\b\d{1,2}:)?\d{1,2}:\d{2}\b/);
+    if (m) {
+      const parts = m[0].split(':').map(Number);
+      while (parts.length < 3) parts.unshift(0); // -> [hh, mm, ss]
+      const [h, m2, sec] = parts;
+      return h * 3600 + m2 * 60 + sec;
+    }
+
+    return NaN; // no recognizable time
+  }
+
+  function getSegmentStartSeconds(seg) {
+    // 1) Prefer explicit numeric data-start (e.g. "92" or "92.5")
+    const raw = seg.getAttribute('data-start');
+    if (raw != null && raw !== '') {
+      const n = parseTimeToSeconds(raw);
+      if (!Number.isNaN(n)) return n;
+    }
+
+    // 2) Fallback: parse the visible time chip text
+    const chip = seg.querySelector('.time');
+    if (chip) {
+      const n2 = parseTimeToSeconds(chip.textContent);
+      if (!Number.isNaN(n2)) return n2;
+    }
+
+    // 3) Last resort: look for any time-ish text inside the segment
+    const any = parseTimeToSeconds(seg.textContent || '');
+    return Number.isNaN(any) ? 0 : any; // better than NaN, avoids “always Intro”
+  }
+
+  function findSegmentAt(seconds) {
+    const segs = Array.from(document.querySelectorAll('.transcript .segment'));
+    if (!segs.length) return null;
+
+    // Find the last segment whose start <= target seconds
+    let best = segs[0], bestStart = getSegmentStartSeconds(best);
+    for (const seg of segs) {
+      const start = getSegmentStartSeconds(seg);
+      if (!Number.isNaN(start) && start <= seconds && start >= bestStart) {
+        best = seg;
+        bestStart = start;
+      }
+    }
+    return best;
+  }
+
+
+  function highlight(seg) {
+    if (!seg) return;
+    if (activeSeg) activeSeg.classList.remove('segment--active');
+    activeSeg = seg;
+    seg.classList.add('segment--active');
+  }
+
+  function jumpToTranscript(seconds) {
+    const seg = findSegmentAt(seconds);
+    if (!seg) return;
+    highlight(seg);
+    seg.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function jumpToAudio(seconds, { autoplay = false } = {}) {
+    const audio = document.querySelector('audio');
+    if (!audio || Number.isNaN(seconds)) return;
+
+    const doSeek = () => {
+      try { audio.currentTime = seconds; } catch(e) {}
+      if (autoplay) {
+        // user clicked → allowed to play; ignore promise rejection
+        audio.play().catch(()=>{});
+      }
+    };
+
+    if (audio.readyState >= 1) doSeek();
+    else audio.addEventListener('loadedmetadata', doSeek, { once: true });
+
+    // do not scroll transcript here
+  }
+
+
+  function scrollToAudio() {
+    const audio = document.querySelector('audio');
+    if (!audio) return;
+
+    // If you have a sticky header, tweak this offset (px)
+    const OFFSET = 80;
+    const top = audio.getBoundingClientRect().top + window.scrollY - OFFSET;
+
+    window.scrollTo({ top, behavior: 'smooth' });
+
+    // Visual cue + focus for keyboard users
+    audio.classList.add('audio-highlight');
+    audio.setAttribute('tabindex', '-1');
+    // focus after scroll has started
+    setTimeout(() => { try { audio.focus({ preventScroll: true }); } catch(_){} }, 150);
+    // remove highlight after a moment
+    setTimeout(() => audio.classList.remove('audio-highlight'), 1600);
+  }
+
+
+
+  let outsideHandler = null;
+  let escHandler = null;
+
+  function showMenu(x, y, seconds) {
+    if (!menu) return;
+
+    // store target seconds for the buttons
+    menu.dataset.seconds = String(Math.max(0, Math.floor(seconds) || 0));
+
+    // position safely in viewport
+    const pad = 8;
+    menu.style.left = Math.max(pad, Math.min(window.innerWidth  - 200, x)) + 'px';
+    menu.style.top  = Math.max(pad, Math.min(window.innerHeight - 120, y)) + 'px';
+    menu.style.display = 'block';
+
+    // outside click (mousedown is better than click to avoid race)
+    outsideHandler = (ev) => {
+      if (!menu.contains(ev.target)) {
+        hideMenu();
+      }
+    };
+    document.addEventListener('mousedown', outsideHandler, true); // capture phase
+
+    // ESC to close
+    escHandler = (ev) => {
+      if (ev.key === 'Escape') hideMenu();
+    };
+    document.addEventListener('keydown', escHandler);
+  }
+
+  function hideMenu() {
+    if (!menu) return;
+    menu.style.display = 'none';
+    // cleanup listeners
+    if (outsideHandler) {
+      document.removeEventListener('mousedown', outsideHandler, true);
+      outsideHandler = null;
+    }
+    if (escHandler) {
+      document.removeEventListener('keydown', escHandler);
+      escHandler = null;
+    }
+  }
+
+
+  menu?.addEventListener('click', (e) => {
+    const btn = e.target.closest('.jump-menu-btn');
+    if (!btn) return;
+    const seconds = parseInt(menu.dataset.seconds || '0', 10) || 0;
+    hideMenu();
+    if (btn.dataset.action === 'audio') {
+      jumpToAudio(seconds, { autoplay: true });  // ← start playing at that mark
+      scrollToAudio();                            // keep your “scroll & highlight” behavior
+      history.replaceState(null, '', '#t=' + seconds);
+    } else if (btn.dataset.action === 'transcript') {
+      jumpToTranscript(seconds);
+      history.replaceState(null, '', '#t=' + seconds);
+    }
+  });
+
+
+  chaptersUL?.addEventListener('click', function(e){
+    const a = e.target.closest('.chapter-link');
+    if (!a) return;
+    e.preventDefault();
+    e.stopPropagation();              // <— important
+    const seconds = parseTimeToSeconds(a.getAttribute('data-t') || a.getAttribute('href'));
+    const clickX = (e.clientX ?? window.innerWidth/2);
+    const clickY = (e.clientY ?? window.innerHeight/2);
+    showMenu(clickX, clickY, seconds);
+  });
+
+   transcriptEl?.addEventListener('click', function(e){
+    const seg = e.target.closest('.segment');
+    if (!seg) return;
+    if (!e.target.closest('.time')) return;
+    e.stopPropagation();              // <— prevents immediate close
+    const seconds = getSegmentStartSeconds(seg);
+    // Either show the menu here:
+    // showMenu(e.clientX, e.clientY, seconds);
+    // Or jump straight to audio:
+    jumpToAudio(seconds);
+    history.replaceState(null, '', '#t=' + Math.floor(seconds));
+  });
+
+
+  // Deep link (#t= or ?t=) still works: jump to audio and highlight transcript
+  (function initDeepLink(){
+    const fromQuery = new URLSearchParams(location.search).get('t');
+    const fromHash  = location.hash.startsWith('#t=') ? location.hash.slice(3) : null;
+    const seconds = parseTimeToSeconds(fromQuery ?? fromHash);
+    if (!Number.isNaN(seconds)) {
+      if (audio && audio.readyState >= 1) jumpToAudio(seconds);
+      else audio?.addEventListener('loadedmetadata', () => jumpToAudio(seconds), { once:true });
+    }
+  })();
+
+  // Keep highlight synced during playback (light polling)
+  let syncTimer = null;
+  audio?.addEventListener('play', () => {
+    if (syncTimer) return;
+    syncTimer = setInterval(() => {
+      const s = audio.currentTime|0;
+      const seg = findSegmentAt(s);
+      if (seg && seg !== activeSeg) highlight(seg);
+    }, 1000);
+  });
+  function stopSync(){ if (syncTimer){ clearInterval(syncTimer); syncTimer=null; } }
+  audio?.addEventListener('pause', stopSync);
+  audio?.addEventListener('ended', stopSync);
+})();
+</script>
+
+
 
 <script>
   function formatNumber(n) {
@@ -397,6 +706,8 @@
     if (el) el.textContent = text;
   }
 </script>
+
+
 
 <script>
   function num(x) {
