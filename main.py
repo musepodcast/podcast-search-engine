@@ -83,12 +83,57 @@ except Exception as e:
 try:
     sentence_model = SentenceTransformer('all-MiniLM-L6-v2', device='cuda')
     sentence_model.eval()
+    # Cap sentence transformer input to avoid long-seq weirdness
+    try:
+        sentence_model.max_seq_length = 256
+    except Exception:
+        pass
+
 
     #sentence_model.half()  # Convert the model's parameters to FP16
     logging.info("Sentence-BERT model loaded successfully on CUDA.")
 except Exception as e:
     logging.critical(f"Failed to load Sentence-BERT model: {e}")
     sentence_model = None
+
+def clamp_to_full_sentence(text: str) -> str:
+    """
+    Return a single full sentence ending in . ! or ? (optionally followed by a closing quote/bracket).
+    If the input doesn't contain a full sentence, return "".
+    """
+    t = re.sub(r"\s+", " ", (text or "")).strip()
+    if not t:
+        return t
+    # If it already ends with terminal punctuation, keep it.
+    if re.search(r"[.!?][\"’”)]?$", t):
+        return t
+    m = re.search(r"(.+[.!?])[\"’”)]?\s*$", t)
+    return m.group(1).strip() if m else ""
+
+def best_sentence_by_noun_density(text: str) -> str:
+    """
+    Extractive fallback: pick the sentence with the highest NOUN/PROPN density.
+    """
+    try:
+        sents = nltk.sent_tokenize(text)
+    except Exception:
+        sents = re.split(r'(?<=[.!?])\s+', text or "")
+    sents = [s.strip() for s in sents if len(s.strip().split()) >= 5]
+    if not sents:
+        return (text or "").strip()
+    if nlp:
+        best = None
+        best_score = -1.0
+        for s in sents:
+            doc = nlp(s)
+            content = sum(1 for t in doc if t.pos_ in ("NOUN","PROPN"))
+            score = (content + 1e-6) / (len(doc) + 1e-6)
+            if score > best_score:
+                best, best_score = s, score
+        return best or sents[0]
+    # fallback: longest reasonable sentence
+    return max(sents, key=lambda s: len(s))
+
 
 def convert_to_5min_wav_chunks(input_path, output_dir, chunk_length_ms=5*60*1000):
     """
@@ -227,35 +272,33 @@ def get_embedding(model, text, max_tokens=256):
 # Function to load configuration
 def load_config(config_path='config.yaml'):
     """
-    Load YAML configuration file.
-    
-    Parameters:
-    - config_path (str): Path to the YAML configuration file.
-    
-    Returns:
-    - dict: Configuration parameters.
+    Load YAML configuration file (UTF-8). Falls back to UTF-8-SIG if needed.
     """
     try:
-        with open(config_path, 'r') as file:
+        # First attempt: strict UTF-8
+        with open(config_path, 'r', encoding='utf-8') as file:
             config = yaml.safe_load(file)
-        logging.info(f"Configuration loaded successfully from {config_path}")
-        # Validate required sections and parameters
-        required_sections = ['summarizer', 'chapter_generation']
-        for section in required_sections:
-            if section not in config:
-                logging.critical(f"Missing section '{section}' in configuration file. Exiting.")
-                exit(1)
-        logging.info(f"All required configuration sections are present.")
-        return config
-    except FileNotFoundError:
-        logging.critical(f"Configuration file {config_path} not found. Exiting.")
-        exit(1)
-    except yaml.YAMLError as e:
-        logging.critical(f"Error parsing YAML file: {e}")
-        exit(1)
+        logging.info(f"Configuration loaded successfully from {config_path} (utf-8)")
+    except UnicodeDecodeError:
+        # Some editors save with BOM → try utf-8-sig
+        with open(config_path, 'r', encoding='utf-8-sig') as file:
+            config = yaml.safe_load(file)
+        logging.info(f"Configuration loaded successfully from {config_path} (utf-8-sig)")
+
+    # Validate required sections and parameters
+    required_sections = ['summarizer', 'chapter_generation']
+    for section in required_sections:
+        if section not in config:
+            logging.critical(f"Missing section '{section}' in configuration file. Exiting.")
+            raise SystemExit(1)
+    logging.info("All required configuration sections are present.")
+    return config
+
 
 # Load the configuration
 config = load_config()
+
+
 
 # 2) initialize summarizer pipeline
 try:
@@ -270,14 +313,7 @@ except Exception as e:
     logging.critical(f"Failed to initialize summarization pipeline: {e}", exc_info=True)
     summarizer = None
 
-# 3) load sentence_model
-try:
-    sentence_model = SentenceTransformer('all-MiniLM-L6-v2', device='cuda')
-    sentence_model.eval()
-    logging.info("Sentence-BERT model loaded successfully on CUDA.")
-except Exception as e:
-    logging.critical(f"Failed to load Sentence-BERT model: {e}", exc_info=True)
-    sentence_model = None
+
 
 # ─── NOW throttle your GPU and do the FP16 conversion ────────────────────
 if torch.cuda.is_available():
@@ -654,80 +690,49 @@ def is_title_unique(new_title, chapters, model, similarity_threshold=0.6):
         logging.error(f"Error in uniqueness check: {e}", exc_info=True)
         return False
 
-# ===== Concise, Title-Cased, Sponsor-Filtered Chaptering (no profanity scrub) =====
+def _expand_semicolon_list(items):
+    out = []
+    for it in items or []:
+        parts = [p.strip() for p in str(it).split(';')]
+        out.extend([p for p in parts if p])
+    return out
 
-SMALL_WORDS = {"a","an","and","as","at","but","by","for","in","nor","of","on","or","per","so","the","to","via"}
-PRONOUN_STARTS = tuple(["i ", "i’m", "im ", "you ", "we ", "they "])  # lowercased compare
-BOUNDARY_TOKENS = {'.', '!', '?', '…', '—', '–', ';', ':'}
-TRAILING_BAD = {
-    # Coordinators / discourse
-    "and","or","but","so","yet","nor",
+def build_text_rules(cfg):
+    tr = (cfg or {}).get('text_rules', {})
 
-    # Prepositions & particles
-    "to","of","for","with","without","about","above","across","after","against",
-    "along","among","around","as","at","before","behind","below","beneath",
-    "beside","besides","between","beyond","by","down","during","except","from",
-    "in","inside","into","like","near","off","on","onto","out","outside","over",
-    "past","per","since","through","throughout","till","toward","towards",
-    "under","underneath","until","up","upon","via","within","versus","vs",
+    small_words = set(_expand_semicolon_list(tr.get('small_words')))
+    pronoun_starts = tuple(_expand_semicolon_list(tr.get('pronoun_starts')))
+    boundary_tokens = set(_expand_semicolon_list(tr.get('boundary_tokens')))
+    trailing_bad = set(_expand_semicolon_list(tr.get('trailing_bad')))
 
-    # Subordinators / WH-words / comparatives
-    "that","which","who","whom","whose","what","when","where","why","how",
-    "if","though","although","because","unless","while","whereas","than",
+    sponsor_patterns = [re.compile(p, re.I) for p in tr.get('sponsor_patterns', [])]
 
-    # Determiners / quantifiers
-    "a","an","the","this","that","these","those","each","every","either",
-    "neither","some","any","no","none","both","few","many","much","more",
-    "most","several","such","another","other","others","own",
+    domain_re = re.compile(tr.get('domain_re', r"\b([a-z0-9\-]+\.)+(com|net|org|io|co|tv|fm)\b"), re.I)
+    urlish_re = re.compile(tr.get('urlish_re', r"https?://|www\."), re.I)
+    cta_re = re.compile(tr.get('cta_re', r"\b(click|tap|visit|use|enter|subscribe|follow|download|learn more|shop now)\b"), re.I)
 
-    # Pronouns
-    "i","you","we","they","he","she","it","me","us","them","him","her",
-    "my","your","our","their","mine","yours","ours","theirs","his","hers","its",
+    return {
+        "SMALL_WORDS": small_words or {"a","an","and","as","at","but","by","for","in","nor","of","on","or","per","so","the","to","via"},
+        "PRONOUN_STARTS": pronoun_starts or tuple(["i ","i’m","im ","you ","we ","they "]),
+        "BOUNDARY_TOKENS": boundary_tokens or {'.','!','?','…','—','–',';',':'},
+        "TRAILING_BAD": trailing_bad or set(),
+        "SPONSOR_PATTERNS": sponsor_patterns,
+        "DOMAIN_RE": domain_re,
+        "URLISH_RE": urlish_re,
+        "CTA_RE": cta_re,
+    }
 
-    # Auxiliaries / copula
-    "am","is","are","was","were","be","been","being",
-    "do","does","did","doing",
-    "have","has","had","having",
 
-    # Modals
-    "will","would","shall","should","can","could","may","might","must",
 
-    # Negation
-    "not","n't",
-
-    # Contractions (ASCII & curly apostrophes)
-    "i'm","you're","we're","they're","he's","she's","it's","that's","there's","who's",
-    "i've","you've","we've","they've","would've","could've","should've","must've",
-    "i'd","you'd","we'd","they'd","he'd","she'd","it'd","there'd",
-    "i'll","you'll","we'll","they'll","he'll","she'll","it'll","there'll",
-    "'s","'re","'ve","'d","'ll","’s","’re","’ve","’d","’ll",
-
-    # Misc. weak enders
-    "etc","&"
-}
-
-# Common sponsor phrases to skip as chapters
-SPONSOR_PATTERNS = [
-    r"\bthis episode (is|was)\s+(brought to you by|brought to|presented by)\b",
-    r"\bsponsored by\b",
-    r"\bad(vertisement)?\s*(break|read)?\b",
-    r"\bpromo\s*code\b",
-    r"\b(use|enter)\s+code\s+[A-Za-z0-9\-]+\b",
-    r"\bhappy\s+dad\b",
-    r"\bfarmers?\s+dog\b",
-    r"\bmanscaped\b",
-    r"\bnord\s?vpn\b",
-    r"\bsquarespace\b",
-    r"\baudible\b",
-    r"\bshopify\b",
-    r"\bbetterhelp\b",
-    r"\b(raid\s+shadow\s+legends|raycon|hellofresh)\b",
-    r"\bchumba\s+casino\b",
-]
-
-DOMAIN_RE = re.compile(r"\b([a-z0-9\-]+\.)+(com|net|org|io|co|tv|fm)\b", re.I)
-URLISH_RE = re.compile(r"https?://|www\.", re.I)
-CTA_RE = re.compile(r"\b(click|tap|visit|use|enter|subscribe|follow|download|learn more|shop now)\b", re.I)
+TEXT_RULES = build_text_rules(config)
+SMALL_WORDS      = TEXT_RULES["SMALL_WORDS"]
+PRONOUN_STARTS   = TEXT_RULES["PRONOUN_STARTS"]
+BOUNDARY_TOKENS  = TEXT_RULES["BOUNDARY_TOKENS"]
+TRAILING_BAD     = TEXT_RULES["TRAILING_BAD"]
+SPONSOR_PATTERNS = TEXT_RULES["SPONSOR_PATTERNS"]
+DOMAIN_RE        = TEXT_RULES["DOMAIN_RE"]
+URLISH_RE        = TEXT_RULES["URLISH_RE"]
+CTA_RE           = TEXT_RULES["CTA_RE"]
 
 def aggregate_segments_with_stride(segments, window_size=30, stride=None):
     """
@@ -808,9 +813,10 @@ def titlecase_compact(s: str) -> str:
 def is_sponsor_segment(text: str) -> bool:
     t = " " + (text or "").lower() + " "
     for pat in SPONSOR_PATTERNS:
-        if re.search(pat, t, flags=re.I):
+        if pat.search(t):
             return True
     return False
+
 
 def is_promotional_title(title: str) -> bool:
     """Reject titles that *look* like ad reads."""
@@ -888,33 +894,47 @@ def clean_title(title):
 def is_title_valid(title, config):
     """
     Enforce concise, topical titles; avoid first-person rambles and sponsor reads.
+    Sentence style: allow longer ranges and require at least one content word.
     """
     try:
-        t = title.strip()
+        t = (title or "").strip()
+        if not t:
+            return False
         t_low = t.lower()
         rules = config.get('chapter_generation', {}).get('title', {})
-        min_words = int(rules.get('min_words', 4))
-        max_words = int(rules.get('max_words', 8))
+        style = (rules.get('style') or 'title').strip().lower()
+
+        if t_low.startswith(PRONOUN_STARTS):
+            return False
+        if is_sponsor_segment(t):
+            return False
+
+        if style == "sentence":
+            min_words = int(rules.get('min_words', 8))
+            max_words = int(rules.get('max_words', 24))
+        else:
+            min_words = int(rules.get('min_words', 4))
+            max_words = int(rules.get('max_words', 8))
 
         wc = len(t.split())
         if wc < min_words or wc > max_words:
             return False
 
-        if t_low.startswith(PRONOUN_STARTS):
-            return False
-
-        if is_sponsor_segment(t):
-            return False
-
+        # Require at least one content word (NOUN/PROPN/VERB) to avoid empty phrasal junk
         if nlp:
             doc = nlp(t)
-            if not any(tok.pos_ in ('NOUN','PROPN') for tok in doc):
+            if not any(tok.pos_ in ('NOUN','PROPN','VERB') for tok in doc):
                 return False
+
+        # For sentence style, prefer endings with terminal punctuation
+        if style == "sentence" and not re.search(r"[.!?][\"’”)]?$", t):
+            return False
 
         return True
     except Exception as e:
         logging.error(f"Error validating title '{title}': {e}", exc_info=True)
-        return False  # Reject the title if validation fails
+        return False
+
 
 def verify_entities(title, segment_text):
     """
@@ -944,6 +964,7 @@ def generate_chapter_title(segment_text, config=None):
             return None
 
         rules = config.get('chapter_generation', {}).get('title', {}) if config else {}
+        style = (rules.get('style') or 'title').strip().lower()   # ← NEW: 'sentence'|'bullet'|'title'
         min_words = int(rules.get('min_words', 4))
         max_words = int(rules.get('max_words', 8))
         drop_sponsors = bool(rules.get('drop_sponsor_segments', True))
@@ -957,63 +978,93 @@ def generate_chapter_title(segment_text, config=None):
 
         segment_text = preprocess_text(segment_text)
 
-        # Truncate input for focus
-        max_input_length = 1024
+        # Hard input clamp for focus (avoid long sequences to the model)
+        max_input_length = 2000
         if len(segment_text) > max_input_length:
             segment_text = segment_text[:max_input_length]
 
-        # Summarize succinctly
-        raw = summarizer(
-            segment_text,
-            max_length=config['summarizer']['max_length'],
-            min_length=config['summarizer']['min_length'],
-            do_sample=False,
-            num_beams=4,
-            no_repeat_ngram_size=3,
-            length_penalty=2.0,
-            early_stopping=True
-        )[0]['summary_text']
+        # --- Summarize succinctly, but with truncation to avoid tokenizer overflows
+        try:
+            raw = summarizer(
+                segment_text,
+                max_length=config['summarizer']['max_length'],
+                min_length=config['summarizer']['min_length'],
+                do_sample=False,
+                num_beams=4,
+                no_repeat_ngram_size=3,
+                length_penalty=2.0,
+                early_stopping=True,
+                truncation=True,                 # ← IMPORTANT
+            )[0]['summary_text']
+        except Exception as e:
+            logging.warning(f"Summarizer failed, using extractive fallback: {e}")
+            raw = ""
 
-        # Ensure we end a sentence (finish the thought), then compact
-        raw = re.sub(r"\s+", " ", raw.strip())
-        # If the model stopped mid-sentence, cut back to last terminal punctuation.
-        if not re.search(r"[\.!?]$", raw):
-            cut = re.search(r".*[\.!?]", raw)
-            if cut:
-                raw = cut.group(0)
+        raw = re.sub(r"\s+", " ", (raw or "").strip())
 
-        draft = raw
-        words = draft.split()
-        if len(words) > max_words:
-            draft = " ".join(words[:max_words])
+        # === Style switch ===
+        if style == "sentence":
+            # Keep exactly one full sentence; fallback to best extractive if needed
+            sent = clamp_to_full_sentence(raw)
+            if not sent:
+                sent = best_sentence_by_noun_density(segment_text)
 
-        if len(draft.split()) < min_words or draft.lower().startswith(PRONOUN_STARTS):
-            draft = compact_title_from_text(segment_text, min_words=min_words, max_words=max_words)
+            # Light length clamp to keep it crisp; don't mutilate the sentence
+            words = sent.split()
+            if len(words) > max_words:
+                # Try trimming to last punctuation inside the window; else hard-trim
+                head = " ".join(words[:max_words + 8])
+                m = re.search(r"(.+[.!?])[\"’”)]?\s*$", head)
+                sent = (m.group(1) if m else " ".join(words[:max_words])).strip()
+            title = sent.strip()
 
-        title = clean_title(draft)
+        elif style == "bullet":
+            # (optional) If you ever want bullet mode in prod later
+            # use compact_title_from_text() as you were doing in the test script
+            draft = raw if raw else segment_text
+            sent = clamp_to_full_sentence(draft) or best_sentence_by_noun_density(segment_text)
+            # compress to a punchy phrase
+            draft = compact_title_from_text(sent, min_words=min_words, max_words=max_words)
+            title = clean_title(draft)
+
+        else:
+            # Legacy: compact "title case" (your previous default)
+            # Ensure sentence end, then compact if needed
+            if not re.search(r"[\.!?]$", raw):
+                cut = re.search(r".*[\.!?]", raw)
+                if cut:
+                    raw = cut.group(0)
+            draft = raw
+            words = draft.split()
+            if len(words) > max_words:
+                draft = " ".join(words[:max_words])
+            if len(draft.split()) < min_words or draft.lower().startswith(PRONOUN_STARTS):
+                draft = compact_title_from_text(segment_text, min_words=min_words, max_words=max_words)
+            title = clean_title(draft)
 
         # Hard block promo-ish titles
         if is_promotional_title(title):
-            logging.debug(f"Rejecting promotional-looking title: {title}")
             return None
 
-        # Relevance sanity check
+        # Relevance sanity check (fallback to extractive compact if way off)
         title_similarity = compute_similarity(sentence_model, title, segment_text) if sentence_model else 1.0
         if title_similarity < 0.20:
-            title = clean_title(compact_title_from_text(segment_text, min_words=min_words, max_words=max_words))
+            if style == "sentence":
+                title = best_sentence_by_noun_density(segment_text)
+            else:
+                title = clean_title(compact_title_from_text(segment_text, min_words=min_words, max_words=max_words))
             if is_promotional_title(title):
                 return None
 
+        # Style-aware validation (sentence can be longer)
         if not is_title_valid(title, config):
-            return None
-
-        if not verify_entities(title, segment_text):
             return None
 
         return title
     except Exception as e:
         logging.error(f"Error generating chapter title: {e}", exc_info=True)
         return None
+
 
 
 def aggregate_segments_non_overlapping(segments, window_size=5):

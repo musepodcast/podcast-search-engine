@@ -1,22 +1,277 @@
 summarizer:
-  model: "Falconsai/text_summarization"
-  max_length: 32
+  model: facebook/bart-large-cnn
   min_length: 6
+  max_length: 32
 
 chapter_generation:
-  similarity_threshold: 0.60
-  max_chapters: 60
+  similarity_threshold: 0.55
   aggregation_window_size: 40
+  max_chapters: 60
   title:
-    min_words: 5
-    max_words: 10
-    case: "title"
+    style: sentence
+    min_words: 8
+    max_words: 24
+    min_first_chapter_sec: 90
+    min_gap_sec: 90
     drop_sponsor_segments: true
-    force_first_window: true
-    min_first_chapter_sec: 90   
-    min_gap_sec: 90             
-
 
 gpu:
-  memory_fraction: 1.0     # limit to 90% of GPU RAM
-  precision: fp16          # optional: run models in half‑precision
+  memory_fraction: 1.0
+  precision: fp16
+
+text_rules:
+  small_words:
+    - a
+    - an
+    - and
+    - as
+    - at
+    - but
+    - by
+    - for
+    - in
+    - nor
+    - of
+    - on
+    - or
+    - per
+    - so
+    - the
+    - to
+    - via
+
+  pronoun_starts:
+    - "i "
+    - "i’m"
+    - "im "
+    - "you "
+    - "we "
+    - "they "
+
+  boundary_tokens: ['.', '!', '?', '…', '—', '–', ';', ':']
+
+  trailing_bad:
+    - and
+    - or
+    - but
+    - so
+    - yet
+    - nor
+    - to
+    - of
+    - for
+    - with
+    - without
+    - about
+    - above
+    - across
+    - after
+    - against
+    - along
+    - among
+    - around
+    - as
+    - at
+    - before
+    - behind
+    - below
+    - beneath
+    - beside
+    - besides
+    - between
+    - beyond
+    - by
+    - down
+    - during
+    - except
+    - from
+    - in
+    - inside
+    - into
+    - like
+    - near
+    - off
+    - on
+    - onto
+    - out
+    - outside
+    - over
+    - past
+    - per
+    - since
+    - through
+    - throughout
+    - till
+    - toward
+    - towards
+    - under
+    - underneath
+    - until
+    - up
+    - upon
+    - via
+    - within
+    - versus
+    - vs
+    - that
+    - which
+    - who
+    - whom
+    - whose
+    - what
+    - when
+    - where
+    - why
+    - how
+    - if
+    - though
+    - although
+    - because
+    - unless
+    - while
+    - whereas
+    - than
+    - a
+    - an
+    - the
+    - this
+    - that
+    - these
+    - those
+    - each
+    - every
+    - either
+    - neither
+    - some
+    - any
+    - no
+    - none
+    - both
+    - few
+    - many
+    - much
+    - more
+    - most
+    - several
+    - such
+    - another
+    - other
+    - others
+    - own
+    - i
+    - you
+    - we
+    - they
+    - he
+    - she
+    - it
+    - me
+    - us
+    - them
+    - him
+    - her
+    - my
+    - your
+    - our
+    - their
+    - mine
+    - yours
+    - ours
+    - theirs
+    - his
+    - hers
+    - its
+    - am
+    - is
+    - are
+    - was
+    - were
+    - be
+    - been
+    - being
+    - do
+    - does
+    - did
+    - doing
+    - have
+    - has
+    - had
+    - having
+    - will
+    - would
+    - shall
+    - should
+    - can
+    - could
+    - may
+    - might
+    - must
+    - not
+    - "n't"
+    - i'm
+    - you're
+    - we're
+    - they're
+    - he's
+    - she's
+    - it's
+    - that's
+    - there's
+    - who's
+    - i've
+    - you've
+    - we've
+    - they've
+    - would've
+    - could've
+    - should've
+    - must've
+    - i'd
+    - you'd
+    - we'd
+    - they'd
+    - he'd
+    - she'd
+    - it'd
+    - there'd
+    - i'll
+    - you'll
+    - we'll
+    - they'll
+    - he'll
+    - she'll
+    - it'll
+    - there'll
+    - "'s"
+    - "'re"
+    - "'ve"
+    - "'d"
+    - "'ll"
+    - "’s"
+    - "’re"
+    - "’ve"
+    - "’d"
+    - "’ll"
+    - etc
+    - "&"
+
+  sponsor_patterns:
+    - '\bthis episode (is|was)\s+(brought to you by|brought to|presented by)\b'
+    - '\bsponsored by\b'
+    - '\bad(vertisement)?\s*(break|read)?\b'
+    - '\bpromo\s*code\b'
+    - '\b(use|enter)\s+code\s+[A-Za-z0-9\-]+\b'
+    - '\bhappy\s+dad\b'
+    - '\bfarmers?\s+dog\b'
+    - '\bmanscaped\b'
+    - '\bnord\s?vpn\b'
+    - '\bsquarespace\b'
+    - '\baudible\b'
+    - '\bshopify\b'
+    - '\bbetterhelp\b'
+    - '\b(raid\s+shadow\s+legends|raycon|hellofresh)\b'
+    - '\bchumba\s+casino\b'
+
+  domain_re: '\b([a-z0-9\-]+\.)+(com|net|org|io|co|tv|fm)\b'
+  urlish_re: 'https?://|www\.'
+  cta_re: '\b(click|tap|visit|use|enter|subscribe|follow|download|learn more|shop now)\b'
