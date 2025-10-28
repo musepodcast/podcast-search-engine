@@ -177,27 +177,51 @@
     </div>
   </div>
 
-  <!-- DESCRIPTION + AUDIO -->
-  <div class="row mt-3">
-    <div class="col">
-      {% if episode.description %}
-        <p>{{ episode.description|clean_html }}</p>
-      {% endif %}
-      {% if episode.audio_url %}
-        <div>
-          <audio controls style="width:100%;">
-            <source src="{{ episode.audio_url }}" type="audio/mpeg">
-            {% trans "Your browser does not support the audio element." %}
-          </audio>
+
+<div class="section-container mb-4" id="listen" role="region" aria-label="{% trans 'Listen' %}">
+  {% if episode.description %}
+    <!-- DESCRIPTION (above audio, same container) -->
+    <div class="row mt-3" id="episode-description">
+      <div class="col">
+        <div class="episode-description">
+          {{ episode.description|clean_html }}
         </div>
-      {% else %}
-        <p><strong>{% trans "Audio:" %}</strong> <em>{% trans "No audio available" %}</em></p>
-      {% endif %}
+      </div>
     </div>
-  </div>
+  {% endif %}
+
+  {% if episode.audio_url %}
+    <!-- AUDIO ROW: custom skip on left • native controls in middle • rate on right -->
+    <div id="audioRow" class="audio-row{% if episode.description %} mt-2{% endif %}">
+      <div class="audio-left">
+        <button type="button" id="back15" class="chip-btn" title="{% trans 'Back 15 seconds (Shift+←)' %}" aria-label="{% trans 'Back 15 seconds' %}">
+          <i class="fa-solid fa-rotate-left"></i> -15s
+        </button>
+        <button type="button" id="fwd15" class="chip-btn" title="{% trans 'Forward 15 seconds (Shift+→)' %}" aria-label="{% trans 'Forward 15 seconds' %}">
+          +15s <i class="fa-solid fa-rotate-right"></i>
+        </button>
+      </div>
+
+      <audio id="episodeAudio" controls class="flex-audio" aria-label="{% trans 'Episode audio player' %}">
+        <source src="{{ episode.audio_url }}" type="audio/mpeg">
+        {% trans "Your browser does not support the audio element." %}
+      </audio>
+
+      <div class="audio-right">
+        <button type="button" id="slower" class="chip-btn" title="{% trans 'Slower ([ key)' %}" aria-label="{% trans 'Decrease speed' %}">–</button>
+        <span id="rateBadge" class="rate-badge" title="{% trans 'Click to reset to 1×' %}" role="button" tabindex="0" aria-label="{% trans 'Playback speed; click to reset to 1×' %}">1.0×</span>
+        <button type="button" id="faster" class="chip-btn" title="{% trans 'Faster (] key)' %}" aria-label="{% trans 'Increase speed' %}">+</button>
+      </div>
+    </div>
+  {% else %}
+    <p class="mt-2"><strong>{% trans "Audio:" %}</strong> <em>{% trans "No audio available" %}</em></p>
+  {% endif %}
 </div>
 
-<!-- CHAPTERS -->
+
+
+
+
 <!-- CHAPTERS -->
 <div class="section-container mb-4">
   <h3>{% trans "Chapters" %}</h3>
@@ -220,7 +244,6 @@
 
 <hr style="border-top: 2px solid var(--list-hover-bg); margin: 2rem 0;">
 
-<!-- TRANSCRIPT -->
 <!-- TRANSCRIPT -->
 <div class="section-container mb-4">
   <h3>{% trans "Transcript" %}</h3>
@@ -455,11 +478,168 @@
     100% { box-shadow: 0 0 0 0 rgba(0,0,0,0.0); }
   }
 
+  /* Row layout */
+  .audio-row {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    flex-wrap: wrap;
+    margin-top: .5rem;
+  }
+
+  /* Left & right control clusters */
+  .audio-left,
+  .audio-right {
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+  }
+
+  /* Push speed controls toward the system volume on the right */
+  .audio-right { margin-left: auto; }
+
+  /* Audio element grows in the middle */
+  .flex-audio {
+    flex: 1 1 420px;
+    min-width: 260px;
+  }
+
+  /* ——— MATCH SITE “CHIP” STYLE ——— */
+  .chip-btn {
+    background: var(--chip-bg);
+    color: var(--chip-text);
+    border: 1px solid var(--chip-border);
+    border-radius: 999px;
+    padding: .45em .75em;
+    font-size: .95rem;
+    line-height: 1;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+    transition: filter .15s ease, transform .03s ease;
+  }
+  /* Icons inside chip buttons should match the text color */
+  .audio-row .chip-btn i,
+  .audio-row .chip-btn svg {
+    color: currentColor !important;
+    fill: currentColor;    /* for SVG-based FA kits */
+    stroke: currentColor;  /* safety for some SVG sets */
+  }
+
+  /* If FA sets its own color on .fa-solid/.fa-regular, override it */
+  .audio-row .chip-btn .fa-solid,
+  .audio-row .chip-btn .fa-regular {
+    color: currentColor !important;
+  }
+  .chip-btn:hover { filter: brightness(.95); }
+  .chip-btn:active { transform: translateY(1px); }
+  .chip-btn:focus-visible {
+    outline: 2px solid var(--chip-text);
+    outline-offset: 2px;
+    border-radius: 12px;
+  }
+
+  /* Playback rate badge (clickable reset) */
+  .rate-badge {
+    background: color-mix(in srgb, var(--chip-bg) 15%, transparent);
+    color: var(--text-color);
+    border: 1px dashed color-mix(in srgb, var(--chip-border) 70%, transparent);
+    border-radius: 10px;
+    padding: .35em .55em;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    cursor: pointer;
+    user-select: none;
+  }
+  .rate-badge:hover { filter: brightness(.98); }
+  .rate-badge:focus-visible {
+    outline: 2px solid var(--chip-text);
+    outline-offset: 2px;
+  }
+
+  /* Icon nudge for symmetry when text appears on one side */
+  .chip-btn i.fa-rotate-left { margin-right: .15rem; }
+  .chip-btn i.fa-rotate-right { margin-left: .15rem; }
+
+  /* Respect reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .chip-btn { transition: none; }
+  }
+
+  /* Small screens: ensure nice wrapping */
+  @media (max-width: 520px) {
+    .audio-row { gap: .4rem; }
+    .flex-audio { min-width: 200px; }
+  }
+
+  /* IMPORTANT: keep native play/pause visible */
+  audio::-webkit-media-controls-play-button { display: inline-block !important; }
+
+
+
+
 
 
 </style>
 
 <script>
+(function(){
+  const audio = document.getElementById('episodeAudio');
+  if (!audio) return;
+
+  const SKIP_SECONDS = 15;
+  const RATE_STEP = 0.1, RATE_MIN = 0.5, RATE_MAX = 4.0, LS_KEY = 'muse_audio_playback_rate';
+
+  const backBtn   = document.getElementById('back15');
+  const fwdBtn    = document.getElementById('fwd15');
+  const slowerBtn = document.getElementById('slower');
+  const fasterBtn = document.getElementById('faster');
+  const rateBadge = document.getElementById('rateBadge');
+
+  const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
+
+  function setRate(rate){
+    // round to nearest 0.1 to avoid FP noise
+    const r = clamp(Math.round((Number(rate)||1)*10)/10, RATE_MIN, RATE_MAX);
+    audio.playbackRate = r;
+    rateBadge.textContent = r.toFixed(1) + '×';
+    try { localStorage.setItem(LS_KEY, String(r)); } catch(_) {}
+  }
+  function nudgeRate(delta){ setRate((audio.playbackRate + delta).toFixed(1)); }
+  function skipBy(sec){
+    try {
+      const t = clamp((audio.currentTime||0) + sec, 0, audio.duration || 9e9);
+      audio.currentTime = t;
+    } catch(_) {}
+  }
+
+  // init rate from storage (default 1.0×)
+  (function initRate(){
+    let r = 1.0;
+    try { r = parseFloat(localStorage.getItem(LS_KEY)) || 1.0; } catch(_) {}
+    setRate(r);
+  })();
+
+  // wire clicks
+  backBtn?.addEventListener('click', () => skipBy(-SKIP_SECONDS));
+  fwdBtn ?.addEventListener('click', () => skipBy(+SKIP_SECONDS));
+  slowerBtn?.addEventListener('click', () => nudgeRate(-RATE_STEP));
+  fasterBtn?.addEventListener('click', () => nudgeRate(+RATE_STEP));
+  rateBadge?.addEventListener('click', () => setRate(1.0));
+
+  // keyboard shortcuts (ignore while typing)
+  function inText(){ const a=document.activeElement; return a && (a.tagName==='INPUT'||a.tagName==='TEXTAREA'||a.isContentEditable); }
+  document.addEventListener('keydown', (e) => {
+    if (inText()) return;
+    if (e.shiftKey && e.key === 'ArrowLeft')  { e.preventDefault(); skipBy(-SKIP_SECONDS); }
+    else if (e.shiftKey && e.key === 'ArrowRight'){ e.preventDefault(); skipBy(+SKIP_SECONDS); }
+    else if (e.key === '[') { e.preventDefault(); nudgeRate(-RATE_STEP); }
+    else if (e.key === ']') { e.preventDefault(); nudgeRate(+RATE_STEP); }
+  });
+})();
+
+
   (function(){
     const audio = document.querySelector('audio');
     const chaptersUL = document.getElementById('chapters');
