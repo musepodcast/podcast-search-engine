@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-26 16:12-0500\n"
+"POT-Creation-Date: 2025-10-27 21:47-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -336,13 +336,13 @@ msgstr "接近"
 
 #: .\podcasts\templates\podcasts\base.html:592
 #: .\podcasts\templates\podcasts\channel_detail.html:203
-#: .\podcasts\templates\podcasts\episode_detail.html:285
+#: .\podcasts\templates\podcasts\episode_detail.html:305
 msgid "Please sign in to complete this action."
 msgstr "请登录完成此操作."
 
 #: .\podcasts\templates\podcasts\base.html:594
 #: .\podcasts\templates\podcasts\channel_detail.html:204
-#: .\podcasts\templates\podcasts\episode_detail.html:286
+#: .\podcasts\templates\podcasts\episode_detail.html:306
 msgid "Sign in"
 msgstr "登录"
 
@@ -393,7 +393,7 @@ msgstr "显式"
 #: .\podcasts\templates\podcasts\bookmarks_list_items.html:62
 #: .\podcasts\templates\podcasts\channel_detail.html:165
 #: .\podcasts\templates\podcasts\channel_detail_item.html:51
-#: .\podcasts\templates\podcasts\episode_detail.html:263
+#: .\podcasts\templates\podcasts\episode_detail.html:283
 #: .\podcasts\templates\podcasts\episode_list.html:34
 #: .\podcasts\templates\podcasts\episode_list.html:88
 #: .\podcasts\templates\podcasts\episode_list_items.html:59
@@ -791,65 +791,114 @@ msgstr "登录下载JSON"
 msgid "Total Downloads"
 msgstr "总下载量"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:190
+#: .\podcasts\templates\podcasts\episode_detail.html:181
+msgid "Listen"
+msgstr "听着."
+
+#: .\podcasts\templates\podcasts\episode_detail.html:197
+msgid "Rewind 15 seconds"
+msgstr "转动15秒"
+
+#: .\podcasts\templates\podcasts\episode_detail.html:197
+#| msgid "Backend"
+msgid "Back 15 seconds"
+msgstr "返回15秒"
+
+#: .\podcasts\templates\podcasts\episode_detail.html:200
+msgid "Fast Forward 15 seconds"
+msgstr "快速前进15秒"
+
+#: .\podcasts\templates\podcasts\episode_detail.html:200
+msgid "Forward 15 seconds"
+msgstr "前进15秒"
+
+#: .\podcasts\templates\podcasts\episode_detail.html:205
+#| msgid "Episode Title"
+msgid "Episode audio player"
+msgstr "剧情音频播放器"
+
+#: .\podcasts\templates\podcasts\episode_detail.html:207
 msgid "Your browser does not support the audio element."
 msgstr "您的浏览器不支持音频元素."
 
-#: .\podcasts\templates\podcasts\episode_detail.html:194
+#: .\podcasts\templates\podcasts\episode_detail.html:211
+msgid "Slower Audio"
+msgstr "最慢的音频"
+
+#: .\podcasts\templates\podcasts\episode_detail.html:211
+msgid "Decrease speed"
+msgstr "减速速度"
+
+#: .\podcasts\templates\podcasts\episode_detail.html:212
+msgid "Click to reset to 1×"
+msgstr "点击重置到1×"
+
+#: .\podcasts\templates\podcasts\episode_detail.html:212
+msgid "Playback speed; click to reset to 1×"
+msgstr "播放速度; 点击重置到1×"
+
+#: .\podcasts\templates\podcasts\episode_detail.html:213
+msgid "Faster Audio"
+msgstr "更快的音频"
+
+#: .\podcasts\templates\podcasts\episode_detail.html:213
+msgid "Increase speed"
+msgstr "增加速度"
+
+#: .\podcasts\templates\podcasts\episode_detail.html:217
 msgid "Audio:"
 msgstr "音频:"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:194
+#: .\podcasts\templates\podcasts\episode_detail.html:217
 msgid "No audio available"
 msgstr "无音频可用"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:203
+#: .\podcasts\templates\podcasts\episode_detail.html:224
 msgid "Chapters"
 msgstr "章节"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:210
+#: .\podcasts\templates\podcasts\episode_detail.html:231
 msgid "Jump to"
 msgstr "跳到"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:215
+#: .\podcasts\templates\podcasts\episode_detail.html:236
 msgid "No chapters available for this episode."
 msgstr "没有本集的章节."
 
-#: .\podcasts\templates\podcasts\episode_detail.html:226
-#: .\podcasts\templates\podcasts\episode_detail.html:255
+#: .\podcasts\templates\podcasts\episode_detail.html:246
+#: .\podcasts\templates\podcasts\episode_detail.html:275
 msgid "Transcript"
 msgstr "脚本"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:246
+#: .\podcasts\templates\podcasts\episode_detail.html:266
 msgid "No transcript available for this episode."
 msgstr "没有本集的转录."
 
-#: .\podcasts\templates\podcasts\episode_detail.html:254
-#| msgid "Audio:"
+#: .\podcasts\templates\podcasts\episode_detail.html:274
 msgid "Audio"
 msgstr "音频"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:269
+#: .\podcasts\templates\podcasts\episode_detail.html:289
 msgid "Write a comment..."
 msgstr "写一个评论..."
 
-#: .\podcasts\templates\podcasts\episode_detail.html:272
+#: .\podcasts\templates\podcasts\episode_detail.html:292
 msgid "Submit Comment"
 msgstr "提交评论"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:834
+#: .\podcasts\templates\podcasts\episode_detail.html:1011
 msgid "Remove episode from Bookmarks"
 msgstr "从标签删除节目"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:840
+#: .\podcasts\templates\podcasts\episode_detail.html:1017
 msgid "Add episode to Bookmarks"
 msgstr "将节目添加到标签中"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:966
+#: .\podcasts\templates\podcasts\episode_detail.html:1143
 msgid "No comments yet."
 msgstr "没有评论."
 
-#: .\podcasts\templates\podcasts\episode_detail.html:1030
+#: .\podcasts\templates\podcasts\episode_detail.html:1207
 msgid "Please enter a comment"
 msgstr "请输入评论"
 

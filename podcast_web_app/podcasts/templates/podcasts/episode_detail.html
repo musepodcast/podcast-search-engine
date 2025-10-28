@@ -194,10 +194,10 @@
     <!-- AUDIO ROW: custom skip on left • native controls in middle • rate on right -->
     <div id="audioRow" class="audio-row{% if episode.description %} mt-2{% endif %}">
       <div class="audio-left">
-        <button type="button" id="back15" class="chip-btn" title="{% trans 'Back 15 seconds (Shift+←)' %}" aria-label="{% trans 'Back 15 seconds' %}">
+        <button type="button" id="back15" class="chip-btn" title="{% trans 'Rewind 15 seconds' %}" aria-label="{% trans 'Back 15 seconds' %}">
           <i class="fa-solid fa-rotate-left"></i> -15s
         </button>
-        <button type="button" id="fwd15" class="chip-btn" title="{% trans 'Forward 15 seconds (Shift+→)' %}" aria-label="{% trans 'Forward 15 seconds' %}">
+        <button type="button" id="fwd15" class="chip-btn" title="{% trans 'Fast Forward 15 seconds' %}" aria-label="{% trans 'Forward 15 seconds' %}">
           +15s <i class="fa-solid fa-rotate-right"></i>
         </button>
       </div>
@@ -208,18 +208,15 @@
       </audio>
 
       <div class="audio-right">
-        <button type="button" id="slower" class="chip-btn" title="{% trans 'Slower ([ key)' %}" aria-label="{% trans 'Decrease speed' %}">–</button>
+        <button type="button" id="slower" class="chip-btn" title="{% trans 'Slower Audio' %}" aria-label="{% trans 'Decrease speed' %}">–</button>
         <span id="rateBadge" class="rate-badge" title="{% trans 'Click to reset to 1×' %}" role="button" tabindex="0" aria-label="{% trans 'Playback speed; click to reset to 1×' %}">1.0×</span>
-        <button type="button" id="faster" class="chip-btn" title="{% trans 'Faster (] key)' %}" aria-label="{% trans 'Increase speed' %}">+</button>
+        <button type="button" id="faster" class="chip-btn" title="{% trans 'Faster Audio' %}" aria-label="{% trans 'Increase speed' %}">+</button>
       </div>
     </div>
   {% else %}
     <p class="mt-2"><strong>{% trans "Audio:" %}</strong> <em>{% trans "No audio available" %}</em></p>
   {% endif %}
 </div>
-
-
-
 
 
 <!-- CHAPTERS -->
