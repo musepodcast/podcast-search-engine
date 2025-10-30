@@ -20,10 +20,35 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <!-- Custom Styles -->
   <link rel="stylesheet" href="{% static 'podcasts/styles.css' %}">
-  <!-- Favicon -->
-  <link rel="shortcut icon" href="{% static 'podcasts/favicon.ico' %}" type="image/x-icon">
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="{% static 'podcasts/fontawesome/css/all.min.css' %}">
+  <!-- Favicons -->
+  <link rel="icon" type="image/png" sizes="32x32" href="{% static 'podcasts/images/favicon-32x32.png' %}">
+  <link rel="icon" type="image/png" sizes="192x192" href="{% static 'podcasts/images/favicon-192x192.png' %}">
+  <link rel="shortcut icon" href="{% static 'podcasts/favicon.ico' %}">
+
+  <!-- Apple touch icons -->
+  <link rel="apple-touch-icon" sizes="180x180" href="{% static 'podcasts/images/apple-touch-icon-180.png' %}">
+  <link rel="apple-touch-icon" sizes="167x167" href="{% static 'podcasts/images/apple-touch-icon-167.png' %}">
+  <link rel="apple-touch-icon" sizes="152x152" href="{% static 'podcasts/images/apple-touch-icon-152.png' %}">
+  <link rel="apple-touch-icon" sizes="120x120" href="{% static 'podcasts/images/apple-touch-icon-120.png' %}">
+
+  {% block meta %}
+  <meta property="og:title" content="Muse Podcast – Podcast Search Engine">
+  <meta property="og:description" content="Search and discover podcasts in 17+ languages.">
+  <meta property="og:image" content="https://musepodcast.com/static/podcasts/images/muse-og-1200x630.png">
+  <meta property="og:url" content="https://musepodcast.com/">
+  <meta property="og:type" content="website">
+  {% endblock %}
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Muse Podcast",
+    "url": "https://musepodcast.com/",
+    "logo": "https://musepodcast.com/static/podcasts/images/favicon-192x192.png"
+  }
+  </script>
+
 
   <style>
     .site-title { position: relative; padding-left: 2rem; }

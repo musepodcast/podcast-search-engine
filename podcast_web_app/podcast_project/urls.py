@@ -1,7 +1,12 @@
 from django.contrib import admin
 from django.urls import path, include
 from django.contrib.sitemaps.views import sitemap
-from podcasts.sitemaps import StaticViewSitemap
+from podcasts.sitemaps import (
+    StaticViewSitemap,
+    ChannelSitemap,
+    EpisodeSitemap,
+)
+
 from django.conf.urls.i18n import i18n_patterns
 from two_factor import urls as two_factor_urls
 from django.http import HttpResponse
@@ -31,6 +36,8 @@ two_factor_patterns = filter_valid_patterns(two_factor_urls.urlpatterns)
 
 sitemaps = {
     "static": StaticViewSitemap,
+    "channels": ChannelSitemap,
+    "episodes": EpisodeSitemap,
 }
 
 
