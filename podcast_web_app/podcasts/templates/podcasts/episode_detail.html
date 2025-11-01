@@ -268,13 +268,19 @@
   </div>
 </div>
 
-<!-- Jump menu (hidden by default) -->
 <div id="jump-menu" style="display:none; position:fixed; z-index:1200;">
   <div class="jump-menu-card">
-    <button type="button" data-action="audio" class="jump-menu-btn">{% trans "Audio" %}</button> 
-    <button type="button" data-action="transcript" class="jump-menu-btn">{% trans "Transcript" %}</button>
+    <!-- play at this time, DON'T scroll -->
+    <button type="button" data-action="play-here" class="jump-menu-btn">{% trans "Play" %}</button>
+    <!-- pause audio -->
+    <button type="button" data-action="pause" class="jump-menu-btn">{% trans "Pause" %}</button>
+    <!-- (optional) scroll to audio like before -->
+    <button type="button" data-action="audio" class="jump-menu-btn">{% trans "Go to Audio" %}</button>
+    <!-- (optional) jump to transcript -->
+    <button type="button" data-action="transcript" class="jump-menu-btn">{% trans "Go to Transcript" %}</button>
   </div>
 </div>
+
 
 <!-- COMMENT MODAL -->
 <div id="comment-modal" class="comment-modal" style="display: none;">
@@ -573,12 +579,62 @@
   /* IMPORTANT: keep native play/pause visible */
   audio::-webkit-media-controls-play-button { display: inline-block !important; }
 
-
-
-
-
-
 </style>
+
+<script>
+(function(){
+  const audio = document.getElementById('episodeAudio');
+  if (!audio) return;
+
+  // Play buttons on transcript
+  document.addEventListener('click', function(e){
+    const playBtn = e.target.closest('.seg-audio-play');
+    const stopBtn = e.target.closest('.seg-audio-stop');
+
+    // PLAY
+    if (playBtn) {
+      const raw = playBtn.getAttribute('data-start');
+      if (!raw) return;
+      // reuse your existing parser if present
+      let seconds = NaN;
+      if (typeof window.museParseTimeToSeconds === 'function') {
+        seconds = window.museParseTimeToSeconds(raw);
+      } else {
+        // fallback simple parser: "MM:SS" or seconds
+        const s = String(raw).trim();
+        if (/^\d+(\.\d+)?$/.test(s)) {
+          seconds = parseFloat(s);
+        } else {
+          const parts = s.split(':').map(Number);
+          if (parts.length === 2) {
+            seconds = parts[0] * 60 + parts[1];
+          } else if (parts.length === 3) {
+            seconds = parts[0] * 3600 + parts[1] * 60 + parts[2];
+          }
+        }
+      }
+
+      if (!Number.isNaN(seconds)) {
+        // seek but DON'T scroll
+        audio.currentTime = seconds;
+        audio.play().catch(()=>{});
+      }
+
+      // don't let it bubble to transcript click (which scrolls/jumps)
+      e.stopPropagation();
+      return;
+    }
+
+    // STOP
+    if (stopBtn) {
+      audio.pause();
+      // optional: audio.currentTime = 0;
+      e.stopPropagation();
+      return;
+    }
+  });
+})();
+</script>
 
 <script>
 (function(){
@@ -803,19 +859,40 @@
 
 
   menu?.addEventListener('click', (e) => {
-    const btn = e.target.closest('.jump-menu-btn');
-    if (!btn) return;
-    const seconds = parseInt(menu.dataset.seconds || '0', 10) || 0;
-    hideMenu();
-    if (btn.dataset.action === 'audio') {
-      jumpToAudio(seconds, { autoplay: true });  // ← start playing at that mark
-      scrollToAudio();                            // keep your “scroll & highlight” behavior
-      history.replaceState(null, '', '#t=' + seconds);
-    } else if (btn.dataset.action === 'transcript') {
-      jumpToTranscript(seconds);
-      history.replaceState(null, '', '#t=' + seconds);
+  const btn = e.target.closest('.jump-menu-btn');
+  if (!btn) return;
+  const seconds = parseInt(menu.dataset.seconds || '0', 10) || 0;
+  const audio = document.getElementById('episodeAudio');
+  hideMenu();
+
+  if (btn.dataset.action === 'play-here') {
+    if (audio && !Number.isNaN(seconds)) {
+      audio.currentTime = seconds;
+      audio.play().catch(()=>{});
     }
-  });
+    return;
+  }
+
+  if (btn.dataset.action === 'pause') {
+    audio?.pause();
+    return;
+  }
+
+  if (btn.dataset.action === 'audio') {
+    // your old behavior
+    jumpToAudio(seconds, { autoplay: true });
+    scrollToAudio();
+    history.replaceState(null, '', '#t=' + seconds);
+    return;
+  }
+
+  if (btn.dataset.action === 'transcript') {
+    jumpToTranscript(seconds);
+    history.replaceState(null, '', '#t=' + seconds);
+    return;
+  }
+});
+
 
 
   chaptersUL?.addEventListener('click', function(e){
@@ -829,18 +906,23 @@
     showMenu(clickX, clickY, seconds);
   });
 
-   transcriptEl?.addEventListener('click', function(e){
-    const seg = e.target.closest('.segment');
-    if (!seg) return;
-    if (!e.target.closest('.time')) return;
-    e.stopPropagation();              // <— prevents immediate close
-    const seconds = getSegmentStartSeconds(seg);
-    // Either show the menu here:
-    // showMenu(e.clientX, e.clientY, seconds);
-    // Or jump straight to audio:
-    jumpToAudio(seconds);
-    history.replaceState(null, '', '#t=' + Math.floor(seconds));
-  });
+transcriptEl?.addEventListener('click', function(e){
+  const seg = e.target.closest('.segment');
+  if (!seg) return;
+  if (!e.target.closest('.time')) return; // only when clicking the time
+  e.stopPropagation();
+
+  const seconds = getSegmentStartSeconds(seg);
+  const x = e.clientX ?? window.innerWidth / 2;
+  const y = e.clientY ?? window.innerHeight / 2;
+
+  // show popup with play/pause
+  showMenu(x, y, seconds);
+
+  // update URL but DON'T autoplay or scroll
+  history.replaceState(null, '', '#t=' + Math.floor(seconds));
+});
+
 
 
   // Deep link (#t= or ?t=) still works: jump to audio and highlight transcript

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-27 21:47-0500\n"
+"POT-Creation-Date: 2025-10-31 22:13-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -147,15 +147,15 @@ msgstr "Retour à Login"
 msgid "Podcast Search Engine"
 msgstr "Moteur de recherche pour les podcasts"
 
-#: .\podcasts\templates\podcasts\base.html:54
+#: .\podcasts\templates\podcasts\base.html:82
 msgid "Muse"
 msgstr "Une musée"
 
-#: .\podcasts\templates\podcasts\base.html:57
+#: .\podcasts\templates\podcasts\base.html:85
 msgid "Home"
 msgstr "À la maison"
 
-#: .\podcasts\templates\podcasts\base.html:61
+#: .\podcasts\templates\podcasts\base.html:89
 #: .\podcasts\templates\podcasts\channel_list.html:22
 #: .\podcasts\templates\podcasts\channel_list.html:79
 #: .\podcasts\templates\podcasts\channel_list_items.html:27
@@ -166,7 +166,7 @@ msgstr "À la maison"
 msgid "Favorites"
 msgstr "Les préférés"
 
-#: .\podcasts\templates\podcasts\base.html:66
+#: .\podcasts\templates\podcasts\base.html:94
 #: .\podcasts\templates\podcasts\channel_list.html:28
 #: .\podcasts\templates\podcasts\channel_list.html:83
 #: .\podcasts\templates\podcasts\channel_list_items.html:31
@@ -177,7 +177,7 @@ msgstr "Les préférés"
 msgid "Notifications"
 msgstr "Les notifications"
 
-#: .\podcasts\templates\podcasts\base.html:72
+#: .\podcasts\templates\podcasts\base.html:100
 #: .\podcasts\templates\podcasts\bookmarks_list.html:65
 #: .\podcasts\templates\podcasts\bookmarks_list_items.html:57
 #: .\podcasts\templates\podcasts\channel_detail.html:160
@@ -192,143 +192,143 @@ msgstr "Les notifications"
 msgid "Bookmarks"
 msgstr "Marqueurs de livres"
 
-#: .\podcasts\templates\podcasts\base.html:74
-#: .\podcasts\templates\podcasts\base.html:180
+#: .\podcasts\templates\podcasts\base.html:102
+#: .\podcasts\templates\podcasts\base.html:208
 msgid "Channels"
 msgstr "Canaux"
 
-#: .\podcasts\templates\podcasts\base.html:75
-#: .\podcasts\templates\podcasts\base.html:174
+#: .\podcasts\templates\podcasts\base.html:103
+#: .\podcasts\templates\podcasts\base.html:202
 #: .\podcasts\templates\podcasts\channel_detail.html:122
 #: .\podcasts\templates\podcasts\channel_list.html:46
 msgid "Episodes"
 msgstr "Épisodes"
 
-#: .\podcasts\templates\podcasts\base.html:102
+#: .\podcasts\templates\podcasts\base.html:130
 msgid "Light and Dark Mode"
 msgstr "Mode lumineux et sombre"
 
-#: .\podcasts\templates\podcasts\base.html:112
+#: .\podcasts\templates\podcasts\base.html:140
 msgid "Profile"
 msgstr "Le profil"
 
-#: .\podcasts\templates\podcasts\base.html:117
+#: .\podcasts\templates\podcasts\base.html:145
 msgid "See Profile"
 msgstr "Voir le profil"
 
-#: .\podcasts\templates\podcasts\base.html:120
+#: .\podcasts\templates\podcasts\base.html:148
 msgid "See Replies"
 msgstr "Voir les réponses"
 
-#: .\podcasts\templates\podcasts\base.html:133
-#: .\podcasts\templates\podcasts\base.html:514
+#: .\podcasts\templates\podcasts\base.html:161
+#: .\podcasts\templates\podcasts\base.html:542
 msgid "Support Me"
 msgstr "Soutenez-moi"
 
-#: .\podcasts\templates\podcasts\base.html:140
+#: .\podcasts\templates\podcasts\base.html:168
 msgid "Support Ticket"
 msgstr "Ticket de soutien"
 
-#: .\podcasts\templates\podcasts\base.html:145
+#: .\podcasts\templates\podcasts\base.html:173
 msgid "Contribute"
 msgstr "Contribuer"
 
-#: .\podcasts\templates\podcasts\base.html:151
+#: .\podcasts\templates\podcasts\base.html:179
 msgid "Sign Out"
 msgstr "S'inscrire"
 
-#: .\podcasts\templates\podcasts\base.html:155
+#: .\podcasts\templates\podcasts\base.html:183
 msgid "Sign In"
 msgstr "Inscrivez-vous"
 
-#: .\podcasts\templates\podcasts\base.html:188
+#: .\podcasts\templates\podcasts\base.html:216
 msgid "Search episodes or channels..."
 msgstr "Rechercher des épisodes ou des chaînes..."
 
-#: .\podcasts\templates\podcasts\base.html:194
+#: .\podcasts\templates\podcasts\base.html:222
 #: .\podcasts\templates\podcasts\channel_detail.html:116
 msgid "Search"
 msgstr "Rechercher"
 
-#: .\podcasts\templates\podcasts\base.html:210
-#: .\podcasts\templates\podcasts\base.html:404
+#: .\podcasts\templates\podcasts\base.html:238
+#: .\podcasts\templates\podcasts\base.html:432
 msgid "Channel Title"
 msgstr "Titre de la chaîne"
 
-#: .\podcasts\templates\podcasts\base.html:216
+#: .\podcasts\templates\podcasts\base.html:244
 msgid "Episode Title"
 msgstr "Titre de l'épisode"
 
-#: .\podcasts\templates\podcasts\base.html:222
+#: .\podcasts\templates\podcasts\base.html:250
 msgid "Episode Description"
 msgstr "Description de l'épisode"
 
-#: .\podcasts\templates\podcasts\base.html:228
+#: .\podcasts\templates\podcasts\base.html:256
 msgid "Transcript Text"
 msgstr "Texte de transcription"
 
-#: .\podcasts\templates\podcasts\base.html:235
-#: .\podcasts\templates\podcasts\base.html:423
+#: .\podcasts\templates\podcasts\base.html:263
+#: .\podcasts\templates\podcasts\base.html:451
 msgid "Language"
 msgstr "Langue"
 
-#: .\podcasts\templates\podcasts\base.html:315
+#: .\podcasts\templates\podcasts\base.html:343
 msgid "Date"
 msgstr "Date"
 
-#: .\podcasts\templates\podcasts\base.html:323
+#: .\podcasts\templates\podcasts\base.html:351
 msgid "Anytime"
 msgstr "À tout moment"
 
-#: .\podcasts\templates\podcasts\base.html:329
+#: .\podcasts\templates\podcasts\base.html:357
 msgid "Past Day"
 msgstr "Jour passé"
 
-#: .\podcasts\templates\podcasts\base.html:335
+#: .\podcasts\templates\podcasts\base.html:363
 msgid "Past Week"
 msgstr "La semaine dernière"
 
-#: .\podcasts\templates\podcasts\base.html:341
+#: .\podcasts\templates\podcasts\base.html:369
 msgid "Past Month"
 msgstr "Mois dernier"
 
-#: .\podcasts\templates\podcasts\base.html:347
+#: .\podcasts\templates\podcasts\base.html:375
 msgid "Past Year"
 msgstr "Année passée"
 
-#: .\podcasts\templates\podcasts\base.html:353
+#: .\podcasts\templates\podcasts\base.html:381
 msgid "Past 2 Years"
 msgstr "2 dernières années"
 
-#: .\podcasts\templates\podcasts\base.html:359
+#: .\podcasts\templates\podcasts\base.html:387
 msgid "Past 3 Years"
 msgstr "3 dernières années"
 
-#: .\podcasts\templates\podcasts\base.html:365
+#: .\podcasts\templates\podcasts\base.html:393
 msgid "Past 4 Years"
 msgstr "4 dernières années"
 
-#: .\podcasts\templates\podcasts\base.html:371
+#: .\podcasts\templates\podcasts\base.html:399
 msgid "Past 5 Years"
 msgstr "5 dernières années"
 
-#: .\podcasts\templates\podcasts\base.html:377
+#: .\podcasts\templates\podcasts\base.html:405
 msgid "Past 10 Years"
 msgstr "10 dernières années"
 
-#: .\podcasts\templates\podcasts\base.html:383
+#: .\podcasts\templates\podcasts\base.html:411
 msgid "Past 15 Years"
 msgstr "15 dernières années"
 
-#: .\podcasts\templates\podcasts\base.html:410
+#: .\podcasts\templates\podcasts\base.html:438
 msgid "Channel Author"
 msgstr "Auteur de la chaîne"
 
-#: .\podcasts\templates\podcasts\base.html:416
+#: .\podcasts\templates\podcasts\base.html:444
 msgid "Channel Summary"
 msgstr "Résumé du canal"
 
-#: .\podcasts\templates\podcasts\base.html:519
+#: .\podcasts\templates\podcasts\base.html:547
 #: .\podcasts\templates\podcasts\signup.html:175
 #: .\podcasts\templates\podcasts\signup.html:229
 #: .\podcasts\templates\podcasts\support_ticket.html:148
@@ -337,29 +337,29 @@ msgstr "Résumé du canal"
 msgid "Close"
 msgstr "À proximité"
 
-#: .\podcasts\templates\podcasts\base.html:592
+#: .\podcasts\templates\podcasts\base.html:620
 #: .\podcasts\templates\podcasts\channel_detail.html:203
-#: .\podcasts\templates\podcasts\episode_detail.html:305
+#: .\podcasts\templates\podcasts\episode_detail.html:311
 msgid "Please sign in to complete this action."
 msgstr "Veuillez vous inscrire pour terminer cette action."
 
-#: .\podcasts\templates\podcasts\base.html:594
+#: .\podcasts\templates\podcasts\base.html:622
 #: .\podcasts\templates\podcasts\channel_detail.html:204
-#: .\podcasts\templates\podcasts\episode_detail.html:306
+#: .\podcasts\templates\podcasts\episode_detail.html:312
 msgid "Sign in"
 msgstr "Inscrivez-vous"
 
-#: .\podcasts\templates\podcasts\base.html:601
+#: .\podcasts\templates\podcasts\base.html:629
 msgid "Contact Me"
 msgstr "Contactez-moi"
 
-#: .\podcasts\templates\podcasts\base.html:662
-#: .\podcasts\templates\podcasts\base.html:663
+#: .\podcasts\templates\podcasts\base.html:694
+#: .\podcasts\templates\podcasts\base.html:695
 msgid "Switch to light mode"
 msgstr "Passez au mode lumineux"
 
-#: .\podcasts\templates\podcasts\base.html:667
-#: .\podcasts\templates\podcasts\base.html:668
+#: .\podcasts\templates\podcasts\base.html:699
+#: .\podcasts\templates\podcasts\base.html:700
 msgid "Switch to dark mode"
 msgstr "Passez au mode sombre"
 
@@ -396,7 +396,7 @@ msgstr "Explicite"
 #: .\podcasts\templates\podcasts\bookmarks_list_items.html:62
 #: .\podcasts\templates\podcasts\channel_detail.html:165
 #: .\podcasts\templates\podcasts\channel_detail_item.html:51
-#: .\podcasts\templates\podcasts\episode_detail.html:283
+#: .\podcasts\templates\podcasts\episode_detail.html:289
 #: .\podcasts\templates\podcasts\episode_list.html:34
 #: .\podcasts\templates\podcasts\episode_list.html:88
 #: .\podcasts\templates\podcasts\episode_list_items.html:59
@@ -820,7 +820,6 @@ msgid "Rewind 15 seconds"
 msgstr "Retourner 15 secondes"
 
 #: .\podcasts\templates\podcasts\episode_detail.html:197
-#| msgid "Backend"
 msgid "Back 15 seconds"
 msgstr "Retourner 15 secondes"
 
@@ -833,7 +832,6 @@ msgid "Forward 15 seconds"
 msgstr "À l' avance de 15 secondes"
 
 #: .\podcasts\templates\podcasts\episode_detail.html:205
-#| msgid "Episode Title"
 msgid "Episode audio player"
 msgstr "Le lecteur audio de l'épisode"
 
@@ -886,7 +884,6 @@ msgid "No chapters available for this episode."
 msgstr "Aucun chapitre disponible pour cet épisode."
 
 #: .\podcasts\templates\podcasts\episode_detail.html:246
-#: .\podcasts\templates\podcasts\episode_detail.html:275
 msgid "Transcript"
 msgstr "Transcription"
 
@@ -895,30 +892,43 @@ msgid "No transcript available for this episode."
 msgstr "Aucune transcription disponible pour cet épisode."
 
 #: .\podcasts\templates\podcasts\episode_detail.html:274
-msgid "Audio"
-msgstr "L'audio"
+msgid "Play"
+msgstr "Jouez"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:289
+#: .\podcasts\templates\podcasts\episode_detail.html:276
+msgid "Pause"
+msgstr "Une pause"
+
+#: .\podcasts\templates\podcasts\episode_detail.html:278
+msgid "Go to audio"
+msgstr "Allez à l' audio"
+
+#: .\podcasts\templates\podcasts\episode_detail.html:280
+#| msgid "Transcript"
+msgid "Go to Transcript"
+msgstr "Allez à la transcription"
+
+#: .\podcasts\templates\podcasts\episode_detail.html:295
 msgid "Write a comment..."
 msgstr "Écrivez un commentaire..."
 
-#: .\podcasts\templates\podcasts\episode_detail.html:292
+#: .\podcasts\templates\podcasts\episode_detail.html:298
 msgid "Submit Comment"
 msgstr "Envoyer un commentaire"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:1011
+#: .\podcasts\templates\podcasts\episode_detail.html:1093
 msgid "Remove episode from Bookmarks"
 msgstr "Supprimer l'épisode des annotations"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:1017
+#: .\podcasts\templates\podcasts\episode_detail.html:1099
 msgid "Add episode to Bookmarks"
 msgstr "Ajouter un épisode à Bookmarks"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:1143
+#: .\podcasts\templates\podcasts\episode_detail.html:1225
 msgid "No comments yet."
 msgstr "Aucun commentaire pour l'instant."
 
-#: .\podcasts\templates\podcasts\episode_detail.html:1207
+#: .\podcasts\templates\podcasts\episode_detail.html:1289
 msgid "Please enter a comment"
 msgstr "Veuillez noter un commentaire"
 
@@ -1012,11 +1022,11 @@ msgstr "Moteur de recherche Muse Podcast"
 msgid "License: GPL v3"
 msgstr "Licence: sous licence GPL v3"
 
-#: .\podcasts\templates\podcasts\home.html:39
+#: .\podcasts\templates\podcasts\home.html:43
 msgid "🚀 About"
 msgstr " À propos"
 
-#: .\podcasts\templates\podcasts\home.html:40
+#: .\podcasts\templates\podcasts\home.html:44
 msgid ""
 "Muse is a free, AI-powered podcast search engine. Tired of scouring episode "
 "show notes for bits of information, we built a platform where you can:"
@@ -1025,7 +1035,7 @@ msgstr ""
 " fouiller les notes d'épisodes pour trouver des informations, nous avons "
 "construit une plateforme où vous pouvez:"
 
-#: .\podcasts\templates\podcasts\home.html:42
+#: .\podcasts\templates\podcasts\home.html:46
 msgid ""
 "🔍 Search any podcast by keyword (titles, descriptions, or transcript "
 "content)"
@@ -1033,17 +1043,17 @@ msgstr ""
 "🔍 Rechercher n'importe quel podcast par mot clé (titres, descriptions ou "
 "contenu de transcription)"
 
-#: .\podcasts\templates\podcasts\home.html:43
+#: .\podcasts\templates\podcasts\home.html:47
 msgid "📄 View full, time-stamped transcripts (speaker-diarized and formatted)"
 msgstr ""
 " Afficher les transcriptions complètes et marquées à l'heure (diarisées et "
 "formatées par le haut-parleur)"
 
-#: .\podcasts\templates\podcasts\home.html:44
+#: .\podcasts\templates\podcasts\home.html:48
 msgid "✍️ Read AI-generated chapter summaries"
 msgstr "✍️ Lisez les résumés des chapitres générés par l'IA"
 
-#: .\podcasts\templates\podcasts\home.html:45
+#: .\podcasts\templates\podcasts\home.html:49
 msgid ""
 "🌐 Find podcasts in 17 different languages natively transcribed or AI "
 "translated"
@@ -1051,16 +1061,16 @@ msgstr ""
 " Trouver des podcasts en 17 langues différentes transcrits de manière native"
 " ou traduits par l'IA"
 
-#: .\podcasts\templates\podcasts\home.html:46
+#: .\podcasts\templates\podcasts\home.html:50
 msgid "🎧 Click through to listen at the exact moment a topic is discussed"
 msgstr " Cliquez ici pour écouter le moment exact où un sujet est discuté"
 
-#: .\podcasts\templates\podcasts\home.html:47
+#: .\podcasts\templates\podcasts\home.html:51
 msgid "🆕 Discover new channels or episodes based on your interests"
 msgstr ""
 " Découvrez de nouvelles chaînes ou épisodes en fonction de vos intérêts"
 
-#: .\podcasts\templates\podcasts\home.html:49
+#: .\podcasts\templates\podcasts\home.html:53
 msgid ""
 "Currently optimized for desktop browsers, tablets, foldables, and "
 "smartphones. Community contribution and native apps are coming soon!"
@@ -1068,15 +1078,15 @@ msgstr ""
 "Actuellement optimisé pour les navigateurs de bureau, les tablettes, les "
 "tablettes pliables et les smartphones."
 
-#: .\podcasts\templates\podcasts\home.html:51
+#: .\podcasts\templates\podcasts\home.html:55
 msgid "🌟 Key Features"
 msgstr " Caractéristiques clés"
 
-#: .\podcasts\templates\podcasts\home.html:53
+#: .\podcasts\templates\podcasts\home.html:57
 msgid "Account Signup & Management"
 msgstr "Inscription et gestion du compte"
 
-#: .\podcasts\templates\podcasts\home.html:53
+#: .\podcasts\templates\podcasts\home.html:57
 msgid ""
 "Create a free account to save searches, bookmark episodes, and track "
 "listening history."
@@ -1084,11 +1094,11 @@ msgstr ""
 "Créez un compte gratuit pour enregistrer les recherches, les épisodes de "
 "bookmark et suivre l'historique de l'écoute."
 
-#: .\podcasts\templates\podcasts\home.html:54
+#: .\podcasts\templates\podcasts\home.html:58
 msgid "Transcript Generation"
 msgstr "Génération de transcriptions"
 
-#: .\podcasts\templates\podcasts\home.html:54
+#: .\podcasts\templates\podcasts\home.html:58
 msgid ""
 "Ingests RSS feeds from any podcast; uses OpenAI Whisper Turbo on an NVIDIA "
 "GPU for fast, high-quality transcription; diarizes speakers and formats with"
@@ -1098,11 +1108,11 @@ msgstr ""
 " sur un GPU NVIDIA pour une transcription rapide et de haute qualité; "
 "journalise les haut-parleurs et les formats avec des timestamps."
 
-#: .\podcasts\templates\podcasts\home.html:55
+#: .\podcasts\templates\podcasts\home.html:59
 msgid "Chapter Summaries"
 msgstr "Résumé des chapitres"
 
-#: .\podcasts\templates\podcasts\home.html:55
+#: .\podcasts\templates\podcasts\home.html:59
 msgid ""
 "Generates concise summaries of each transcript segment using FalconsAI text-"
 "summarization."
@@ -1110,11 +1120,11 @@ msgstr ""
 "Génère des résumés concis de chaque segment de transcription à l'aide de la "
 "synthèse de texte de FalconsAI."
 
-#: .\podcasts\templates\podcasts\home.html:56
+#: .\podcasts\templates\podcasts\home.html:60
 msgid "Transcript Translations"
 msgstr "Les traductions des transcriptions"
 
-#: .\podcasts\templates\podcasts\home.html:56
+#: .\podcasts\templates\podcasts\home.html:60
 msgid ""
 "Takes podcasts and translates them into 17 different languages using "
 "nllb-200-distilled-600M translation model."
@@ -1122,11 +1132,11 @@ msgstr ""
 "Prend des podcasts et les traduit en 17 langues différentes en utilisant le "
 "modèle de traduction nllb-200-distilled-600M."
 
-#: .\podcasts\templates\podcasts\home.html:57
+#: .\podcasts\templates\podcasts\home.html:61
 msgid "Full-Text Search"
 msgstr "Recherche de texte intégral"
 
-#: .\podcasts\templates\podcasts\home.html:57
+#: .\podcasts\templates\podcasts\home.html:61
 msgid ""
 "Powered by Elasticsearch for lightning-fast, fuzzy-match queries; filters by"
 " title, description, channel metadata, or transcript."
@@ -1135,11 +1145,11 @@ msgstr ""
 " à la vitesse de l'éclair; Filtres par titre, description, métadonnées de "
 "chaîne ou transcription."
 
-#: .\podcasts\templates\podcasts\home.html:58
+#: .\podcasts\templates\podcasts\home.html:62
 msgid "Flexible Playback"
 msgstr "Répétition souple"
 
-#: .\podcasts\templates\podcasts\home.html:58
+#: .\podcasts\templates\podcasts\home.html:62
 msgid ""
 "Jump directly to the moment a keyword appears in the audio player on the "
 "website."
@@ -1147,95 +1157,95 @@ msgstr ""
 "Sautez directement au moment où un mot clé apparaît dans le lecteur audio du"
 " site."
 
-#: .\podcasts\templates\podcasts\home.html:61
+#: .\podcasts\templates\podcasts\home.html:65
 msgid "🏗️ Architecture & Tech Stack"
 msgstr "️ Architecture & Tech Stack"
 
-#: .\podcasts\templates\podcasts\home.html:65
+#: .\podcasts\templates\podcasts\home.html:69
 msgid "Layer"
 msgstr "Couche"
 
-#: .\podcasts\templates\podcasts\home.html:66
+#: .\podcasts\templates\podcasts\home.html:70
 msgid "Technology"
 msgstr "Technologie"
 
-#: .\podcasts\templates\podcasts\home.html:71
+#: .\podcasts\templates\podcasts\home.html:75
 msgid "Backend"
 msgstr "Retour en arrière"
 
-#: .\podcasts\templates\podcasts\home.html:71
+#: .\podcasts\templates\podcasts\home.html:75
 msgid "Python, Django"
 msgstr "Python, Django"
 
-#: .\podcasts\templates\podcasts\home.html:74
+#: .\podcasts\templates\podcasts\home.html:78
 msgid "Transcription"
 msgstr "Transcription"
 
-#: .\podcasts\templates\podcasts\home.html:74
+#: .\podcasts\templates\podcasts\home.html:78
 msgid "OpenAI Whisper Turbo (GPU-accelerated)"
 msgstr "OpenAI Whisper Turbo (GPU accéléré)"
 
-#: .\podcasts\templates\podcasts\home.html:77
+#: .\podcasts\templates\podcasts\home.html:81
 msgid "Summarization"
 msgstr "Résumé"
 
-#: .\podcasts\templates\podcasts\home.html:77
+#: .\podcasts\templates\podcasts\home.html:81
 msgid "FalconsAI / text_summarization"
 msgstr "FalconsAI / text_resumé"
 
-#: .\podcasts\templates\podcasts\home.html:80
+#: .\podcasts\templates\podcasts\home.html:84
 msgid "Translation"
 msgstr "Traduction"
 
-#: .\podcasts\templates\podcasts\home.html:80
+#: .\podcasts\templates\podcasts\home.html:84
 msgid "Facebook / nllb-200-distilled-600M translation model"
 msgstr "Modèle de traduction Facebook / nllb-200-distillé-600M"
 
-#: .\podcasts\templates\podcasts\home.html:83
+#: .\podcasts\templates\podcasts\home.html:87
 msgid "Connection Pooling"
 msgstr "Réseau de connexions"
 
-#: .\podcasts\templates\podcasts\home.html:83
+#: .\podcasts\templates\podcasts\home.html:87
 msgid "PgBouncer"
 msgstr "PgBouncer"
 
-#: .\podcasts\templates\podcasts\home.html:86
+#: .\podcasts\templates\podcasts\home.html:90
 msgid "Email Services"
 msgstr "Services de courrier électronique"
 
-#: .\podcasts\templates\podcasts\home.html:86
+#: .\podcasts\templates\podcasts\home.html:90
 msgid "Mailjet"
 msgstr "Jet de messagerie"
 
-#: .\podcasts\templates\podcasts\home.html:89
+#: .\podcasts\templates\podcasts\home.html:93
 msgid "Database"
 msgstr "Base de données"
 
-#: .\podcasts\templates\podcasts\home.html:89
+#: .\podcasts\templates\podcasts\home.html:93
 msgid "PostgreSQL | MaraiaDB"
 msgstr "Après le grand SQL , la base de données Maraia ."
 
-#: .\podcasts\templates\podcasts\home.html:92
+#: .\podcasts\templates\podcasts\home.html:96
 msgid "Search Engine"
 msgstr "Moteur de recherche"
 
-#: .\podcasts\templates\podcasts\home.html:92
+#: .\podcasts\templates\podcasts\home.html:96
 msgid "Elasticsearch"
 msgstr "Recherche élastique"
 
-#: .\podcasts\templates\podcasts\home.html:95
+#: .\podcasts\templates\podcasts\home.html:99
 msgid "Frontend"
 msgstr "Front-end"
 
-#: .\podcasts\templates\podcasts\home.html:95
+#: .\podcasts\templates\podcasts\home.html:99
 msgid "Django templates | HTML | CSS | JavaScript"
 msgstr "Des modèles Django HTML CSS JavaScript"
 
-#: .\podcasts\templates\podcasts\home.html:98
+#: .\podcasts\templates\podcasts\home.html:102
 msgid "Deployment"
 msgstr "Déploiement"
 
-#: .\podcasts\templates\podcasts\home.html:98
+#: .\podcasts\templates\podcasts\home.html:102
 msgid "Docker | Ubuntu VM | Windows OS"
 msgstr ""
 "Docker, le système d'exploitation Ubuntu, le système d'exploitation Windows"
@@ -1943,6 +1953,9 @@ msgstr "Entrez l' OTP"
 #: .\podcasts\templates\two_factor\core\otp.html:9
 msgid "Submit OTP"
 msgstr "Présentation de l' OTP"
+
+#~ msgid "Audio"
+#~ msgstr "L'audio"
 
 #~ msgid "Toggle Theme"
 #~ msgstr "Basculer le thème"

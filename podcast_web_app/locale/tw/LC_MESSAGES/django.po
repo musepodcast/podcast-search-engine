@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-27 21:47-0500\n"
+"POT-Creation-Date: 2025-10-31 22:13-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -144,15 +144,15 @@ msgstr "返回登入"
 msgid "Podcast Search Engine"
 msgstr "播客搜索引擎"
 
-#: .\podcasts\templates\podcasts\base.html:54
+#: .\podcasts\templates\podcasts\base.html:82
 msgid "Muse"
 msgstr "沒有任何樓盤符合您的搜尋"
 
-#: .\podcasts\templates\podcasts\base.html:57
+#: .\podcasts\templates\podcasts\base.html:85
 msgid "Home"
 msgstr "在家裡"
 
-#: .\podcasts\templates\podcasts\base.html:61
+#: .\podcasts\templates\podcasts\base.html:89
 #: .\podcasts\templates\podcasts\channel_list.html:22
 #: .\podcasts\templates\podcasts\channel_list.html:79
 #: .\podcasts\templates\podcasts\channel_list_items.html:27
@@ -163,7 +163,7 @@ msgstr "在家裡"
 msgid "Favorites"
 msgstr "喜歡的人"
 
-#: .\podcasts\templates\podcasts\base.html:66
+#: .\podcasts\templates\podcasts\base.html:94
 #: .\podcasts\templates\podcasts\channel_list.html:28
 #: .\podcasts\templates\podcasts\channel_list.html:83
 #: .\podcasts\templates\podcasts\channel_list_items.html:31
@@ -174,7 +174,7 @@ msgstr "喜歡的人"
 msgid "Notifications"
 msgstr "公告"
 
-#: .\podcasts\templates\podcasts\base.html:72
+#: .\podcasts\templates\podcasts\base.html:100
 #: .\podcasts\templates\podcasts\bookmarks_list.html:65
 #: .\podcasts\templates\podcasts\bookmarks_list_items.html:57
 #: .\podcasts\templates\podcasts\channel_detail.html:160
@@ -189,143 +189,143 @@ msgstr "公告"
 msgid "Bookmarks"
 msgstr "標籤"
 
-#: .\podcasts\templates\podcasts\base.html:74
-#: .\podcasts\templates\podcasts\base.html:180
+#: .\podcasts\templates\podcasts\base.html:102
+#: .\podcasts\templates\podcasts\base.html:208
 msgid "Channels"
 msgstr "頻道"
 
-#: .\podcasts\templates\podcasts\base.html:75
-#: .\podcasts\templates\podcasts\base.html:174
+#: .\podcasts\templates\podcasts\base.html:103
+#: .\podcasts\templates\podcasts\base.html:202
 #: .\podcasts\templates\podcasts\channel_detail.html:122
 #: .\podcasts\templates\podcasts\channel_list.html:46
 msgid "Episodes"
 msgstr "劇集"
 
-#: .\podcasts\templates\podcasts\base.html:102
+#: .\podcasts\templates\podcasts\base.html:130
 msgid "Light and Dark Mode"
 msgstr "光與黑暗模式"
 
-#: .\podcasts\templates\podcasts\base.html:112
+#: .\podcasts\templates\podcasts\base.html:140
 msgid "Profile"
 msgstr "公告表"
 
-#: .\podcasts\templates\podcasts\base.html:117
+#: .\podcasts\templates\podcasts\base.html:145
 msgid "See Profile"
 msgstr "查看個人資料"
 
-#: .\podcasts\templates\podcasts\base.html:120
+#: .\podcasts\templates\podcasts\base.html:148
 msgid "See Replies"
 msgstr "查看答案"
 
-#: .\podcasts\templates\podcasts\base.html:133
-#: .\podcasts\templates\podcasts\base.html:514
+#: .\podcasts\templates\podcasts\base.html:161
+#: .\podcasts\templates\podcasts\base.html:542
 msgid "Support Me"
 msgstr "支持我"
 
-#: .\podcasts\templates\podcasts\base.html:140
+#: .\podcasts\templates\podcasts\base.html:168
 msgid "Support Ticket"
 msgstr "支持票"
 
-#: .\podcasts\templates\podcasts\base.html:145
+#: .\podcasts\templates\podcasts\base.html:173
 msgid "Contribute"
 msgstr "提供貢獻"
 
-#: .\podcasts\templates\podcasts\base.html:151
+#: .\podcasts\templates\podcasts\base.html:179
 msgid "Sign Out"
 msgstr "註冊下載"
 
-#: .\podcasts\templates\podcasts\base.html:155
+#: .\podcasts\templates\podcasts\base.html:183
 msgid "Sign In"
 msgstr "登入"
 
-#: .\podcasts\templates\podcasts\base.html:188
+#: .\podcasts\templates\podcasts\base.html:216
 msgid "Search episodes or channels..."
 msgstr "搜尋劇集或頻道..."
 
-#: .\podcasts\templates\podcasts\base.html:194
+#: .\podcasts\templates\podcasts\base.html:222
 #: .\podcasts\templates\podcasts\channel_detail.html:116
 msgid "Search"
 msgstr "搜尋"
 
-#: .\podcasts\templates\podcasts\base.html:210
-#: .\podcasts\templates\podcasts\base.html:404
+#: .\podcasts\templates\podcasts\base.html:238
+#: .\podcasts\templates\podcasts\base.html:432
 msgid "Channel Title"
 msgstr "頻道標題"
 
-#: .\podcasts\templates\podcasts\base.html:216
+#: .\podcasts\templates\podcasts\base.html:244
 msgid "Episode Title"
 msgstr "劇集標題"
 
-#: .\podcasts\templates\podcasts\base.html:222
+#: .\podcasts\templates\podcasts\base.html:250
 msgid "Episode Description"
 msgstr "劇集描述"
 
-#: .\podcasts\templates\podcasts\base.html:228
+#: .\podcasts\templates\podcasts\base.html:256
 msgid "Transcript Text"
 msgstr "抄寫文字"
 
-#: .\podcasts\templates\podcasts\base.html:235
-#: .\podcasts\templates\podcasts\base.html:423
+#: .\podcasts\templates\podcasts\base.html:263
+#: .\podcasts\templates\podcasts\base.html:451
 msgid "Language"
 msgstr "語言"
 
-#: .\podcasts\templates\podcasts\base.html:315
+#: .\podcasts\templates\podcasts\base.html:343
 msgid "Date"
 msgstr "日期"
 
-#: .\podcasts\templates\podcasts\base.html:323
+#: .\podcasts\templates\podcasts\base.html:351
 msgid "Anytime"
 msgstr "任何時候"
 
-#: .\podcasts\templates\podcasts\base.html:329
+#: .\podcasts\templates\podcasts\base.html:357
 msgid "Past Day"
 msgstr "過去一天"
 
-#: .\podcasts\templates\podcasts\base.html:335
+#: .\podcasts\templates\podcasts\base.html:363
 msgid "Past Week"
 msgstr "上星期"
 
-#: .\podcasts\templates\podcasts\base.html:341
+#: .\podcasts\templates\podcasts\base.html:369
 msgid "Past Month"
 msgstr "上個月"
 
-#: .\podcasts\templates\podcasts\base.html:347
+#: .\podcasts\templates\podcasts\base.html:375
 msgid "Past Year"
 msgstr "去年"
 
-#: .\podcasts\templates\podcasts\base.html:353
+#: .\podcasts\templates\podcasts\base.html:381
 msgid "Past 2 Years"
 msgstr "過去 2 年"
 
-#: .\podcasts\templates\podcasts\base.html:359
+#: .\podcasts\templates\podcasts\base.html:387
 msgid "Past 3 Years"
 msgstr "過去 3 年"
 
-#: .\podcasts\templates\podcasts\base.html:365
+#: .\podcasts\templates\podcasts\base.html:393
 msgid "Past 4 Years"
 msgstr "過去 4 年"
 
-#: .\podcasts\templates\podcasts\base.html:371
+#: .\podcasts\templates\podcasts\base.html:399
 msgid "Past 5 Years"
 msgstr "過去 5 年"
 
-#: .\podcasts\templates\podcasts\base.html:377
+#: .\podcasts\templates\podcasts\base.html:405
 msgid "Past 10 Years"
 msgstr "過去 10 年"
 
-#: .\podcasts\templates\podcasts\base.html:383
+#: .\podcasts\templates\podcasts\base.html:411
 msgid "Past 15 Years"
 msgstr "過去 15 年"
 
-#: .\podcasts\templates\podcasts\base.html:410
+#: .\podcasts\templates\podcasts\base.html:438
 msgid "Channel Author"
 msgstr "道作者"
 
-#: .\podcasts\templates\podcasts\base.html:416
+#: .\podcasts\templates\podcasts\base.html:444
 msgid "Channel Summary"
 msgstr "道總結"
 
-#: .\podcasts\templates\podcasts\base.html:519
+#: .\podcasts\templates\podcasts\base.html:547
 #: .\podcasts\templates\podcasts\signup.html:175
 #: .\podcasts\templates\podcasts\signup.html:229
 #: .\podcasts\templates\podcasts\support_ticket.html:148
@@ -334,29 +334,29 @@ msgstr "道總結"
 msgid "Close"
 msgstr "靠近"
 
-#: .\podcasts\templates\podcasts\base.html:592
+#: .\podcasts\templates\podcasts\base.html:620
 #: .\podcasts\templates\podcasts\channel_detail.html:203
-#: .\podcasts\templates\podcasts\episode_detail.html:305
+#: .\podcasts\templates\podcasts\episode_detail.html:311
 msgid "Please sign in to complete this action."
 msgstr "請註冊完成此活動."
 
-#: .\podcasts\templates\podcasts\base.html:594
+#: .\podcasts\templates\podcasts\base.html:622
 #: .\podcasts\templates\podcasts\channel_detail.html:204
-#: .\podcasts\templates\podcasts\episode_detail.html:306
+#: .\podcasts\templates\podcasts\episode_detail.html:312
 msgid "Sign in"
 msgstr "登入"
 
-#: .\podcasts\templates\podcasts\base.html:601
+#: .\podcasts\templates\podcasts\base.html:629
 msgid "Contact Me"
 msgstr "聯絡我們"
 
-#: .\podcasts\templates\podcasts\base.html:662
-#: .\podcasts\templates\podcasts\base.html:663
+#: .\podcasts\templates\podcasts\base.html:694
+#: .\podcasts\templates\podcasts\base.html:695
 msgid "Switch to light mode"
 msgstr "切換到燈光模式"
 
-#: .\podcasts\templates\podcasts\base.html:667
-#: .\podcasts\templates\podcasts\base.html:668
+#: .\podcasts\templates\podcasts\base.html:699
+#: .\podcasts\templates\podcasts\base.html:700
 msgid "Switch to dark mode"
 msgstr "切換到黑暗模式"
 
@@ -393,7 +393,7 @@ msgstr "明確"
 #: .\podcasts\templates\podcasts\bookmarks_list_items.html:62
 #: .\podcasts\templates\podcasts\channel_detail.html:165
 #: .\podcasts\templates\podcasts\channel_detail_item.html:51
-#: .\podcasts\templates\podcasts\episode_detail.html:283
+#: .\podcasts\templates\podcasts\episode_detail.html:289
 #: .\podcasts\templates\podcasts\episode_list.html:34
 #: .\podcasts\templates\podcasts\episode_list.html:88
 #: .\podcasts\templates\podcasts\episode_list_items.html:59
@@ -800,7 +800,6 @@ msgid "Rewind 15 seconds"
 msgstr "轉轉 15 秒"
 
 #: .\podcasts\templates\podcasts\episode_detail.html:197
-#| msgid "Backend"
 msgid "Back 15 seconds"
 msgstr "還是15秒的時間."
 
@@ -813,7 +812,6 @@ msgid "Forward 15 seconds"
 msgstr "提前15秒"
 
 #: .\podcasts\templates\podcasts\episode_detail.html:205
-#| msgid "Episode Title"
 msgid "Episode audio player"
 msgstr "播放器"
 
@@ -866,7 +864,6 @@ msgid "No chapters available for this episode."
 msgstr "沒有本集的章節."
 
 #: .\podcasts\templates\podcasts\episode_detail.html:246
-#: .\podcasts\templates\podcasts\episode_detail.html:275
 msgid "Transcript"
 msgstr "抄錄"
 
@@ -875,30 +872,43 @@ msgid "No transcript available for this episode."
 msgstr "沒有本集的抄錄."
 
 #: .\podcasts\templates\podcasts\episode_detail.html:274
-msgid "Audio"
-msgstr "音频"
+msgid "Play"
+msgstr "遊戲"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:289
+#: .\podcasts\templates\podcasts\episode_detail.html:276
+msgid "Pause"
+msgstr "休息時間"
+
+#: .\podcasts\templates\podcasts\episode_detail.html:278
+msgid "Go to audio"
+msgstr "轉到音頻"
+
+#: .\podcasts\templates\podcasts\episode_detail.html:280
+#| msgid "Transcript"
+msgid "Go to Transcript"
+msgstr "請前往翻譯頁面."
+
+#: .\podcasts\templates\podcasts\episode_detail.html:295
 msgid "Write a comment..."
 msgstr "寫一篇評論."
 
-#: .\podcasts\templates\podcasts\episode_detail.html:292
+#: .\podcasts\templates\podcasts\episode_detail.html:298
 msgid "Submit Comment"
 msgstr "發表評論"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:1011
+#: .\podcasts\templates\podcasts\episode_detail.html:1093
 msgid "Remove episode from Bookmarks"
 msgstr "删除影片中的節目"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:1017
+#: .\podcasts\templates\podcasts\episode_detail.html:1099
 msgid "Add episode to Bookmarks"
 msgstr "添加節目到帳號標籤"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:1143
+#: .\podcasts\templates\podcasts\episode_detail.html:1225
 msgid "No comments yet."
 msgstr "沒有任何評論."
 
-#: .\podcasts\templates\podcasts\episode_detail.html:1207
+#: .\podcasts\templates\podcasts\episode_detail.html:1289
 msgid "Please enter a comment"
 msgstr "請輸入您的評論."
 
@@ -990,204 +1000,204 @@ msgstr "音樂播客搜索引擎"
 msgid "License: GPL v3"
 msgstr "授權:GPL v3"
 
-#: .\podcasts\templates\podcasts\home.html:39
+#: .\podcasts\templates\podcasts\home.html:43
 msgid "🚀 About"
 msgstr " 關於"
 
-#: .\podcasts\templates\podcasts\home.html:40
+#: .\podcasts\templates\podcasts\home.html:44
 msgid ""
 "Muse is a free, AI-powered podcast search engine. Tired of scouring episode "
 "show notes for bits of information, we built a platform where you can:"
 msgstr "我們建立了一个平台, 您可以:"
 
-#: .\podcasts\templates\podcasts\home.html:42
+#: .\podcasts\templates\podcasts\home.html:46
 msgid ""
 "🔍 Search any podcast by keyword (titles, descriptions, or transcript "
 "content)"
 msgstr "🔍 按關鍵字搜尋任何播客 (標題,描述或抄錄內容)"
 
-#: .\podcasts\templates\podcasts\home.html:43
+#: .\podcasts\templates\podcasts\home.html:47
 msgid "📄 View full, time-stamped transcripts (speaker-diarized and formatted)"
 msgstr " 查看完整的時刻印記錄 (音箱日記化和格式化)"
 
-#: .\podcasts\templates\podcasts\home.html:44
+#: .\podcasts\templates\podcasts\home.html:48
 msgid "✍️ Read AI-generated chapter summaries"
 msgstr "✍️閱讀人工智能生成的章節摘要"
 
-#: .\podcasts\templates\podcasts\home.html:45
+#: .\podcasts\templates\podcasts\home.html:49
 msgid ""
 "🌐 Find podcasts in 17 different languages natively transcribed or AI "
 "translated"
 msgstr " 在17種不同的語言中找到原本翻譯或人工智能翻譯的播客"
 
-#: .\podcasts\templates\podcasts\home.html:46
+#: .\podcasts\templates\podcasts\home.html:50
 msgid "🎧 Click through to listen at the exact moment a topic is discussed"
 msgstr " 點擊即可在討論某個主題時收聽"
 
-#: .\podcasts\templates\podcasts\home.html:47
+#: .\podcasts\templates\podcasts\home.html:51
 msgid "🆕 Discover new channels or episodes based on your interests"
 msgstr " 尋找根據您的興趣的新頻道或節目"
 
-#: .\podcasts\templates\podcasts\home.html:49
+#: .\podcasts\templates\podcasts\home.html:53
 msgid ""
 "Currently optimized for desktop browsers, tablets, foldables, and "
 "smartphones. Community contribution and native apps are coming soon!"
 msgstr "目前為桌面覽器,平板電腦,折叠式和智能手機最適化."
 
-#: .\podcasts\templates\podcasts\home.html:51
+#: .\podcasts\templates\podcasts\home.html:55
 msgid "🌟 Key Features"
 msgstr " 關鍵特點"
 
-#: .\podcasts\templates\podcasts\home.html:53
+#: .\podcasts\templates\podcasts\home.html:57
 msgid "Account Signup & Management"
 msgstr "帳戶註冊與管理"
 
-#: .\podcasts\templates\podcasts\home.html:53
+#: .\podcasts\templates\podcasts\home.html:57
 msgid ""
 "Create a free account to save searches, bookmark episodes, and track "
 "listening history."
 msgstr "建立一個免費的帳戶,"
 
-#: .\podcasts\templates\podcasts\home.html:54
+#: .\podcasts\templates\podcasts\home.html:58
 msgid "Transcript Generation"
 msgstr "抄本世代"
 
-#: .\podcasts\templates\podcasts\home.html:54
+#: .\podcasts\templates\podcasts\home.html:58
 msgid ""
 "Ingests RSS feeds from any podcast; uses OpenAI Whisper Turbo on an NVIDIA "
 "GPU for fast, high-quality transcription; diarizes speakers and formats with"
 " timestamps."
 msgstr "在 NVIDIA GPU 上使用 OpenAI Whisper Turbo 進行快速,高品質的轉錄,"
 
-#: .\podcasts\templates\podcasts\home.html:55
+#: .\podcasts\templates\podcasts\home.html:59
 msgid "Chapter Summaries"
 msgstr "章節總結"
 
-#: .\podcasts\templates\podcasts\home.html:55
+#: .\podcasts\templates\podcasts\home.html:59
 msgid ""
 "Generates concise summaries of each transcript segment using FalconsAI text-"
 "summarization."
 msgstr "使用FalconsAI文本總結,生成每個抄錄段的簡潔總結."
 
-#: .\podcasts\templates\podcasts\home.html:56
+#: .\podcasts\templates\podcasts\home.html:60
 msgid "Transcript Translations"
 msgstr "翻譯的翻譯"
 
-#: .\podcasts\templates\podcasts\home.html:56
+#: .\podcasts\templates\podcasts\home.html:60
 msgid ""
 "Takes podcasts and translates them into 17 different languages using "
 "nllb-200-distilled-600M translation model."
 msgstr "使用 nllb-200-distilled-600M翻譯模型將播客翻譯成17種不同的語言."
 
-#: .\podcasts\templates\podcasts\home.html:57
+#: .\podcasts\templates\podcasts\home.html:61
 msgid "Full-Text Search"
 msgstr "全文搜索"
 
-#: .\podcasts\templates\podcasts\home.html:57
+#: .\podcasts\templates\podcasts\home.html:61
 msgid ""
 "Powered by Elasticsearch for lightning-fast, fuzzy-match queries; filters by"
 " title, description, channel metadata, or transcript."
 msgstr "透過 Elasticsearch 提供閃電快速,模糊匹配的查詢; 按標題,描述,頻道元數據或抄錄的過濾器."
 
-#: .\podcasts\templates\podcasts\home.html:58
+#: .\podcasts\templates\podcasts\home.html:62
 msgid "Flexible Playback"
 msgstr "靈活的播放"
 
-#: .\podcasts\templates\podcasts\home.html:58
+#: .\podcasts\templates\podcasts\home.html:62
 msgid ""
 "Jump directly to the moment a keyword appears in the audio player on the "
 "website."
 msgstr "直接跳到網站上的音頻播放器中出現的關鍵字."
 
-#: .\podcasts\templates\podcasts\home.html:61
+#: .\podcasts\templates\podcasts\home.html:65
 msgid "🏗️ Architecture & Tech Stack"
 msgstr "️建築與技術堆"
 
-#: .\podcasts\templates\podcasts\home.html:65
+#: .\podcasts\templates\podcasts\home.html:69
 msgid "Layer"
 msgstr "層層"
 
-#: .\podcasts\templates\podcasts\home.html:66
+#: .\podcasts\templates\podcasts\home.html:70
 msgid "Technology"
 msgstr "科技"
 
-#: .\podcasts\templates\podcasts\home.html:71
+#: .\podcasts\templates\podcasts\home.html:75
 msgid "Backend"
 msgstr "后端"
 
-#: .\podcasts\templates\podcasts\home.html:71
+#: .\podcasts\templates\podcasts\home.html:75
 msgid "Python, Django"
 msgstr "這裡有許多人,"
 
-#: .\podcasts\templates\podcasts\home.html:74
+#: .\podcasts\templates\podcasts\home.html:78
 msgid "Transcription"
 msgstr "翻譯"
 
-#: .\podcasts\templates\podcasts\home.html:74
+#: .\podcasts\templates\podcasts\home.html:78
 msgid "OpenAI Whisper Turbo (GPU-accelerated)"
 msgstr "打開AI 聲 (加快GPU)"
 
-#: .\podcasts\templates\podcasts\home.html:77
+#: .\podcasts\templates\podcasts\home.html:81
 msgid "Summarization"
 msgstr "總結"
 
-#: .\podcasts\templates\podcasts\home.html:77
+#: .\podcasts\templates\podcasts\home.html:81
 msgid "FalconsAI / text_summarization"
 msgstr "FalconsAI / text_summary"
 
-#: .\podcasts\templates\podcasts\home.html:80
+#: .\podcasts\templates\podcasts\home.html:84
 msgid "Translation"
 msgstr "翻譯"
 
-#: .\podcasts\templates\podcasts\home.html:80
+#: .\podcasts\templates\podcasts\home.html:84
 msgid "Facebook / nllb-200-distilled-600M translation model"
 msgstr "臉書 / nllb-200-distilled-600M翻譯模型"
 
-#: .\podcasts\templates\podcasts\home.html:83
+#: .\podcasts\templates\podcasts\home.html:87
 msgid "Connection Pooling"
 msgstr "聯繫集結"
 
-#: .\podcasts\templates\podcasts\home.html:83
+#: .\podcasts\templates\podcasts\home.html:87
 msgid "PgBouncer"
 msgstr "沒有任何樓盤符合您的搜尋"
 
-#: .\podcasts\templates\podcasts\home.html:86
+#: .\podcasts\templates\podcasts\home.html:90
 msgid "Email Services"
 msgstr "電子郵件服務"
 
-#: .\podcasts\templates\podcasts\home.html:86
+#: .\podcasts\templates\podcasts\home.html:90
 msgid "Mailjet"
 msgstr "郵寄機"
 
-#: .\podcasts\templates\podcasts\home.html:89
+#: .\podcasts\templates\podcasts\home.html:93
 msgid "Database"
 msgstr "數據庫"
 
-#: .\podcasts\templates\podcasts\home.html:89
+#: .\podcasts\templates\podcasts\home.html:93
 msgid "PostgreSQL | MaraiaDB"
 msgstr "在這個網站上,"
 
-#: .\podcasts\templates\podcasts\home.html:92
+#: .\podcasts\templates\podcasts\home.html:96
 msgid "Search Engine"
 msgstr "搜索引擎"
 
-#: .\podcasts\templates\podcasts\home.html:92
+#: .\podcasts\templates\podcasts\home.html:96
 msgid "Elasticsearch"
 msgstr "彈性搜索"
 
-#: .\podcasts\templates\podcasts\home.html:95
+#: .\podcasts\templates\podcasts\home.html:99
 msgid "Frontend"
 msgstr "首頁 > 列表"
 
-#: .\podcasts\templates\podcasts\home.html:95
+#: .\podcasts\templates\podcasts\home.html:99
 msgid "Django templates | HTML | CSS | JavaScript"
 msgstr "沒有任何問題."
 
-#: .\podcasts\templates\podcasts\home.html:98
+#: .\podcasts\templates\podcasts\home.html:102
 msgid "Deployment"
 msgstr "部署"
 
-#: .\podcasts\templates\podcasts\home.html:98
+#: .\podcasts\templates\podcasts\home.html:102
 msgid "Docker | Ubuntu VM | Windows OS"
 msgstr "沒有任何問題."
 
@@ -1852,6 +1862,9 @@ msgstr "輸入出口號碼"
 #: .\podcasts\templates\two_factor\core\otp.html:9
 msgid "Submit OTP"
 msgstr "提交出口信息"
+
+#~ msgid "Audio"
+#~ msgstr "音频"
 
 #~ msgid "Toggle Theme"
 #~ msgstr "切換主題"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-27 21:47-0500\n"
+"POT-Creation-Date: 2025-10-31 22:13-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -151,15 +151,15 @@ msgstr "Повернутися до входу"
 msgid "Podcast Search Engine"
 msgstr "Пошукова система підкасту"
 
-#: .\podcasts\templates\podcasts\base.html:54
+#: .\podcasts\templates\podcasts\base.html:82
 msgid "Muse"
 msgstr "Муза"
 
-#: .\podcasts\templates\podcasts\base.html:57
+#: .\podcasts\templates\podcasts\base.html:85
 msgid "Home"
 msgstr "Додому"
 
-#: .\podcasts\templates\podcasts\base.html:61
+#: .\podcasts\templates\podcasts\base.html:89
 #: .\podcasts\templates\podcasts\channel_list.html:22
 #: .\podcasts\templates\podcasts\channel_list.html:79
 #: .\podcasts\templates\podcasts\channel_list_items.html:27
@@ -170,7 +170,7 @@ msgstr "Додому"
 msgid "Favorites"
 msgstr "Улюблені"
 
-#: .\podcasts\templates\podcasts\base.html:66
+#: .\podcasts\templates\podcasts\base.html:94
 #: .\podcasts\templates\podcasts\channel_list.html:28
 #: .\podcasts\templates\podcasts\channel_list.html:83
 #: .\podcasts\templates\podcasts\channel_list_items.html:31
@@ -181,7 +181,7 @@ msgstr "Улюблені"
 msgid "Notifications"
 msgstr "Повідомлення"
 
-#: .\podcasts\templates\podcasts\base.html:72
+#: .\podcasts\templates\podcasts\base.html:100
 #: .\podcasts\templates\podcasts\bookmarks_list.html:65
 #: .\podcasts\templates\podcasts\bookmarks_list_items.html:57
 #: .\podcasts\templates\podcasts\channel_detail.html:160
@@ -196,143 +196,143 @@ msgstr "Повідомлення"
 msgid "Bookmarks"
 msgstr "Ознаки книг"
 
-#: .\podcasts\templates\podcasts\base.html:74
-#: .\podcasts\templates\podcasts\base.html:180
+#: .\podcasts\templates\podcasts\base.html:102
+#: .\podcasts\templates\podcasts\base.html:208
 msgid "Channels"
 msgstr "Канали"
 
-#: .\podcasts\templates\podcasts\base.html:75
-#: .\podcasts\templates\podcasts\base.html:174
+#: .\podcasts\templates\podcasts\base.html:103
+#: .\podcasts\templates\podcasts\base.html:202
 #: .\podcasts\templates\podcasts\channel_detail.html:122
 #: .\podcasts\templates\podcasts\channel_list.html:46
 msgid "Episodes"
 msgstr "Епізоди"
 
-#: .\podcasts\templates\podcasts\base.html:102
+#: .\podcasts\templates\podcasts\base.html:130
 msgid "Light and Dark Mode"
 msgstr "Світло-темний режим"
 
-#: .\podcasts\templates\podcasts\base.html:112
+#: .\podcasts\templates\podcasts\base.html:140
 msgid "Profile"
 msgstr "Профіль"
 
-#: .\podcasts\templates\podcasts\base.html:117
+#: .\podcasts\templates\podcasts\base.html:145
 msgid "See Profile"
 msgstr "Подивіться Профіль"
 
-#: .\podcasts\templates\podcasts\base.html:120
+#: .\podcasts\templates\podcasts\base.html:148
 msgid "See Replies"
 msgstr "Дивіться відповіді"
 
-#: .\podcasts\templates\podcasts\base.html:133
-#: .\podcasts\templates\podcasts\base.html:514
+#: .\podcasts\templates\podcasts\base.html:161
+#: .\podcasts\templates\podcasts\base.html:542
 msgid "Support Me"
 msgstr "Підтримай мене"
 
-#: .\podcasts\templates\podcasts\base.html:140
+#: .\podcasts\templates\podcasts\base.html:168
 msgid "Support Ticket"
 msgstr "Білет підтримки"
 
-#: .\podcasts\templates\podcasts\base.html:145
+#: .\podcasts\templates\podcasts\base.html:173
 msgid "Contribute"
 msgstr "Допомога"
 
-#: .\podcasts\templates\podcasts\base.html:151
+#: .\podcasts\templates\podcasts\base.html:179
 msgid "Sign Out"
 msgstr "Підпишіться"
 
-#: .\podcasts\templates\podcasts\base.html:155
+#: .\podcasts\templates\podcasts\base.html:183
 msgid "Sign In"
 msgstr "Прийміть участь"
 
-#: .\podcasts\templates\podcasts\base.html:188
+#: .\podcasts\templates\podcasts\base.html:216
 msgid "Search episodes or channels..."
 msgstr "Шукати епізоди чи канали..."
 
-#: .\podcasts\templates\podcasts\base.html:194
+#: .\podcasts\templates\podcasts\base.html:222
 #: .\podcasts\templates\podcasts\channel_detail.html:116
 msgid "Search"
 msgstr "Пошук"
 
-#: .\podcasts\templates\podcasts\base.html:210
-#: .\podcasts\templates\podcasts\base.html:404
+#: .\podcasts\templates\podcasts\base.html:238
+#: .\podcasts\templates\podcasts\base.html:432
 msgid "Channel Title"
 msgstr "Назва каналу"
 
-#: .\podcasts\templates\podcasts\base.html:216
+#: .\podcasts\templates\podcasts\base.html:244
 msgid "Episode Title"
 msgstr "Назва епізоду"
 
-#: .\podcasts\templates\podcasts\base.html:222
+#: .\podcasts\templates\podcasts\base.html:250
 msgid "Episode Description"
 msgstr "Опис епізоду"
 
-#: .\podcasts\templates\podcasts\base.html:228
+#: .\podcasts\templates\podcasts\base.html:256
 msgid "Transcript Text"
 msgstr "Текст транскрипції"
 
-#: .\podcasts\templates\podcasts\base.html:235
-#: .\podcasts\templates\podcasts\base.html:423
+#: .\podcasts\templates\podcasts\base.html:263
+#: .\podcasts\templates\podcasts\base.html:451
 msgid "Language"
 msgstr "Мова"
 
-#: .\podcasts\templates\podcasts\base.html:315
+#: .\podcasts\templates\podcasts\base.html:343
 msgid "Date"
 msgstr "Дата"
 
-#: .\podcasts\templates\podcasts\base.html:323
+#: .\podcasts\templates\podcasts\base.html:351
 msgid "Anytime"
 msgstr "У будь-який час"
 
-#: .\podcasts\templates\podcasts\base.html:329
+#: .\podcasts\templates\podcasts\base.html:357
 msgid "Past Day"
 msgstr "Минулий день"
 
-#: .\podcasts\templates\podcasts\base.html:335
+#: .\podcasts\templates\podcasts\base.html:363
 msgid "Past Week"
 msgstr "Минулий тиждень"
 
-#: .\podcasts\templates\podcasts\base.html:341
+#: .\podcasts\templates\podcasts\base.html:369
 msgid "Past Month"
 msgstr "Останній місяць"
 
-#: .\podcasts\templates\podcasts\base.html:347
+#: .\podcasts\templates\podcasts\base.html:375
 msgid "Past Year"
 msgstr "Минулий рік"
 
-#: .\podcasts\templates\podcasts\base.html:353
+#: .\podcasts\templates\podcasts\base.html:381
 msgid "Past 2 Years"
 msgstr "Останні 2 роки"
 
-#: .\podcasts\templates\podcasts\base.html:359
+#: .\podcasts\templates\podcasts\base.html:387
 msgid "Past 3 Years"
 msgstr "Останні 3 роки"
 
-#: .\podcasts\templates\podcasts\base.html:365
+#: .\podcasts\templates\podcasts\base.html:393
 msgid "Past 4 Years"
 msgstr "Останні 4 роки"
 
-#: .\podcasts\templates\podcasts\base.html:371
+#: .\podcasts\templates\podcasts\base.html:399
 msgid "Past 5 Years"
 msgstr "Останні 5 років"
 
-#: .\podcasts\templates\podcasts\base.html:377
+#: .\podcasts\templates\podcasts\base.html:405
 msgid "Past 10 Years"
 msgstr "Останні 10 років"
 
-#: .\podcasts\templates\podcasts\base.html:383
+#: .\podcasts\templates\podcasts\base.html:411
 msgid "Past 15 Years"
 msgstr "Останні 15 років"
 
-#: .\podcasts\templates\podcasts\base.html:410
+#: .\podcasts\templates\podcasts\base.html:438
 msgid "Channel Author"
 msgstr "Автор каналу"
 
-#: .\podcasts\templates\podcasts\base.html:416
+#: .\podcasts\templates\podcasts\base.html:444
 msgid "Channel Summary"
 msgstr "Підсумок каналу"
 
-#: .\podcasts\templates\podcasts\base.html:519
+#: .\podcasts\templates\podcasts\base.html:547
 #: .\podcasts\templates\podcasts\signup.html:175
 #: .\podcasts\templates\podcasts\signup.html:229
 #: .\podcasts\templates\podcasts\support_ticket.html:148
@@ -341,29 +341,29 @@ msgstr "Підсумок каналу"
 msgid "Close"
 msgstr "Близько"
 
-#: .\podcasts\templates\podcasts\base.html:592
+#: .\podcasts\templates\podcasts\base.html:620
 #: .\podcasts\templates\podcasts\channel_detail.html:203
-#: .\podcasts\templates\podcasts\episode_detail.html:305
+#: .\podcasts\templates\podcasts\episode_detail.html:311
 msgid "Please sign in to complete this action."
 msgstr "Будь ласка, підпишіться, щоб завершити цю акцію."
 
-#: .\podcasts\templates\podcasts\base.html:594
+#: .\podcasts\templates\podcasts\base.html:622
 #: .\podcasts\templates\podcasts\channel_detail.html:204
-#: .\podcasts\templates\podcasts\episode_detail.html:306
+#: .\podcasts\templates\podcasts\episode_detail.html:312
 msgid "Sign in"
 msgstr "Підпишіться"
 
-#: .\podcasts\templates\podcasts\base.html:601
+#: .\podcasts\templates\podcasts\base.html:629
 msgid "Contact Me"
 msgstr "Зв'яжіться зі мною"
 
-#: .\podcasts\templates\podcasts\base.html:662
-#: .\podcasts\templates\podcasts\base.html:663
+#: .\podcasts\templates\podcasts\base.html:694
+#: .\podcasts\templates\podcasts\base.html:695
 msgid "Switch to light mode"
 msgstr "Перейти на світловий режим"
 
-#: .\podcasts\templates\podcasts\base.html:667
-#: .\podcasts\templates\podcasts\base.html:668
+#: .\podcasts\templates\podcasts\base.html:699
+#: .\podcasts\templates\podcasts\base.html:700
 msgid "Switch to dark mode"
 msgstr "Перейти на темний режим"
 
@@ -400,7 +400,7 @@ msgstr "Відвертий"
 #: .\podcasts\templates\podcasts\bookmarks_list_items.html:62
 #: .\podcasts\templates\podcasts\channel_detail.html:165
 #: .\podcasts\templates\podcasts\channel_detail_item.html:51
-#: .\podcasts\templates\podcasts\episode_detail.html:283
+#: .\podcasts\templates\podcasts\episode_detail.html:289
 #: .\podcasts\templates\podcasts\episode_list.html:34
 #: .\podcasts\templates\podcasts\episode_list.html:88
 #: .\podcasts\templates\podcasts\episode_list_items.html:59
@@ -822,7 +822,6 @@ msgid "Rewind 15 seconds"
 msgstr "Поверніть 15 секунд"
 
 #: .\podcasts\templates\podcasts\episode_detail.html:197
-#| msgid "Backend"
 msgid "Back 15 seconds"
 msgstr "Поверніться 15 секунд."
 
@@ -835,7 +834,6 @@ msgid "Forward 15 seconds"
 msgstr "Перед 15 секунд"
 
 #: .\podcasts\templates\podcasts\episode_detail.html:205
-#| msgid "Episode Title"
 msgid "Episode audio player"
 msgstr "Аудіопередавець епізоду"
 
@@ -888,7 +886,6 @@ msgid "No chapters available for this episode."
 msgstr "На цей епізод немає розділів."
 
 #: .\podcasts\templates\podcasts\episode_detail.html:246
-#: .\podcasts\templates\podcasts\episode_detail.html:275
 msgid "Transcript"
 msgstr "Стенограма"
 
@@ -897,30 +894,43 @@ msgid "No transcript available for this episode."
 msgstr "Немає транскрипту для цього епізоду."
 
 #: .\podcasts\templates\podcasts\episode_detail.html:274
-msgid "Audio"
-msgstr "Аудіо"
+msgid "Play"
+msgstr "Пограти"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:289
+#: .\podcasts\templates\podcasts\episode_detail.html:276
+msgid "Pause"
+msgstr "Пауза"
+
+#: .\podcasts\templates\podcasts\episode_detail.html:278
+msgid "Go to audio"
+msgstr "Перейдіть на аудіо"
+
+#: .\podcasts\templates\podcasts\episode_detail.html:280
+#| msgid "Transcript"
+msgid "Go to Transcript"
+msgstr "Перейдіть до перекладу"
+
+#: .\podcasts\templates\podcasts\episode_detail.html:295
 msgid "Write a comment..."
 msgstr "Напишіть коментар..."
 
-#: .\podcasts\templates\podcasts\episode_detail.html:292
+#: .\podcasts\templates\podcasts\episode_detail.html:298
 msgid "Submit Comment"
 msgstr "Подачі коментарів"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:1011
+#: .\podcasts\templates\podcasts\episode_detail.html:1093
 msgid "Remove episode from Bookmarks"
 msgstr "Вилучити епізод з відзначанок"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:1017
+#: .\podcasts\templates\podcasts\episode_detail.html:1099
 msgid "Add episode to Bookmarks"
 msgstr "Додавати епізод до відзнак"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:1143
+#: .\podcasts\templates\podcasts\episode_detail.html:1225
 msgid "No comments yet."
 msgstr "Ще немає коментарів."
 
-#: .\podcasts\templates\podcasts\episode_detail.html:1207
+#: .\podcasts\templates\podcasts\episode_detail.html:1289
 msgid "Please enter a comment"
 msgstr "Будь ласка, введіть коментар"
 
@@ -1014,11 +1024,11 @@ msgstr "Пошукова система \"Муза\""
 msgid "License: GPL v3"
 msgstr "Ліцензія: GPL v3"
 
-#: .\podcasts\templates\podcasts\home.html:39
+#: .\podcasts\templates\podcasts\home.html:43
 msgid "🚀 About"
 msgstr " Про"
 
-#: .\podcasts\templates\podcasts\home.html:40
+#: .\podcasts\templates\podcasts\home.html:44
 msgid ""
 "Muse is a free, AI-powered podcast search engine. Tired of scouring episode "
 "show notes for bits of information, we built a platform where you can:"
@@ -1026,7 +1036,7 @@ msgstr ""
 "Муза - це безкоштовна пошукова система підкастів за допомогою штучного "
 "інтелекту."
 
-#: .\podcasts\templates\podcasts\home.html:42
+#: .\podcasts\templates\podcasts\home.html:46
 msgid ""
 "🔍 Search any podcast by keyword (titles, descriptions, or transcript "
 "content)"
@@ -1034,17 +1044,17 @@ msgstr ""
 "🔍 Пошукуйте будь-який підкаст за ключовим словом (заголовки, описи або зміст"
 " транскрипту)"
 
-#: .\podcasts\templates\podcasts\home.html:43
+#: .\podcasts\templates\podcasts\home.html:47
 msgid "📄 View full, time-stamped transcripts (speaker-diarized and formatted)"
 msgstr ""
 " Погляньте повні транскрипти з часовою печкою (диарізовані і форматизовані "
 "для громкоговорив)"
 
-#: .\podcasts\templates\podcasts\home.html:44
+#: .\podcasts\templates\podcasts\home.html:48
 msgid "✍️ Read AI-generated chapter summaries"
 msgstr "✍️ Читайте резюме розділів, створених штучним інтелектом"
 
-#: .\podcasts\templates\podcasts\home.html:45
+#: .\podcasts\templates\podcasts\home.html:49
 msgid ""
 "🌐 Find podcasts in 17 different languages natively transcribed or AI "
 "translated"
@@ -1052,15 +1062,15 @@ msgstr ""
 " Знайдіть підкасти на 17 різних мовах, які були перенесені або перекладені "
 "штучним інтелектуалом"
 
-#: .\podcasts\templates\podcasts\home.html:46
+#: .\podcasts\templates\podcasts\home.html:50
 msgid "🎧 Click through to listen at the exact moment a topic is discussed"
 msgstr " Перейдіть, щоб слухати в точний момент, коли обговорюється тема"
 
-#: .\podcasts\templates\podcasts\home.html:47
+#: .\podcasts\templates\podcasts\home.html:51
 msgid "🆕 Discover new channels or episodes based on your interests"
 msgstr " Відкрийте нові канали або епізоди на основі ваших інтересів"
 
-#: .\podcasts\templates\podcasts\home.html:49
+#: .\podcasts\templates\podcasts\home.html:53
 msgid ""
 "Currently optimized for desktop browsers, tablets, foldables, and "
 "smartphones. Community contribution and native apps are coming soon!"
@@ -1068,15 +1078,15 @@ msgstr ""
 "У даний час оптимізовано для настільних браузерів, планшетів, складових і "
 "смартфонів."
 
-#: .\podcasts\templates\podcasts\home.html:51
+#: .\podcasts\templates\podcasts\home.html:55
 msgid "🌟 Key Features"
 msgstr " Ключові особливості"
 
-#: .\podcasts\templates\podcasts\home.html:53
+#: .\podcasts\templates\podcasts\home.html:57
 msgid "Account Signup & Management"
 msgstr "Регистрація і управління рахунком"
 
-#: .\podcasts\templates\podcasts\home.html:53
+#: .\podcasts\templates\podcasts\home.html:57
 msgid ""
 "Create a free account to save searches, bookmark episodes, and track "
 "listening history."
@@ -1084,11 +1094,11 @@ msgstr ""
 "Створюйте безкоштовний обліковий запис, щоб зберегти пошуки, відзначати "
 "епізоди і відстежувати історію прослуховування."
 
-#: .\podcasts\templates\podcasts\home.html:54
+#: .\podcasts\templates\podcasts\home.html:58
 msgid "Transcript Generation"
 msgstr "Початок транскриптів"
 
-#: .\podcasts\templates\podcasts\home.html:54
+#: .\podcasts\templates\podcasts\home.html:58
 msgid ""
 "Ingests RSS feeds from any podcast; uses OpenAI Whisper Turbo on an NVIDIA "
 "GPU for fast, high-quality transcription; diarizes speakers and formats with"
@@ -1098,11 +1108,11 @@ msgstr ""
 "на GPU NVIDIA для швидкої, високоякісної транскрипції; записує громкоговорих"
 " і формати з часовими штампами."
 
-#: .\podcasts\templates\podcasts\home.html:55
+#: .\podcasts\templates\podcasts\home.html:59
 msgid "Chapter Summaries"
 msgstr "Підсумки розділів"
 
-#: .\podcasts\templates\podcasts\home.html:55
+#: .\podcasts\templates\podcasts\home.html:59
 msgid ""
 "Generates concise summaries of each transcript segment using FalconsAI text-"
 "summarization."
@@ -1110,11 +1120,11 @@ msgstr ""
 "Створює короткі резюме кожного сегменту транскрипту за допомогою текстового "
 "резюме FalconsAI."
 
-#: .\podcasts\templates\podcasts\home.html:56
+#: .\podcasts\templates\podcasts\home.html:60
 msgid "Transcript Translations"
 msgstr "Переведення перекладів"
 
-#: .\podcasts\templates\podcasts\home.html:56
+#: .\podcasts\templates\podcasts\home.html:60
 msgid ""
 "Takes podcasts and translates them into 17 different languages using "
 "nllb-200-distilled-600M translation model."
@@ -1122,11 +1132,11 @@ msgstr ""
 "Вибирає підкасти і перекладає їх на 17 різних мов, використовуючи модель "
 "перекладу nllb-200-distilled-600M."
 
-#: .\podcasts\templates\podcasts\home.html:57
+#: .\podcasts\templates\podcasts\home.html:61
 msgid "Full-Text Search"
 msgstr "Пошук повного тексту"
 
-#: .\podcasts\templates\podcasts\home.html:57
+#: .\podcasts\templates\podcasts\home.html:61
 msgid ""
 "Powered by Elasticsearch for lightning-fast, fuzzy-match queries; filters by"
 " title, description, channel metadata, or transcript."
@@ -1135,11 +1145,11 @@ msgstr ""
 " відповідддністю; фільтри за назвами, описами, метаданами каналу або "
 "транскриптом."
 
-#: .\podcasts\templates\podcasts\home.html:58
+#: .\podcasts\templates\podcasts\home.html:62
 msgid "Flexible Playback"
 msgstr "Флексибельна відтворення"
 
-#: .\podcasts\templates\podcasts\home.html:58
+#: .\podcasts\templates\podcasts\home.html:62
 msgid ""
 "Jump directly to the moment a keyword appears in the audio player on the "
 "website."
@@ -1147,95 +1157,95 @@ msgstr ""
 "Перейдіть безпосередньо до моменту, коли ключове слово з'явиться в "
 "аудіопередачі на веб-сайті."
 
-#: .\podcasts\templates\podcasts\home.html:61
+#: .\podcasts\templates\podcasts\home.html:65
 msgid "🏗️ Architecture & Tech Stack"
 msgstr "️ Архітектура & Технологічний Stack"
 
-#: .\podcasts\templates\podcasts\home.html:65
+#: .\podcasts\templates\podcasts\home.html:69
 msgid "Layer"
 msgstr "Склад"
 
-#: .\podcasts\templates\podcasts\home.html:66
+#: .\podcasts\templates\podcasts\home.html:70
 msgid "Technology"
 msgstr "Технологія"
 
-#: .\podcasts\templates\podcasts\home.html:71
+#: .\podcasts\templates\podcasts\home.html:75
 msgid "Backend"
 msgstr "Зверток"
 
-#: .\podcasts\templates\podcasts\home.html:71
+#: .\podcasts\templates\podcasts\home.html:75
 msgid "Python, Django"
 msgstr "Пітон, Джанго"
 
-#: .\podcasts\templates\podcasts\home.html:74
+#: .\podcasts\templates\podcasts\home.html:78
 msgid "Transcription"
 msgstr "Транскрипція"
 
-#: .\podcasts\templates\podcasts\home.html:74
+#: .\podcasts\templates\podcasts\home.html:78
 msgid "OpenAI Whisper Turbo (GPU-accelerated)"
 msgstr "OpenAI Whisper Turbo (поскаржено з GPU)"
 
-#: .\podcasts\templates\podcasts\home.html:77
+#: .\podcasts\templates\podcasts\home.html:81
 msgid "Summarization"
 msgstr "Резюме"
 
-#: .\podcasts\templates\podcasts\home.html:77
+#: .\podcasts\templates\podcasts\home.html:81
 msgid "FalconsAI / text_summarization"
 msgstr "FalconsAI / text_summary"
 
-#: .\podcasts\templates\podcasts\home.html:80
+#: .\podcasts\templates\podcasts\home.html:84
 msgid "Translation"
 msgstr "Переклад"
 
-#: .\podcasts\templates\podcasts\home.html:80
+#: .\podcasts\templates\podcasts\home.html:84
 msgid "Facebook / nllb-200-distilled-600M translation model"
 msgstr "Facebook / nllb-200-distilled-600M перекладової моделі"
 
-#: .\podcasts\templates\podcasts\home.html:83
+#: .\podcasts\templates\podcasts\home.html:87
 msgid "Connection Pooling"
 msgstr "Об'єднання зв'язків"
 
-#: .\podcasts\templates\podcasts\home.html:83
+#: .\podcasts\templates\podcasts\home.html:87
 msgid "PgBouncer"
 msgstr "PgBouncer"
 
-#: .\podcasts\templates\podcasts\home.html:86
+#: .\podcasts\templates\podcasts\home.html:90
 msgid "Email Services"
 msgstr "Послуги електронної пошти"
 
-#: .\podcasts\templates\podcasts\home.html:86
+#: .\podcasts\templates\podcasts\home.html:90
 msgid "Mailjet"
 msgstr "Mailjet"
 
-#: .\podcasts\templates\podcasts\home.html:89
+#: .\podcasts\templates\podcasts\home.html:93
 msgid "Database"
 msgstr "База даних"
 
-#: .\podcasts\templates\podcasts\home.html:89
+#: .\podcasts\templates\podcasts\home.html:93
 msgid "PostgreSQL | MaraiaDB"
 msgstr "ПостГреSQL МарайАДБ"
 
-#: .\podcasts\templates\podcasts\home.html:92
+#: .\podcasts\templates\podcasts\home.html:96
 msgid "Search Engine"
 msgstr "Пошукова система"
 
-#: .\podcasts\templates\podcasts\home.html:92
+#: .\podcasts\templates\podcasts\home.html:96
 msgid "Elasticsearch"
 msgstr "Еластичний пошук"
 
-#: .\podcasts\templates\podcasts\home.html:95
+#: .\podcasts\templates\podcasts\home.html:99
 msgid "Frontend"
 msgstr "Фронт-энд"
 
-#: .\podcasts\templates\podcasts\home.html:95
+#: .\podcasts\templates\podcasts\home.html:99
 msgid "Django templates | HTML | CSS | JavaScript"
 msgstr "Шаблони Джанго. HTML, CSS, JavaScript."
 
-#: .\podcasts\templates\podcasts\home.html:98
+#: .\podcasts\templates\podcasts\home.html:102
 msgid "Deployment"
 msgstr "Розповсюдження"
 
-#: .\podcasts\templates\podcasts\home.html:98
+#: .\podcasts\templates\podcasts\home.html:102
 msgid "Docker | Ubuntu VM | Windows OS"
 msgstr "Докер Убунту ВМ Windows ОС"
 
@@ -1938,6 +1948,9 @@ msgstr "Введіть OTP"
 #: .\podcasts\templates\two_factor\core\otp.html:9
 msgid "Submit OTP"
 msgstr "Задайте ОТП"
+
+#~ msgid "Audio"
+#~ msgstr "Аудіо"
 
 #~ msgid "Toggle Theme"
 #~ msgstr "Переключити тему"
