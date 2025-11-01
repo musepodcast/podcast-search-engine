@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-27 21:47-0500\n"
+"POT-Creation-Date: 2025-10-31 22:13-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -146,15 +146,15 @@ msgstr "Login'e geri dön"
 msgid "Podcast Search Engine"
 msgstr "Podcast Arama Motoru"
 
-#: .\podcasts\templates\podcasts\base.html:54
+#: .\podcasts\templates\podcasts\base.html:82
 msgid "Muse"
 msgstr "Müze"
 
-#: .\podcasts\templates\podcasts\base.html:57
+#: .\podcasts\templates\podcasts\base.html:85
 msgid "Home"
 msgstr "Ev"
 
-#: .\podcasts\templates\podcasts\base.html:61
+#: .\podcasts\templates\podcasts\base.html:89
 #: .\podcasts\templates\podcasts\channel_list.html:22
 #: .\podcasts\templates\podcasts\channel_list.html:79
 #: .\podcasts\templates\podcasts\channel_list_items.html:27
@@ -165,7 +165,7 @@ msgstr "Ev"
 msgid "Favorites"
 msgstr "En sevdiğim"
 
-#: .\podcasts\templates\podcasts\base.html:66
+#: .\podcasts\templates\podcasts\base.html:94
 #: .\podcasts\templates\podcasts\channel_list.html:28
 #: .\podcasts\templates\podcasts\channel_list.html:83
 #: .\podcasts\templates\podcasts\channel_list_items.html:31
@@ -176,7 +176,7 @@ msgstr "En sevdiğim"
 msgid "Notifications"
 msgstr "İletişimler"
 
-#: .\podcasts\templates\podcasts\base.html:72
+#: .\podcasts\templates\podcasts\base.html:100
 #: .\podcasts\templates\podcasts\bookmarks_list.html:65
 #: .\podcasts\templates\podcasts\bookmarks_list_items.html:57
 #: .\podcasts\templates\podcasts\channel_detail.html:160
@@ -191,143 +191,143 @@ msgstr "İletişimler"
 msgid "Bookmarks"
 msgstr "Kayıt işaretleri"
 
-#: .\podcasts\templates\podcasts\base.html:74
-#: .\podcasts\templates\podcasts\base.html:180
+#: .\podcasts\templates\podcasts\base.html:102
+#: .\podcasts\templates\podcasts\base.html:208
 msgid "Channels"
 msgstr "Kanallar"
 
-#: .\podcasts\templates\podcasts\base.html:75
-#: .\podcasts\templates\podcasts\base.html:174
+#: .\podcasts\templates\podcasts\base.html:103
+#: .\podcasts\templates\podcasts\base.html:202
 #: .\podcasts\templates\podcasts\channel_detail.html:122
 #: .\podcasts\templates\podcasts\channel_list.html:46
 msgid "Episodes"
 msgstr "Bölümler"
 
-#: .\podcasts\templates\podcasts\base.html:102
+#: .\podcasts\templates\podcasts\base.html:130
 msgid "Light and Dark Mode"
 msgstr "Işık ve Karanlık Modu"
 
-#: .\podcasts\templates\podcasts\base.html:112
+#: .\podcasts\templates\podcasts\base.html:140
 msgid "Profile"
 msgstr "Profil"
 
-#: .\podcasts\templates\podcasts\base.html:117
+#: .\podcasts\templates\podcasts\base.html:145
 msgid "See Profile"
 msgstr "Profil görüntüsü"
 
-#: .\podcasts\templates\podcasts\base.html:120
+#: .\podcasts\templates\podcasts\base.html:148
 msgid "See Replies"
 msgstr "Cevaplar"
 
-#: .\podcasts\templates\podcasts\base.html:133
-#: .\podcasts\templates\podcasts\base.html:514
+#: .\podcasts\templates\podcasts\base.html:161
+#: .\podcasts\templates\podcasts\base.html:542
 msgid "Support Me"
 msgstr "Beni Destekle"
 
-#: .\podcasts\templates\podcasts\base.html:140
+#: .\podcasts\templates\podcasts\base.html:168
 msgid "Support Ticket"
 msgstr "Destek Bileti"
 
-#: .\podcasts\templates\podcasts\base.html:145
+#: .\podcasts\templates\podcasts\base.html:173
 msgid "Contribute"
 msgstr "Katkı sağlayın"
 
-#: .\podcasts\templates\podcasts\base.html:151
+#: .\podcasts\templates\podcasts\base.html:179
 msgid "Sign Out"
 msgstr "İmzalayın"
 
-#: .\podcasts\templates\podcasts\base.html:155
+#: .\podcasts\templates\podcasts\base.html:183
 msgid "Sign In"
 msgstr "Giriş yap"
 
-#: .\podcasts\templates\podcasts\base.html:188
+#: .\podcasts\templates\podcasts\base.html:216
 msgid "Search episodes or channels..."
 msgstr "Bölümleri veya kanalları arayın..."
 
-#: .\podcasts\templates\podcasts\base.html:194
+#: .\podcasts\templates\podcasts\base.html:222
 #: .\podcasts\templates\podcasts\channel_detail.html:116
 msgid "Search"
 msgstr "Ara"
 
-#: .\podcasts\templates\podcasts\base.html:210
-#: .\podcasts\templates\podcasts\base.html:404
+#: .\podcasts\templates\podcasts\base.html:238
+#: .\podcasts\templates\podcasts\base.html:432
 msgid "Channel Title"
 msgstr "Kanal Başlığı"
 
-#: .\podcasts\templates\podcasts\base.html:216
+#: .\podcasts\templates\podcasts\base.html:244
 msgid "Episode Title"
 msgstr "Bölüm Başlığı"
 
-#: .\podcasts\templates\podcasts\base.html:222
+#: .\podcasts\templates\podcasts\base.html:250
 msgid "Episode Description"
 msgstr "Bölüm Açıklaması"
 
-#: .\podcasts\templates\podcasts\base.html:228
+#: .\podcasts\templates\podcasts\base.html:256
 msgid "Transcript Text"
 msgstr "Transkript Metni"
 
-#: .\podcasts\templates\podcasts\base.html:235
-#: .\podcasts\templates\podcasts\base.html:423
+#: .\podcasts\templates\podcasts\base.html:263
+#: .\podcasts\templates\podcasts\base.html:451
 msgid "Language"
 msgstr "Dil"
 
-#: .\podcasts\templates\podcasts\base.html:315
+#: .\podcasts\templates\podcasts\base.html:343
 msgid "Date"
 msgstr "Tarih"
 
-#: .\podcasts\templates\podcasts\base.html:323
+#: .\podcasts\templates\podcasts\base.html:351
 msgid "Anytime"
 msgstr "Her zaman"
 
-#: .\podcasts\templates\podcasts\base.html:329
+#: .\podcasts\templates\podcasts\base.html:357
 msgid "Past Day"
 msgstr "Geçen Gün"
 
-#: .\podcasts\templates\podcasts\base.html:335
+#: .\podcasts\templates\podcasts\base.html:363
 msgid "Past Week"
 msgstr "Geçen Hafta"
 
-#: .\podcasts\templates\podcasts\base.html:341
+#: .\podcasts\templates\podcasts\base.html:369
 msgid "Past Month"
 msgstr "Geçen Ay"
 
-#: .\podcasts\templates\podcasts\base.html:347
+#: .\podcasts\templates\podcasts\base.html:375
 msgid "Past Year"
 msgstr "Geçen Yıl"
 
-#: .\podcasts\templates\podcasts\base.html:353
+#: .\podcasts\templates\podcasts\base.html:381
 msgid "Past 2 Years"
 msgstr "Son 2 Yıl"
 
-#: .\podcasts\templates\podcasts\base.html:359
+#: .\podcasts\templates\podcasts\base.html:387
 msgid "Past 3 Years"
 msgstr "Son 3 Yıl"
 
-#: .\podcasts\templates\podcasts\base.html:365
+#: .\podcasts\templates\podcasts\base.html:393
 msgid "Past 4 Years"
 msgstr "Son 4 Yıl"
 
-#: .\podcasts\templates\podcasts\base.html:371
+#: .\podcasts\templates\podcasts\base.html:399
 msgid "Past 5 Years"
 msgstr "Son 5 Yıl"
 
-#: .\podcasts\templates\podcasts\base.html:377
+#: .\podcasts\templates\podcasts\base.html:405
 msgid "Past 10 Years"
 msgstr "Son 10 Yıl"
 
-#: .\podcasts\templates\podcasts\base.html:383
+#: .\podcasts\templates\podcasts\base.html:411
 msgid "Past 15 Years"
 msgstr "Son 15 Yıl"
 
-#: .\podcasts\templates\podcasts\base.html:410
+#: .\podcasts\templates\podcasts\base.html:438
 msgid "Channel Author"
 msgstr "Kanal Yazarı"
 
-#: .\podcasts\templates\podcasts\base.html:416
+#: .\podcasts\templates\podcasts\base.html:444
 msgid "Channel Summary"
 msgstr "Kanal Özetleri"
 
-#: .\podcasts\templates\podcasts\base.html:519
+#: .\podcasts\templates\podcasts\base.html:547
 #: .\podcasts\templates\podcasts\signup.html:175
 #: .\podcasts\templates\podcasts\signup.html:229
 #: .\podcasts\templates\podcasts\support_ticket.html:148
@@ -336,29 +336,29 @@ msgstr "Kanal Özetleri"
 msgid "Close"
 msgstr "Yakınlık"
 
-#: .\podcasts\templates\podcasts\base.html:592
+#: .\podcasts\templates\podcasts\base.html:620
 #: .\podcasts\templates\podcasts\channel_detail.html:203
-#: .\podcasts\templates\podcasts\episode_detail.html:305
+#: .\podcasts\templates\podcasts\episode_detail.html:311
 msgid "Please sign in to complete this action."
 msgstr "Lütfen bu hareketi tamamlamak için giriş yapın."
 
-#: .\podcasts\templates\podcasts\base.html:594
+#: .\podcasts\templates\podcasts\base.html:622
 #: .\podcasts\templates\podcasts\channel_detail.html:204
-#: .\podcasts\templates\podcasts\episode_detail.html:306
+#: .\podcasts\templates\podcasts\episode_detail.html:312
 msgid "Sign in"
 msgstr "Giriş yap ."
 
-#: .\podcasts\templates\podcasts\base.html:601
+#: .\podcasts\templates\podcasts\base.html:629
 msgid "Contact Me"
 msgstr "Benimle iletişime geç"
 
-#: .\podcasts\templates\podcasts\base.html:662
-#: .\podcasts\templates\podcasts\base.html:663
+#: .\podcasts\templates\podcasts\base.html:694
+#: .\podcasts\templates\podcasts\base.html:695
 msgid "Switch to light mode"
 msgstr "Işık moduna geç"
 
-#: .\podcasts\templates\podcasts\base.html:667
-#: .\podcasts\templates\podcasts\base.html:668
+#: .\podcasts\templates\podcasts\base.html:699
+#: .\podcasts\templates\podcasts\base.html:700
 msgid "Switch to dark mode"
 msgstr "Karanlık moduna geç"
 
@@ -395,7 +395,7 @@ msgstr "Açık"
 #: .\podcasts\templates\podcasts\bookmarks_list_items.html:62
 #: .\podcasts\templates\podcasts\channel_detail.html:165
 #: .\podcasts\templates\podcasts\channel_detail_item.html:51
-#: .\podcasts\templates\podcasts\episode_detail.html:283
+#: .\podcasts\templates\podcasts\episode_detail.html:289
 #: .\podcasts\templates\podcasts\episode_list.html:34
 #: .\podcasts\templates\podcasts\episode_list.html:88
 #: .\podcasts\templates\podcasts\episode_list_items.html:59
@@ -817,7 +817,6 @@ msgid "Rewind 15 seconds"
 msgstr "15 saniye geri çevir ."
 
 #: .\podcasts\templates\podcasts\episode_detail.html:197
-#| msgid "Backend"
 msgid "Back 15 seconds"
 msgstr "15 saniye geri."
 
@@ -830,7 +829,6 @@ msgid "Forward 15 seconds"
 msgstr "15 saniye ileri."
 
 #: .\podcasts\templates\podcasts\episode_detail.html:205
-#| msgid "Episode Title"
 msgid "Episode audio player"
 msgstr "Bölüm ses oynatıcısı"
 
@@ -883,7 +881,6 @@ msgid "No chapters available for this episode."
 msgstr "Bu bölüm için hiçbir bölüm mevcut değil."
 
 #: .\podcasts\templates\podcasts\episode_detail.html:246
-#: .\podcasts\templates\podcasts\episode_detail.html:275
 msgid "Transcript"
 msgstr "Transkript"
 
@@ -892,30 +889,43 @@ msgid "No transcript available for this episode."
 msgstr "Bu bölüm için kayıt yok."
 
 #: .\podcasts\templates\podcasts\episode_detail.html:274
-msgid "Audio"
-msgstr "Sesli"
+msgid "Play"
+msgstr "Oynayın ."
 
-#: .\podcasts\templates\podcasts\episode_detail.html:289
+#: .\podcasts\templates\podcasts\episode_detail.html:276
+msgid "Pause"
+msgstr "Durum"
+
+#: .\podcasts\templates\podcasts\episode_detail.html:278
+msgid "Go to audio"
+msgstr "Sesle git ."
+
+#: .\podcasts\templates\podcasts\episode_detail.html:280
+#| msgid "Transcript"
+msgid "Go to Transcript"
+msgstr "Transkript'e git ."
+
+#: .\podcasts\templates\podcasts\episode_detail.html:295
 msgid "Write a comment..."
 msgstr "Bir yorum yaz..."
 
-#: .\podcasts\templates\podcasts\episode_detail.html:292
+#: .\podcasts\templates\podcasts\episode_detail.html:298
 msgid "Submit Comment"
 msgstr "Yorum gönder"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:1011
+#: .\podcasts\templates\podcasts\episode_detail.html:1093
 msgid "Remove episode from Bookmarks"
 msgstr "Episodeyi Kayıt Dizilerinden Kaldır"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:1017
+#: .\podcasts\templates\podcasts\episode_detail.html:1099
 msgid "Add episode to Bookmarks"
 msgstr "Episodeyi Kaynaklara Ekle"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:1143
+#: .\podcasts\templates\podcasts\episode_detail.html:1225
 msgid "No comments yet."
 msgstr "Henüz yorum yok."
 
-#: .\podcasts\templates\podcasts\episode_detail.html:1207
+#: .\podcasts\templates\podcasts\episode_detail.html:1289
 msgid "Please enter a comment"
 msgstr "Lütfen bir yorum yazın ."
 
@@ -1009,17 +1019,17 @@ msgstr "Muse Podcast Arama Motoru"
 msgid "License: GPL v3"
 msgstr "Lisans: GPL v3"
 
-#: .\podcasts\templates\podcasts\home.html:39
+#: .\podcasts\templates\podcasts\home.html:43
 msgid "🚀 About"
 msgstr " Hakkında"
 
-#: .\podcasts\templates\podcasts\home.html:40
+#: .\podcasts\templates\podcasts\home.html:44
 msgid ""
 "Muse is a free, AI-powered podcast search engine. Tired of scouring episode "
 "show notes for bits of information, we built a platform where you can:"
 msgstr "Muse, ücretsiz, yapay zeka ile desteklenen bir podcast arama motoru."
 
-#: .\podcasts\templates\podcasts\home.html:42
+#: .\podcasts\templates\podcasts\home.html:46
 msgid ""
 "🔍 Search any podcast by keyword (titles, descriptions, or transcript "
 "content)"
@@ -1027,32 +1037,32 @@ msgstr ""
 "🔍 Anahtar kelime (başlıklar, açıklamalar veya transkript içeriği) ile "
 "herhangi bir podcast aramak"
 
-#: .\podcasts\templates\podcasts\home.html:43
+#: .\podcasts\templates\podcasts\home.html:47
 msgid "📄 View full, time-stamped transcripts (speaker-diarized and formatted)"
 msgstr ""
 " Tam, zamanla işaretli transkriptleri görüntüle (sürekli ve biçimlendirilmiş"
 " konuşmacı)"
 
-#: .\podcasts\templates\podcasts\home.html:44
+#: .\podcasts\templates\podcasts\home.html:48
 msgid "✍️ Read AI-generated chapter summaries"
 msgstr "✍️ AI tarafından oluşturulan bölümlerin özetlerini okuyun"
 
-#: .\podcasts\templates\podcasts\home.html:45
+#: .\podcasts\templates\podcasts\home.html:49
 msgid ""
 "🌐 Find podcasts in 17 different languages natively transcribed or AI "
 "translated"
 msgstr ""
 " Doğal olarak aktarılan veya AI tercüme edilen 17 farklı dilde podcast bulun"
 
-#: .\podcasts\templates\podcasts\home.html:46
+#: .\podcasts\templates\podcasts\home.html:50
 msgid "🎧 Click through to listen at the exact moment a topic is discussed"
 msgstr " Bir konunun tartışıldığı tam anda dinlemek için buraya tıklayın"
 
-#: .\podcasts\templates\podcasts\home.html:47
+#: .\podcasts\templates\podcasts\home.html:51
 msgid "🆕 Discover new channels or episodes based on your interests"
 msgstr " ilgi alanlarınıza göre yeni kanallar ya da bölümler keşfedin"
 
-#: .\podcasts\templates\podcasts\home.html:49
+#: .\podcasts\templates\podcasts\home.html:53
 msgid ""
 "Currently optimized for desktop browsers, tablets, foldables, and "
 "smartphones. Community contribution and native apps are coming soon!"
@@ -1060,15 +1070,15 @@ msgstr ""
 "Şu anda masaüstü tarayıcılar, tabletler, katlanabilir cihazlar ve akıllı "
 "telefonlar için optimize edilmiş."
 
-#: .\podcasts\templates\podcasts\home.html:51
+#: .\podcasts\templates\podcasts\home.html:55
 msgid "🌟 Key Features"
 msgstr " Anahtar Özellikler"
 
-#: .\podcasts\templates\podcasts\home.html:53
+#: .\podcasts\templates\podcasts\home.html:57
 msgid "Account Signup & Management"
 msgstr "Hesap Kayıt ve Yönetim"
 
-#: .\podcasts\templates\podcasts\home.html:53
+#: .\podcasts\templates\podcasts\home.html:57
 msgid ""
 "Create a free account to save searches, bookmark episodes, and track "
 "listening history."
@@ -1076,11 +1086,11 @@ msgstr ""
 "Aramaları kaydetmek, bölümleri işaretlemek ve dinleme geçmişini izlemek için"
 " ücretsiz bir hesap oluşturun."
 
-#: .\podcasts\templates\podcasts\home.html:54
+#: .\podcasts\templates\podcasts\home.html:58
 msgid "Transcript Generation"
 msgstr "Transkript Nesli"
 
-#: .\podcasts\templates\podcasts\home.html:54
+#: .\podcasts\templates\podcasts\home.html:58
 msgid ""
 "Ingests RSS feeds from any podcast; uses OpenAI Whisper Turbo on an NVIDIA "
 "GPU for fast, high-quality transcription; diarizes speakers and formats with"
@@ -1090,11 +1100,11 @@ msgstr ""
 "transkripsiyon için NVIDIA GPU'da OpenAI Whisper Turbo kullanır; zaman "
 "damgaları ile hoparlörleri ve biçimleri günlükleştirir."
 
-#: .\podcasts\templates\podcasts\home.html:55
+#: .\podcasts\templates\podcasts\home.html:59
 msgid "Chapter Summaries"
 msgstr "Bölüm Özetleri"
 
-#: .\podcasts\templates\podcasts\home.html:55
+#: .\podcasts\templates\podcasts\home.html:59
 msgid ""
 "Generates concise summaries of each transcript segment using FalconsAI text-"
 "summarization."
@@ -1102,11 +1112,11 @@ msgstr ""
 "FalconsAI metin özetlemesini kullanarak her transkript segmentinin kısa "
 "özetlerini oluşturur."
 
-#: .\podcasts\templates\podcasts\home.html:56
+#: .\podcasts\templates\podcasts\home.html:60
 msgid "Transcript Translations"
 msgstr "Çeviri Çevirileri"
 
-#: .\podcasts\templates\podcasts\home.html:56
+#: .\podcasts\templates\podcasts\home.html:60
 msgid ""
 "Takes podcasts and translates them into 17 different languages using "
 "nllb-200-distilled-600M translation model."
@@ -1114,11 +1124,11 @@ msgstr ""
 "Podcasts alır ve nllb-200-distilled-600M çeviri modelini kullanarak 17 "
 "farklı dile çevirir."
 
-#: .\podcasts\templates\podcasts\home.html:57
+#: .\podcasts\templates\podcasts\home.html:61
 msgid "Full-Text Search"
 msgstr "Tam Metin Arama"
 
-#: .\podcasts\templates\podcasts\home.html:57
+#: .\podcasts\templates\podcasts\home.html:61
 msgid ""
 "Powered by Elasticsearch for lightning-fast, fuzzy-match queries; filters by"
 " title, description, channel metadata, or transcript."
@@ -1127,11 +1137,11 @@ msgstr ""
 "desteklenir; başlık, açıklama, kanal metadataları veya transkripti ile "
 "filtreler."
 
-#: .\podcasts\templates\podcasts\home.html:58
+#: .\podcasts\templates\podcasts\home.html:62
 msgid "Flexible Playback"
 msgstr "Esnek Çalma"
 
-#: .\podcasts\templates\podcasts\home.html:58
+#: .\podcasts\templates\podcasts\home.html:62
 msgid ""
 "Jump directly to the moment a keyword appears in the audio player on the "
 "website."
@@ -1139,95 +1149,95 @@ msgstr ""
 "Web sitesindeki ses oynatıcısında bir anahtar kelime ortaya çıktığı anda "
 "doğrudan atlayın."
 
-#: .\podcasts\templates\podcasts\home.html:61
+#: .\podcasts\templates\podcasts\home.html:65
 msgid "🏗️ Architecture & Tech Stack"
 msgstr "️ Mimarlık & Teknoloji Stack"
 
-#: .\podcasts\templates\podcasts\home.html:65
+#: .\podcasts\templates\podcasts\home.html:69
 msgid "Layer"
 msgstr "Katman"
 
-#: .\podcasts\templates\podcasts\home.html:66
+#: .\podcasts\templates\podcasts\home.html:70
 msgid "Technology"
 msgstr "Teknoloji"
 
-#: .\podcasts\templates\podcasts\home.html:71
+#: .\podcasts\templates\podcasts\home.html:75
 msgid "Backend"
 msgstr "Arkaplan"
 
-#: .\podcasts\templates\podcasts\home.html:71
+#: .\podcasts\templates\podcasts\home.html:75
 msgid "Python, Django"
 msgstr "Python, Django"
 
-#: .\podcasts\templates\podcasts\home.html:74
+#: .\podcasts\templates\podcasts\home.html:78
 msgid "Transcription"
 msgstr "Transkripsi"
 
-#: .\podcasts\templates\podcasts\home.html:74
+#: .\podcasts\templates\podcasts\home.html:78
 msgid "OpenAI Whisper Turbo (GPU-accelerated)"
 msgstr "OpenAI Whisper Turbo (GPU hızlandırılmış)"
 
-#: .\podcasts\templates\podcasts\home.html:77
+#: .\podcasts\templates\podcasts\home.html:81
 msgid "Summarization"
 msgstr "Özetleme"
 
-#: .\podcasts\templates\podcasts\home.html:77
+#: .\podcasts\templates\podcasts\home.html:81
 msgid "FalconsAI / text_summarization"
 msgstr "FalconsAI / text_summarization"
 
-#: .\podcasts\templates\podcasts\home.html:80
+#: .\podcasts\templates\podcasts\home.html:84
 msgid "Translation"
 msgstr "Tercüme"
 
-#: .\podcasts\templates\podcasts\home.html:80
+#: .\podcasts\templates\podcasts\home.html:84
 msgid "Facebook / nllb-200-distilled-600M translation model"
 msgstr "Facebook / nllb-200-distilled-600M çeviri modeli"
 
-#: .\podcasts\templates\podcasts\home.html:83
+#: .\podcasts\templates\podcasts\home.html:87
 msgid "Connection Pooling"
 msgstr "Bağlantı Birleştirme"
 
-#: .\podcasts\templates\podcasts\home.html:83
+#: .\podcasts\templates\podcasts\home.html:87
 msgid "PgBouncer"
 msgstr "PgBouncer"
 
-#: .\podcasts\templates\podcasts\home.html:86
+#: .\podcasts\templates\podcasts\home.html:90
 msgid "Email Services"
 msgstr "E-posta Hizmetleri"
 
-#: .\podcasts\templates\podcasts\home.html:86
+#: .\podcasts\templates\podcasts\home.html:90
 msgid "Mailjet"
 msgstr "Mailjet"
 
-#: .\podcasts\templates\podcasts\home.html:89
+#: .\podcasts\templates\podcasts\home.html:93
 msgid "Database"
 msgstr "Veritabanı"
 
-#: .\podcasts\templates\podcasts\home.html:89
+#: .\podcasts\templates\podcasts\home.html:93
 msgid "PostgreSQL | MaraiaDB"
 msgstr "PostgreSQL . MaraiaDB ."
 
-#: .\podcasts\templates\podcasts\home.html:92
+#: .\podcasts\templates\podcasts\home.html:96
 msgid "Search Engine"
 msgstr "Arama Motoru"
 
-#: .\podcasts\templates\podcasts\home.html:92
+#: .\podcasts\templates\podcasts\home.html:96
 msgid "Elasticsearch"
 msgstr "Elastik arama"
 
-#: .\podcasts\templates\podcasts\home.html:95
+#: .\podcasts\templates\podcasts\home.html:99
 msgid "Frontend"
 msgstr "Ön uç"
 
-#: .\podcasts\templates\podcasts\home.html:95
+#: .\podcasts\templates\podcasts\home.html:99
 msgid "Django templates | HTML | CSS | JavaScript"
 msgstr "Django şablonları HTML CSS JavaScript"
 
-#: .\podcasts\templates\podcasts\home.html:98
+#: .\podcasts\templates\podcasts\home.html:102
 msgid "Deployment"
 msgstr "Deployment"
 
-#: .\podcasts\templates\podcasts\home.html:98
+#: .\podcasts\templates\podcasts\home.html:102
 msgid "Docker | Ubuntu VM | Windows OS"
 msgstr "Docker Ubuntu VM Windows OS"
 
@@ -1934,6 +1944,9 @@ msgstr "OTP girin"
 #: .\podcasts\templates\two_factor\core\otp.html:9
 msgid "Submit OTP"
 msgstr "OTP gönder"
+
+#~ msgid "Audio"
+#~ msgstr "Sesli"
 
 #~ msgid "Toggle Theme"
 #~ msgstr "Temayı Değiştir"
