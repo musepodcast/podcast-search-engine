@@ -173,6 +173,32 @@
           {{ total_downloads|number_format }}
         </span>
 
+        {% if request.user.is_authenticated %}
+          <button
+            type="button"
+            class="btn-bookmark"
+            id="share-btn"
+            data-episode-id="{{ episode.id }}"
+            data-share-url="{{ request.build_absolute_uri }}"
+            title="{% trans 'Share link to this episode' %}">
+            <i class="fa-solid fa-share-nodes" aria-hidden="true"></i>
+            <span class="visually-hidden">{% trans "Share link" %}</span>
+          </button>
+
+        {% else %}
+          <button
+            type="button"
+            class="btn-bookmark is-guest guest-dim"
+            id="share-btn-guest"
+            title="{% trans 'Sign in to share' %}">
+            <i class="fa-solid fa-share-nodes" aria-hidden="true"></i>
+          </button>
+        {% endif %}
+
+        <span class="shares-count" title="{% trans 'Total Shares' %}">
+          {{ total_shares|number_format }}
+        </span>
+
       </div>
     </div>
   </div>
@@ -312,6 +338,12 @@
   <a class="guest-toast-link" href="{% url 'podcasts:login' %}">{% trans "Sign in" %}</a>
 </div>
 
+<!-- tiny popup for copy -->
+<div id="copyToast" class="guest-toast" style="display:none;">
+  <span>{% trans "Copied to clipboard" %}</span>
+</div>
+
+
 
 <!-- PAGE-LOCAL THEME CSS (controls only) -->
 <style>
@@ -320,7 +352,8 @@
   .total-views,
   .bookmarks-count,
   .episode-rating-info, 
-  .downloads-count {
+  .downloads-count,
+  .shares-count {
     font-size: 1.15rem;
     font-weight: 600;
     color: var(--text-color) !important; /* dark in light mode, light in dark */
@@ -579,7 +612,112 @@
   /* IMPORTANT: keep native play/pause visible */
   audio::-webkit-media-controls-play-button { display: inline-block !important; }
 
+  .auth-popup {
+    position: fixed;
+    top: 2rem;
+    right: 2rem;
+    background: rgba(0,0,0,.85);
+    color: #fff;
+    padding: .75rem 1.1rem;
+    border-radius: .6rem;
+    z-index: 9999;
+    transition: opacity .3s ease, transform .3s ease;
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  .auth-popup.show {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
 </style>
+
+<script>
+  function showCopyToast() {
+    const toast = document.getElementById('copyToast');
+    if (!toast) return;
+    toast.style.display = 'block';
+    toast.classList.add('guest-toast-show');  // 👈 same as your sign-in popup
+    setTimeout(() => {
+      toast.classList.remove('guest-toast-show');
+      toast.style.display = 'none';
+    }, 1800);
+  }
+</script>
+
+
+
+<script>
+(function wireShareCounter(){
+  const btn = document.getElementById('share-btn');
+  if (!btn) return;
+
+  const episodeId = btn.getAttribute('data-episode-id');
+  const shareUrl  = btn.getAttribute('data-share-url') || window.location.href;
+
+  function optimisticBump(totalFromServer) {
+    const el = document.querySelector('.shares-count');
+    if (!el) return;
+    if (typeof totalFromServer === 'number') {
+      el.textContent = totalFromServer.toLocaleString();
+      return;
+    }
+    const current = parseInt((el.textContent||"0").replace(/,/g,''),10) || 0;
+    el.textContent = (current + 1).toLocaleString();
+  }
+
+  async function pingServer() {
+    try {
+      const r = await fetch(`/episode/${episodeId}/share_ping/`, {
+        method: "POST",
+        headers: {
+          "X-CSRFToken": csrftoken,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ ts: Date.now() })
+      });
+      if (!r.ok) return;
+      const data = await r.json();
+      if (typeof data.total_shares === 'number') {
+        optimisticBump(data.total_shares);
+      }
+    } catch (_) {}
+  }
+
+  btn.addEventListener('click', async function(){
+    // 1) Try native share
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: document.title,
+          text: '{{ episode.episode_title|escapejs }}',
+          url: shareUrl,
+        });
+      } catch(e) {
+        // user cancelled — ignore
+      }
+      // still count & ping
+      optimisticBump();
+      pingServer();
+      return;
+    }
+
+    // 2) Fallback: copy
+    try {
+      await navigator.clipboard.writeText(shareUrl);
+      showCopyToast();             // 👈 show it here
+    } catch (_) {
+      prompt("Copy this link:", shareUrl);
+      showCopyToast();             // 👈 and here too
+    }
+
+    optimisticBump();
+    pingServer();
+  });
+})();
+</script>
+
+
 
 <script>
 (function(){

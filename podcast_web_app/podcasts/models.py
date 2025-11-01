@@ -598,3 +598,34 @@ class EpisodeDownload(models.Model):
     def __str__(self):
         who = self.user.username if self.user else "anonymous"
         return f"{who} → {self.episode.episode_title} [{self.language}] ×{self.count}"
+    
+class EpisodeShare(models.Model):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True, blank=True,
+        related_name="episode_shares",
+    )
+    episode = models.ForeignKey(
+        'Episode',
+        on_delete=models.CASCADE,
+        related_name="shares",
+    )
+    # aggregate
+    count = models.PositiveIntegerField(default=0)
+    first_shared = models.DateTimeField(auto_now_add=True)
+    last_shared  = models.DateTimeField(auto_now=True)
+
+    last_ip_address = models.GenericIPAddressField(null=True, blank=True)
+    last_user_agent = models.TextField(null=True, blank=True)
+
+    class Meta:
+        unique_together = ('user', 'episode')
+        indexes = [
+            models.Index(fields=['episode', '-last_shared']),
+            models.Index(fields=['user', '-last_shared']),
+        ]
+
+    def __str__(self):
+        who = self.user.username if self.user else "anonymous"
+        return f"{who} → {self.episode.episode_title} ×{self.count}"

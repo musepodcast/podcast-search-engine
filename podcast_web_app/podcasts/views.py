@@ -35,7 +35,7 @@ from .models import (
     SearchQuery, ChannelInteraction, EpisodeInteraction,
     Comment, CommentReaction, Reply,
     SupportTicket, SupportTicketAttachment, ChannelSearchQuery,
-    EpisodeDownload
+    EpisodeDownload, EpisodeShare
 
 )
 from .filters import EpisodeFilter
@@ -84,6 +84,48 @@ from axes.models import AccessAttempt
 from axes.conf import settings as axes_settings
 from django.db import transaction
 
+_slug_non_alnum = re.compile(r"[^a-z0-9]+", re.IGNORECASE)
+
+def slug_norm(s: str) -> str:
+    """Diacritic-insensitive, lower, non-alnum→_ normalizer for episode slugs."""
+    s = unicodedata.normalize("NFKD", s or "")
+    s = "".join(ch for ch in s if not unicodedata.combining(ch))
+    s = s.lower()
+    s = _slug_non_alnum.sub("_", s)
+    return re.sub(r"_+", "_", s).strip("_")
+
+@require_POST
+def episode_share_ping(request, episode_id):
+    episode = get_object_or_404(Episode, pk=episode_id)
+
+    user = request.user if request.user.is_authenticated else None
+    ip   = request.META.get('HTTP_X_FORWARDED_FOR', '').split(',')[0].strip() or request.META.get('REMOTE_ADDR')
+    ua   = (request.META.get('HTTP_USER_AGENT') or '')[:1000]
+
+    # aggregate per (user, episode); guests all go to the same row (user=None)
+    share, _ = EpisodeShare.objects.get_or_create(
+        user=user,
+        episode=episode,
+        defaults={'count': 0}
+    )
+    EpisodeShare.objects.filter(pk=share.pk).update(
+        count=F('count') + 1,
+        last_shared=timezone.now(),
+        last_ip_address=ip,
+        last_user_agent=ua,
+    )
+
+    # return total shares for this episode (all users)
+    total_shares = (
+        EpisodeShare.objects
+        .filter(episode=episode)
+        .aggregate(total=Coalesce(Sum('count'), 0))['total']
+    )
+
+    return JsonResponse({
+        "ok": True,
+        "total_shares": total_shares,
+    })
 
 def episode_download_json_file(request, sanitized_channel_title, sanitized_episode_title):
     """
@@ -1152,6 +1194,20 @@ class ChannelDetailView(DetailView):
         ctx['avg_rating']   = rating_stats['avg_rating']   or 0.0
         ctx['rating_count'] = rating_stats['rating_count'] or 0
         ctx['total_views']  = ChannelVisit.objects.filter(channel=base).aggregate(total=Sum('count'))['total'] or 0
+                # ✅ total downloads across all episodes in this channel
+        ctx['total_downloads'] = (
+            EpisodeDownload.objects
+            .filter(episode__channel=base)
+            .aggregate(total=Coalesce(Sum('count'), 0))['total']
+        )
+
+        # ✅ total shares across all episodes in this channel
+        ctx['total_shares'] = (
+            EpisodeShare.objects
+            .filter(episode__channel=base)
+            .aggregate(total=Coalesce(Sum('count'), 0))['total']
+        )
+        
         # --- Total episodes (per current language if translated; otherwise all base episodes) ---
         if lang in ('en', 'en-us'):
             total_episodes = self.base_channel.episodes.count()
@@ -1190,6 +1246,21 @@ class ChannelDetailView(DetailView):
                             .order_by().values('episode').annotate(c=Count('rating')).values('c')
         views_sq = EpisodeVisit.objects.filter(episode=lookup)\
                     .order_by().values('episode').annotate(s=Sum('count')).values('s')
+                # ---- subqueries for per-episode aggregates (used below) ----
+        downloads_sq = (
+            EpisodeDownload.objects
+            .filter(episode=OuterRef('pk'))
+            .values('episode')
+            .annotate(total=Sum('count'))
+            .values('total')[:1]
+        )
+        shares_sq = (
+            EpisodeShare.objects
+            .filter(episode=OuterRef('pk'))
+            .values('episode')
+            .annotate(total=Sum('count'))
+            .values('total')[:1]
+        )
 
         if q:
             # (1) title matches (within this channel)
@@ -1306,6 +1377,8 @@ class ChannelDetailView(DetailView):
                     ep_avg_rating       = Coalesce(Subquery(avg_rating_sq,  output_field=FloatField()),   Value(0.0)),
                     ep_rating_count     = Coalesce(Subquery(rating_count_sq, output_field=IntegerField()), Value(0)),
                     total_episode_views = Coalesce(Subquery(views_sq,       output_field=IntegerField()), Value(0)),
+                    total_downloads     = Coalesce(Subquery(downloads_sq,   output_field=IntegerField()), Value(0)),
+                    total_shares        = Coalesce(Subquery(shares_sq,      output_field=IntegerField()), Value(0)),
                 )
                 ann_map = {e.id: e for e in ann_qs}
                 page_annotated = [ann_map.get(i, obj_by_id[i]) for i in ids_slice]
@@ -1350,6 +1423,8 @@ class ChannelDetailView(DetailView):
                     ep_avg_rating       = Coalesce(Subquery(avg_rating_sq,  output_field=FloatField()),   Value(0.0)),
                     ep_rating_count     = Coalesce(Subquery(rating_count_sq, output_field=IntegerField()), Value(0)),
                     total_episode_views = Coalesce(Subquery(views_sq,       output_field=IntegerField()), Value(0)),
+                    total_downloads     = Coalesce(Subquery(downloads_sq,   output_field=IntegerField()), Value(0)),
+                    total_shares        = Coalesce(Subquery(shares_sq,      output_field=IntegerField()), Value(0)),
                 )
                 ann_map = {tr.episode_id: tr for tr in ann_qs}
                 merged = []
@@ -1377,6 +1452,8 @@ class ChannelDetailView(DetailView):
                 ep_avg_rating       = Coalesce(Subquery(avg_rating_sq,  output_field=FloatField()),   Value(0.0)),
                 ep_rating_count     = Coalesce(Subquery(rating_count_sq, output_field=IntegerField()), Value(0)),
                 total_episode_views = Coalesce(Subquery(views_sq,       output_field=IntegerField()), Value(0)),
+                total_downloads     = Coalesce(Subquery(downloads_sq,   output_field=IntegerField()), Value(0)),
+                total_shares        = Coalesce(Subquery(shares_sq,      output_field=IntegerField()), Value(0)),
             )
             paginator = Paginator(eps_qs, page_size)
             try:
@@ -1392,6 +1469,8 @@ class ChannelDetailView(DetailView):
                 ep_avg_rating       = Coalesce(Subquery(avg_rating_sq,  output_field=FloatField()),   Value(0.0)),
                 ep_rating_count     = Coalesce(Subquery(rating_count_sq, output_field=IntegerField()), Value(0)),
                 total_episode_views = Coalesce(Subquery(views_sq,       output_field=IntegerField()), Value(0)),
+                total_downloads     = Coalesce(Subquery(downloads_sq,   output_field=IntegerField()), Value(0)),
+                total_shares        = Coalesce(Subquery(shares_sq,      output_field=IntegerField()), Value(0)),
             )
             for tr in tr_qs:
                 tr.channel = base
@@ -1487,47 +1566,95 @@ class EpisodeDetailView(DetailView):
         slug_ep = self.kwargs['sanitized_episode_title']
         lang    = (get_selected_language(self.request) or 'en').lower().split('-', 1)[0]
 
-        # 1) Try canonical base episode first
+        incoming_norm = slug_norm(slug_ep)
+
+        # 1) exact base
         try:
-            base = Episode.objects.select_related('channel').get(
-                channel__sanitized_channel_title=slug_ch,
-                sanitized_episode_title=slug_ep
+            base = (
+                Episode.objects
+                .select_related('channel')
+                .get(
+                    channel__sanitized_channel_title=slug_ch,
+                    sanitized_episode_title=slug_ep,
+                )
             )
         except Episode.DoesNotExist:
-            # 2) Try: this slug belongs to ANY translation (any language) in this channel
-            tr_any = (EpisodeTranslations.objects
-                      .select_related('episode','episode__channel')
-                      .filter(episode__channel__sanitized_channel_title=slug_ch,
-                              sanitized_episode_title=slug_ep,
-                              translated=True)
-                      .first())
-            if not tr_any:
-                # 2b) Diacritic-insensitive fallback across all translations in channel
-                norm_target = _norm(slug_ep)
-                tr_any = next(
-                    (tr for tr in EpisodeTranslations.objects
-                                   .select_related('episode','episode__channel')
-                                   .filter(episode__channel__sanitized_channel_title=slug_ch, translated=True)
-                     if _norm(tr.sanitized_episode_title) == norm_target),
-                    None
+            # 2) exact translation in this channel
+            tr_any = (
+                EpisodeTranslations.objects
+                .select_related('episode', 'episode__channel')
+                .filter(
+                    episode__channel__sanitized_channel_title=slug_ch,
+                    sanitized_episode_title=slug_ep,
+                    translated=True,
                 )
-            if not tr_any:
-                raise Http404("No Episode matches the given query.")
-            base = tr_any.episode  # map back to base
+                .first()
+            )
+            if tr_any:
+                base = tr_any.episode
+            else:
+                # 3) AGGRESSIVE FALLBACK
+                base = None
 
-        # Record for later use in context
+                # 3a) scan base episodes for this channel
+                for ep in (
+                    Episode.objects
+                    .filter(channel__sanitized_channel_title=slug_ch)
+                    .only('id', 'sanitized_episode_title', 'channel_id')
+                ):
+                    db_norm = slug_norm(ep.sanitized_episode_title)
+
+                    # accept equal
+                    if db_norm == incoming_norm:
+                        base = ep
+                        break
+
+                    # accept prefix/suffix — incoming longer than DB OR DB longer than incoming
+                    if incoming_norm.startswith(db_norm) or db_norm.startswith(incoming_norm):
+                        base = ep
+                        break
+
+                # 3b) if still nothing, scan translations
+                if not base:
+                    for tr in (
+                        EpisodeTranslations.objects
+                        .filter(
+                            episode__channel__sanitized_channel_title=slug_ch,
+                            translated=True,
+                        )
+                        .only('id', 'sanitized_episode_title', 'episode_id')
+                    ):
+                        db_norm = slug_norm(tr.sanitized_episode_title)
+
+                        if db_norm == incoming_norm:
+                            base = tr.episode
+                            break
+
+                        if incoming_norm.startswith(db_norm) or db_norm.startswith(incoming_norm):
+                            base = tr.episode
+                            break
+
+                if not base:
+                    # nothing matched at all
+                    raise Http404("No Episode matches the given query.")
+
+        # at this point we have the base episode
         self.base_episode = base
 
-        # 3) Choose display object for current language (if available)
+        # 4) language-specific display
         if lang != 'en':
-            tr = (EpisodeTranslations.objects
-                  .select_related('episode','episode__channel')
-                  .filter(episode=base, language__startswith=lang, translated=True)
-                  .first())
+            tr = (
+                EpisodeTranslations.objects
+                .select_related('episode', 'episode__channel')
+                .filter(episode=base, language__startswith=lang, translated=True)
+                .first()
+            )
             if tr:
                 return tr
 
         return base
+
+
 
     def get_queryset(self):
         lang = get_selected_language(self.request)
@@ -1628,6 +1755,12 @@ class EpisodeDetailView(DetailView):
             .aggregate(total=Sum('count'))['total'] or 0
         )
 
+        ctx['total_shares'] = (
+            EpisodeShare.objects
+            .filter(episode=base)
+            .aggregate(total=Coalesce(Sum('count'), 0))['total'] or 0
+        )
+        
         # per-user toggles only if authenticated
         if self.request.user.is_authenticated:
             ei = EpisodeInteraction.objects.filter(user=self.request.user, episode=base).first()
@@ -1753,6 +1886,20 @@ class EpisodeListView(ListView):
             .annotate(total=Sum('count'))
             .values('total')[:1]
         )
+        shares_sq_base = (
+            EpisodeShare.objects
+            .filter(episode=OuterRef('pk'))
+            .values('episode')
+            .annotate(total=Sum('count'))
+            .values('total')[:1]
+        )
+        shares_sq_tr = (
+            EpisodeShare.objects
+            .filter(episode=OuterRef('episode'))
+            .values('episode')
+            .annotate(total=Sum('count'))
+            .values('total')[:1]
+        )
 
         if lang in ('en', 'en-us'):
             qs = (
@@ -1774,6 +1921,7 @@ class EpisodeListView(ListView):
                     ),
                     total_episode_views=Coalesce(Sum('episodevisit__count'), 0),
                     total_downloads=Coalesce(Subquery(downloads_sq_base, output_field=IntegerField()), Value(0)),
+                    total_shares=Coalesce(Subquery(shares_sq_base, output_field=IntegerField()), Value(0)),
                 )
             )
 
@@ -1839,6 +1987,7 @@ class EpisodeListView(ListView):
                 total_episode_views=Coalesce(Sum('episode__episodevisit__count'), 0),
                 # NEW: total downloads (aggregated on base episode)
                 total_downloads=Coalesce(Subquery(downloads_sq_tr, output_field=IntegerField()), Value(0)),
+                total_shares=Coalesce(Subquery(shares_sq_tr, output_field=IntegerField()), Value(0)),
             )
             .order_by('-publication_date')
         )
@@ -1912,6 +2061,13 @@ class SearchResultsView(LoginRequiredMixin, ListView):
             .annotate(total=Sum('count'))
             .values('total')[:1]
         )
+        shares_sq = (
+            EpisodeShare.objects
+            .filter(episode=OuterRef('pk'))
+            .values('episode')
+            .annotate(total=Sum('count'))
+            .values('total')[:1]
+        )
         return (
             qs.annotate(
                 bookmarks_count=Count(
@@ -1928,6 +2084,7 @@ class SearchResultsView(LoginRequiredMixin, ListView):
                 ),
                 total_episode_views=Coalesce(Sum('episodevisit__count'), 0),
                 total_downloads=Coalesce(Subquery(downloads_sq, output_field=IntegerField()), Value(0)),
+                total_shares=Coalesce(Subquery(shares_sq, output_field=IntegerField()), Value(0)),
             )
         )
 
@@ -1976,6 +2133,7 @@ class SearchResultsView(LoginRequiredMixin, ListView):
                 .annotate(c=Count('*'))
                 .values('c')[:1]
             )
+            
 
             chans = (
                 chans
@@ -2374,6 +2532,13 @@ class NotificationsListView(LoginRequiredMixin, ListView):
             .annotate(total=Sum('count'))
             .values('total')[:1]
         )
+        shares_sq = (
+            EpisodeShare.objects
+            .filter(episode=OuterRef('pk'))
+            .values('episode')
+            .annotate(total=Sum('count'))
+            .values('total')[:1]
+        )
 
         qs = (
             Episode.objects
@@ -2396,6 +2561,7 @@ class NotificationsListView(LoginRequiredMixin, ListView):
                 ),
                 total_episode_views=Coalesce(Sum('episodevisit__count'), 0),
                 total_downloads=Coalesce(Subquery(downloads_sq, output_field=IntegerField()), Value(0)),
+                total_shares=Coalesce(Subquery(shares_sq, output_field=IntegerField()), Value(0)),
             )
         )
         return qs
@@ -2442,6 +2608,13 @@ class BookmarksListView(LoginRequiredMixin, ListView):
             .annotate(total=Sum('count'))
             .values('total')[:1]
         )
+        shares_sq = (
+            EpisodeShare.objects
+            .filter(episode=OuterRef('pk'))
+            .values('episode')
+            .annotate(total=Sum('count'))
+            .values('total')[:1]
+        )
 
         qs = (
             Episode.objects
@@ -2466,6 +2639,7 @@ class BookmarksListView(LoginRequiredMixin, ListView):
                 total_episode_views=Coalesce(Sum('episodevisit__count'), 0),
                 # NEW: total downloads
                 total_downloads=Coalesce(Subquery(downloads_sq, output_field=IntegerField()), Value(0)),
+                total_shares=Coalesce(Subquery(shares_sq, output_field=IntegerField()), Value(0)),
             )
         )
         return qs
