@@ -5,8 +5,7 @@
     {# Translation result (EpisodeTranslations) #}
     {% if item.episode %}
       {% with base=item.episode channel=item.episode.channel %}
-      {% with chslug=channel.sanitized_channel_title|default:channel.channel_title|slugify epslug=item.sanitized_episode_title|default:item.episode_title|slugify %}
-      <a href="{% url 'podcasts:episode_detail' sanitized_channel_title=chslug sanitized_episode_title=epslug %}"
+      <a href="{% url 'podcasts:episode_detail' channel.sanitized_channel_title base.sanitized_episode_title %}"
          class="list-group-item list-group-item-action mb-2" style="text-decoration:none;">
         <div class="row">
           <div class="col-auto">
@@ -84,14 +83,13 @@
           </div>
         </div>
       </a>
-      {% endwith %}
+
       {% endwith %}
 
     {% else %}
       {# Base Episode result #}
       {% with channel=item.channel %}
-      {% with chslug=channel.sanitized_channel_title|default:channel.channel_title|slugify epslug=item.sanitized_episode_title|default:item.episode_title|slugify %}
-      <a href="{% url 'podcasts:episode_detail' sanitized_channel_title=chslug sanitized_episode_title=epslug %}"
+      <a href="{% url 'podcasts:episode_detail' channel.sanitized_channel_title item.sanitized_episode_title %}"
          class="list-group-item list-group-item-action mb-2" style="text-decoration:none;">
         <div class="row">
           <div class="col-auto">
@@ -145,6 +143,11 @@
                 <i class="fa-solid fa-file-arrow-down" style="font-size:1rem;margin-right:.25rem;"></i>
                 {{ item.total_downloads|default:"0"|number_format }}
               </span>
+              <!-- Shares -->
+              <span class="d-flex align-items-center me-3" title="{% trans 'Shares' %}">
+                <i class="fa-solid fa-share-nodes" style="font-size: 1rem; margin-right: 0.25rem;"></i>
+                {{ item.total_shares|default:"0"|number_format }}
+              </span>
             </div>
 
             {% if item.transcripts.all %}
@@ -162,7 +165,6 @@
           </div>
         </div>
       </a>
-      {% endwith %}
       {% endwith %}
     {% endif %}
 

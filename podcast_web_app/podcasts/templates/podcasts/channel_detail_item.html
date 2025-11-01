@@ -66,7 +66,16 @@
             <i class="fa-solid fa-eye" style="font-size: 1rem; margin-right: 0.25rem;"></i>
             {{ episode.total_episode_views|default:"0"|number_format }}
           </span>
-    
+            <!-- Downloads -->
+            <span class="d-flex align-items-center me-3" title="{% trans 'Downloads' %}">
+              <i class="fa-solid fa-file-arrow-down" style="font-size: 1rem; margin-right: 0.25rem;"></i>
+              {{ episode.total_downloads|default:"0"|number_format }}
+            </span>
+            <!-- Shares -->
+            <span class="d-flex align-items-center me-3" title="{% trans 'Shares' %}">
+              <i class="fa-solid fa-share-nodes" style="font-size: 1rem; margin-right: 0.25rem;"></i>
+              {{ episode.total_shares|default:"0"|number_format }}
+            </span>
         </div>
         
         <!-- End Aggregated Info Container -->

@@ -48,6 +48,7 @@ urlpatterns = [
     path('episode/<int:episode_id>/update_episode_rating/', views.update_episode_rating, name='update_episode_rating'),
     path('episode/<int:episode_id>/post_comment/', views.post_comment, name='post_comment'),
     path('episode/<int:episode_id>/comments/', views.get_comments, name='get_comments'),
+    path('episode/<int:episode_id>/share_ping/', views.episode_share_ping, name='episode_share_ping'),
     path('comment/<int:comment_id>/reaction/', views.comment_reaction, name='comment_reaction'),
     path('search_users/', views.search_users, name='search_users'),
     path('<str:sanitized_channel_title>/<str:sanitized_episode_title>/', views.EpisodeDetailView.as_view(), name='episode_detail'),
