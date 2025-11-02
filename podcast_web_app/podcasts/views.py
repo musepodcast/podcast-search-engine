@@ -1853,7 +1853,7 @@ class EpisodeListView(ListView):
     paginate_by = 10
 
     # include "recent"
-    ALLOWED_SORTS = {'recent', 'views', 'bookmarks', 'comments', 'stars', 'title'}
+    ALLOWED_SORTS = {'recent', 'views', 'bookmarks', 'comments', 'stars', 'downloaded', 'shared', 'title'}
     ALLOWED_DIRS = {'asc', 'desc'}
 
     def _parse_sort(self):
@@ -1955,6 +1955,12 @@ class EpisodeListView(ListView):
                         'episode_title',
                     ]
 
+            elif sort == 'downloaded':
+                ordering = [f'{dir_prefix}total_downloads', 'episode_title']
+
+            elif sort == 'shared':
+                ordering = [f'{dir_prefix}total_shares', 'episode_title']
+
             elif sort == 'title':
                 # pure alphabetical
                 ordering = [f'{dir_prefix}episode_title']
@@ -2021,6 +2027,10 @@ class EpisodeListView(ListView):
             ('comments', 'asc'):  "Least commented",
             ('stars', 'desc'): "Most stars",
             ('stars', 'asc'):  "Least stars",
+            ('downloaded', 'desc'): "Most downloaded",
+            ('downloaded', 'asc'):  "Least downloaded",
+            ('shared', 'desc'): "Most shared",
+            ('shared', 'asc'):  "Least shared",
             ('title', 'asc'):  "A → Z",
             ('title', 'desc'): "Z → A",
         }
