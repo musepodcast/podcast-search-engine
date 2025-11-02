@@ -43,6 +43,18 @@
 
       <li><hr class="dropdown-divider"></li>
 
+      <li class="dropdown-header">{% trans "Downloaded" %}</li>
+      <li><a class="dropdown-item {% if sort == 'downloaded' and dir == 'desc' %}active{% endif %}" href="?sort=downloaded&dir=desc">{% trans "Most downloaded" %}</a></li>
+      <li><a class="dropdown-item {% if sort == 'downloaded' and dir == 'asc' %}active{% endif %}" href="?sort=downloaded&dir=asc">{% trans "Least downloaded" %}</a></li>
+
+      <li><hr class="dropdown-divider"></li>
+
+      <li class="dropdown-header">{% trans "Shared" %}</li>
+      <li><a class="dropdown-item {% if sort == 'shared' and dir == 'desc' %}active{% endif %}" href="?sort=shared&dir=desc">{% trans "Most shared" %}</a></li>
+      <li><a class="dropdown-item {% if sort == 'shared' and dir == 'asc' %}active{% endif %}" href="?sort=shared&dir=asc">{% trans "Least shared" %}</a></li>
+
+      <li><hr class="dropdown-divider"></li>
+
       <li class="dropdown-header">{% trans "Alphabetical" %}</li>
       <li><a class="dropdown-item {% if sort == 'title' and dir == 'asc' %}active{% endif %}" href="?sort=title&dir=asc">{% trans "A → Z" %}</a></li>
       <li><a class="dropdown-item {% if sort == 'title' and dir == 'desc' %}active{% endif %}" href="?sort=title&dir=desc">{% trans "Z → A" %}</a></li>

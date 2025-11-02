@@ -3,13 +3,14 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.utils.safestring import mark_safe
+from django.db.models import Sum, Count, Q, F
 from .models import (
     Channel, Episode, Transcript,
     Chapter, CustomUser, ChannelVisit,
     EpisodeVisit, SearchQuery, ChannelInteraction, 
     EpisodeInteraction, Comment, Reply, 
     SupportTicket, SupportTicketAttachment, ChannelSearchQuery,
-    EpisodeDownload
+    EpisodeDownload, EpisodeShare
 )
 from django.utils import timezone
 from axes.handlers.proxy import AxesProxyHandler  
@@ -25,9 +26,36 @@ class ChannelAdmin(admin.ModelAdmin):
 
 @admin.register(Episode)
 class EpisodeAdmin(admin.ModelAdmin):
-    list_display = ('id', 'episode_title', 'channel', 'publication_date', 'guid')
+    list_display = (
+        'id', 'episode_title', 'channel', 'publication_date', 'guid',
+        'total_views', 'total_downloads', 'total_shares',
+    )
     search_fields = ('episode_title', 'channel__channel_title', 'guid')
     list_filter = ('channel', 'publication_date', 'explicit')
+    ordering = ('-publication_date',)
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        # annotate from EpisodeVisit, EpisodeDownload, EpisodeShare
+        qs = qs.annotate(
+            _views=Sum('episodevisit__count'),
+            _downloads=Sum('downloads__count'),
+            _shares=Sum('shares__count'),
+        )
+        return qs
+
+    @admin.display(ordering='_views', description='Views')
+    def total_views(self, obj):
+        return obj._views or 0
+
+    @admin.display(ordering='_downloads', description='Downloads')
+    def total_downloads(self, obj):
+        return obj._downloads or 0
+
+    @admin.display(ordering='_shares', description='Shares')
+    def total_shares(self, obj):
+        return obj._shares or 0
+
 
 @admin.register(Transcript)
 class TranscriptAdmin(admin.ModelAdmin):
@@ -267,3 +295,19 @@ class EpisodeDownloadAdmin(admin.ModelAdmin):
     search_fields = ('user__username', 'episode__episode_title', 'last_ip_address', 'last_user_agent', 'last_filename')
     autocomplete_fields = ('user', 'episode')
     ordering = ('-last_downloaded',)
+
+@admin.register(EpisodeShare)
+class EpisodeShareAdmin(admin.ModelAdmin):
+    list_display = (
+        'user', 'episode', 'count',
+        'last_shared', 'last_ip_address',
+    )
+    list_filter = ('episode__channel',)
+    search_fields = (
+        'user__username',
+        'episode__episode_title',
+        'last_ip_address',
+        'last_user_agent',
+    )
+    ordering = ('-last_shared',)
+    autocomplete_fields = ('user', 'episode')

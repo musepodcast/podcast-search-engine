@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-01 17:56-0500\n"
+"POT-Creation-Date: 2025-11-02 17:34-0600\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -186,7 +186,7 @@ msgstr "Thông báo"
 #: .\podcasts\templates\podcasts\channel_detail.html:160
 #: .\podcasts\templates\podcasts\channel_detail_item.html:46
 #: .\podcasts\templates\podcasts\episode_list.html:28
-#: .\podcasts\templates\podcasts\episode_list.html:83
+#: .\podcasts\templates\podcasts\episode_list.html:95
 #: .\podcasts\templates\podcasts\episode_list_items.html:54
 #: .\podcasts\templates\podcasts\notifications_list.html:63
 #: .\podcasts\templates\podcasts\notifications_list_items.html:56
@@ -373,7 +373,7 @@ msgstr "Các tập được đánh dấu bằng sách"
 #: .\podcasts\templates\podcasts\bookmarks_list.html:42
 #: .\podcasts\templates\podcasts\bookmarks_list_items.html:35
 #: .\podcasts\templates\podcasts\episode_detail.html:48
-#: .\podcasts\templates\podcasts\episode_list.html:72
+#: .\podcasts\templates\podcasts\episode_list.html:84
 #: .\podcasts\templates\podcasts\episode_list_items.html:31
 #: .\podcasts\templates\podcasts\notifications_list.html:41
 #: .\podcasts\templates\podcasts\notifications_list_items.html:34
@@ -386,7 +386,7 @@ msgstr "qua"
 #: .\podcasts\templates\podcasts\bookmarks_list_items.html:50
 #: .\podcasts\templates\podcasts\channel_detail_item.html:39
 #: .\podcasts\templates\podcasts\episode_detail.html:70
-#: .\podcasts\templates\podcasts\episode_list.html:79
+#: .\podcasts\templates\podcasts\episode_list.html:91
 #: .\podcasts\templates\podcasts\episode_list_items.html:46
 #: .\podcasts\templates\podcasts\notifications_list.html:56
 #: .\podcasts\templates\podcasts\notifications_list_items.html:49
@@ -401,7 +401,7 @@ msgstr "Rõ ràng"
 #: .\podcasts\templates\podcasts\channel_detail_item.html:51
 #: .\podcasts\templates\podcasts\episode_detail.html:315
 #: .\podcasts\templates\podcasts\episode_list.html:34
-#: .\podcasts\templates\podcasts\episode_list.html:88
+#: .\podcasts\templates\podcasts\episode_list.html:100
 #: .\podcasts\templates\podcasts\episode_list_items.html:59
 #: .\podcasts\templates\podcasts\notifications_list.html:68
 #: .\podcasts\templates\podcasts\notifications_list_items.html:61
@@ -414,7 +414,7 @@ msgstr "Lời bình luận"
 #: .\podcasts\templates\podcasts\bookmarks_list_items.html:67
 #: .\podcasts\templates\podcasts\channel_detail.html:169
 #: .\podcasts\templates\podcasts\channel_detail_item.html:56
-#: .\podcasts\templates\podcasts\episode_list.html:93
+#: .\podcasts\templates\podcasts\episode_list.html:105
 #: .\podcasts\templates\podcasts\episode_list_items.html:64
 #: .\podcasts\templates\podcasts\notifications_list.html:73
 #: .\podcasts\templates\podcasts\notifications_list_items.html:66
@@ -430,7 +430,7 @@ msgstr "Đánh giá tập phim"
 #: .\podcasts\templates\podcasts\channel_list.html:95
 #: .\podcasts\templates\podcasts\channel_list_items.html:43
 #: .\podcasts\templates\podcasts\episode_detail.html:147
-#: .\podcasts\templates\podcasts\episode_list.html:102
+#: .\podcasts\templates\podcasts\episode_list.html:114
 #: .\podcasts\templates\podcasts\episode_list_items.html:73
 #: .\podcasts\templates\podcasts\favorites_list.html:52
 #: .\podcasts\templates\podcasts\favorites_list_items.html:41
@@ -446,7 +446,7 @@ msgstr "Tổng số lượt xem"
 #: .\podcasts\templates\podcasts\bookmarks_list_items.html:81
 #: .\podcasts\templates\podcasts\channel_detail.html:182
 #: .\podcasts\templates\podcasts\channel_detail_item.html:70
-#: .\podcasts\templates\podcasts\episode_list.html:107
+#: .\podcasts\templates\podcasts\episode_list.html:119
 #: .\podcasts\templates\podcasts\episode_list_items.html:78
 #: .\podcasts\templates\podcasts\notifications_list.html:87
 #: .\podcasts\templates\podcasts\notifications_list_items.html:80
@@ -459,7 +459,7 @@ msgstr "Tải xuống"
 #: .\podcasts\templates\podcasts\bookmarks_list_items.html:86
 #: .\podcasts\templates\podcasts\channel_detail.html:187
 #: .\podcasts\templates\podcasts\channel_detail_item.html:75
-#: .\podcasts\templates\podcasts\episode_list.html:112
+#: .\podcasts\templates\podcasts\episode_list.html:124
 #: .\podcasts\templates\podcasts\episode_list_items.html:83
 #: .\podcasts\templates\podcasts\notifications_list.html:92
 #: .\podcasts\templates\podcasts\notifications_list_items.html:85
@@ -479,8 +479,8 @@ msgstr "Lắp thêm các tập được đánh dấu..."
 #: .\podcasts\templates\podcasts\bookmarks_list.html:159
 #: .\podcasts\templates\podcasts\channel_detail.html:219
 #: .\podcasts\templates\podcasts\channel_list.html:118
-#: .\podcasts\templates\podcasts\episode_list.html:170
-#: .\podcasts\templates\podcasts\episode_list.html:177
+#: .\podcasts\templates\podcasts\episode_list.html:182
+#: .\podcasts\templates\podcasts\episode_list.html:189
 #: .\podcasts\templates\podcasts\favorites_list.html:79
 #: .\podcasts\templates\podcasts\notifications_list.html:144
 #: .\podcasts\templates\podcasts\notifications_list.html:151
@@ -556,7 +556,7 @@ msgstr "Không có tập nào cho kênh này."
 
 #: .\podcasts\templates\podcasts\channel_detail.html:207
 #: .\podcasts\templates\podcasts\channel_detail.html:220
-#: .\podcasts\templates\podcasts\episode_list.html:135
+#: .\podcasts\templates\podcasts\episode_list.html:147
 #: .\podcasts\templates\podcasts\search_results_items.html:180
 #: .\podcasts\templates\podcasts\search_results_items.html:190
 msgid "Loading more episodes..."
@@ -618,17 +618,17 @@ msgid "Least stars"
 msgstr "Những ngôi sao nhỏ nhất"
 
 #: .\podcasts\templates\podcasts\channel_list.html:40
-#: .\podcasts\templates\podcasts\episode_list.html:46
+#: .\podcasts\templates\podcasts\episode_list.html:58
 msgid "Alphabetical"
 msgstr "Từ bảng chữ cái"
 
 #: .\podcasts\templates\podcasts\channel_list.html:41
-#: .\podcasts\templates\podcasts\episode_list.html:47
+#: .\podcasts\templates\podcasts\episode_list.html:59
 msgid "A → Z"
 msgstr "A → Z"
 
 #: .\podcasts\templates\podcasts\channel_list.html:42
-#: .\podcasts\templates\podcasts\episode_list.html:48
+#: .\podcasts\templates\podcasts\episode_list.html:60
 msgid "Z → A"
 msgstr "Z → A"
 
@@ -829,7 +829,6 @@ msgid "Total Downloads"
 msgstr "Tổng tải xuống"
 
 #: .\podcasts\templates\podcasts\episode_detail.html:183
-#| msgid "Rate this episode"
 msgid "Share link to this episode"
 msgstr "Chia sẻ liên kết cho tập này"
 
@@ -838,12 +837,10 @@ msgid "Share link"
 msgstr "Chia sẻ liên kết"
 
 #: .\podcasts\templates\podcasts\episode_detail.html:193
-#| msgid "Sign in to rate"
 msgid "Sign in to share"
 msgstr "Đăng nhập để chia sẻ"
 
 #: .\podcasts\templates\podcasts\episode_detail.html:198
-#| msgid "Total Views"
 msgid "Total Shares"
 msgstr "Tổng cổ phần"
 
@@ -936,7 +933,6 @@ msgid "Pause"
 msgstr "Hỗng nghỉ"
 
 #: .\podcasts\templates\podcasts\episode_detail.html:304
-#| msgid "Go to audio"
 msgid "Go to Audio"
 msgstr "Chuyển vào Audio"
 
@@ -1004,7 +1000,37 @@ msgstr "Hầu hết những người bình luận"
 msgid "Least commented"
 msgstr "Ít nhất bình luận"
 
-#: .\podcasts\templates\podcasts\episode_list.html:128
+#: .\podcasts\templates\podcasts\episode_list.html:46
+#| msgid "Downloads"
+msgid "Downloaded"
+msgstr "Tải xuống"
+
+#: .\podcasts\templates\podcasts\episode_list.html:47
+#| msgid "Total Downloads"
+msgid "Most downloaded"
+msgstr "Tải nhiều nhất"
+
+#: .\podcasts\templates\podcasts\episode_list.html:48
+#| msgid "Least watched"
+msgid "Least downloaded"
+msgstr "Ít nhất được tải xuống"
+
+#: .\podcasts\templates\podcasts\episode_list.html:52
+#| msgid "Shares"
+msgid "Shared"
+msgstr "Chia sẻ"
+
+#: .\podcasts\templates\podcasts\episode_list.html:53
+#| msgid "Most stars"
+msgid "Most shared"
+msgstr "Phần lớn được chia sẻ"
+
+#: .\podcasts\templates\podcasts\episode_list.html:54
+#| msgid "Least stars"
+msgid "Least shared"
+msgstr "Ít nhất được chia sẻ"
+
+#: .\podcasts\templates\podcasts\episode_list.html:140
 #: .\podcasts\templates\podcasts\episode_list_items.html:98
 msgid "No episodes available."
 msgstr "Không có tập nào có sẵn."
