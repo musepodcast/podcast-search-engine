@@ -4,10 +4,20 @@ from django import template
 from django.utils.safestring import mark_safe
 from django.contrib.auth import get_user_model
 from django.utils.html import strip_tags
+from urllib.parse import urlsplit, urlunsplit
 
 register = template.Library()
 User = get_user_model()
 
+
+@register.filter
+def strip_querystring(full_url: str) -> str:
+    try:
+        parts = urlsplit(full_url)
+        return urlunsplit((parts.scheme, parts.netloc, parts.path, "", ""))
+    except Exception:
+        return full_url.split('?', 1)[0]
+    
 @register.filter
 def flatten_html(value):
     """
