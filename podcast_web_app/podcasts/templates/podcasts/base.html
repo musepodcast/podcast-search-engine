@@ -34,9 +34,18 @@
   <link rel="apple-touch-icon" sizes="152x152" href="{% static 'podcasts/images/apple-touch-icon-152.png' %}">
   <link rel="apple-touch-icon" sizes="120x120" href="{% static 'podcasts/images/apple-touch-icon-120.png' %}">
 
+  <!-- Canonical URL (no query string like ?next=/...) -->
+  <link rel="canonical" href="{{ request.build_absolute_uri|strip_querystring }}">
+
+
   {% block meta %}
+  {# If a page is accessed with ?next=..., ask crawlers not to index that URL #}
+  {% if request.GET.next %}
+    <meta name="robots" content="noindex,follow">
+  {% endif %}
+
   <meta property="og:title" content="Muse Podcast – Podcast Search Engine">
-  <meta property="og:description" content="Search and discover podcasts in 17+ languages.">
+  <meta property="og:description" content="Muse is a free podcast search engine that allows you to search and discover podcasts in 17+ languages.">
   <meta property="og:image" content="https://musepodcast.com/static/podcasts/images/muse-og-1200x630.png">
   <meta property="og:url" content="https://musepodcast.com/">
   <meta property="og:type" content="website">
