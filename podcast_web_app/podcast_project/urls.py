@@ -14,6 +14,7 @@ from podcasts.adapters import CancelledRedirectView
 from django.conf import settings
 from django.conf.urls.static import static
 from pathlib import Path
+from django.views.generic import TemplateView
 
 # Point at ~/podcast_data/support_attachments
 SUPPORT_ATTACHMENTS_ROOT = Path.home() / 'podcast_data' / 'support_attachments'
@@ -53,6 +54,7 @@ urlpatterns = [
     path('', include((two_factor_patterns, 'two_factor'), namespace='two_factor')),
     path('', include('podcasts.urls', namespace='podcasts')),
     path("sitemap.xml", sitemap, {"sitemaps": sitemaps}, name="django-sitemap"),
+    path("robots.txt", TemplateView.as_view(template_name="podcasts/robots.txt", content_type="text/plain")),
     
 ]
 #path('', include((two_factor_patterns, 'two_factor'), namespace='two_factor')),
