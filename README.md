@@ -4,6 +4,13 @@
 
 **Website:** https://musepodcast.com
 
+## Scan to visit Muse Podcast Search Engine
+[![Scan the QR](static/podcasts/images/musepodcast-qr.svg)](https://musepodcast.com/?utm_source=gitlab&utm_medium=qr&utm_campaign=readme)
+
+[![GitLab Stars](https://img.shields.io/gitlab/stars/musepodcast/podcast-search-engine?gitlab_url=https://gitlab.com&style=social)](https://gitlab.com/musepodcast-group/podcast-search-engine-project/-/starrers)
+[![GitLab Forks](https://img.shields.io/gitlab/forks/musepodcast/podcast-search-engine?gitlab_url=https://gitlab.com&style=social)](https://gitlab.com/musepodcast-group/podcast-search-engine-project/-/forks)
+[![GitLab Open Issues](https://img.shields.io/gitlab/issues/open/musepodcast/podcast-search-engine?gitlab_url=https://gitlab.com)](https://gitlab.com/musepodcast-group/podcast-search-engine-project/-/issues)
+
 [![Stars](https://img.shields.io/github/stars/musepodcast/podcast-search-engine?style=social)](https://github.com/musepodcast/podcast-search-engine/stargazers)
 [![Forks](https://img.shields.io/github/forks/musepodcast/podcast-search-engine?style=social)](https://github.com/musepodcast/podcast-search-engine/forks)
 [![Issues](https://img.shields.io/github/issues/musepodcast/podcast-search-engine)](https://github.com/musepodcast/podcast-search-engine/issues)
