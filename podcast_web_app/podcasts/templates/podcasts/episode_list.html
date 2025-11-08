@@ -12,6 +12,12 @@
       {% trans "Sort:" %} {{ current_sort_label }}
     </button>
     <ul class="dropdown-menu dropdown-menu-end">
+
+      <li class="dropdown-header">{% trans "Trending" %}</li>
+      <li><a class="dropdown-item {% if sort == 'trending' and dir == 'desc' %}active{% endif %}" href="?sort=trending&dir=desc">{% trans "Most trending" %}</a></li>
+      <li><a class="dropdown-item {% if sort == 'trending' and dir == 'asc' %}active{% endif %}" href="?sort=trending&dir=asc">{% trans "Least trending" %}</a></li>
+
+      <li><hr class="dropdown-divider"></li>
       
       <li class="dropdown-header">{% trans "Recent" %}</li>
       <li><a class="dropdown-item {% if sort == 'recent' and dir == 'desc' %}active{% endif %}" href="?sort=recent&dir=desc">{% trans "Most recent" %}</a></li>
