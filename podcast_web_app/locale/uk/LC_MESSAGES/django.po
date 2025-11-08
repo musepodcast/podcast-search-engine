@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-02 17:34-0600\n"
+"POT-Creation-Date: 2025-11-08 16:55-0600\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -151,15 +151,15 @@ msgstr "Повернутися до входу"
 msgid "Podcast Search Engine"
 msgstr "Пошукова система підкасту"
 
-#: .\podcasts\templates\podcasts\base.html:82
+#: .\podcasts\templates\podcasts\base.html:106
 msgid "Muse"
 msgstr "Муза"
 
-#: .\podcasts\templates\podcasts\base.html:85
+#: .\podcasts\templates\podcasts\base.html:109
 msgid "Home"
 msgstr "Додому"
 
-#: .\podcasts\templates\podcasts\base.html:89
+#: .\podcasts\templates\podcasts\base.html:113
 #: .\podcasts\templates\podcasts\channel_list.html:22
 #: .\podcasts\templates\podcasts\channel_list.html:79
 #: .\podcasts\templates\podcasts\channel_list_items.html:27
@@ -170,7 +170,7 @@ msgstr "Додому"
 msgid "Favorites"
 msgstr "Улюблені"
 
-#: .\podcasts\templates\podcasts\base.html:94
+#: .\podcasts\templates\podcasts\base.html:118
 #: .\podcasts\templates\podcasts\channel_list.html:28
 #: .\podcasts\templates\podcasts\channel_list.html:83
 #: .\podcasts\templates\podcasts\channel_list_items.html:31
@@ -181,13 +181,13 @@ msgstr "Улюблені"
 msgid "Notifications"
 msgstr "Повідомлення"
 
-#: .\podcasts\templates\podcasts\base.html:100
+#: .\podcasts\templates\podcasts\base.html:124
 #: .\podcasts\templates\podcasts\bookmarks_list.html:65
 #: .\podcasts\templates\podcasts\bookmarks_list_items.html:57
 #: .\podcasts\templates\podcasts\channel_detail.html:160
 #: .\podcasts\templates\podcasts\channel_detail_item.html:46
-#: .\podcasts\templates\podcasts\episode_list.html:28
-#: .\podcasts\templates\podcasts\episode_list.html:95
+#: .\podcasts\templates\podcasts\episode_list.html:34
+#: .\podcasts\templates\podcasts\episode_list.html:101
 #: .\podcasts\templates\podcasts\episode_list_items.html:54
 #: .\podcasts\templates\podcasts\notifications_list.html:63
 #: .\podcasts\templates\podcasts\notifications_list_items.html:56
@@ -196,143 +196,143 @@ msgstr "Повідомлення"
 msgid "Bookmarks"
 msgstr "Ознаки книг"
 
-#: .\podcasts\templates\podcasts\base.html:102
-#: .\podcasts\templates\podcasts\base.html:208
+#: .\podcasts\templates\podcasts\base.html:126
+#: .\podcasts\templates\podcasts\base.html:232
 msgid "Channels"
 msgstr "Канали"
 
-#: .\podcasts\templates\podcasts\base.html:103
-#: .\podcasts\templates\podcasts\base.html:202
+#: .\podcasts\templates\podcasts\base.html:127
+#: .\podcasts\templates\podcasts\base.html:226
 #: .\podcasts\templates\podcasts\channel_detail.html:122
 #: .\podcasts\templates\podcasts\channel_list.html:46
 msgid "Episodes"
 msgstr "Епізоди"
 
-#: .\podcasts\templates\podcasts\base.html:130
+#: .\podcasts\templates\podcasts\base.html:154
 msgid "Light and Dark Mode"
 msgstr "Світло-темний режим"
 
-#: .\podcasts\templates\podcasts\base.html:140
+#: .\podcasts\templates\podcasts\base.html:164
 msgid "Profile"
 msgstr "Профіль"
 
-#: .\podcasts\templates\podcasts\base.html:145
+#: .\podcasts\templates\podcasts\base.html:169
 msgid "See Profile"
 msgstr "Подивіться Профіль"
 
-#: .\podcasts\templates\podcasts\base.html:148
+#: .\podcasts\templates\podcasts\base.html:172
 msgid "See Replies"
 msgstr "Дивіться відповіді"
 
-#: .\podcasts\templates\podcasts\base.html:161
-#: .\podcasts\templates\podcasts\base.html:542
+#: .\podcasts\templates\podcasts\base.html:185
+#: .\podcasts\templates\podcasts\base.html:566
 msgid "Support Me"
 msgstr "Підтримай мене"
 
-#: .\podcasts\templates\podcasts\base.html:168
+#: .\podcasts\templates\podcasts\base.html:192
 msgid "Support Ticket"
 msgstr "Білет підтримки"
 
-#: .\podcasts\templates\podcasts\base.html:173
+#: .\podcasts\templates\podcasts\base.html:197
 msgid "Contribute"
 msgstr "Допомога"
 
-#: .\podcasts\templates\podcasts\base.html:179
+#: .\podcasts\templates\podcasts\base.html:203
 msgid "Sign Out"
 msgstr "Підпишіться"
 
-#: .\podcasts\templates\podcasts\base.html:183
+#: .\podcasts\templates\podcasts\base.html:207
 msgid "Sign In"
 msgstr "Прийміть участь"
 
-#: .\podcasts\templates\podcasts\base.html:216
+#: .\podcasts\templates\podcasts\base.html:240
 msgid "Search episodes or channels..."
 msgstr "Шукати епізоди чи канали..."
 
-#: .\podcasts\templates\podcasts\base.html:222
+#: .\podcasts\templates\podcasts\base.html:246
 #: .\podcasts\templates\podcasts\channel_detail.html:116
 msgid "Search"
 msgstr "Пошук"
 
-#: .\podcasts\templates\podcasts\base.html:238
-#: .\podcasts\templates\podcasts\base.html:432
+#: .\podcasts\templates\podcasts\base.html:262
+#: .\podcasts\templates\podcasts\base.html:456
 msgid "Channel Title"
 msgstr "Назва каналу"
 
-#: .\podcasts\templates\podcasts\base.html:244
+#: .\podcasts\templates\podcasts\base.html:268
 msgid "Episode Title"
 msgstr "Назва епізоду"
 
-#: .\podcasts\templates\podcasts\base.html:250
+#: .\podcasts\templates\podcasts\base.html:274
 msgid "Episode Description"
 msgstr "Опис епізоду"
 
-#: .\podcasts\templates\podcasts\base.html:256
+#: .\podcasts\templates\podcasts\base.html:280
 msgid "Transcript Text"
 msgstr "Текст транскрипції"
 
-#: .\podcasts\templates\podcasts\base.html:263
-#: .\podcasts\templates\podcasts\base.html:451
+#: .\podcasts\templates\podcasts\base.html:287
+#: .\podcasts\templates\podcasts\base.html:475
 msgid "Language"
 msgstr "Мова"
 
-#: .\podcasts\templates\podcasts\base.html:343
+#: .\podcasts\templates\podcasts\base.html:367
 msgid "Date"
 msgstr "Дата"
 
-#: .\podcasts\templates\podcasts\base.html:351
+#: .\podcasts\templates\podcasts\base.html:375
 msgid "Anytime"
 msgstr "У будь-який час"
 
-#: .\podcasts\templates\podcasts\base.html:357
+#: .\podcasts\templates\podcasts\base.html:381
 msgid "Past Day"
 msgstr "Минулий день"
 
-#: .\podcasts\templates\podcasts\base.html:363
+#: .\podcasts\templates\podcasts\base.html:387
 msgid "Past Week"
 msgstr "Минулий тиждень"
 
-#: .\podcasts\templates\podcasts\base.html:369
+#: .\podcasts\templates\podcasts\base.html:393
 msgid "Past Month"
 msgstr "Останній місяць"
 
-#: .\podcasts\templates\podcasts\base.html:375
+#: .\podcasts\templates\podcasts\base.html:399
 msgid "Past Year"
 msgstr "Минулий рік"
 
-#: .\podcasts\templates\podcasts\base.html:381
+#: .\podcasts\templates\podcasts\base.html:405
 msgid "Past 2 Years"
 msgstr "Останні 2 роки"
 
-#: .\podcasts\templates\podcasts\base.html:387
+#: .\podcasts\templates\podcasts\base.html:411
 msgid "Past 3 Years"
 msgstr "Останні 3 роки"
 
-#: .\podcasts\templates\podcasts\base.html:393
+#: .\podcasts\templates\podcasts\base.html:417
 msgid "Past 4 Years"
 msgstr "Останні 4 роки"
 
-#: .\podcasts\templates\podcasts\base.html:399
+#: .\podcasts\templates\podcasts\base.html:423
 msgid "Past 5 Years"
 msgstr "Останні 5 років"
 
-#: .\podcasts\templates\podcasts\base.html:405
+#: .\podcasts\templates\podcasts\base.html:429
 msgid "Past 10 Years"
 msgstr "Останні 10 років"
 
-#: .\podcasts\templates\podcasts\base.html:411
+#: .\podcasts\templates\podcasts\base.html:435
 msgid "Past 15 Years"
 msgstr "Останні 15 років"
 
-#: .\podcasts\templates\podcasts\base.html:438
+#: .\podcasts\templates\podcasts\base.html:462
 msgid "Channel Author"
 msgstr "Автор каналу"
 
-#: .\podcasts\templates\podcasts\base.html:444
+#: .\podcasts\templates\podcasts\base.html:468
 msgid "Channel Summary"
 msgstr "Підсумок каналу"
 
-#: .\podcasts\templates\podcasts\base.html:547
+#: .\podcasts\templates\podcasts\base.html:571
 #: .\podcasts\templates\podcasts\signup.html:175
 #: .\podcasts\templates\podcasts\signup.html:229
 #: .\podcasts\templates\podcasts\support_ticket.html:148
@@ -341,29 +341,29 @@ msgstr "Підсумок каналу"
 msgid "Close"
 msgstr "Близько"
 
-#: .\podcasts\templates\podcasts\base.html:620
+#: .\podcasts\templates\podcasts\base.html:644
 #: .\podcasts\templates\podcasts\channel_detail.html:213
 #: .\podcasts\templates\podcasts\episode_detail.html:337
 msgid "Please sign in to complete this action."
 msgstr "Будь ласка, підпишіться, щоб завершити цю акцію."
 
-#: .\podcasts\templates\podcasts\base.html:622
+#: .\podcasts\templates\podcasts\base.html:646
 #: .\podcasts\templates\podcasts\channel_detail.html:214
 #: .\podcasts\templates\podcasts\episode_detail.html:338
 msgid "Sign in"
 msgstr "Підпишіться"
 
-#: .\podcasts\templates\podcasts\base.html:629
+#: .\podcasts\templates\podcasts\base.html:652
 msgid "Contact Me"
 msgstr "Зв'яжіться зі мною"
 
-#: .\podcasts\templates\podcasts\base.html:694
-#: .\podcasts\templates\podcasts\base.html:695
+#: .\podcasts\templates\podcasts\base.html:739
+#: .\podcasts\templates\podcasts\base.html:740
 msgid "Switch to light mode"
 msgstr "Перейти на світловий режим"
 
-#: .\podcasts\templates\podcasts\base.html:699
-#: .\podcasts\templates\podcasts\base.html:700
+#: .\podcasts\templates\podcasts\base.html:744
+#: .\podcasts\templates\podcasts\base.html:745
 msgid "Switch to dark mode"
 msgstr "Перейти на темний режим"
 
@@ -374,7 +374,7 @@ msgstr "Епізоди з книжками"
 #: .\podcasts\templates\podcasts\bookmarks_list.html:42
 #: .\podcasts\templates\podcasts\bookmarks_list_items.html:35
 #: .\podcasts\templates\podcasts\episode_detail.html:48
-#: .\podcasts\templates\podcasts\episode_list.html:84
+#: .\podcasts\templates\podcasts\episode_list.html:90
 #: .\podcasts\templates\podcasts\episode_list_items.html:31
 #: .\podcasts\templates\podcasts\notifications_list.html:41
 #: .\podcasts\templates\podcasts\notifications_list_items.html:34
@@ -387,7 +387,7 @@ msgstr "від"
 #: .\podcasts\templates\podcasts\bookmarks_list_items.html:50
 #: .\podcasts\templates\podcasts\channel_detail_item.html:39
 #: .\podcasts\templates\podcasts\episode_detail.html:70
-#: .\podcasts\templates\podcasts\episode_list.html:91
+#: .\podcasts\templates\podcasts\episode_list.html:97
 #: .\podcasts\templates\podcasts\episode_list_items.html:46
 #: .\podcasts\templates\podcasts\notifications_list.html:56
 #: .\podcasts\templates\podcasts\notifications_list_items.html:49
@@ -401,8 +401,8 @@ msgstr "Відвертий"
 #: .\podcasts\templates\podcasts\channel_detail.html:165
 #: .\podcasts\templates\podcasts\channel_detail_item.html:51
 #: .\podcasts\templates\podcasts\episode_detail.html:315
-#: .\podcasts\templates\podcasts\episode_list.html:34
-#: .\podcasts\templates\podcasts\episode_list.html:100
+#: .\podcasts\templates\podcasts\episode_list.html:40
+#: .\podcasts\templates\podcasts\episode_list.html:106
 #: .\podcasts\templates\podcasts\episode_list_items.html:59
 #: .\podcasts\templates\podcasts\notifications_list.html:68
 #: .\podcasts\templates\podcasts\notifications_list_items.html:61
@@ -415,7 +415,7 @@ msgstr "Комментарії"
 #: .\podcasts\templates\podcasts\bookmarks_list_items.html:67
 #: .\podcasts\templates\podcasts\channel_detail.html:169
 #: .\podcasts\templates\podcasts\channel_detail_item.html:56
-#: .\podcasts\templates\podcasts\episode_list.html:105
+#: .\podcasts\templates\podcasts\episode_list.html:111
 #: .\podcasts\templates\podcasts\episode_list_items.html:64
 #: .\podcasts\templates\podcasts\notifications_list.html:73
 #: .\podcasts\templates\podcasts\notifications_list_items.html:66
@@ -431,7 +431,7 @@ msgstr "Рейтинг епізодів"
 #: .\podcasts\templates\podcasts\channel_list.html:95
 #: .\podcasts\templates\podcasts\channel_list_items.html:43
 #: .\podcasts\templates\podcasts\episode_detail.html:147
-#: .\podcasts\templates\podcasts\episode_list.html:114
+#: .\podcasts\templates\podcasts\episode_list.html:120
 #: .\podcasts\templates\podcasts\episode_list_items.html:73
 #: .\podcasts\templates\podcasts\favorites_list.html:52
 #: .\podcasts\templates\podcasts\favorites_list_items.html:41
@@ -447,7 +447,7 @@ msgstr "Загальні перегляди"
 #: .\podcasts\templates\podcasts\bookmarks_list_items.html:81
 #: .\podcasts\templates\podcasts\channel_detail.html:182
 #: .\podcasts\templates\podcasts\channel_detail_item.html:70
-#: .\podcasts\templates\podcasts\episode_list.html:119
+#: .\podcasts\templates\podcasts\episode_list.html:125
 #: .\podcasts\templates\podcasts\episode_list_items.html:78
 #: .\podcasts\templates\podcasts\notifications_list.html:87
 #: .\podcasts\templates\podcasts\notifications_list_items.html:80
@@ -460,7 +460,7 @@ msgstr "Завантаження"
 #: .\podcasts\templates\podcasts\bookmarks_list_items.html:86
 #: .\podcasts\templates\podcasts\channel_detail.html:187
 #: .\podcasts\templates\podcasts\channel_detail_item.html:75
-#: .\podcasts\templates\podcasts\episode_list.html:124
+#: .\podcasts\templates\podcasts\episode_list.html:130
 #: .\podcasts\templates\podcasts\episode_list_items.html:83
 #: .\podcasts\templates\podcasts\notifications_list.html:92
 #: .\podcasts\templates\podcasts\notifications_list_items.html:85
@@ -480,8 +480,8 @@ msgstr "Завантажую додаткові епізоди..."
 #: .\podcasts\templates\podcasts\bookmarks_list.html:159
 #: .\podcasts\templates\podcasts\channel_detail.html:219
 #: .\podcasts\templates\podcasts\channel_list.html:118
-#: .\podcasts\templates\podcasts\episode_list.html:182
-#: .\podcasts\templates\podcasts\episode_list.html:189
+#: .\podcasts\templates\podcasts\episode_list.html:188
+#: .\podcasts\templates\podcasts\episode_list.html:195
 #: .\podcasts\templates\podcasts\favorites_list.html:79
 #: .\podcasts\templates\podcasts\notifications_list.html:144
 #: .\podcasts\templates\podcasts\notifications_list.html:151
@@ -557,7 +557,7 @@ msgstr "На цьому каналі немає епізодів."
 
 #: .\podcasts\templates\podcasts\channel_detail.html:207
 #: .\podcasts\templates\podcasts\channel_detail.html:220
-#: .\podcasts\templates\podcasts\episode_list.html:147
+#: .\podcasts\templates\podcasts\episode_list.html:153
 #: .\podcasts\templates\podcasts\search_results_items.html:180
 #: .\podcasts\templates\podcasts\search_results_items.html:190
 msgid "Loading more episodes..."
@@ -573,17 +573,17 @@ msgid "Sort:"
 msgstr "Різниця:"
 
 #: .\podcasts\templates\podcasts\channel_list.html:16
-#: .\podcasts\templates\podcasts\episode_list.html:22
+#: .\podcasts\templates\podcasts\episode_list.html:28
 msgid "Watched"
 msgstr "Наглядається"
 
 #: .\podcasts\templates\podcasts\channel_list.html:17
-#: .\podcasts\templates\podcasts\episode_list.html:23
+#: .\podcasts\templates\podcasts\episode_list.html:29
 msgid "Most watched"
 msgstr "Найчастіше дивилися"
 
 #: .\podcasts\templates\podcasts\channel_list.html:18
-#: .\podcasts\templates\podcasts\episode_list.html:24
+#: .\podcasts\templates\podcasts\episode_list.html:30
 msgid "Least watched"
 msgstr "Найменше спостерігається"
 
@@ -604,32 +604,32 @@ msgid "Least notified"
 msgstr "Найменше повідомлено"
 
 #: .\podcasts\templates\podcasts\channel_list.html:34
-#: .\podcasts\templates\podcasts\episode_list.html:40
+#: .\podcasts\templates\podcasts\episode_list.html:46
 msgid "Stars"
 msgstr "Зірки"
 
 #: .\podcasts\templates\podcasts\channel_list.html:35
-#: .\podcasts\templates\podcasts\episode_list.html:41
+#: .\podcasts\templates\podcasts\episode_list.html:47
 msgid "Most stars"
 msgstr "Більшість зірок"
 
 #: .\podcasts\templates\podcasts\channel_list.html:36
-#: .\podcasts\templates\podcasts\episode_list.html:42
+#: .\podcasts\templates\podcasts\episode_list.html:48
 msgid "Least stars"
 msgstr "Найменші зірки"
 
 #: .\podcasts\templates\podcasts\channel_list.html:40
-#: .\podcasts\templates\podcasts\episode_list.html:58
+#: .\podcasts\templates\podcasts\episode_list.html:64
 msgid "Alphabetical"
 msgstr "Альфабетне"
 
 #: .\podcasts\templates\podcasts\channel_list.html:41
-#: .\podcasts\templates\podcasts\episode_list.html:59
+#: .\podcasts\templates\podcasts\episode_list.html:65
 msgid "A → Z"
 msgstr "А → З"
 
 #: .\podcasts\templates\podcasts\channel_list.html:42
-#: .\podcasts\templates\podcasts\episode_list.html:60
+#: .\podcasts\templates\podcasts\episode_list.html:66
 msgid "Z → A"
 msgstr "З → А"
 
@@ -972,64 +972,72 @@ msgid "Podcast Episodes"
 msgstr "Епізоди подкастів"
 
 #: .\podcasts\templates\podcasts\episode_list.html:16
+msgid "Trending"
+msgstr "Тренди"
+
+#: .\podcasts\templates\podcasts\episode_list.html:17
+#| msgid "Most recent"
+msgid "Most trending"
+msgstr "Найбільш трендові"
+
+#: .\podcasts\templates\podcasts\episode_list.html:18
+#| msgid "Least recent"
+msgid "Least trending"
+msgstr "Найменший тренд"
+
+#: .\podcasts\templates\podcasts\episode_list.html:22
 msgid "Recent"
 msgstr "Недавні"
 
-#: .\podcasts\templates\podcasts\episode_list.html:17
+#: .\podcasts\templates\podcasts\episode_list.html:23
 msgid "Most recent"
 msgstr "Найдавніші"
 
-#: .\podcasts\templates\podcasts\episode_list.html:18
+#: .\podcasts\templates\podcasts\episode_list.html:24
 msgid "Least recent"
 msgstr "Найпоследніше"
 
-#: .\podcasts\templates\podcasts\episode_list.html:29
+#: .\podcasts\templates\podcasts\episode_list.html:35
 msgid "Most bookmarked"
 msgstr "Більшість книжкових знаків"
 
-#: .\podcasts\templates\podcasts\episode_list.html:30
+#: .\podcasts\templates\podcasts\episode_list.html:36
 msgid "Least bookmarked"
 msgstr "Мінімальна книжна ознака"
 
-#: .\podcasts\templates\podcasts\episode_list.html:35
+#: .\podcasts\templates\podcasts\episode_list.html:41
 msgid "Most commented"
 msgstr "Більшість коментарів"
 
-#: .\podcasts\templates\podcasts\episode_list.html:36
+#: .\podcasts\templates\podcasts\episode_list.html:42
 msgid "Least commented"
 msgstr "Мінімум коментарів"
 
-#: .\podcasts\templates\podcasts\episode_list.html:46
-#| msgid "Downloads"
+#: .\podcasts\templates\podcasts\episode_list.html:52
 msgid "Downloaded"
 msgstr "Завантажено"
 
-#: .\podcasts\templates\podcasts\episode_list.html:47
-#| msgid "Total Downloads"
+#: .\podcasts\templates\podcasts\episode_list.html:53
 msgid "Most downloaded"
 msgstr "Найбільш завантажені"
 
-#: .\podcasts\templates\podcasts\episode_list.html:48
-#| msgid "Least watched"
+#: .\podcasts\templates\podcasts\episode_list.html:54
 msgid "Least downloaded"
 msgstr "Найменше завантажено"
 
-#: .\podcasts\templates\podcasts\episode_list.html:52
-#| msgid "Shares"
+#: .\podcasts\templates\podcasts\episode_list.html:58
 msgid "Shared"
 msgstr "Об'єднані"
 
-#: .\podcasts\templates\podcasts\episode_list.html:53
-#| msgid "Most stars"
+#: .\podcasts\templates\podcasts\episode_list.html:59
 msgid "Most shared"
 msgstr "Найбільш поширені"
 
-#: .\podcasts\templates\podcasts\episode_list.html:54
-#| msgid "Least stars"
+#: .\podcasts\templates\podcasts\episode_list.html:60
 msgid "Least shared"
 msgstr "Найменше поширені"
 
-#: .\podcasts\templates\podcasts\episode_list.html:140
+#: .\podcasts\templates\podcasts\episode_list.html:146
 #: .\podcasts\templates\podcasts\episode_list_items.html:98
 msgid "No episodes available."
 msgstr "Ніяких епізодів немає."
@@ -1066,7 +1074,7 @@ msgid "Search to find your thoughts!"
 msgstr "Шукай, щоб знайти свої думки!"
 
 #: .\podcasts\templates\podcasts\home.html:11
-#: .\podcasts\templates\registration\login.html:7
+#: .\podcasts\templates\registration\login.html:12
 msgid "Login"
 msgstr "Ввійти в систему"
 
@@ -1463,7 +1471,7 @@ msgid "Please fix the errors below."
 msgstr "Будь ласка, виправить помилки нижче."
 
 #: .\podcasts\templates\podcasts\signup.html:108
-#: .\podcasts\templates\registration\login.html:52
+#: .\podcasts\templates\registration\login.html:57
 msgid "Password"
 msgstr "Пароль"
 
@@ -1834,44 +1842,44 @@ msgstr ""
 msgid "OK"
 msgstr "Добре."
 
-#: .\podcasts\templates\registration\login.html:15
+#: .\podcasts\templates\registration\login.html:20
 msgid "Sign in with Google"
 msgstr "Прийміться в Google"
 
-#: .\podcasts\templates\registration\login.html:23
+#: .\podcasts\templates\registration\login.html:28
 msgid "Sign in with X"
 msgstr "Підпишіться з X"
 
-#: .\podcasts\templates\registration\login.html:31
+#: .\podcasts\templates\registration\login.html:36
 msgid "Sign in with GitHub"
 msgstr "Прийдіть на GitHub"
 
-#: .\podcasts\templates\registration\login.html:38
+#: .\podcasts\templates\registration\login.html:43
 msgid "or sign in with an account manually"
 msgstr "або ввійти на обліковий запис вручную"
 
-#: .\podcasts\templates\registration\login.html:46
+#: .\podcasts\templates\registration\login.html:51
 msgid "Email or Username"
 msgstr "Електронна пошта або ім'я користувача"
 
-#: .\podcasts\templates\registration\login.html:58
+#: .\podcasts\templates\registration\login.html:63
 msgid "Show password"
 msgstr "Покажіть пароль"
 
-#: .\podcasts\templates\registration\login.html:65
+#: .\podcasts\templates\registration\login.html:70
 #: .\podcasts\templates\registration\password_reset_complete.html:11
 msgid "Log In"
 msgstr "Ввійти в систему"
 
-#: .\podcasts\templates\registration\login.html:69
+#: .\podcasts\templates\registration\login.html:74
 msgid "Forgot your password?"
 msgstr "Ви забули пароль?"
 
-#: .\podcasts\templates\registration\login.html:72
+#: .\podcasts\templates\registration\login.html:77
 msgid "Don't have an account?"
 msgstr "У вас немає рахунку?"
 
-#: .\podcasts\templates\registration\login.html:72
+#: .\podcasts\templates\registration\login.html:77
 msgid "Sign up"
 msgstr "Запишіться"
 

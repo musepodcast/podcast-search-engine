@@ -1853,15 +1853,15 @@ class EpisodeListView(ListView):
     paginate_by = 10
 
     # include "recent"
-    ALLOWED_SORTS = {'recent', 'views', 'bookmarks', 'comments', 'stars', 'downloaded', 'shared', 'title'}
+    ALLOWED_SORTS = {'trending', 'recent', 'views', 'bookmarks', 'comments', 'stars', 'downloaded', 'shared', 'title'}
     ALLOWED_DIRS = {'asc', 'desc'}
 
     def _parse_sort(self):
         # default: Most recent
-        sort = (self.request.GET.get('sort') or 'recent').lower()
+        sort = (self.request.GET.get('sort') or 'trending').lower()
         direction = (self.request.GET.get('dir') or 'desc').lower()
         if sort not in self.ALLOWED_SORTS:
-            sort = 'recent'
+            sort = 'trending'
         if direction not in self.ALLOWED_DIRS:
             direction = 'desc'
         return sort, direction
@@ -1870,6 +1870,11 @@ class EpisodeListView(ListView):
         lang = get_selected_language(self.request)
         sort, direction = self._parse_sort()
         dir_prefix = '' if direction == 'asc' else '-'
+
+        # time windows
+        now = timezone.now()
+        dt_24h = now - timedelta(hours=24)
+        dt_7d  = now - timedelta(days=7)
 
         # --- Subqueries for total downloads ---
         downloads_sq_base = (
@@ -1907,6 +1912,7 @@ class EpisodeListView(ListView):
                 .select_related('channel')
                 .prefetch_related('transcripts', 'chapters')
                 .annotate(
+                    # existing aggregates
                     bookmarks_count=Count(
                         'episode_interactions',
                         filter=Q(episode_interactions__bookmarked=True),
@@ -1922,10 +1928,53 @@ class EpisodeListView(ListView):
                     total_episode_views=Coalesce(Sum('episodevisit__count'), 0),
                     total_downloads=Coalesce(Subquery(downloads_sq_base, output_field=IntegerField()), Value(0)),
                     total_shares=Coalesce(Subquery(shares_sq_base, output_field=IntegerField()), Value(0)),
+
+                    # NEW: 24h and 7d windows (velocity)
+                    views_24h=Coalesce(
+                        Sum('episodevisit__count', filter=Q(episodevisit__last_visited__gte=dt_24h)),
+                        0
+                    ),
+                    views_7d=Coalesce(
+                        Sum('episodevisit__count', filter=Q(episodevisit__last_visited__gte=dt_7d)),
+                        0
+                    ),
+                    downloads_7d=Coalesce(
+                        Sum('downloads__count', filter=Q(downloads__last_downloaded__gte=dt_7d)),
+                        0
+                    ),
+                    shares_7d=Coalesce(
+                        Sum('shares__count', filter=Q(shares__last_shared__gte=dt_7d)),
+                        0
+                    ),
+                    comments_7d=Coalesce(
+                        Count('comments', filter=Q(comments__created_at__gte=dt_7d), distinct=True),
+                        0
+                    ),
+                )
+                .annotate(
+                    # Weighted trending score — tweak weights as you like
+                    trending_score=(
+                        F('views_7d') * 1.0 +
+                        F('downloads_7d') * 3.0 +
+                        F('shares_7d') * 4.0 +
+                        F('comments_7d') * 2.0 +
+                        F('ep_rating_count') * 1.0
+                    )
                 )
             )
 
-            if sort == 'recent':
+            if sort == 'trending':
+                # Desc: most trending. Add tie breakers: 24h velocity, then recency
+                ordering = [
+                    F('trending_score').desc(nulls_last=True) if direction == 'desc'
+                    else F('trending_score').asc(nulls_last=True),
+                    F('views_24h').desc(nulls_last=True) if direction == 'desc'
+                    else F('views_24h').asc(nulls_last=True),
+                    F('publication_date').desc(nulls_last=True) if direction == 'desc'
+                    else F('publication_date').asc(nulls_last=True),
+                    'episode_title',
+                ]
+            elif sort == 'recent':
                 # publication_date with A–Z tie-break; unrated/NULL dates go last either way
                 if direction == 'desc':
                     ordering = [F('publication_date').desc(nulls_last=True), 'episode_title']
@@ -1970,7 +2019,7 @@ class EpisodeListView(ListView):
                 ordering = [F('publication_date').desc(nulls_last=True), 'episode_title']
 
             return qs.order_by(*ordering)
-
+        
         # Non-English (EpisodeTranslations)
         qs = (
             EpisodeTranslations.objects
@@ -1991,13 +2040,85 @@ class EpisodeListView(ListView):
                     distinct=True
                 ),
                 total_episode_views=Coalesce(Sum('episode__episodevisit__count'), 0),
-                # NEW: total downloads (aggregated on base episode)
                 total_downloads=Coalesce(Subquery(downloads_sq_tr, output_field=IntegerField()), Value(0)),
                 total_shares=Coalesce(Subquery(shares_sq_tr, output_field=IntegerField()), Value(0)),
+
+                # Recent windows via base episode relations
+                views_24h=Coalesce(
+                    Sum('episode__episodevisit__count', filter=Q(episode__episodevisit__last_visited__gte=dt_24h)), 0
+                ),
+                views_7d=Coalesce(
+                    Sum('episode__episodevisit__count', filter=Q(episode__episodevisit__last_visited__gte=dt_7d)), 0
+                ),
+                downloads_7d=Coalesce(
+                    Sum('episode__downloads__count', filter=Q(episode__downloads__last_downloaded__gte=dt_7d)), 0
+                ),
+                shares_7d=Coalesce(
+                    Sum('episode__shares__count', filter=Q(episode__shares__last_shared__gte=dt_7d)), 0
+                ),
+                comments_7d=Coalesce(
+                    Count('episode__comments', filter=Q(episode__comments__created_at__gte=dt_7d), distinct=True), 0
+                ),
             )
-            .order_by('-publication_date')
+            .annotate(
+                trending_score=(
+                    F('views_7d')      * 1.0 +
+                    F('downloads_7d')  * 3.0 +
+                    F('shares_7d')     * 4.0 +
+                    F('comments_7d')   * 2.0 +
+                    F('ep_rating_count') * 1.0
+                )
+            )
         )
-        return qs
+
+        if sort == 'trending':
+            ordering = [
+                F('trending_score').desc(nulls_last=True) if direction == 'desc'
+                else F('trending_score').asc(nulls_last=True),
+                F('views_24h').desc(nulls_last=True) if direction == 'desc'
+                else F('views_24h').asc(nulls_last=True),
+                F('publication_date').desc(nulls_last=True) if direction == 'desc'
+                else F('publication_date').asc(nulls_last=True),
+                'episode_title',
+            ]
+
+        elif sort == 'recent':
+            ordering = [
+                F('publication_date').desc(nulls_last=True) if direction == 'desc'
+                else F('publication_date').asc(nulls_last=True),
+                'episode_title',
+            ]
+
+        elif sort == 'views':
+            ordering = [f'{dir_prefix}total_episode_views', 'episode_title']
+
+        elif sort == 'bookmarks':
+            ordering = [f'{dir_prefix}bookmarks_count', 'episode_title']
+
+        elif sort == 'comments':
+            ordering = [f'{dir_prefix}comments_count', 'episode_title']
+
+        elif sort == 'stars':
+            ordering = [
+                F('ep_avg_rating').desc(nulls_last=True) if direction == 'desc'
+                else F('ep_avg_rating').asc(nulls_last=True),
+                F('ep_rating_count').desc() if direction == 'desc' else F('ep_rating_count').asc(),
+                'episode_title',
+            ]
+
+        elif sort == 'downloaded':
+            ordering = [f'{dir_prefix}total_downloads', 'episode_title']
+
+        elif sort == 'shared':
+            ordering = [f'{dir_prefix}total_shares', 'episode_title']
+
+        elif sort == 'title':
+            ordering = [f'{dir_prefix}episode_title']
+
+        else:
+            ordering = [F('publication_date').desc(nulls_last=True), 'episode_title']
+
+        return qs.order_by(*ordering)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -2017,6 +2138,8 @@ class EpisodeListView(ListView):
         context['dir'] = direction
 
         labels = {
+            ('trending', 'desc'): "Most trending",
+            ('trending', 'asc'):  "Least trending",
             ('recent', 'desc'): "Most recent",
             ('recent', 'asc'):  "Least recent",
             ('views', 'desc'): "Most watched",
@@ -2034,7 +2157,7 @@ class EpisodeListView(ListView):
             ('title', 'asc'):  "A → Z",
             ('title', 'desc'): "Z → A",
         }
-        context['current_sort_label'] = labels.get((sort, direction), "Most recent")
+        context['current_sort_label'] = labels.get((sort, direction), "Most trending")
         context['selected_language'] = lang
         return context
 
