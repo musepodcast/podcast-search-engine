@@ -259,6 +259,109 @@ input[type="text"]::placeholder { color: var(--muted-color); }
   }
 }
 
+/* =========================================================
+   Social Media Icons
+   ========================================================= */
+  /* ---------- Footer social icons (scoped) ---------- */
+  .social-links {
+    position: relative;
+    display: inline-flex;            /* sit nicely on one line in footer */
+    gap: 0;                          /* spacing handled by li.mx-2 */
+    list-style: none;
+  }
+  .social-links li { position: relative; list-style: none; }
+  .social-links li a {
+    position: relative;
+    display: inline-block;
+    text-decoration: none;
+    line-height: 1;
+  }
+
+  /* Base icon: large, dim neutral color that matches theme */
+  .social-links li a .fa-brands,
+  .social-links li a .fas {
+    font-size: 2rem;                 /* adjust size as you like */
+    color: var(--footer-text-color); /* integrate with your theme tokens */
+    opacity: .6;                     /* “unfilled” baseline */
+    transition: opacity .25s ease;
+  }
+
+  /* Overlay “fill” that reveals on hover */
+  .social-links li a::before {
+    /* Using Font Awesome brands; envelope is in 'Free' but shows fine as overlay text */
+    font-family: "Font Awesome 6 Brands";
+    font-weight: 400;
+    position: absolute;
+    inset: 0;                        /* full overlay */
+    font-size: 2rem;
+    line-height: 1;
+    height: 0;                       /* collapsed until hover */
+    overflow: hidden;
+    transition: height .45s ease-in-out, border-color .25s ease-in-out;
+    color: transparent;              /* we’ll use background-clip on some */
+    border-bottom: 3px solid transparent;
+  }
+
+
+  /* X / Twitter (blue) */
+  .social-links li:nth-child(1) a::before {
+    /* If you prefer 'X' glyph, switch to "\e61b" and ensure you have latest FA build */
+    content: "\e61b"; /* legacy twitter bird - widely supported */
+    color: #FFFFFF;
+    -webkit-text-fill-color: #FFFFFF;
+    background: #000000;
+    border-bottom-color: #FFFFFF;
+  }
+
+  /* Email (envelope) */
+  .social-links li:nth-child(2) a::before {
+    font-family: "Font Awesome 6 Free"; font-weight: 900; /* solid */
+    content: "\f0e0"; /* envelope */
+    color: var(--link-color);
+    -webkit-text-fill-color: var(--link-color);
+    border-bottom-color: var(--link-color);
+  }
+
+  /* GitHub (white) */
+  .social-links li:nth-child(3) a::before {
+    content: "\f09b"; /* github */
+    color: #fff; -webkit-text-fill-color: #fff;
+    border-bottom-color: #fff;
+  }
+
+  /* GitLab (orange) */
+  .social-links li:nth-child(4) a::before {
+    content: "\f296"; /* gitlab */
+    color: #e24329; -webkit-text-fill-color: #e24329;
+    border-bottom-color: #e24329;
+  }
+
+  /* YouTube (red) */
+  .social-links li:nth-child(5) a::before {
+    content: "\f167"; /* youtube */
+    color: #ff0000; -webkit-text-fill-color: #ff0000;
+    border-bottom-color: #ff0000;
+  }
+
+  /* Hover animation */
+  .social-links li a:hover::before,
+  .social-links li a:focus-visible::before {
+    height: 100%;
+  }
+  .social-links li a:hover .fa-brands,
+  .social-links li a:hover .fas,
+  .social-links li a:focus-visible .fa-brands,
+  .social-links li a:focus-visible .fas {
+    opacity: 1;
+  }
+
+  /* Respect reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .social-links li a::before { transition: none; }
+    .social-links li a .fa-brands,
+    .social-links li a .fas { transition: none; }
+  }
+
 
 /* =========================================================
    PANELS / SECTIONS
