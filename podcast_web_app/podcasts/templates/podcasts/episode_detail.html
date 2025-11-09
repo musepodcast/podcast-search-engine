@@ -78,7 +78,7 @@
         {% if request.user.is_authenticated %}
         <!-- Bookmark -->
         <button id="bookmark-btn" data-episode-id="{{ episode.id }}"
-                class="bookmark-btn {% if is_bookmarked %}btn-bookmarked{% else %}btn-bookmark{% endif %}"
+                class="bookmark-btn confetti-click {% if is_bookmarked %}btn-bookmarked{% else %}btn-bookmark{% endif %}"
                 title="{% if is_bookmarked %}{% trans 'Remove from Bookmarks' %}{% else %}{% trans 'Add to Bookmarks' %}{% endif %}">
           {% if is_bookmarked %}
             <i class="fa-solid fa-bookmark"></i>
@@ -119,9 +119,9 @@
           <div id="episode-rating-container" data-episode-id="{{ post_episode_id }}">
             {% for star in star_range %}
               {% if episode_rating >= star %}
-                <i class="fa fa-star star-icon star-active" data-star="{{ star }}" title="{% trans 'Update your rating' %}"></i>
+                <i class="fa fa-star star-icon star-active confetti-click" data-star="{{ star }}" title="{% trans 'Update your rating' %}"></i>
               {% else %}
-                <i class="fa fa-star star-icon" data-star="{{ star }}" title="{% trans 'Rate this episode' %}"></i>
+                <i class="fa fa-star star-icon confetti-click" data-star="{{ star }}" title="{% trans 'Rate this episode' %}"></i>
               {% endif %}
             {% endfor %}
           </div>
@@ -152,7 +152,7 @@
         <!-- DOWNLOADS -->
         {% if request.user.is_authenticated %}
         <a href="/{{ episode.channel.sanitized_channel_title }}/{{ episode.sanitized_episode_title }}/download.json?lang={{ request.LANGUAGE_CODE|default:'en' }}"
-          class="btn-bookmark"
+          class="btn-bookmark confetti-click"
           data-episode-id="{{ episode.id }}"
           download
           title="{% trans 'Download JSON' %}"
@@ -176,7 +176,7 @@
         {% if request.user.is_authenticated %}
           <button
             type="button"
-            class="btn-bookmark"
+            class="btn-bookmark confetti-click"
             id="share-btn"
             data-episode-id="{{ episode.id }}"
             data-share-url="{{ request.build_absolute_uri }}"
@@ -631,6 +631,70 @@
   }
 
 </style>
+
+<script>
+(function () {
+  // Colors that work in both themes
+  const COLORS = ['#EFD469', '#0ABAB5', '#9929EA', '#FF6B6B', '#4ECDC4', '#FFD166', '#06D6A0', '#118AB2'];
+
+  function burstConfettiAt(x, y, count = 24) {
+    // Respect reduced motion
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    for (let i = 0; i < count; i++) {
+      const el = document.createElement('i');
+      el.className = 'confetti-piece';
+      el.style.left = x + 'px';
+      el.style.top  = y + 'px';
+
+      // Random direction + distance
+      const angle = Math.random() * Math.PI * 2;
+      const dist  = 50 + Math.random() * 90;     // px travel
+      const dx    = Math.cos(angle) * dist;
+      const dy    = Math.sin(angle) * dist * -1; // bias upward a bit
+
+      el.style.setProperty('--dx', dx.toFixed(1) + 'px');
+      el.style.setProperty('--dy', dy.toFixed(1) + 'px');
+      el.style.setProperty('--rot', (Math.random()*540 - 270).toFixed(0) + 'deg');
+      el.style.setProperty('--dur', (600 + Math.random()*500).toFixed(0) + 'ms');
+
+      // Random color
+      el.style.background = COLORS[(Math.random() * COLORS.length) | 0];
+
+      document.body.appendChild(el);
+      el.addEventListener('animationend', () => el.remove());
+    }
+  }
+
+  function burstFromElement(target, evt) {
+    // Use click coordinates if available, else element center
+    let x = evt?.clientX, y = evt?.clientY;
+    if (typeof x !== 'number' || typeof y !== 'number') {
+      const r = target.getBoundingClientRect();
+      x = r.left + r.width / 2;
+      y = r.top  + r.height / 2;
+    }
+    burstConfettiAt(x, y);
+  }
+
+  // Delegate clicks for any .confetti-click button inside #episode-actions
+  const area = document.getElementById('episode-actions');
+  if (!area) return;
+
+  const authed = area.getAttribute('data-authenticated') === 'true';
+
+  area.addEventListener('click', (e) => {
+    // Only for authenticated controls with the marker class
+    if (!authed) return;
+    const ctrl = e.target.closest('.confetti-click');
+    if (!ctrl) return;
+
+    // Fire immediately (visual feedback), regardless of async success
+    burstFromElement(ctrl, e);
+  });
+})();
+</script>
+
 
 <script>
   function showCopyToast() {

@@ -16,7 +16,7 @@
     <div class="col-12">
       <form method="post" action="{% provider_login_url 'google' process='login' %}">
         {% csrf_token %}
-        <button type="submit" class="btn btn-outline-light w-100">
+        <button type="submit" class="btn btn-outline-light w-100 btn-pulse-hover">
           <i class="fab fa-google me-2"></i> {% trans "Sign in with Google" %}
         </button>
       </form>
@@ -24,7 +24,7 @@
     <div class="col-12">
       <form method="post" action="{% provider_login_url 'twitter' process='login' %}">
         {% csrf_token %}
-        <button type="submit" class="btn btn-outline-light w-100">
+        <button type="submit" class="btn btn-outline-light w-100 btn-pulse-hover">
           <i class="fab fa-x me-2"></i> {% trans "Sign in with X" %}
         </button>
       </form>
@@ -32,7 +32,7 @@
     <div class="col-12">
       <form method="post" action="{% provider_login_url 'github' process='login' %}">
         {% csrf_token %}
-        <button type="submit" class="btn btn-outline-light w-100">
+        <button type="submit" class="btn btn-outline-light w-100 btn-pulse-hover">
           <i class="fab fa-github me-2"></i> {% trans "Sign in with GitHub" %}
         </button>
       </form>
@@ -67,7 +67,7 @@
   {{ form.password.errors }}
 </div>
 
-    <button type="submit" class="btn btn-primary w-100">{% trans "Log In" %}</button>
+    <button type="submit" class="btn btn-primary w-100 btn-pulse-hover">{% trans "Log In" %}</button>
   </form>
 
   <p class="mt-3">
@@ -78,8 +78,6 @@
   </p>
 </div>
 
-{# Font Awesome (if not already loaded in base) #}
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
 <style>
   /* High-contrast toggle for both themes */

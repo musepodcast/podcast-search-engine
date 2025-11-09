@@ -43,7 +43,7 @@
               {# Follow (Favorites) #}
               <button id="follow-btn"
                       data-channel-id="{{ channel.id }}"
-                      class="follow-btn {% if has_followed_channel %}btn-following{% else %}btn-follow{% endif %}{% if not is_authenticated %} is-guest{% endif %}"
+                      class="follow-btn confetti-click {% if has_followed_channel %}btn-following{% else %}btn-follow{% endif %}{% if not is_authenticated %} is-guest{% endif %}"
                       {% if not is_authenticated %}aria-disabled="true" tabindex="-1" title="{% trans 'Sign in to add favorites' %}"{% else %}
                       title="{% if has_followed_channel %}{% trans 'Remove from Favorites' %}{% else %}{% trans 'Add to Favorites' %}{% endif %}"{% endif %}>
                 {% if has_followed_channel %}
@@ -57,7 +57,7 @@
               {# Notifications #}
               <button id="notify-btn"
                       data-channel-id="{{ channel.id }}"
-                      class="notify-btn {% if receive_notifications %}btn-notification-active{% else %}btn-notification{% endif %}{% if not is_authenticated %} is-guest{% endif %}"
+                      class="notify-btn confetti-click {% if receive_notifications %}btn-notification-active{% else %}btn-notification{% endif %}{% if not is_authenticated %} is-guest{% endif %}"
                       {% if not is_authenticated %}aria-disabled="true" tabindex="-1" title="{% trans 'Sign in to enable notifications' %}"{% else %}
                       title="{% if receive_notifications %}{% trans 'Remove from Notifications' %}{% else %}{% trans 'Add to Notifications' %}{% endif %}"{% endif %}>
                 {% if receive_notifications %}
@@ -113,7 +113,7 @@
            placeholder="{% trans 'Search episodes in this channel…' %}"
            value="{{ request.GET.q|default:'' }}"
            autocomplete="off" required>
-    <button class="btn btn-primary" type="submit">{% trans "Search" %}</button>
+    <button class="btn btn-primary btn-pulse-hover" type="submit">{% trans "Search" %}</button>
   </div>
 </form>
 
@@ -322,6 +322,7 @@
 </script>
 
 
+
 <!-- CSS for clamping the episode description -->
 <style>
     .description-clamp {
@@ -351,7 +352,8 @@
     .total-views,
     .favorites-count,
     .notifications-count,
-    .channel-rating-info {
+    .channel-rating-info,
+    .total-episodes {
       font-size: 1.25rem;
       color: var(--list-text);      /* was #e3e6e8 */
       margin-right: 0.5em;
@@ -646,6 +648,62 @@ if (ratingContainer) {
     }
     return false;
   }
+</script>
+
+<script>
+window.MuseConfetti = (function(){
+  const COLORS = ['#EFD469','#0ABAB5','#9929EA','#FF6B6B','#4ECDC4','#FFD166','#06D6A0','#118AB2'];
+  function burstAt(x,y,count=24){
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    for(let i=0;i<count;i++){
+      const el=document.createElement('i');
+      el.className='confetti-piece';
+      el.style.left=x+'px'; el.style.top=y+'px';
+      const ang=Math.random()*Math.PI*2, dist=50+Math.random()*90;
+      const dx=Math.cos(ang)*dist, dy=Math.sin(ang)*dist*-1;
+      el.style.setProperty('--dx',dx.toFixed(1)+'px');
+      el.style.setProperty('--dy',dy.toFixed(1)+'px');
+      el.style.setProperty('--rot',(Math.random()*540-270).toFixed(0)+'deg');
+      el.style.setProperty('--dur',(600+Math.random()*500).toFixed(0)+'ms');
+      el.style.background=COLORS[(Math.random()*COLORS.length)|0];
+      document.body.appendChild(el);
+      el.addEventListener('animationend',()=>el.remove());
+    }
+  }
+  function burstFromEl(el, evt){
+    let x=evt?.clientX, y=evt?.clientY;
+    if (typeof x!=='number' || typeof y!=='number'){
+      const r=el.getBoundingClientRect();
+      x=r.left+r.width/2; y=r.top+r.height/2;
+    }
+    burstAt(x,y);
+  }
+  return { burstAt, burstFromEl };
+})();
+</script>
+
+<script>
+(function(){
+  const area = document.getElementById('channel-actions');
+  if (!area) return;
+
+  const authed = area.getAttribute('data-authenticated') === 'true';
+  if (!authed) return; // do nothing for guests
+
+  // Confetti on follow/notify (elements marked with .confetti-click)
+  area.addEventListener('click', (e)=>{
+    const ctrl = e.target.closest('.confetti-click');
+    if (ctrl) {
+      window.MuseConfetti?.burstFromEl(ctrl, e);
+      return; // don’t double-fire when star also matches
+    }
+    // Confetti on star rating clicks
+    const star = e.target.closest('#rating-container .star-icon');
+    if (star) {
+      window.MuseConfetti?.burstFromEl(star, e);
+    }
+  });
+})();
 </script>
 
  

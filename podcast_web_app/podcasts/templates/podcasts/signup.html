@@ -10,7 +10,7 @@
     <div class="mb-4">
       <form method="post" action="{% provider_login_url 'google' process='signup' %}">
         {% csrf_token %}
-        <button type="submit" class="btn btn-outline-light w-100">
+        <button type="submit" class="btn btn-outline-light w-100 btn-pulse-hover">
           <i class="fab fa-google me-2"></i> Sign up with Google
         </button>
       </form>
@@ -18,7 +18,7 @@
     <div class="mb-4">
       <form method="post" action="{% provider_login_url 'twitter' process='signup' %}">
         {% csrf_token %}
-        <button type="submit" class="btn btn-outline-light w-100">
+        <button type="submit" class="btn btn-outline-light w-100 btn-pulse-hover">
           <i class="fab fa-x me-2"></i> Sign up with X
         </button>
       </form>
@@ -26,7 +26,7 @@
     <div class="mb-4">
       <form method="post" action="{% provider_login_url 'github' process='signup' %}">
         {% csrf_token %}
-        <button type="submit" class="btn btn-outline-light w-100">
+        <button type="submit" class="btn btn-outline-light w-100 btn-pulse-hover">
           <i class="fab fa-github me-2"></i> {% trans "Sign up with GitHub" %}
         </button>
       </form>
@@ -158,13 +158,11 @@
         </label>
       </div>
 
-      <button type="submit" class="btn btn-primary w-100">{% trans "Sign Up" %}</button>
+      <button type="submit" class="btn btn-primary w-100 btn-pulse-hover">{% trans "Sign Up" %}</button>
     </form>
   </div>
 </div>
 
-<!-- Include Font Awesome (if not already in your base template) -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
 <!-- Privacy Notice Modal (unchanged) -->
 <div class="modal fade" id="privacyModal" tabindex="-1" aria-labelledby="privacyModalLabel" aria-hidden="true">

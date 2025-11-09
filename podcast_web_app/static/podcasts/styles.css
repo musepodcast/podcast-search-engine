@@ -652,7 +652,19 @@ Create Account button uses theme tokens
   background-color: var(--list-bg);
   color: var(--list-text);
   border: 1px solid var(--border-color);
+  max-height: 590px;          /* fixed height */
+  overflow-y: auto;
+  overscroll-behavior: contain; /* prevents body scroll on touchpads */
 }
+/* Optional: use viewport-based height on small screens */
+@media (max-width: 576px) {
+  .episode-sort .dropdown-menu,
+  .channel-sort .dropdown-menu {
+    max-height: 47vh;         /* breathe on phones */
+  }
+}
+
+
 .episode-sort .dropdown-item,
 .channel-sort .dropdown-item { color: var(--list-text); }
 .episode-sort .dropdown-item:hover,
@@ -673,6 +685,247 @@ Create Account button uses theme tokens
 .channel-sort .dropdown-header { color: var(--muted-color); }
 .episode-sort .dropdown-divider,
 .channel-sort .dropdown-divider { border-top-color: var(--border-color); }
+
+/* ============================
+   Sort button: magnetic hover
+   ============================ */
+.sort-magnetic {
+  position: relative;
+  overflow: visible;               /* allow particles to breathe */
+  transform: translateZ(0);        /* promote to its own layer */
+  will-change: transform, box-shadow;
+  transition: transform .18s ease, box-shadow .18s ease;
+  z-index: 2;                      /* keep above dropdown menu border */
+}
+
+/* Base look inherits from your .btn-outline-light tokens.
+   We only add a subtle hover ring that matches your theme. */
+.sort-magnetic:hover,
+.sort-magnetic:focus-visible {
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--focus-outline) 35%, transparent);
+}
+
+/* Particle field container (already in your theme as a pattern) */
+.sort-magnetic .particles-field {
+  position: absolute;
+  inset: -80%;                     /* extend field around the button */
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .25s ease;
+  z-index: -1;                     /* sits behind the button face */
+}
+
+.sort-magnetic:hover .particles-field { opacity: 1; }
+
+/* Particle dots (theme aware) */
+.sort-magnetic .particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--list-text) 85%, transparent);
+  opacity: .9;
+  filter: drop-shadow(0 0 2px color-mix(in srgb, var(--list-text) 45%, transparent));
+}
+
+/* Float animation (uses per-particle CSS vars --x/--y) */
+@keyframes sortParticleFloat {
+  0%   { transform: translate(var(--x), var(--y)) scale(0); }
+  50%  { transform: translate(calc(var(--x) * -1), calc(var(--y) * -1)) scale(1); }
+  100% { transform: translate(var(--x), var(--y)) scale(0); }
+}
+
+/* Optional: reduce motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .sort-magnetic { transition: none; }
+  .sort-magnetic .particles-field { transition: none; }
+  .sort-magnetic .particle { animation: none !important; }
+}
+
+/* ============================
+   Click ripple (subtle, themed)
+   ============================ */
+.sort-magnetic {
+  --ripple-color: color-mix(in srgb, var(--link-color) 35%, transparent);
+}
+.sort-magnetic .ripple {
+  position: absolute;
+  border-radius: 999px;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  width: 12px; height: 12px;
+  background: radial-gradient(circle, var(--ripple-color) 0%, transparent 60%);
+  opacity: .35;
+  animation: sortRipple .5s ease-out forwards;
+  z-index: 3;
+}
+@keyframes sortRipple {
+  to {
+    opacity: 0;
+    width: 220px;
+    height: 220px;
+  }
+}
+
+/* ================================
+   Header nav: animated underlines
+   ================================ */
+
+/* Theme colors for the underline gradient */
+:root {
+  --nav-underline-start: var(--accent);      /* light theme start */
+  --nav-underline-end:   var(--link-color);  /* light theme end   */
+}
+:root[data-theme="dark"] {
+  --nav-underline-start: var(--highlight-bg-color);
+  --nav-underline-end:   var(--bs-link-color);
+}
+
+/* Base nav link override: keep no built-in underline */
+header nav a.nav-underline {
+  position: relative;
+  text-decoration: none !important;   /* beat your header nav a:hover underline */
+  display: inline-block;
+}
+
+/* Make sure default hover rule doesn't add text-decoration */
+header nav a.nav-underline:hover { text-decoration: none; }
+
+/* Underlines (top + bottom) using pseudo elements */
+header nav a.nav-underline::after,
+header nav a.nav-underline::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, var(--nav-underline-start), var(--nav-underline-end));
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform .35s ease-out;
+  will-change: transform;
+}
+
+/* Bottom line sits a touch below text baseline */
+header nav a.nav-underline::after { bottom: -0.25em; }
+
+/* Top line sits a touch above cap height; grows from the left */
+header nav a.nav-underline::before {
+  top: -0.25em;
+  transform-origin: left;
+}
+
+/* Hover/focus states: animate both lines in */
+header nav a.nav-underline:hover::after,
+header nav a.nav-underline:hover::before,
+header nav a.nav-underline:focus-visible::after,
+header nav a.nav-underline:focus-visible::before {
+  transform: scaleX(1);
+}
+
+/* Optional: color shift on hover for the text itself (keeps your theme look) */
+header nav a.nav-underline:hover,
+header nav a.nav-underline:focus-visible {
+  color: var(--bs-link-color);
+  outline: none;
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  header nav a.nav-underline::after,
+  header nav a.nav-underline::before {
+    transition: none;
+  }
+}
+
+/* Pulse animation — only when hovered/focused */
+.btn-pulse-hover {
+  /* avoid layout thrash while animating */
+  will-change: transform;
+}
+
+.btn-pulse-hover:hover,
+.btn-pulse-hover:focus-visible {
+  animation: pulse 1.2s ease-in-out infinite;
+}
+
+/* Slight press on click */
+.btn-pulse-hover:active {
+  transform: scale(0.97);
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .btn-pulse-hover:hover,
+  .btn-pulse-hover:focus-visible {
+    animation: none;
+    transform: none;
+  }
+}
+
+/* Reuse your existing keyframes (or keep this if not already present) */
+@keyframes pulse {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(1.06); }
+  100% { transform: scale(1); }
+}
+
+/* One-off wobble on hover/focus */
+.btn-wobble-once:hover,
+.btn-wobble-once:focus-visible {
+  animation: wobble 0.8s ease both 1;
+}
+
+/* Press feedback (optional) */
+.btn-wobble-once:active {
+  transform: translateX(0) scale(0.98);
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .btn-wobble-once:hover,
+  .btn-wobble-once:focus-visible {
+    animation: none;
+    transform: none;
+  }
+}
+
+/* If you don't already have wobble keyframes in your CSS, include this: */
+@keyframes wobble {
+  0%, 100% { transform: translateX(0) rotate(0); }
+  15% { transform: translateX(-25%) rotate(-5deg); }
+  30% { transform: translateX(20%) rotate(3deg); }
+  45% { transform: translateX(-15%) rotate(-3deg); }
+  60% { transform: translateX(10%) rotate(2deg); }
+  75% { transform: translateX(-5%) rotate(-1deg); }
+}
+
+/* ============================
+   Click confetti (subtle, themed)
+   ============================ */
+.confetti-piece {
+  position: fixed;             /* placed at click point */
+  width: 7px;
+  height: 10px;
+  border-radius: 2px;
+  pointer-events: none;
+  opacity: 0;
+  transform: translate(-50%, -50%) rotate(0deg);
+  animation: confetti-pop var(--dur, 800ms) ease-out forwards;
+}
+
+@keyframes confetti-pop {
+  0%   { opacity: 0; transform: translate(-50%, -50%) translate(0, 0)   rotate(0deg); }
+  10%  { opacity: 1; }
+  100% { opacity: 0; transform: translate(-50%, -50%) translate(var(--dx, 0), var(--dy, -90px)) rotate(var(--rot, 180deg)); }
+}
+
+/* Respect user preference */
+@media (prefers-reduced-motion: reduce) {
+  .confetti-piece { animation: none; }
+}
+
+
 
 
 /* =========================================================

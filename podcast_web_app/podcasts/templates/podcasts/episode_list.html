@@ -8,8 +8,9 @@
 
   <!-- Sort control (top-right) -->
   <div class="dropdown episode-sort">
-    <button class="btn btn-outline-light dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+    <button class="btn btn-outline-light dropdown-toggle sort-magnetic" type="button" data-bs-toggle="dropdown" aria-expanded="false">
       {% trans "Sort:" %} {{ current_sort_label }}
+      <span class="particles-field" aria-hidden="true"></span>
     </button>
     <ul class="dropdown-menu dropdown-menu-end">
 
@@ -209,6 +210,82 @@ document.addEventListener("DOMContentLoaded", function(){
   });
 });
 </script>
+
+<script>
+(function () {
+  const MAG_STRENGTH = 18;      // px pull at center
+  const MAG_RADIUS   = 140;     // px effective radius
+
+  // Initialize every sort-magnetic button
+  document.querySelectorAll('.sort-magnetic').forEach((btn) => {
+    const field = btn.querySelector('.particles-field');
+    if (!field) return;
+
+    // Build particles once
+    const particleCount = 42;  // tweak as you like (mobile perf: 24–36)
+    for (let i = 0; i < particleCount; i++) {
+      const p = document.createElement('div');
+      p.className = 'particle';
+      p.style.left = `${Math.random() * 100}%`;
+      p.style.top  = `${Math.random() * 100}%`;
+      p.style.setProperty('--x', `${(Math.random() * 200 - 100).toFixed(1)}px`);
+      p.style.setProperty('--y', `${(Math.random() * 200 - 100).toFixed(1)}px`);
+      p.style.animation = `sortParticleFloat ${(0.9 + Math.random() * 1.8).toFixed(2)}s infinite`;
+      field.appendChild(p);
+    }
+
+    // Magnetic hover
+    let raf = null;
+    const reset = () => { btn.style.transform = 'translate3d(0,0,0)'; };
+
+    const onMove = (e) => {
+      const r = btn.getBoundingClientRect();
+      const cx = r.left + r.width / 2;
+      const cy = r.top  + r.height / 2;
+      const dx = e.clientX - cx;
+      const dy = e.clientY - cy;
+      const dist = Math.hypot(dx, dy);
+
+      if (dist > MAG_RADIUS) {
+        if (!btn.matches(':hover')) reset();
+        return;
+      }
+
+      // Pull strength tapers with distance
+      const power = 1 - (dist / MAG_RADIUS);
+      const offsetX = (dx / dist) * MAG_STRENGTH * power;
+      const offsetY = (dy / dist) * MAG_STRENGTH * power;
+
+      // throttle with RAF for smoothness
+      if (!raf) {
+        raf = requestAnimationFrame(() => {
+          btn.style.transform = `translate3d(${offsetX.toFixed(1)}px, ${offsetY.toFixed(1)}px, 0)`;
+          raf = null;
+        });
+      }
+    };
+
+    const onEnter = () => { /* particles fade-in handled by CSS */ };
+    const onLeave = () => { reset(); };
+
+    btn.addEventListener('mousemove', onMove);
+    btn.addEventListener('mouseenter', onEnter);
+    btn.addEventListener('mouseleave', onLeave);
+
+    // Click ripple (doesn't interfere with dropdown)
+    btn.addEventListener('click', (e) => {
+      const r = btn.getBoundingClientRect();
+      const ripple = document.createElement('span');
+      ripple.className = 'ripple';
+      ripple.style.left = `${e.clientX - r.left}px`;
+      ripple.style.top  = `${e.clientY - r.top }px`;
+      btn.appendChild(ripple);
+      ripple.addEventListener('animationend', () => ripple.remove());
+    }, { capture: false, passive: true });
+  });
+})();
+</script>
+
 
 <style>
 .description-clamp {

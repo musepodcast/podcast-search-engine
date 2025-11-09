@@ -8,9 +8,9 @@
     <p>{% trans "Your memory is short, the Muse's is not..." %}</p>
     <p>{% trans "Search to find your thoughts!" %}</p>
     <div class="mt-4">
-        <a href="{% url 'podcasts:login' %}" class="btn btn-primary me-2">{% trans "Login" %}</a>
-        <a href="{% url 'podcasts:channel_list' %}" class="btn btn-secondary me-2">{% trans "Guest" %}</a>
-        <a href="{% url 'podcasts:signup' %}" class="btn btn-create-account">{% trans "Create Account" %}</a>
+        <a href="{% url 'podcasts:login' %}" class="btn btn-primary btn-pulse-hover me-2">{% trans "Login" %}</a>
+        <a href="{% url 'podcasts:channel_list' %}" class="btn btn-secondary btn-pulse-hover me-2">{% trans "Guest" %}</a>
+        <a href="{% url 'podcasts:signup' %}" class="btn btn-create-account btn-pulse-hover me-2">{% trans "Create Account" %}</a>
         
     </div>
 </div>
@@ -33,7 +33,7 @@
     </a>
   </p>
    <p>
-    <a href="https://ko-fi.com/R6R01HY3FF" target="_blank" rel="noopener">
+    <a href="https://ko-fi.com/R6R01HY3FF" target="_blank" rel="noopener" class="btn-wobble-once" style="display:inline-block;">
       <img src="https://ko-fi.com/img/githubbutton_sm.svg"
            alt="Support me on Ko-fi"
            style="vertical-align:middle;">
@@ -104,6 +104,8 @@
     </tbody>
   </table>
 </div>
+
+
 
 
 {% endblock %}
