@@ -651,6 +651,19 @@
   </a>
 </div>
 
+<!-- GitHub disabled toast (site-wide) -->
+<div id="github-toast" class="guest-toast" role="status" aria-live="polite" style="display:none">
+  <span>
+    {% trans "Our GitHub is temporarily unavailable. Please visit our up-to-date repository on GitLab instead." %}
+  </span>
+  <a class="guest-toast-link"
+     href="https://gitlab.com/musepodcast-group/podcast-search-engine-project"
+     target="_blank" rel="noopener">
+    {% trans "Open GitLab" %}
+  </a>
+</div>
+
+
 <footer class="pt-2 pb-5 text-center">
   <div class="contact-me mb-2">
     <span class="d-block mb-1">{% trans "Contact Me" %}</span>
@@ -674,8 +687,10 @@
 
       <!-- GitHub -->
       <li class="mx-2">
-        <a href="https://github.com/musepodcast/podcast-search-engine" target="_blank" rel="noopener"
-           aria-label="GitHub">
+        <a href="#"
+          class="github-block"
+          rel="noopener"
+          aria-label="GitHub">
           <i class="fa-brands fa-github"></i>
         </a>
       </li>
@@ -708,6 +723,44 @@
   <!-- after bootstrap.bundle.min.js -->
   <script src="https://cdn.jsdelivr.net/npm/mark.js/dist/mark.min.js"></script>
   
+  <script>
+    (function () {
+      // Only target the GitHub icon in the footer social list
+      const ghLink  = document.querySelector('footer .social-links a.github-block, footer .social-links a[aria-label="GitHub"]');
+      const toastEl = document.getElementById('github-toast');
+      if (!ghLink || !toastEl) return;
+
+      function showGithubToast() {
+        toastEl.classList.add('guest-toast-show');
+        clearTimeout(showGithubToast._t);
+        showGithubToast._t = setTimeout(() => {
+          toastEl.classList.remove('guest-toast-show');
+        }, 2800);
+      }
+
+      function block(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        showGithubToast();
+      }
+
+      // Mouse + middle click
+      ghLink.addEventListener('click', block);
+      ghLink.addEventListener('auxclick', block);
+
+      // Keyboard accessibility
+      ghLink.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') block(e);
+      });
+
+      // Present like a button for AT users
+      ghLink.setAttribute('role', 'button');
+      ghLink.setAttribute('tabindex', '0');
+      ghLink.setAttribute('title', '{{ _("GitHub temporarily unavailable. Click to see GitLab link.") }}');
+    })();
+  </script>
+
+
   <script>
     // language selector
     (function(){
