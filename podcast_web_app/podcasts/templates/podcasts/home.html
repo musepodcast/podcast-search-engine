@@ -24,8 +24,10 @@
       <img src="https://img.shields.io/badge/License-GPLv3-blue.svg" alt="{% trans 'License: GPL v3' %}" />
     </a>
     &nbsp;|&nbsp;
-    <a href="https://github.com/musepodcast/podcast-search-engine" target="_blank" rel="noopener" class="text-decoration-none">
-      <i class="fab fa-github fa-lg" aria-label="GitHub"></i>
+    <a href="#" rel="noopener"
+      class="text-decoration-none github-block"
+      aria-label="GitHub (temporarily unavailable)">
+      <i class="fab fa-github fa-lg" aria-hidden="true"></i>
     </a>
     &nbsp;|&nbsp; 
     <a href="https://gitlab.com/musepodcast-group/podcast-search-engine-project" target="_blank" rel="noopener" class="text-decoration-none">
@@ -105,6 +107,49 @@
   </table>
 </div>
 
+<!-- GitHub disabled toast -->
+<div id="github-toast" class="guest-toast" role="status" aria-live="polite" style="display:none">
+  <span>
+    {% trans "Our GitHub is temporarily unavailable. Please visit our up-to-date repository on GitLab instead." %}
+  </span>
+  <a class="guest-toast-link" href="https://gitlab.com/musepodcast-group/podcast-search-engine-project" target="_blank" rel="noopener">
+    {% trans "Open GitLab" %}
+  </a>
+</div>
+
+<script>
+  (function () {
+    const ghLink  = document.querySelector('.github-block');
+    const toastEl = document.getElementById('github-toast');
+    if (!ghLink || !toastEl) return;
+
+    function showGithubToast() {
+      toastEl.classList.add('guest-toast-show');
+      clearTimeout(showGithubToast._t);
+      showGithubToast._t = setTimeout(() => {
+        toastEl.classList.remove('guest-toast-show');
+      }, 2800);
+    }
+
+    // Block mouse clicks (left/middle) and keyboard activation
+    function block(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      showGithubToast();
+    }
+
+    ghLink.addEventListener('click', block);
+    ghLink.addEventListener('auxclick', block);   // middle-click
+    ghLink.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') block(e);
+    });
+
+    // Make it accessible as a button-ish thing
+    ghLink.setAttribute('role', 'button');
+    ghLink.setAttribute('tabindex', '0');
+    ghLink.setAttribute('title', '{{ _("GitHub temporarily unavailable. Click to see GitLab link.") }}');
+  })();
+</script>
 
 
 
