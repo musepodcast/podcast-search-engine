@@ -30,7 +30,15 @@ import torch.nn.functional as F
 from pathlib import Path
 import argparse
 import glob
+import gc
+import psutil
 
+
+os.environ.setdefault("OMP_NUM_THREADS", "1")
+os.environ.setdefault("MKL_NUM_THREADS", "1")
+os.environ.setdefault("NUMEXPR_NUM_THREADS", "1")
+
+FFMPEG_BIN = r"C:\ffmpeg\ffmpeg.exe"
 
 BASE = Path(__file__).parent            # …\podcast_news
 # where all your artifacts now live
@@ -134,53 +142,68 @@ def best_sentence_by_noun_density(text: str) -> str:
     # fallback: longest reasonable sentence
     return max(sents, key=lambda s: len(s))
 
+def resolve_ffmpeg_bin():
+    # Prefer explicit env var if you set it
+    env_bin = os.environ.get("FFMPEG_BIN")
+    if env_bin and os.path.isfile(env_bin):
+        return env_bin
+
+    # Then the constant you defined in code
+    try:
+        from __main__ import FFMPEG_BIN as _FFMPEG_BIN
+        if _FFMPEG_BIN and os.path.isfile(_FFMPEG_BIN):
+            return _FFMPEG_BIN
+    except Exception:
+        pass
+
+    # Finally, try PATH
+    which = shutil.which("ffmpeg")
+    if which and os.path.isfile(which):
+        return which
+
+    raise FileNotFoundError(
+        "ffmpeg not found. Set FFMPEG_BIN to a valid full path or add ffmpeg to PATH."
+    )
 
 def convert_to_5min_wav_chunks(input_path, output_dir, chunk_length_ms=5*60*1000):
-    """
-    Split input audio to 5-minute PCM WAV chunks **on disk** using ffmpeg -f segment,
-    avoiding loading the whole file into memory.
-
-    Returns: list[str] of chunk file paths in time order.
-    """
     input_path = str(Path(input_path))
     out_dir = Path(output_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
 
+    if not os.path.isfile(input_path):
+        raise FileNotFoundError(f"Input audio not found: {input_path}")
+
     base = Path(input_path).stem
-    # 5 minutes in seconds
+    pattern = str(out_dir / f"{base}_chunk%03d.wav")
     seg_seconds = max(1, int(round(chunk_length_ms / 1000.0)))
 
-    # Output pattern (zero-padded indices)
-    pattern = str(out_dir / f"{base}_chunk%03d.wav")
+    ffmpeg_bin = resolve_ffmpeg_bin()
 
-    # -f segment = split by time
-    # -segment_time N = N seconds per file
-    # -map a:0 = first audio stream
-    # -c:a pcm_s16le = 16-bit PCM WAV
-    # -ar 16000 / -ac 1 are optional if your ASR prefers mono 16 kHz
     cmd = [
-        "ffmpeg", "-hide_banner", "-loglevel", "error",
+        ffmpeg_bin, "-hide_banner", "-loglevel", "error",
         "-y", "-nostdin",
         "-i", input_path,
         "-map", "0:a:0",
         "-c:a", "pcm_s16le",
-        # "-ar", "16000",
-        # "-ac", "1",
+        "-ac", "1",
+        "-ar", "16000",
         "-f", "segment",
         "-segment_time", str(seg_seconds),
         pattern
     ]
 
-    try:
-        subprocess.run(cmd, check=True)
-    except FileNotFoundError:
-        raise RuntimeError("ffmpeg not found. Put ffmpeg in PATH or set absolute path.")
-    except subprocess.CalledProcessError as e:
-        raise RuntimeError(f"ffmpeg segmenting failed: {e}") from e
+    kwargs = {"check": True, "close_fds": True}
+    if os.name == "nt":
+        kwargs["creationflags"] = 0x08000000  # CREATE_NO_WINDOW
 
-    # Collect the outputs; glob sorts lexicographically, which matches %03d order
-    chunks = sorted(glob.glob(str(out_dir / f"{base}_chunk*.wav")))
-    return chunks
+    try:
+        subprocess.run(cmd, **kwargs)
+    except FileNotFoundError:
+        # This means ffmpeg_bin itself was wrong (CreateProcess failed)
+        raise FileNotFoundError(f"ffmpeg executable not found at: {ffmpeg_bin}")
+    return sorted(glob.glob(str(out_dir / f"{base}_chunk*.wav")))
+
+
 
 # A helper function to split long texts and then average the embeddings.
 def get_embedding(model, text, max_tokens=256):
@@ -1306,6 +1329,9 @@ def process_entry(entry, channel_transcript_dir, download_dir, channel_title, pi
     - Generate chapter titles from the transcript segments
     - Save a combined JSON with all transcripts, segments, and chapters
     """
+    chunks_since_refresh = 0
+    REFRESH_EVERY = 80  # keep 5-min chunks; refresh every ~6.5 hours if busy
+
     try:
         # Extract episode metadata
         raw_title = entry.get('title', 'Unknown Title')
@@ -1319,7 +1345,7 @@ def process_entry(entry, channel_transcript_dir, download_dir, channel_title, pi
         # Check if transcript already exists
         if os.path.exists(transcript_filename):
             logging.info(f"Transcript already exists: {transcript_filename}")
-            return  # Skip to the next entry
+            return None, pipeline  # Skip to the next entry
 
         # Download audio file if it doesn't exist
         if not os.path.exists(mp3_file_path):
@@ -1327,7 +1353,7 @@ def process_entry(entry, channel_transcript_dir, download_dir, channel_title, pi
             audio_file = download_audio(entry, download_dir, mp3_filename)
             if not audio_file:
                 logging.error(f"Failed to download audio for entry: {sanitized_title}")
-                return  # Skip to the next entry
+                return None, pipeline  # Skip to the next entry
         else:
             logging.info(f"MP3 file already exists: {mp3_file_path}")
 
@@ -1339,7 +1365,7 @@ def process_entry(entry, channel_transcript_dir, download_dir, channel_title, pi
         )
         if not chunks:
             logging.error(f"Failed to split {mp3_file_path} into WAV chunks. Skipping.")
-            return
+            return None, pipeline
 
 
         combined_data = {
@@ -1381,6 +1407,40 @@ def process_entry(entry, channel_transcript_dir, download_dir, channel_title, pi
                     combined_data['segments'].append(adjusted_segment)
             else:
                 logging.error(f"Failed to retrieve transcription data from chunk: {chunk}")
+
+            # --- memory hygiene between chunks ---
+            gc.collect()
+            if torch.cuda.is_available():
+                torch.cuda.empty_cache()
+            # --- soft guard: refresh pipeline if process RSS climbs too high ---
+            try:
+                rss_gb = psutil.Process().memory_info().rss / (1024**3)
+                if rss_gb > 6.0:  # tune for your box (16 GB system → 6–7 GB is a good tripwire)
+                    logging.warning(f"RSS {rss_gb:.2f} GB > 6.0 GB; re-initializing diarization pipeline")
+                    try:
+                        del pipeline
+                    except Exception:
+                        pass
+                    gc.collect()
+                    if torch.cuda.is_available():
+                        torch.cuda.empty_cache()
+                    pipeline = initialize_diarization_pipeline()
+                    chunks_since_refresh = 0
+            except Exception:
+                pass
+            # --- scheduled refresh of the diarization pipeline to avoid fragmentation ---
+            chunks_since_refresh += 1
+            if chunks_since_refresh >= REFRESH_EVERY:
+                logging.info("Refreshing diarization pipeline to avoid long-run fragmentation…")
+                try:
+                    del pipeline
+                except Exception:
+                    pass
+                gc.collect()
+                if torch.cuda.is_available():
+                    torch.cuda.empty_cache()
+                pipeline = initialize_diarization_pipeline()   # rebinds local 'pipeline' for the remaining chunks
+                chunks_since_refresh = 0
 
             cumulative_time += chunk_length_ms / 1000.0  # Increment by 5 minutes
 
@@ -1523,7 +1583,7 @@ def process_entry(entry, channel_transcript_dir, download_dir, channel_title, pi
             logging.info(f"Combined data saved successfully: {transcript_filename}")
         except Exception as e:
             logging.error(f"Failed to save combined data: {e}", exc_info=True)
-            return
+            return None, pipeline
 
         # Add chapters to the transcript with summarization
         add_chapters_to_transcript(transcript_filename, config)
@@ -1545,9 +1605,10 @@ def process_entry(entry, channel_transcript_dir, download_dir, channel_title, pi
         except Exception as e:
             logging.warning(f"Could not delete MP3 file: {e}")
 
-        return combined_data
+        return combined_data, pipeline
     except Exception as e:
         logging.error(f"An error occurred while processing entry '{sanitized_title}': {e}", exc_info=True)
+        return None, pipeline
 
 # ── 3a) Legacy Main Function — NOW deadline-aware and testable ──────────────
 def run_cycle(feeds_filename='master_rss.json', limit_per_feed=0,
@@ -1647,7 +1708,7 @@ def run_cycle(feeds_filename='master_rss.json', limit_per_feed=0,
                 time.sleep(simulate_entry_secs)
 
             logging.debug(f"Starting processing for entry: {entry.get('title', 'No Title')}")
-            process_entry(
+            result, diarization_pipeline = process_entry(
                 entry, channel_transcript_dir, download_dir, channel_title,
                 diarization_pipeline, config, feed_data, channel_summary, channel_author
             )
