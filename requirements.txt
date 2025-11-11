@@ -103,6 +103,7 @@ preshed @ file:///C:/Users/dev-admin/perseverance-python-buildout/croot/preshed_
 primePy==1.3
 propcache==0.2.0
 protobuf==5.28.2
+psutil==7.1.3
 psycopg2==2.9.9
 psycopg2-binary==2.9.9
 pyannote.audio==3.3.2
