@@ -4,38 +4,36 @@
 {% block content %}
 
 <!-- TOP-CENTERED IMAGE SECTION WITH THEME GRADIENT -->
-<div style="background: linear-gradient(to bottom, #29214d, var(--background-color));
-            padding: 2rem 0; text-align: center;">
+<!-- TOP-CENTERED IMAGE SECTION WITH THEME GRADIENT -->
+<div class="episode-hero">
   {% if episode.image_url %}
     <img
       src="{{ episode.image_url }}"
       alt="{{ episode.episode_title }}"
-      style="display:block; margin:0 auto; max-width:85%; max-height:40vh;
-             width:auto; height:auto; border-radius:10px;"
+      class="episode-hero-img"
     />
   {% elif episode.channel.channel_image_url %}
     <img
       src="{{ episode.channel.channel_image_url }}"
       alt="{{ episode.episode_title }}"
-      style="display:block; margin:0 auto; max-width:85%; max-height:40vh;
-             width:auto; height:auto; border-radius:10px;"
+      class="episode-hero-img"
     />
   {% else %}
     <img
       src="{{ placeholder }}"
       alt="{{ episode.episode_title }}"
-      style="display:block; margin:0 auto; max-width:85%; max-height:40vh;
-             width:auto; height:auto; border-radius:10px;"
+      class="episode-hero-img"
     />
   {% endif %}
 </div>
+
 
 <!-- DETAILS / CONTROLS -->
 <div class="section-container mb-4">
   <div class="row">
     <div class="col-auto">
       {% if episode.channel.channel_image_url %}
-        <img src="{{ episode.channel.channel_image_url }}" alt="{{ episode.channel.channel_title }}" style="width: 175px; height: 175px; border-radius: 6px;">
+        <img src="{{ episode.channel.channel_image_url }}" alt="{{ episode.channel.channel_title }}" class="episode-thumb">
       {% else %}
         <p><em>{% trans "No channel image" %}</em></p>
       {% endif %}
@@ -218,27 +216,41 @@
 
   {% if episode.audio_url %}
     <!-- AUDIO ROW: custom skip on left • native controls in middle • rate on right -->
-    <div id="audioRow" class="audio-row{% if episode.description %} mt-2{% endif %}">
-      <div class="audio-left">
-        <button type="button" id="back15" class="chip-btn" title="{% trans 'Rewind 15 seconds' %}" aria-label="{% trans 'Back 15 seconds' %}">
-          <i class="fa-solid fa-rotate-left"></i> -15s
-        </button>
-        <button type="button" id="fwd15" class="chip-btn" title="{% trans 'Fast Forward 15 seconds' %}" aria-label="{% trans 'Forward 15 seconds' %}">
-          +15s <i class="fa-solid fa-rotate-right"></i>
-        </button>
-      </div>
+<div class="audio-mini">
+  <audio id="episodeAudio" class="sr-only" preload="metadata">
+    <source src="{{ episode.audio_url }}" type="audio/mpeg">
+  </audio>
 
-      <audio id="episodeAudio" controls class="flex-audio" aria-label="{% trans 'Episode audio player' %}">
-        <source src="{{ episode.audio_url }}" type="audio/mpeg">
-        {% trans "Your browser does not support the audio element." %}
-      </audio>
-
-      <div class="audio-right">
-        <button type="button" id="slower" class="chip-btn" title="{% trans 'Slower Audio' %}" aria-label="{% trans 'Decrease speed' %}">–</button>
-        <span id="rateBadge" class="rate-badge" title="{% trans 'Click to reset to 1×' %}" role="button" tabindex="0" aria-label="{% trans 'Playback speed; click to reset to 1×' %}">1.0×</span>
-        <button type="button" id="faster" class="chip-btn" title="{% trans 'Faster Audio' %}" aria-label="{% trans 'Increase speed' %}">+</button>
+  <div class="audio-controls">
+    <!-- ROW 1 -->
+    <div class="ac-row ac-row--top">
+      <input id="seek" class="seek-range" type="range" min="0" max="100" step="0.1" value="0" />
+      <div class="time-wrap" aria-live="polite" aria-atomic="true">
+        <span id="currentTime" class="mono">0:00</span>
+        <span class="separator">/</span>
+        <span id="totalTime" class="mono">0:00</span>
       </div>
     </div>
+
+    <!-- ROW 2 -->
+    <div class="ac-row ac-row--bottom">
+      <button type="button" id="slower" class="chip-btn">–</button>
+      <span id="rateBadge" class="rate-badge" role="button" tabindex="0">1.0×</span>
+      <button type="button" id="faster" class="chip-btn">+</button>
+
+      <button type="button" id="back15" class="chip-btn"><i class="fa-solid fa-rotate-left"></i>-15s</button>
+      <button type="button" id="playPause" class="chip-btn"><i class="fa-solid fa-play"></i></button>
+      <button type="button" id="fwd15" class="chip-btn">+15s<i class="fa-solid fa-rotate-right"></i></button>
+
+      <button type="button" id="muteBtn" class="chip-btn"><i class="fa-solid fa-volume-high"></i></button>
+      <input id="volume" class="volume-range" type="range" min="0" max="1" step="0.01" value="1" />
+      <span id="volPct" class="vol-pct" aria-live="polite" aria-atomic="true">100%</span>
+
+    </div>
+  </div>
+</div>
+
+
   {% else %}
     <p class="mt-2"><strong>{% trans "Audio:" %}</strong> <em>{% trans "No audio available" %}</em></p>
   {% endif %}
@@ -343,294 +355,175 @@
   <span>{% trans "Copied to clipboard" %}</span>
 </div>
 
+<script>
+(function () {
+  // Light & dark palettes (theme-aware)
+  const light = ['#29214d', '#9929EA', '#0ABAB5', '#118AB2', '#FF6B6B'];
+  const dark  = ['#093145', '#EFD469', '#4ECDC4', '#83a7ff', '#06D6A0'];
+
+  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  const palette = isDark ? dark : light;
+
+  const pick = palette[Math.floor(Math.random() * palette.length)];
+  // Set the CSS variable used by .episode-hero
+  document.documentElement.style.setProperty('--hero-top', pick);
+})();
+</script>
 
 
-<!-- PAGE-LOCAL THEME CSS (controls only) -->
-<style>
-  /* ---------- Counters beside the icons ---------- */
-  .comments-count,
-  .total-views,
-  .bookmarks-count,
-  .episode-rating-info, 
-  .downloads-count,
-  .shares-count {
-    font-size: 1.15rem;
-    font-weight: 600;
-    color: var(--text-color) !important; /* dark in light mode, light in dark */
-    margin-right: .5rem;
+
+<script>
+(function () {
+  const audio      = document.getElementById('episodeAudio');
+  if (!audio) return;
+
+  // Elements
+  const playPause  = document.getElementById('playPause');
+  const seek       = document.getElementById('seek');
+  const curEl      = document.getElementById('currentTime');
+  const totEl      = document.getElementById('totalTime');
+  const vol        = document.getElementById('volume');
+  const muteBtn    = document.getElementById('muteBtn');
+  const volPct     = document.getElementById('volPct');   // NEW
+
+  // Storage keys
+  const LS_RATE = 'muse_audio_playback_rate';
+  const LS_VOL  = 'muse_audio_volume';
+  const LS_MUT  = 'muse_audio_muted';
+
+  // --- helpers ---
+  const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
+  const fmtTime = (s) => {
+    if (!Number.isFinite(s)) return '0:00';
+    const h = Math.floor(s/3600);
+    const m = Math.floor((s%3600)/60);
+    const sec = Math.floor(s%60);
+    return h ? `${h}:${String(m).padStart(2,'0')}:${String(sec).padStart(2,'0')}`
+             : `${m}:${String(sec).padStart(2,'0')}`;
+  };
+  function setPlayIcon(isPlaying){
+    const i = playPause?.querySelector('i');
+    if (!i) return;
+    i.classList.toggle('fa-play', !isPlaying);
+    i.classList.toggle('fa-pause', !!isPlaying);
+    playPause.title = isPlaying ? "{{ _('Pause') }}" : "{{ _('Play') }}";
+    playPause.setAttribute('aria-label', isPlaying ? "{{ _('Pause') }}" : "{{ _('Play') }}");
+  }
+  function setVolumeIcon(){
+    const i = muteBtn?.querySelector('i');
+    if (!i) return;
+    if (audio.muted || audio.volume === 0) {
+      i.className = 'fa-solid fa-volume-xmark';
+      muteBtn.title = "{{ _('Unmute') }}";
+      muteBtn.setAttribute('aria-label', "{{ _('Unmute') }}");
+    } else if (audio.volume < 0.5) {
+      i.className = 'fa-solid fa-volume-low';
+      muteBtn.title = "{{ _('Mute') }}";
+      muteBtn.setAttribute('aria-label', "{{ _('Mute') }}");
+    } else {
+      i.className = 'fa-solid fa-volume-high';
+      muteBtn.title = "{{ _('Mute') }}";
+      muteBtn.setAttribute('aria-label', "{{ _('Mute') }}");
+    }
+  }
+  // NEW: render volume percentage
+  function renderVolPct(){
+    if (!volPct) return;
+    const pct = audio.muted ? 0 : Math.round((audio.volume || 0) * 100);
+    volPct.textContent = pct + '%';
   }
 
-  /* Channel link uses site link color */
-  .channel-link {
-    color: var(--link-color);
-    font-weight: 600;
-    text-decoration: none;
-  }
-  .channel-link:hover {
-    text-decoration: underline;
-    filter: brightness(90%);
-  }
+  // --- init duration/volume when known ---
+  function onMeta(){
+    if (Number.isFinite(audio.duration)) {
+      totEl.textContent = fmtTime(audio.duration);
+    }
+    // restore rate
+    try {
+      const savedRate = parseFloat(localStorage.getItem(LS_RATE));
+      if (savedRate) audio.playbackRate = savedRate;
+    } catch(_) {}
 
-  /* Default icons (outside chips) follow theme text color */
-  .section-container i.fa-solid,
-  .section-container i.fa-regular {
-    color: var(--text-color);
+    // restore volume + mute
+    try {
+      const savedVol = parseFloat(localStorage.getItem(LS_VOL));
+      if (Number.isFinite(savedVol)) audio.volume = clamp(savedVol, 0, 1);
+      const savedMut = localStorage.getItem(LS_MUT);
+      audio.muted = savedMut === '1';
+    } catch(_) {}
+    if (vol) vol.value = String(audio.volume);
+    setVolumeIcon();
+    renderVolPct(); // NEW
   }
+  if (audio.readyState >= 1) onMeta();
+  audio.addEventListener('loadedmetadata', onMeta, { once: true });
 
-  /* ---------- Stars (inactive vs active) ---------- */
-  :root { /* light */
-    --star-inactive: #131516;
-    --star-active:   #9929EA;  /* gold */
-  }
-  :root[data-theme="dark"] { /* dark */
-    --star-inactive: #e3e6e8;
-    --star-active:   #EFD469;  /* gold */
-  }
-  #episode-rating-container .star-icon { color: var(--star-inactive) !important; }
-  #episode-rating-container .star-active { color: var(--star-active) !important; }
+  // --- play/pause ---
+  playPause?.addEventListener('click', () => {
+    if (audio.paused) audio.play().catch(()=>{});
+    else audio.pause();
+  });
+  audio.addEventListener('play',  () => setPlayIcon(true));
+  audio.addEventListener('pause', () => setPlayIcon(false));
 
-  /* ---------- Chips (bookmark + comment) ---------- */
-  /* Light: blue chip + yellow text/icon. Dark: yellow chip + deep-blue text/icon. */
-  :root {
-    --chip-bg:     #093145;  /* blue */
-    --chip-text:   #EFD469;  /* yellow */
-    --chip-border: color-mix(in srgb, var(--chip-bg) 85%, black 15%);
+  // --- time + seek sync ---
+  let seekDrag = false;
+  function updateTimeUI(){
+    if (!seekDrag) {
+      const p = audio.duration ? (audio.currentTime / audio.duration) * 100 : 0;
+      seek.value = String(clamp(p, 0, 100));
+    }
+    curEl.textContent = fmtTime(audio.currentTime);
+    if (Number.isFinite(audio.duration)) totEl.textContent = fmtTime(audio.duration);
   }
-  :root[data-theme="dark"] {
-    --chip-bg:     #EFD469;  /* yellow */
-    --chip-text:   #093145;  /* deep blue */
-    --chip-border: color-mix(in srgb, var(--chip-bg) 75%, black 25%);
-  }
+  audio.addEventListener('timeupdate', updateTimeUI);
+  audio.addEventListener('seeked', updateTimeUI);
 
-  .btn-bookmark,
-  .btn-bookmarked,
-  .btn-comment {
-    background-color: var(--chip-bg) !important;
-    color: var(--chip-text) !important;
-    border: 1px solid var(--chip-border) !important;
-    border-radius: 999px !important;     /* keep the bubble look */
-    padding: 0.4em 0.8em;
-    font-size: 0.9rem;
-    line-height: 1;
-    cursor: pointer;
-    transition: filter .15s ease;
-  }
-  /* Icons inside chips match the chip text color */
-  .btn-bookmark i,
-  .btn-bookmarked i,
-  .btn-comment i {
-    color: currentColor !important;
-  }
-  .btn-bookmark:hover,
-  .btn-bookmarked:hover,
-  .btn-comment:hover {
-    filter: brightness(.95);
-  }
+  seek?.addEventListener('input', () => {
+    seekDrag = true;
+    if (!Number.isFinite(audio.duration)) return;
+    const p = parseFloat(seek.value) / 100;
+    audio.currentTime = clamp(p * audio.duration, 0, audio.duration);
+    curEl.textContent = fmtTime(audio.currentTime);
+  });
+  seek?.addEventListener('change', () => { seekDrag = false; });
 
-  /* Make the inline eye icon (not inside a chip) follow text color */
-  .d-flex.align-items-center.gap-2 > .fa-eye { color: var(--text-color) !important; }
+  // --- volume + mute ---
+  vol?.addEventListener('input', () => {
+    audio.volume = clamp(parseFloat(vol.value)||0, 0, 1);
+    if (audio.volume > 0 && audio.muted) audio.muted = false;
+    setVolumeIcon();
+    renderVolPct(); // NEW
+    try { localStorage.setItem(LS_VOL, String(audio.volume)); } catch(_) {}
+    try { localStorage.setItem(LS_MUT, audio.muted ? '1':'0'); } catch(_) {}
+  });
+  muteBtn?.addEventListener('click', () => {
+    audio.muted = !audio.muted;
+    setVolumeIcon();
+    renderVolPct(); // NEW
+    try { localStorage.setItem(LS_MUT, audio.muted ? '1':'0'); } catch(_) {}
+  });
 
-  /* ---------- Comment modal (kept to your dark styling) ---------- */
-  .comment-modal {
-    position: fixed; z-index: 1100; inset: 0; overflow: auto;
-    background-color: rgba(0,0,0,0.4);
-  }
-  .comment-modal .modal-content {
-    background-color: #093145;
-    margin: 5% auto; padding: 20px; border: 1px solid #888;
-    width: 80%; max-width: 600px; border-radius: 8px;
-  }
-  .close { color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer; }
-  .comment { border-bottom: 1px solid #444; padding: 8px 0; }
-  .comment-meta { font-size: 0.85rem; }
-  .comment-meta .username { font-size: 1rem; color: #e3e6e8; font-weight: bold; }
-  .comment-meta .time { color: #b3b3b3; }
-  .comment-text { font-size: 0.9rem; color: #e3e6e8; margin-top: 4px; }
-  .comment-reactions button {
-    background: none; border: none; cursor: pointer;
-    color: #e3e6e8; margin-right: 10px; font-size: 1rem;
-  }
-  .comment-reactions span { color: #e3e6e8; font-size: 1rem; margin-left: 4px; }
-  #new-comment { position: relative; }
-  #mention-suggestions {
-    display: none; position: absolute; top: calc(100% + 4px); left: 10px;
-    width: 30%; max-height: 150px; overflow-y: auto;
-    background-color: #093145; border: 1px solid #888; border-radius: 4px; z-index: 100;
-    color: #0b5ed7;
-  }
-  #mention-suggestions .suggestion-item { padding: 8px 12px; cursor: pointer; color: #0b5ed7; }
-  #mention-suggestions .suggestion-item:hover { background-color: rgba(255,255,255,0.1); }
-  .mention-highlight { color: #0b5ed7; font-weight: bold; }
+  // Reflect external volume changes (e.g., OS media keys)
+  audio.addEventListener('volumechange', renderVolPct); // NEW
 
-  #jump-menu {
-  display:none; position:fixed; z-index:1200;
-  pointer-events: auto; /* <— ensure it's interactive */
-}
+  // --- keyboard: Space toggles play when not typing ---
+  document.addEventListener('keydown', (e) => {
+    const a = document.activeElement;
+    const inText = a && (a.tagName==='INPUT' || a.tagName==='TEXTAREA' || a.isContentEditable);
+    if (inText) return;
+    if (e.code === 'Space') {
+      e.preventDefault();
+      if (audio.paused) audio.play().catch(()=>{});
+      else audio.pause();
+    }
+    // Shift+←/→ and [ / ] handled elsewhere
+  });
 
-  #jump-menu .jump-menu-card {
-  background: var(--background-color);
-  color: var(--text-color);
-  border: 1px solid color-mix(in srgb, var(--text-color) 20%, transparent);
-  border-radius: 10px;
-  box-shadow: 0 10px 24px rgba(0,0,0,.28);
-  padding: .5rem;
-  display: grid;
-  gap: .5rem;
-  min-width: 160px;
-}
+})();
+</script>
 
-  #jump-menu .jump-menu-btn {
-    background: var(--chip-bg);
-    color: var(--chip-text);
-    border: 1px solid var(--chip-border);
-    border-radius: 8px;
-    padding: .5rem .75rem;
-    font-weight: 600;
-    cursor: pointer;
-  }
-  #jump-menu .jump-menu-btn:hover { filter: brightness(.95); }
 
-  /* existing highlight class from earlier step */
-  .segment--active {
-    outline: 2px solid var(--chip-text);
-    background: color-mix(in srgb, var(--chip-bg) 15%, transparent);
-    border-radius: 8px;
-    transition: background .25s ease;
-  }
-
-  /* make timestamps look clickable */
-  .segment .time { cursor: pointer; text-decoration: underline dotted; }
-  .segment .time:hover { text-decoration: underline; }
-
-  /* highlight the audio player briefly so users see where they landed */
-  .audio-highlight {
-    outline: 2px solid var(--chip-text);
-    border-radius: 8px;
-    animation: audioPulse 1.2s ease 2;
-  }
-  @keyframes audioPulse {
-    0%   { box-shadow: 0 0 0 0 rgba(0,0,0,0.0); }
-    50%  { box-shadow: 0 0 0 6px color-mix(in srgb, var(--chip-bg) 35%, transparent); }
-    100% { box-shadow: 0 0 0 0 rgba(0,0,0,0.0); }
-  }
-
-  /* Row layout */
-  .audio-row {
-    display: flex;
-    align-items: center;
-    gap: .5rem;
-    flex-wrap: wrap;
-    margin-top: .5rem;
-  }
-
-  /* Left & right control clusters */
-  .audio-left,
-  .audio-right {
-    display: inline-flex;
-    align-items: center;
-    gap: .5rem;
-  }
-
-  /* Push speed controls toward the system volume on the right */
-  .audio-right { margin-left: auto; }
-
-  /* Audio element grows in the middle */
-  .flex-audio {
-    flex: 1 1 420px;
-    min-width: 260px;
-  }
-
-  /* ——— MATCH SITE “CHIP” STYLE ——— */
-  .chip-btn {
-    background: var(--chip-bg);
-    color: var(--chip-text);
-    border: 1px solid var(--chip-border);
-    border-radius: 999px;
-    padding: .45em .75em;
-    font-size: .95rem;
-    line-height: 1;
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    gap: .5rem;
-    transition: filter .15s ease, transform .03s ease;
-  }
-  /* Icons inside chip buttons should match the text color */
-  .audio-row .chip-btn i,
-  .audio-row .chip-btn svg {
-    color: currentColor !important;
-    fill: currentColor;    /* for SVG-based FA kits */
-    stroke: currentColor;  /* safety for some SVG sets */
-  }
-
-  /* If FA sets its own color on .fa-solid/.fa-regular, override it */
-  .audio-row .chip-btn .fa-solid,
-  .audio-row .chip-btn .fa-regular {
-    color: currentColor !important;
-  }
-  .chip-btn:hover { filter: brightness(.95); }
-  .chip-btn:active { transform: translateY(1px); }
-  .chip-btn:focus-visible {
-    outline: 2px solid var(--chip-text);
-    outline-offset: 2px;
-    border-radius: 12px;
-  }
-
-  /* Playback rate badge (clickable reset) */
-  .rate-badge {
-    background: color-mix(in srgb, var(--chip-bg) 15%, transparent);
-    color: var(--text-color);
-    border: 1px dashed color-mix(in srgb, var(--chip-border) 70%, transparent);
-    border-radius: 10px;
-    padding: .35em .55em;
-    font-weight: 700;
-    font-variant-numeric: tabular-nums;
-    cursor: pointer;
-    user-select: none;
-  }
-  .rate-badge:hover { filter: brightness(.98); }
-  .rate-badge:focus-visible {
-    outline: 2px solid var(--chip-text);
-    outline-offset: 2px;
-  }
-
-  /* Icon nudge for symmetry when text appears on one side */
-  .chip-btn i.fa-rotate-left { margin-right: .15rem; }
-  .chip-btn i.fa-rotate-right { margin-left: .15rem; }
-
-  /* Respect reduced motion */
-  @media (prefers-reduced-motion: reduce) {
-    .chip-btn { transition: none; }
-  }
-
-  /* Small screens: ensure nice wrapping */
-  @media (max-width: 520px) {
-    .audio-row { gap: .4rem; }
-    .flex-audio { min-width: 200px; }
-  }
-
-  /* IMPORTANT: keep native play/pause visible */
-  audio::-webkit-media-controls-play-button { display: inline-block !important; }
-
-  .auth-popup {
-    position: fixed;
-    top: 2rem;
-    right: 2rem;
-    background: rgba(0,0,0,.85);
-    color: #fff;
-    padding: .75rem 1.1rem;
-    border-radius: .6rem;
-    z-index: 9999;
-    transition: opacity .3s ease, transform .3s ease;
-    opacity: 0;
-    transform: translateY(-8px);
-  }
-  .auth-popup.show {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-</style>
 
 <script>
 (function () {

@@ -69,7 +69,20 @@
   /* toggles (checkbox/radio) */
   --control-accent: var(--accent);
   --control-focus-ring: color-mix(in srgb, var(--accent) 25%, transparent);
+
+    /* chips (light) */
+  --chip-bg:     #093145;
+  --chip-text:   #EFD469;
+  --chip-border: color-mix(in srgb, var(--chip-bg) 85%, black 15%);
+
+  /* rating stars (light) */
+  --star-inactive: #131516;
+  --star-active:   #9929EA;
+
+  /* default top color if JS hasn’t set one yet */
+  --hero-top: #29214d;
 }
+
 
 /* Dark */
 :root[data-theme="dark"] {
@@ -127,8 +140,20 @@
 
   --control-accent: var(--accent);
   --control-focus-ring: color-mix(in srgb, var(--accent) 25%, transparent);
-}
 
+    /* chips (dark) */
+  --chip-bg:     #EFD469;
+  --chip-text:   #093145;
+  --chip-border: color-mix(in srgb, var(--chip-bg) 75%, black 25%);
+
+  /* rating stars (dark) */
+  --star-inactive: #e3e6e8;
+  --star-active:   #EFD469;
+
+  /* an optional different default for dark */
+  --hero-top: #093145;
+
+}
 /* =========================================================
    GLOBAL ELEMENTS
    ========================================================= */
@@ -1026,6 +1051,391 @@ html, body { max-width: 100%; overflow-x: hidden; }
 .metadata-line{ font-size:.9rem; }
 .lang-select-btn { font-size: .9rem; max-width: 42vw; }
 .profile-btn { font-size: .9rem; padding: 1rem 1rem; max-width: 42vw; }
+
+/* =========================================================
+   EPISODE DETAIL PAGE
+   ========================================================= */
+/* ---------- Counters beside icons ---------- */
+.comments-count,
+.total-views,
+.bookmarks-count,
+.episode-rating-info,
+.downloads-count,
+.shares-count {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--text-color) !important;
+  margin-right: .5rem;
+}
+
+/* Channel link */
+.channel-link { color: var(--link-color); font-weight: 600; text-decoration: none; }
+.channel-link:hover { text-decoration: underline; filter: brightness(90%); }
+
+/* Default icons (outside chips) follow theme text color */
+.section-container i.fa-solid,
+.section-container i.fa-regular { color: var(--text-color); }
+
+/* ---------- Stars ---------- */
+#episode-rating-container .star-icon { color: var(--star-inactive) !important; }
+#episode-rating-container .star-active { color: var(--star-active) !important; }
+
+/* ---------- Chips (bookmark/comment basic buttons) ---------- */
+.btn-bookmark,
+.btn-bookmarked,
+.btn-comment {
+  background-color: var(--chip-bg) !important;
+  color: var(--chip-text) !important;
+  border: 1px solid var(--chip-border) !important;
+  border-radius: 999px !important;
+  padding: 0.4em 0.8em;
+  font-size: 0.9rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: filter .15s ease;
+}
+.btn-bookmark i,
+.btn-bookmarked i,
+.btn-comment i { color: currentColor !important; }
+.btn-bookmark:hover,
+.btn-bookmarked:hover,
+.btn-comment:hover { filter: brightness(.95); }
+
+/* Inline eye icon */
+.d-flex.align-items-center.gap-2 > .fa-eye { color: var(--text-color) !important; }
+
+/* ---------- Comment modal ---------- */
+.comment-modal {
+  position: fixed; z-index: 1100; inset: 0; overflow: auto;
+  background-color: rgba(0,0,0,0.4);
+}
+.comment-modal .modal-content {
+  background-color: #093145;
+  margin: 5% auto; padding: 20px; border: 1px solid #888;
+  width: 80%; max-width: 600px; border-radius: 8px;
+}
+.close { color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer; }
+.comment { border-bottom: 1px solid #444; padding: 8px 0; }
+.comment-meta { font-size: 0.85rem; }
+.comment-meta .username { font-size: 1rem; color: #e3e6e8; font-weight: bold; }
+.comment-meta .time { color: #b3b3b3; }
+.comment-text { font-size: 0.9rem; color: #e3e6e8; margin-top: 4px; }
+.comment-reactions button {
+  background: none; border: none; cursor: pointer;
+  color: #e3e6e8; margin-right: 10px; font-size: 1rem;
+}
+.comment-reactions span { color: #e3e6e8; font-size: 1rem; margin-left: 4px; }
+
+/* ---------- Jump menu ---------- */
+#jump-menu { display:none; position:fixed; z-index:1200; pointer-events: auto; }
+#jump-menu .jump-menu-card {
+  background: var(--background-color);
+  color: var(--text-color);
+  border: 1px solid color-mix(in srgb, var(--text-color) 20%, transparent);
+  border-radius: 10px;
+  box-shadow: 0 10px 24px rgba(0,0,0,.28);
+  padding: .5rem; display: grid; gap: .5rem; min-width: 160px;
+}
+#jump-menu .jump-menu-btn {
+  background: var(--chip-bg);
+  color: var(--chip-text);
+  border: 1px solid var(--chip-border);
+  border-radius: 8px;
+  padding: .5rem .75rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+#jump-menu .jump-menu-btn:hover { filter: brightness(.95); }
+
+/* Transcript highlight + clickable timestamps */
+.segment--active {
+  outline: 2px solid var(--chip-text);
+  background: color-mix(in srgb, var(--chip-bg) 15%, transparent);
+  border-radius: 8px;
+  transition: background .25s ease;
+}
+.segment .time { cursor: pointer; text-decoration: underline dotted; }
+.segment .time:hover { text-decoration: underline; }
+
+/* Audio player highlight (scroll cue) */
+.audio-highlight {
+  outline: 2px solid var(--chip-text);
+  border-radius: 8px;
+  animation: audioPulse 1.2s ease 2;
+}
+@keyframes audioPulse {
+  0% { box-shadow: 0 0 0 0 rgba(0,0,0,0.0); }
+  50% { box-shadow: 0 0 0 6px color-mix(in srgb, var(--chip-bg) 35%, transparent); }
+  100% { box-shadow: 0 0 0 0 rgba(0,0,0,0.0); }
+}
+
+/* ---------- Generic chip button (used in audio controls too) ---------- */
+.chip-btn {
+  background: var(--chip-bg);
+  color: var(--chip-text);
+  border: 1px solid var(--chip-border);
+  border-radius: 999px;
+  padding: .45em .75em;
+  font-size: .95rem;
+  line-height: 1;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  transition: filter .15s ease, transform .03s ease;
+}
+.chip-btn i,
+.chip-btn svg { color: currentColor !important; fill: currentColor; stroke: currentColor; }
+.chip-btn .fa-solid,
+.chip-btn .fa-regular { color: currentColor !important; }
+.chip-btn:hover { filter: brightness(.95); }
+.chip-btn:active { transform: translateY(1px); }
+.chip-btn:focus-visible {
+  outline: 2px solid var(--chip-text);
+  outline-offset: 2px;
+  border-radius: 12px;
+}
+.chip-btn i.fa-rotate-left { margin-right: .15rem; }
+.chip-btn i.fa-rotate-right { margin-left: .15rem; }
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) { .chip-btn { transition: none; } }
+
+/* ---------- Two-row audio layout ---------- */
+
+/* Mini container */
+.audio-mini {
+  background: color-mix(in srgb, var(--background-color) 86%, white 14%);
+  border: 1px solid color-mix(in srgb, var(--text-color) 16%, transparent);
+  border-radius: 12px;
+  padding: .6rem .8rem;
+  width: 100%;
+  overflow: hidden;
+}
+
+/* Screen-reader-only helper */
+.sr-only {
+  position: absolute !important;
+  width: 1px !important; height: 1px !important;
+  padding: 0 !important; margin: -1px !important;
+  overflow: hidden !important; clip: rect(0,0,0,0) !important;
+  white-space: nowrap !important; border: 0 !important;
+}
+
+/* Two rows */
+.audio-controls {
+  display: grid;
+  grid-template-rows: auto auto;
+  gap: .55rem;
+  width: 100%;
+}
+
+/* Row 1: seek fills, time fixed */
+.ac-row--top {
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+  width: 100%;
+}
+.seek-range {
+  flex: 1 1 auto;
+  min-width: 160px;
+  max-width: 100%;
+  accent-color: var(--chip-text);
+  background: transparent;
+}
+.time-wrap {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: baseline;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  opacity: .9;
+  min-width: 8.5ch; /* fits up to 99:59:59 */
+  text-align: right;
+}
+.time-wrap .mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+.separator { opacity: .6; margin: 0 .25rem; }
+
+/* Row 2: centered control strip */
+.ac-row--bottom {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: .5rem;
+  flex-wrap: nowrap;
+  text-align: center;
+}
+
+/* Chip buttons inside the mini (slightly smaller) */
+.audio-mini .chip-btn { padding: .38em .65em; font-size: .92rem; }
+
+/* Playback rate badge */
+.rate-badge {
+  background: color-mix(in srgb, var(--chip-bg) 15%, transparent);
+  color: var(--text-color);
+  border: 1px dashed color-mix(in srgb, var(--chip-border) 70%, transparent);
+  border-radius: 10px;
+  padding: .35em .55em;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+  user-select: none;
+}
+
+/* Volume slider + percentage */
+.volume-range {
+  flex: 0 1 120px; /* compact by default */
+  min-width: 90px;
+  max-width: 140px;
+  accent-color: var(--chip-text);
+  background: transparent;
+}
+.vol-pct {
+  flex: 0 0 auto;
+  margin-left: .25rem;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  opacity: .85;
+  text-align: right;
+  min-width: 4ch; /* fits '100%' */
+}
+
+/* Buttons stay natural */
+#back15, #fwd15, #playPause, #slower, #rateBadge, #faster, #muteBtn { flex: 0 0 auto; }
+
+/* Responsive tweaks */
+@media (min-width: 900px) {
+  .seek-range { min-width: 220px; }
+  .volume-range { flex-basis: 130px; max-width: 150px; }
+}
+@media (max-width: 560px) {
+  .ac-row--bottom { gap: .35rem; flex-wrap: nowrap; }
+  .audio-mini .chip-btn { padding: .3em .5em; font-size: .9rem; }
+  .rate-badge { font-size: .9rem; padding: .3em .45em; }
+  .seek-range { min-width: 140px; }
+  .time-wrap { font-size: .92rem; min-width: 8.5ch; }
+  .volume-range { flex-basis: 90px; min-width: 72px; max-width: 96px; }
+  .vol-pct { font-size: .9rem; }
+}
+@media (max-width: 420px) {
+  .ac-row--bottom { flex-wrap: wrap; row-gap: .35rem; }
+}
+
+/* Let the text column shrink properly in flex rows */
+.section-container .row > .col { min-width: 0; }
+
+/* Responsive square thumb that scales down below 1000px */
+.episode-thumb {
+  display: block;
+  aspect-ratio: 1 / 1;
+  width: clamp(88px, 14vw, 175px);
+  height: auto;                 /* aspect-ratio handles height */
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+/* Nudge smaller sooner on tighter viewports */
+@media (max-width: 1000px) {
+  .episode-thumb { width: clamp(72px, 12vw, 150px); }
+}
+@media (max-width: 768px) {
+  .episode-thumb { width: clamp(64px, 18vw, 120px); }
+}
+@media (max-width: 576px) {
+  .episode-thumb { width: 64px; }
+}
+
+.episode-hero {
+  background: linear-gradient(to bottom, var(--hero-top), var(--background-color));
+  padding: 2rem 0;
+  text-align: center;
+}
+
+.episode-hero-img {
+  display: block;
+  margin: 0 auto;
+  max-width: min(85%, 1100px);
+  max-height: 40vh;
+  width: auto;
+  height: auto;
+  border-radius: 10px;
+  object-fit: contain; /* keeps full image visible without distortion */
+}
+
+/* Optional: make the hero a bit tighter on very small screens */
+@media (max-width: 576px) {
+  .episode-hero { padding: 1.25rem 0; }
+  .episode-hero-img { max-width: 90%; max-height: 35vh; }
+}
+
+/* Episode actions: tighter layout on small widths */
+@media (max-width: 600px) {
+  /* keep the whole strip on one line and reduce global gap */
+  #episode-actions {
+    gap: .4rem !important;          /* was gap-3 (~1rem) */
+    flex-wrap: nowrap !important;
+  }
+
+  /* pair counts tighter to the icon/button before them */
+  #episode-actions .comments-count,
+  #episode-actions .total-views,
+  #episode-actions .bookmarks-count,
+  #episode-actions .episode-rating-info,
+  #episode-actions .downloads-count,
+  #episode-actions .shares-count {
+    font-size: 1rem;                /* was 1.15rem */
+    margin-right: .35rem;           /* smaller space after the number */
+    margin-left: -.25rem;           /* pull the count closer to its icon */
+    white-space: nowrap;
+  }
+
+  /* chips (bookmark/comment/download/share) a bit smaller */
+  #episode-actions .btn-bookmark,
+  #episode-actions .btn-bookmarked,
+  #episode-actions .btn-comment {
+    padding: .28em .5em !important;
+    font-size: .9rem !important;
+  }
+
+  /* star rating: slightly smaller + tighter spacing */
+  #episode-actions #episode-rating-container .star-icon {
+    font-size: 1rem;
+    margin: 0 .05rem;
+  }
+
+  /* the small "views" sub-row has its own gap — shrink it */
+  #episode-actions .d-flex.align-items-center.gap-2 {
+    gap: .25rem !important;
+  }
+
+  /* icon sizes inside this bar */
+  #episode-actions i.fa-solid,
+  #episode-actions i.fa-regular {
+    font-size: 1rem;
+  }
+
+  /* keep download/share icons compact too */
+  #episode-actions .fa-file-arrow-down,
+  #episode-actions .fa-share-nodes {
+    font-size: 1rem;
+  }
+}
+
+/* Optional: ultra-narrow fallback — allow wrap but keep it centered & tidy */
+@media (max-width: 430px) {
+  #episode-actions {
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    row-gap: .35rem !important;
+  }
+}
+
+
+
+
 /* =========================================================
    RESPONSIVE THUMBNAILS (episodes + channels)
    Desktop first (160px), then step down on smaller screens.
