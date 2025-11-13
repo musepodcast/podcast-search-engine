@@ -79,7 +79,63 @@
 </div>
 
 
+<style>
+  /* High-contrast toggle for both themes */
+  .toggle-password {
+    border-left: 1px solid rgba(255,255,255,0.25);
+    background: rgba(255,255,255,0.08);
+    color: #fff;
+  }
+  .toggle-password i { font-size: 1.15rem; line-height: 1; }
+  .toggle-password:hover { background: rgba(255,255,255,0.16); }
 
+  /* Light mode adjustments */
+  :root:not([data-theme="dark"]) .toggle-password {
+    border-left: 1px solid rgba(0,0,0,0.15);
+    background: rgba(0,0,0,0.05);
+    color: #212529;
+  }
+  :root:not([data-theme="dark"]) .toggle-password:hover {
+    background: rgba(0,0,0,0.1);
+  }
+  /* Make outline social buttons readable in LIGHT mode */
+  :root:not([data-theme="dark"]) .btn-outline-light {
+    /* darker text/border, subtle hover */
+    --bs-btn-color: var(--list-text);
+    --bs-btn-border-color: var(--border-color);
+    --bs-btn-hover-color: var(--list-text);
+    --bs-btn-hover-bg: var(--list-hover-bg);
+    --bs-btn-hover-border-color: var(--border-color);
+    --bs-btn-active-bg: var(--list-hover-bg);
+    --bs-btn-active-border-color: var(--border-color);
+    --bs-btn-disabled-color: var(--muted-color);
+    --bs-btn-disabled-border-color: var(--border-color);
+    box-shadow: none;
+  }
+  :root:not([data-theme="dark"]) .btn-outline-light:focus-visible {
+    outline: 2px solid var(--control-focus-ring);
+    outline-offset: 2px;
+  }
+
+  /* Optional: add subtle brand hints to the icons in LIGHT mode */
+  :root:not([data-theme="dark"]) .btn-outline-light .fa-google  { color: #24292f; }
+  :root:not([data-theme="dark"]) .btn-outline-light .fa-github  { color: #24292f; }
+  :root:not([data-theme="dark"]) .btn-outline-light .fa-x,
+  :root:not([data-theme="dark"]) .btn-outline-light .fa-x-twitter { color: #111; }
+
+  /* Keep dark mode as-is, just slightly nicer hover */
+  :root[data-theme="dark"] .btn-outline-light:hover {
+    background-color: rgba(255,255,255,0.16);
+}
+/* Hide Edge / IE built-in password reveal & clear buttons */
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+</style>
 
 <script>
 document.addEventListener("DOMContentLoaded", function () {
