@@ -1,6 +1,6 @@
 <!-- podcasts/templates/podcasts/channel_list.html -->
 {% extends 'podcasts/base.html' %}
-{% load i18n custom_filters %}
+{% load static i18n custom_filters %}
 {% block content %}
 
 <div class="d-flex align-items-center justify-content-between mb-3">
@@ -59,12 +59,16 @@
        style="text-decoration: none; border-radius: 6px;">
       <div class="row">
         <div class="col-auto">
-          {% if channel.channel_image_url %}
-            <img src="{{ channel.channel_image_url }}" alt="Image for {{ channel.channel_title }}"
-                 style="width: 170px; height: 170px; border-radius: 6px;">
-          {% else %}
-            <p><em>{% trans "No image available" %}</em></p>
-          {% endif %}
+          <img
+            src="{% if channel.channel_image_url %}
+                   {{ channel.channel_image_url }}
+                 {% else %}
+                   {% static 'podcasts/images/no-image.jpg' %}
+                 {% endif %}"
+            alt="Image for {{ channel.channel_title }}"
+            style="width: 170px; height: 170px; border-radius: 6px; object-fit: cover;"
+            onerror="this.onerror=null;this.src='{% static 'podcasts/images/no-image.jpg' %}';"
+          >
         </div>
         <div class="col" style="min-width: 0;">
           <h4 class="fw-bold">{{ channel.channel_title }}</h4>
@@ -138,7 +142,6 @@ document.addEventListener("DOMContentLoaded", function(){
       spinner.innerHTML = "<p>" + loadingMoreText + "</p>";
       page++;
 
-      // Preserve existing query params (like sort/dir) and add page & ajax
       const params = new URLSearchParams(window.location.search);
       params.set('page', page);
       params.set('ajax', '1');
@@ -181,16 +184,14 @@ document.addEventListener("DOMContentLoaded", function(){
 
 <script>
 (function () {
-  const MAG_STRENGTH = 18;      // px pull at center
-  const MAG_RADIUS   = 140;     // px effective radius
+  const MAG_STRENGTH = 18;
+  const MAG_RADIUS   = 140;
 
-  // Initialize every sort-magnetic button
   document.querySelectorAll('.sort-magnetic').forEach((btn) => {
     const field = btn.querySelector('.particles-field');
     if (!field) return;
 
-    // Build particles once
-    const particleCount = 42;  // tweak as you like (mobile perf: 24–36)
+    const particleCount = 42;
     for (let i = 0; i < particleCount; i++) {
       const p = document.createElement('div');
       p.className = 'particle';
@@ -202,7 +203,6 @@ document.addEventListener("DOMContentLoaded", function(){
       field.appendChild(p);
     }
 
-    // Magnetic hover
     let raf = null;
     const reset = () => { btn.style.transform = 'translate3d(0,0,0)'; };
 
@@ -219,12 +219,10 @@ document.addEventListener("DOMContentLoaded", function(){
         return;
       }
 
-      // Pull strength tapers with distance
       const power = 1 - (dist / MAG_RADIUS);
       const offsetX = (dx / dist) * MAG_STRENGTH * power;
       const offsetY = (dy / dist) * MAG_STRENGTH * power;
 
-      // throttle with RAF for smoothness
       if (!raf) {
         raf = requestAnimationFrame(() => {
           btn.style.transform = `translate3d(${offsetX.toFixed(1)}px, ${offsetY.toFixed(1)}px, 0)`;
@@ -233,14 +231,11 @@ document.addEventListener("DOMContentLoaded", function(){
       }
     };
 
-    const onEnter = () => { /* particles fade-in handled by CSS */ };
     const onLeave = () => { reset(); };
 
     btn.addEventListener('mousemove', onMove);
-    btn.addEventListener('mouseenter', onEnter);
     btn.addEventListener('mouseleave', onLeave);
 
-    // Click ripple (doesn't interfere with dropdown)
     btn.addEventListener('click', (e) => {
       const r = btn.getBoundingClientRect();
       const ripple = document.createElement('span');
@@ -254,9 +249,7 @@ document.addEventListener("DOMContentLoaded", function(){
 })();
 </script>
 
-
 <style>
-/* Clamp long summaries */
 .summary-clamp {
   display: -webkit-box;
   -webkit-line-clamp: 2;

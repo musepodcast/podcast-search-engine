@@ -4,41 +4,36 @@
 {% block content %}
 
 <!-- TOP-CENTERED IMAGE SECTION WITH THEME GRADIENT -->
-<!-- TOP-CENTERED IMAGE SECTION WITH THEME GRADIENT -->
 <div class="episode-hero">
-  {% if episode.image_url %}
-    <img
-      src="{{ episode.image_url }}"
-      alt="{{ episode.episode_title }}"
-      class="episode-hero-img"
-    />
-  {% elif episode.channel.channel_image_url %}
-    <img
-      src="{{ episode.channel.channel_image_url }}"
-      alt="{{ episode.episode_title }}"
-      class="episode-hero-img"
-    />
-  {% else %}
-    <img
-      src="{{ placeholder }}"
-      alt="{{ episode.episode_title }}"
-      class="episode-hero-img"
-    />
-  {% endif %}
+  <img
+    src="{% if episode.image_url %}
+           {{ episode.image_url }}
+         {% elif episode.channel.channel_image_url %}
+           {{ episode.channel.channel_image_url }}
+         {% else %}
+           {% static 'podcasts/images/no-image.jpg' %}
+         {% endif %}"
+    alt="{{ episode.episode_title }}"
+    class="episode-hero-img"
+    onerror="this.onerror=null;this.src='{% static 'podcasts/images/no-image.jpg' %}';"
+  />
 </div>
-
 
 <!-- DETAILS / CONTROLS -->
 <div class="section-container mb-4">
   <div class="row">
     <div class="col-auto">
-      {% if episode.channel.channel_image_url %}
-        <img src="{{ episode.channel.channel_image_url }}" alt="{{ episode.channel.channel_title }}" class="episode-thumb">
-      {% else %}
-        <p><em>{% trans "No channel image" %}</em></p>
-      {% endif %}
+      <img
+        src="{% if episode.channel.channel_image_url %}
+              {{ episode.channel.channel_image_url }}
+            {% else %}
+              {% static 'podcasts/images/no-image.jpg' %}
+            {% endif %}"
+        alt="{{ episode.channel.channel_title }}"
+        class="episode-thumb"
+        onerror="this.onerror=null;this.src='{% static 'podcasts/images/no-image.jpg' %}';"
+      >
     </div>
-
     <div class="col">
       <h2>{{ episode.episode_title }}</h2>
 

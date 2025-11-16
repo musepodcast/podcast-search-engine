@@ -8,18 +8,17 @@
       <!-- Image -->
       <div class="col-auto">
         <img
-        src="{% if episode.image_url %}
-               {{ episode.image_url }}
-             {% else %}
-               {{ episode.channel.channel_image_url }}
-             {% endif %}"
-        alt="{{ episode.episode_title }}"
-        style="width:160px; height:160px; border-radius:6px;"
-        onerror="
-          this.onerror=null;
-          this.src='{{ episode.channel.channel_image_url }}'||'{% static 'podcasts/images/no-image.jpg' %}';
-        "
-      >
+          src="{% if episode.image_url %}
+                {{ episode.image_url }}
+              {% elif episode.channel.channel_image_url %}
+                {{ episode.channel.channel_image_url }}
+              {% else %}
+                {% static 'podcasts/images/no-image.jpg' %}
+              {% endif %}"
+          alt="{{ episode.episode_title }}"
+          style="width:160px; height:160px; border-radius:6px; object-fit:cover;"
+          onerror="this.onerror=null;this.src='{% static 'podcasts/images/no-image.jpg' %}';"
+        >
       </div>
           <!-- Right Column: Episode title, metadata, aggregated info and description -->
           <div class="col" style="min-width: 0;">
