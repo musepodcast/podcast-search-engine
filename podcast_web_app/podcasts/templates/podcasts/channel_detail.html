@@ -1,26 +1,29 @@
 <!-- podcasts/templates/podcasts/channel_detail.html -->
 {% extends 'podcasts/base.html' %}
 {% load static i18n custom_filters %}
-{% static 'podcasts/images/no-image.jpg' as placeholder %}
+
 {% block content %}
 <!-- Channel Info Section -->
 <div id="channel-header" class="list-group-item mb-4" style="text-decoration: none; border-radius: 6px;">
     <div class="row">
-        <div class="col-auto">
-            {% if channel.channel_image_url %}
-            <img
+      <div class="col-auto">
+        {% if channel.channel_image_url %}
+          <img
             src="{{ channel.channel_image_url }}"
             alt="{{ channel.channel_title }}"
-            style="width:325px; height:325px; border-radius:6px;"
-            />
+            style="width:325px; height:325px; border-radius:6px; object-fit:cover;"
+            onerror="this.onerror=null;this.src='{% static 'podcasts/images/no-image.jpg' %}';"
+          >
         {% else %}
-            <img
-            src="{{ placeholder }}"
+          <img
+            src="{% static 'podcasts/images/no-image.jpg' %}"
             alt="{{ channel.channel_title }}"
-            style="width:325px; height:325px; border-radius:6px;"
-            />
+            style="width:325px; height:325px; border-radius:6px; object-fit:cover;"
+          >
         {% endif %}
-        </div>
+      </div>
+
+
         <div class="col">
             <h2>{{ channel.channel_title }}</h2>
             {% if channel.channel_author %}
@@ -127,20 +130,21 @@
        style="text-decoration: none; border-radius: 6px;">
       <div class="row">
         <div class="col-auto">
-            <img
-              src="{% if episode.image_url %}
-                    {{ episode.image_url }}
-                  {% else %}
-                    {{ episode.channel.channel_image_url }}
-                  {% endif %}"
-              alt="{{ episode.episode_title }}"
-              style="width:160px; height:160px; border-radius:6px;"
-              onerror="
-                this.onerror=null;
-                this.src='{{ episode.channel.channel_image_url }}'||'{% static 'podcasts/images/no-image.jpg' %}';
-              "
-            >
-          </div>
+          <img
+            src="{% if episode.image_url %}
+                  {{ episode.image_url }}
+                {% elif episode.channel.channel_image_url %}
+                  {{ episode.channel.channel_image_url }}
+                {% else %}
+                  {% static 'podcasts/images/no-image.jpg' %}
+                {% endif %}"
+            alt="{{ episode.episode_title }}"
+            style="width:160px; height:160px; border-radius:6px; object-fit:cover;"
+            onerror="this.onerror=null;this.src='{% static 'podcasts/images/no-image.jpg' %}';"
+          >
+        </div>
+
+
         <div class="col" style="min-width: 0;">
           <strong class="episode-title-clamp">{{ episode.episode_title }}</strong>
           <p class="d-flex flex-wrap align-items-center gap-2 mb-1" style="font-size: 0.9rem;">

@@ -982,6 +982,7 @@ class ChannelDetailView(DetailView):
     TITLE_BONUS   = 100
     PER_OCC_BONUS = 10
     STOP_WORDS    = {'the','a','an','of','in','and','or','to','so','for','on','at','by'}
+    TITLE_PHRASE_BONUS = 100  # exact phrase in title
 
     # ---------- helpers ----------
     def _tokenize(self, q: str):
@@ -1171,6 +1172,8 @@ class ChannelDetailView(DetailView):
         receive_notifications  = False
         channel_rating         = None
 
+
+
         # only touch ChannelInteraction for authenticated users
         if ctx['is_authenticated']:
             interaction, _ = ChannelInteraction.objects.get_or_create(
@@ -1236,6 +1239,7 @@ class ChannelDetailView(DetailView):
         page_num  = int(self.request.GET.get('page', 1))
         page_size = 10
 
+        tokens  = self._tokenize(q)
         # Anno subqueries
         lookup = OuterRef('episode') if lang not in ('en','en-us') else OuterRef('pk')
         bookmarks_sq = EpisodeInteraction.objects.filter(episode=lookup, bookmarked=True)\
@@ -1265,16 +1269,29 @@ class ChannelDetailView(DetailView):
         if q:
             # (1) title matches (within this channel)
             if lang in ('en','en-us'):
-                title_ids = set(
-                    base.episodes.filter(episode_title__icontains=q).values_list('id', flat=True)
-                )
+                # Load all titles for this channel in one go (per-channel is usually small)
+                title_rows = base.episodes.values('id', 'episode_title')
             else:
-                title_ids = set(
-                    EpisodeTranslations.objects.filter(
-                        episode__channel=base, language=lang, translated=True,
-                        episode_title__icontains=q
-                    ).values_list('episode_id', flat=True)
-                )
+                title_rows = EpisodeTranslations.objects.filter(
+                    episode__channel=base, language=lang, translated=True
+                ).values('episode_id', 'episode_title')
+
+            title_overlap_map = {}  # episode_id -> number of tokens that appear in the title
+            phrase_title_ids  = set()
+
+            for row in title_rows:
+                eid   = row.get('id') or row.get('episode_id')
+                ttext = (row['episode_title'] or '').lower()
+
+                # exact phrase match (contiguous substring of full query)
+                if q and q.lower() in ttext:
+                    phrase_title_ids.add(eid)
+
+                # count how many tokens appear anywhere in the title
+                overlap = sum(1 for tok in tokens if tok in ttext)
+                if overlap > 0:
+                    title_overlap_map[eid] = overlap
+
 
             # (2) transcript/episode ES matches → candidate set (keep your current retrieval)
             es_hits, epi_hits = [], []
@@ -1330,7 +1347,12 @@ class ChannelDetailView(DetailView):
             except Exception as e:
                 logger.error("ES retrieval failed: %s", e, exc_info=True)
 
-            candidate_ids = {eid for eid, _ in es_hits} | {eid for eid, _ in epi_hits}
+            candidate_ids = (
+                {eid for eid, _ in es_hits}
+                | {eid for eid, _ in epi_hits}
+                | set(phrase_title_ids)
+                | set(title_overlap_map.keys())
+            )
             if not candidate_ids:
                 paginator = Paginator(range(0), page_size)
                 try:
@@ -1340,16 +1362,23 @@ class ChannelDetailView(DetailView):
                 ctx['episodes'] = []
                 return ctx
 
-            # (3) NEW RANKING: count occurrences per episode, then 100 + 10*k
-            tokens  = self._tokenize(q)
-            occ_map = self._occurrence_counts(candidate_ids, tokens)  # {eid: count}
 
+            # (3) NEW RANKING: count occurrences per episode, then 100 + 10*k
+            occ_map = self._occurrence_counts(candidate_ids, tokens)  # {eid: count}
             score_map = {}
             for eid in candidate_ids:
-                occ   = int(occ_map.get(eid, 0))
-                score = self.PER_OCC_BONUS * occ
-                if eid in title_ids:
-                    score += self.TITLE_BONUS
+                occ = int(occ_map.get(eid, 0))
+
+                # transcript contribution
+                score = self.PER_OCC_BONUS * occ  # 10 * occurrences
+
+                # title contributions
+                overlap = title_overlap_map.get(eid, 0)
+                score += overlap * self.TITLE_BONUS  # e.g. 3 matching words => +120
+
+                if eid in phrase_title_ids:
+                    score += self.TITLE_PHRASE_BONUS  # strong boost if full query phrase appears
+
                 score_map[eid] = score
 
             # (4) sort: score desc, pub_date desc; paginate; annotate

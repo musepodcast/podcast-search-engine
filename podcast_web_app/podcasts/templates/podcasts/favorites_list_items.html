@@ -1,54 +1,64 @@
-{% load i18n custom_filters %}
+<!-- podcasts/templates/podcasts/favorites_list_items.html -->
+{% load static i18n custom_filters %}
+
 {% for channel in channels %}
   <a 
-      href="{% url 'podcasts:channel_detail' sanitized_channel_title=channel.sanitized_channel_title %}" 
-      class="list-group-item list-group-item-action mb-2"
-      style="text-decoration: none; border-radius: 6px;">
-      <div class="row">
-          <div class="col-auto">
-              {% if channel.channel_image_url %}
-                  <img src="{{ channel.channel_image_url }}" alt="Image for {{ channel.channel_title }}" style="width: 170px; height: 170px; border-radius: 6px;">
-              {% else %}
-                  <p><em>{% trans "No image available" %}</em></p>
-              {% endif %}
-          </div>
-          <div class="col">
-              <h4 class="fw-bold">{{ channel.channel_title }}</h4>
-              {% if channel.channel_author %}
-                  <p class="text-muted mb-1">{% trans "by" %} {{ channel.channel_author }}</p>
-              {% endif %}
-              {% if channel.channel_summary %}
-                  <p class="summary-clamp mb-0">{{ channel.channel_summary }}</p>
-              {% endif %}
-              <!-- New Info Container for aggregated channel data -->
-              <div class="d-flex align-items-center flex-wrap mt-2">
-                    <span class="d-flex align-items-center me-3" title="{% trans 'Favorites' %}">
-                        <i class="fa-solid fa-heart" style="font-size: 1rem; margin-right: 0.25rem;"></i>
-                        {{ channel.favorites_count|default:"0"|number_format }}
-                    </span>
-                    <span class="d-flex align-items-center me-3" title="{% trans 'Notifications' %}">
-                        <i class="fa-solid fa-bell" style="font-size: 1rem; margin-right: 0.25rem;"></i>
-                        {{ channel.notifications_count|default:"0"|number_format }}
-                    </span>
-                    <span class="d-flex align-items-center me-3" title="{% trans 'Channel Rating' %}">
-                        <i class="fa-solid fa-star" style="font-size: 1rem; margin-right: 0.25rem;"></i>
-                        {% if channel.avg_rating %}
-                            {{ channel.avg_rating|floatformat:1 }} ({{ channel.rating_count|number_format }})
-                        {% else %}
-                            N/A
-                        {% endif %}
-                    </span>
-                    <span class="d-flex align-items-center me-3" title="{% trans 'Total Views' %}">
-                        <i class="fa-solid fa-eye" style="font-size: 1rem; margin-right: 0.25rem;"></i>
-                        {{ channel.total_views|default:"0"|number_format }}
-                    </span>
-                    <span class="d-flex align-items-center me-3" title="{% trans 'Total episodes' %}">
-                        <i class="fa-solid fa-podcast" style="font-size: 1rem; margin-right: 0.25rem;"></i>
-                        {{ channel.episode_count|default:"0" }}
-                    </span>
-                </div>
-                <!-- End new info container -->
-          </div>
+    href="{% url 'podcasts:channel_detail' sanitized_channel_title=channel.sanitized_channel_title %}" 
+    class="list-group-item list-group-item-action mb-2"
+    style="text-decoration: none; border-radius: 6px;">
+    <div class="row">
+      <div class="col-auto">
+        <img
+          src="{% if channel.channel_image_url %}
+                 {{ channel.channel_image_url }}
+               {% else %}
+                 {% static 'podcasts/images/no-image.jpg' %}
+               {% endif %}"
+          alt="Image for {{ channel.channel_title }}"
+          style="width: 170px; height: 170px; border-radius: 6px; object-fit: cover;"
+          onerror="this.onerror=null;this.src='{% static 'podcasts/images/no-image.jpg' %}';"
+        >
       </div>
+      <div class="col">
+        <h4 class="fw-bold">{{ channel.channel_title }}</h4>
+
+        {% if channel.channel_author %}
+          <p class="text-muted mb-1">
+            {% trans "by" %} {{ channel.channel_author }}
+          </p>
+        {% endif %}
+
+        {% if channel.channel_summary %}
+          <p class="summary-clamp mb-0">{{ channel.channel_summary }}</p>
+        {% endif %}
+
+        <div class="d-flex align-items-center flex-wrap mt-2">
+          <span class="d-flex align-items-center me-3" title="{% trans 'Favorites' %}">
+            <i class="fa-solid fa-heart" style="font-size: 1rem; margin-right: 0.25rem;"></i>
+            {{ channel.favorites_count|default:"0"|number_format }}
+          </span>
+          <span class="d-flex align-items-center me-3" title="{% trans 'Notifications' %}">
+            <i class="fa-solid fa-bell" style="font-size: 1rem; margin-right: 0.25rem;"></i>
+            {{ channel.notifications_count|default:"0"|number_format }}
+          </span>
+          <span class="d-flex align-items-center me-3" title="{% trans 'Channel Rating' %}">
+            <i class="fa-solid fa-star" style="font-size: 1rem; margin-right: 0.25rem;"></i>
+            {% if channel.avg_rating %}
+              {{ channel.avg_rating|floatformat:1 }} ({{ channel.rating_count|number_format }})
+            {% else %}
+              N/A
+            {% endif %}
+          </span>
+          <span class="d-flex align-items-center me-3" title="{% trans 'Total Views' %}">
+            <i class="fa-solid fa-eye" style="font-size: 1rem; margin-right: 0.25rem;"></i>
+            {{ channel.total_views|default:"0"|number_format }}
+          </span>
+          <span class="d-flex align-items-center me-3" title="{% trans 'Total episodes' %}">
+            <i class="fa-solid fa-podcast" style="font-size: 1rem; margin-right: 0.25rem;"></i>
+            {{ channel.episode_count|default:"0" }}
+          </span>
+        </div>
+      </div>
+    </div>
   </a>
 {% endfor %}

@@ -1,5 +1,7 @@
 {# podcasts/templates/podcasts/search_results_ch_items.html #}
 {% load static i18n custom_filters %}
+{% static 'podcasts/images/no-image.jpg' as fallback_img %}
+
 
 <div id="channel-list" class="list-group mt-4">
   {% for channel in channels %}
@@ -11,21 +13,13 @@
       <div class="row gx-3 align-items-start">
         <!-- Image column -->
         <div class="col-auto">
-          {% if channel.channel_image_url %}
             <img
-              src="{{ channel.channel_image_url }}"
+              src="{{ channel.channel_image_url|default:fallback_img }}"
               alt="{{ channel.channel_title }}"
               class="rounded"
               style="width:150px; height:150px; object-fit:cover;"
+              onerror="this.onerror=null;this.src='{{ fallback_img }}';"
             >
-          {% else %}
-            <div
-              class="rounded bg-secondary d-flex align-items-center justify-content-center"
-              style="width:150px; height:150px;"
-            >
-              <em class="text-muted">{% trans "No image" %}</em>
-            </div>
-          {% endif %}
         </div>
 
         <!-- Text column -->
