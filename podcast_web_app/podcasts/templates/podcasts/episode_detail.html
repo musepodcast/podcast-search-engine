@@ -614,11 +614,14 @@
       el.textContent = totalFromServer.toLocaleString();
       return;
     }
-    const current = parseInt((el.textContent||"0").replace(/,/g,''),10) || 0;
+    const current = parseInt((el.textContent || "0").replace(/,/g, ''), 10) || 0;
     el.textContent = (current + 1).toLocaleString();
   }
 
   async function pingServer() {
+    // Don't even try to hit the server if we're offline
+    if (!navigator.onLine) return;
+
     try {
       const r = await fetch(`/episode/${episodeId}/share_ping/`, {
         method: "POST",
@@ -633,41 +636,57 @@
       if (typeof data.total_shares === 'number') {
         optimisticBump(data.total_shares);
       }
-    } catch (_) {}
+    } catch (e) {
+      console.warn("share_ping failed:", e);
+      // swallow – never break the UI
+    }
   }
 
-  btn.addEventListener('click', async function(){
-    // 1) Try native share
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title: document.title,
-          text: '{{ episode.episode_title|escapejs }}',
-          url: shareUrl,
-        });
-      } catch(e) {
-        // user cancelled — ignore
+  btn.addEventListener('click', async function () {
+    try {
+      // 1) Try native share ONLY when online and supported
+      if (navigator.onLine && typeof navigator.share === 'function') {
+        try {
+          await navigator.share({
+            title: document.title,
+            text: '{{ episode.episode_title|escapejs }}',
+            url: shareUrl,
+          });
+        } catch (e) {
+          // user cancelled or share disallowed – just fall back instead of dying
+          console.warn("navigator.share failed/cancelled:", e);
+        }
+        optimisticBump();
+        pingServer();
+        return;
       }
-      // still count & ping
+
+      // 2) Fallback: clipboard API if available
+      if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
+        try {
+          await navigator.clipboard.writeText(shareUrl);
+          showCopyToast();
+        } catch (e) {
+          console.warn("clipboard.writeText failed:", e);
+          // 3) Last fallback: prompt
+          window.prompt("Copy this link:", shareUrl);
+        }
+      } else {
+        // No clipboard API at all – just show a prompt
+        window.prompt("Copy this link:", shareUrl);
+      }
+
       optimisticBump();
       pingServer();
-      return;
+    } catch (err) {
+      // Absolutely never let a share error break other buttons
+      console.error("Share button handler crashed:", err);
+      try { showCopyToast(); } catch (_) {}
     }
-
-    // 2) Fallback: copy
-    try {
-      await navigator.clipboard.writeText(shareUrl);
-      showCopyToast();             // 👈 show it here
-    } catch (_) {
-      prompt("Copy this link:", shareUrl);
-      showCopyToast();             // 👈 and here too
-    }
-
-    optimisticBump();
-    pingServer();
   });
 })();
 </script>
+
 
 
 
@@ -883,23 +902,33 @@
 
 
   function scrollToAudio() {
-    const audio = document.querySelector('audio');
-    if (!audio) return;
+    // Prefer the visible controls / section instead of the hidden <audio>
+    const listenSection = document.getElementById('listen');
+    const playBtn       = document.getElementById('playPause');
+    const target        = playBtn || listenSection;
 
-    // If you have a sticky header, tweak this offset (px)
-    const OFFSET = 80;
-    const top = audio.getBoundingClientRect().top + window.scrollY - OFFSET;
+    if (!target) return;
+
+    const OFFSET = 80; // adjust if you have a taller sticky header
+    const top = target.getBoundingClientRect().top + window.scrollY - OFFSET;
 
     window.scrollTo({ top, behavior: 'smooth' });
 
-    // Visual cue + focus for keyboard users
-    audio.classList.add('audio-highlight');
-    audio.setAttribute('tabindex', '-1');
-    // focus after scroll has started
-    setTimeout(() => { try { audio.focus({ preventScroll: true }); } catch(_){} }, 150);
-    // remove highlight after a moment
-    setTimeout(() => audio.classList.remove('audio-highlight'), 1600);
+    // Visual cue
+    target.classList.add('audio-highlight');
+
+    // For keyboard users, focus the play button if available
+    if (playBtn) {
+      playBtn.setAttribute('tabindex', '-1');
+      setTimeout(() => {
+        try { playBtn.focus({ preventScroll: true }); } catch (_) {}
+      }, 150);
+    }
+
+    // Remove highlight after a short delay
+    setTimeout(() => target.classList.remove('audio-highlight'), 1600);
   }
+
 
 
 
@@ -912,11 +941,43 @@
     // store target seconds for the buttons
     menu.dataset.seconds = String(Math.max(0, Math.floor(seconds) || 0));
 
-    // position safely in viewport
     const pad = 8;
-    menu.style.left = Math.max(pad, Math.min(window.innerWidth  - 200, x)) + 'px';
-    menu.style.top  = Math.max(pad, Math.min(window.innerHeight - 120, y)) + 'px';
+
+    // Make it visible so we can measure size, but hide visually during positioning
     menu.style.display = 'block';
+    menu.style.visibility = 'hidden';
+
+    // Default position: slightly *below* the click
+    let left = x;
+    let top  = y + 8;
+
+    // Measure actual size (fallbacks if not yet laid out)
+    const rect = menu.getBoundingClientRect();
+    const w = rect.width  || 200;
+    const h = rect.height || 120;
+
+    // Clamp horizontally inside viewport
+    if (left + w + pad > window.innerWidth) {
+      left = window.innerWidth - w - pad;
+    }
+    if (left < pad) {
+      left = pad;
+    }
+
+    // If placing below would go off the bottom, flip above the click
+    if (top + h + pad > window.innerHeight) {
+      top = y - h - 8;   // show above the cursor
+    }
+    // Still make sure we don't go off the top
+    if (top < pad) {
+      top = pad;
+    }
+
+    menu.style.left = left + 'px';
+    menu.style.top  = top  + 'px';
+
+    // Now reveal it
+    menu.style.visibility = 'visible';
 
     // outside click (mousedown is better than click to avoid race)
     outsideHandler = (ev) => {
@@ -932,6 +993,7 @@
     };
     document.addEventListener('keydown', escHandler);
   }
+
 
   function hideMenu() {
     if (!menu) return;
