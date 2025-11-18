@@ -1905,6 +1905,53 @@ class EpisodeListView(ListView):
         dt_24h = now - timedelta(hours=24)
         dt_7d  = now - timedelta(days=7)
 
+        # --- Subqueries for views ---
+        views_total_sq = (
+            EpisodeVisit.objects
+            .filter(episode=OuterRef('pk'))
+            .values('episode')
+            .annotate(total=Sum('count'))
+            .values('total')[:1]
+        )
+        views_24h_sq = (
+            EpisodeVisit.objects
+            .filter(episode=OuterRef('pk'), last_visited__gte=dt_24h)
+            .values('episode')
+            .annotate(total=Sum('count'))
+            .values('total')[:1]
+        )
+
+        views_7d_sq = (
+            EpisodeVisit.objects
+            .filter(episode=OuterRef('pk'), last_visited__gte=dt_7d)
+            .values('episode')
+            .annotate(total=Sum('count'))
+            .values('total')[:1]
+        )
+
+        # --- NEW: Subqueries for views (EpisodeTranslations, non-EN branch uses OuterRef('episode')) ---
+        views_total_sq_tr = (
+            EpisodeVisit.objects
+            .filter(episode=OuterRef('episode'))
+            .values('episode')
+            .annotate(total=Sum('count'))
+            .values('total')[:1]
+        )
+        views_24h_sq_tr = (
+            EpisodeVisit.objects
+            .filter(episode=OuterRef('episode'), last_visited__gte=dt_24h)
+            .values('episode')
+            .annotate(total=Sum('count'))
+            .values('total')[:1]
+        )
+        views_7d_sq_tr = (
+            EpisodeVisit.objects
+            .filter(episode=OuterRef('episode'), last_visited__gte=dt_7d)
+            .values('episode')
+            .annotate(total=Sum('count'))
+            .values('total')[:1]
+        )
+
         # --- Subqueries for total downloads ---
         downloads_sq_base = (
             EpisodeDownload.objects
@@ -1954,18 +2001,22 @@ class EpisodeListView(ListView):
                         filter=Q(episode_interactions__rating__isnull=False),
                         distinct=True
                     ),
-                    total_episode_views=Coalesce(Sum('episodevisit__count'), 0),
+                    # ✅ now coming from subquery, so it exists for ordering
+                    total_episode_views=Coalesce(
+                        Subquery(views_total_sq, output_field=IntegerField()),
+                        Value(0)
+                    ),
                     total_downloads=Coalesce(Subquery(downloads_sq_base, output_field=IntegerField()), Value(0)),
                     total_shares=Coalesce(Subquery(shares_sq_base, output_field=IntegerField()), Value(0)),
 
                     # NEW: 24h and 7d windows (velocity)
                     views_24h=Coalesce(
-                        Sum('episodevisit__count', filter=Q(episodevisit__last_visited__gte=dt_24h)),
-                        0
+                        Subquery(views_24h_sq, output_field=IntegerField()),
+                        Value(0)
                     ),
                     views_7d=Coalesce(
-                        Sum('episodevisit__count', filter=Q(episodevisit__last_visited__gte=dt_7d)),
-                        0
+                        Subquery(views_7d_sq, output_field=IntegerField()),
+                        Value(0)
                     ),
                     downloads_7d=Coalesce(
                         Sum('downloads__count', filter=Q(downloads__last_downloaded__gte=dt_7d)),
@@ -2068,16 +2119,21 @@ class EpisodeListView(ListView):
                     filter=Q(episode__episode_interactions__rating__isnull=False),
                     distinct=True
                 ),
-                total_episode_views=Coalesce(Sum('episode__episodevisit__count'), 0),
                 total_downloads=Coalesce(Subquery(downloads_sq_tr, output_field=IntegerField()), Value(0)),
                 total_shares=Coalesce(Subquery(shares_sq_tr, output_field=IntegerField()), Value(0)),
-
-                # Recent windows via base episode relations
+                # ✅ translations: views via Episode FK
+                total_episode_views=Coalesce(
+                    Subquery(views_total_sq_tr, output_field=IntegerField()),
+                    Value(0)
+                ),
+                # ✅ NEW (via subqueries matching EpisodeDetailView semantics):
                 views_24h=Coalesce(
-                    Sum('episode__episodevisit__count', filter=Q(episode__episodevisit__last_visited__gte=dt_24h)), 0
+                    Subquery(views_24h_sq_tr, output_field=IntegerField()),
+                    Value(0)
                 ),
                 views_7d=Coalesce(
-                    Sum('episode__episodevisit__count', filter=Q(episode__episodevisit__last_visited__gte=dt_7d)), 0
+                    Subquery(views_7d_sq_tr, output_field=IntegerField()),
+                    Value(0)
                 ),
                 downloads_7d=Coalesce(
                     Sum('episode__downloads__count', filter=Q(episode__downloads__last_downloaded__gte=dt_7d)), 0
@@ -2216,6 +2272,7 @@ class SearchResultsView(LoginRequiredMixin, ListView):
 
     # ---------- helper: annotate Episode queryset with aggregates ----------
     def _with_episode_stats(self, qs):
+        # per-episode downloads
         downloads_sq = (
             EpisodeDownload.objects
             .filter(episode=OuterRef('pk'))
@@ -2223,6 +2280,8 @@ class SearchResultsView(LoginRequiredMixin, ListView):
             .annotate(total=Sum('count'))
             .values('total')[:1]
         )
+
+        # per-episode shares
         shares_sq = (
             EpisodeShare.objects
             .filter(episode=OuterRef('pk'))
@@ -2230,6 +2289,16 @@ class SearchResultsView(LoginRequiredMixin, ListView):
             .annotate(total=Sum('count'))
             .values('total')[:1]
         )
+
+        # ✅ per-episode views (fixes inflation)
+        views_sq = (
+            EpisodeVisit.objects
+            .filter(episode=OuterRef('pk'))
+            .values('episode')
+            .annotate(total=Sum('count'))
+            .values('total')[:1]
+        )
+
         return (
             qs.annotate(
                 bookmarks_count=Count(
@@ -2244,11 +2313,24 @@ class SearchResultsView(LoginRequiredMixin, ListView):
                     filter=Q(episode_interactions__rating__isnull=False),
                     distinct=True
                 ),
-                total_episode_views=Coalesce(Sum('episodevisit__count'), 0),
-                total_downloads=Coalesce(Subquery(downloads_sq, output_field=IntegerField()), Value(0)),
-                total_shares=Coalesce(Subquery(shares_sq, output_field=IntegerField()), Value(0)),
+
+                # ✅ NEW (matches EpisodeDetailView semantics)
+                total_episode_views=Coalesce(
+                    Subquery(views_sq, output_field=IntegerField()),
+                    Value(0)
+                ),
+
+                total_downloads=Coalesce(
+                    Subquery(downloads_sq, output_field=IntegerField()),
+                    Value(0)
+                ),
+                total_shares=Coalesce(
+                    Subquery(shares_sq, output_field=IntegerField()),
+                    Value(0)
+                ),
             )
         )
+
 
     def paginate_queryset(self, qs, page_size):
         from .models import Episode
@@ -2686,6 +2768,14 @@ class NotificationsListView(LoginRequiredMixin, ListView):
             notifications_enabled=True
         ).values_list('channel_id', flat=True)
 
+        # ✅ per-episode views (subquery, avoids fan-out inflation)
+        views_sq = (
+            EpisodeVisit.objects
+            .filter(episode=OuterRef('pk'))
+            .values('episode')
+            .annotate(total=Sum('count'))
+            .values('total')[:1]
+        )
         # subquery: total downloads per episode
         downloads_sq = (
             EpisodeDownload.objects
@@ -2721,7 +2811,11 @@ class NotificationsListView(LoginRequiredMixin, ListView):
                     filter=Q(episode_interactions__rating__isnull=False),
                     distinct=True
                 ),
-                total_episode_views=Coalesce(Sum('episodevisit__count'), 0),
+                # ✅ Fixed total episode views:
+                total_episode_views=Coalesce(
+                    Subquery(views_sq, output_field=IntegerField()),
+                    Value(0)
+                ),
                 total_downloads=Coalesce(Subquery(downloads_sq, output_field=IntegerField()), Value(0)),
                 total_shares=Coalesce(Subquery(shares_sq, output_field=IntegerField()), Value(0)),
             )
@@ -2762,6 +2856,14 @@ class BookmarksListView(LoginRequiredMixin, ListView):
             bookmarked=True
         ).values_list('episode_id', flat=True)
 
+        # ✅ per-episode views (subquery, avoids fan-out inflation)
+        views_sq = (
+            EpisodeVisit.objects
+            .filter(episode=OuterRef('pk'))
+            .values('episode')
+            .annotate(total=Sum('count'))
+            .values('total')[:1]
+        )
         # Subquery: total downloads per episode
         downloads_sq = (
             EpisodeDownload.objects
@@ -2798,7 +2900,11 @@ class BookmarksListView(LoginRequiredMixin, ListView):
                     filter=Q(episode_interactions__rating__isnull=False),
                     distinct=True
                 ),
-                total_episode_views=Coalesce(Sum('episodevisit__count'), 0),
+                # ✅ Fixed total episode views:
+                total_episode_views=Coalesce(
+                    Subquery(views_sq, output_field=IntegerField()),
+                    Value(0)
+                ),
                 # NEW: total downloads
                 total_downloads=Coalesce(Subquery(downloads_sq, output_field=IntegerField()), Value(0)),
                 total_shares=Coalesce(Subquery(shares_sq, output_field=IntegerField()), Value(0)),
