@@ -1104,6 +1104,85 @@ transcriptEl?.addEventListener('click', function(e){
 })();
 </script>
 
+<script>
+(function () {
+  const audio = document.getElementById('episodeAudio');
+  if (!audio || !('mediaSession' in navigator)) return;
+
+  const SKIP_SECONDS = 15;
+
+  function clamp(v, lo, hi) {
+    return Math.min(hi, Math.max(lo, v));
+  }
+
+  function skipBy(sec) {
+    try {
+      const t = clamp(
+        (audio.currentTime || 0) + sec,
+        0,
+        audio.duration || Number.MAX_VALUE
+      );
+      audio.currentTime = t;
+    } catch (_) {}
+  }
+
+  // ---- Metadata that shows in car/lockscreen ----
+  try {
+    const artworkUrl   = "{{ episode.image_url|default_if_none:''|escapejs }}";
+    const channelImage = "{{ episode.channel.channel_image_url|default_if_none:''|escapejs }}";
+
+    const artwork = [];
+    if (artworkUrl) {
+      artwork.push({ src: artworkUrl, sizes: "512x512", type: "image/jpeg" });
+    } else if (channelImage) {
+      artwork.push({ src: channelImage, sizes: "512x512", type: "image/jpeg" });
+    }
+
+    navigator.mediaSession.metadata = new MediaMetadata({
+      title:  "{{ episode.episode_title|escapejs }}",
+      artist: "{{ episode.channel.channel_title|escapejs }}",
+      album:  "{{ episode.channel.channel_title|escapejs }}",
+      artwork: artwork
+    });
+  } catch (e) {
+    console.warn("MediaSession metadata failed:", e);
+  }
+
+  // ---- Wire up car / OS controls ----
+  navigator.mediaSession.setActionHandler('play', () => {
+    audio.play().catch(()=>{});
+  });
+
+  navigator.mediaSession.setActionHandler('pause', () => {
+    audio.pause();
+  });
+
+  // Many cars map “skip” to these
+  navigator.mediaSession.setActionHandler('seekforward', (details) => {
+    const offset = (details && details.seekOffset) || SKIP_SECONDS;
+    skipBy(+offset);
+  });
+
+  navigator.mediaSession.setActionHandler('seekbackward', (details) => {
+    const offset = (details && details.seekOffset) || SKIP_SECONDS;
+    skipBy(-offset);
+  });
+
+  // Some head units only send next/previous track
+  navigator.mediaSession.setActionHandler('nexttrack', () => {
+    skipBy(+SKIP_SECONDS);
+  });
+
+  navigator.mediaSession.setActionHandler('previoustrack', () => {
+    // “Previous track” often acts like “jump back”
+    if (audio.currentTime > SKIP_SECONDS * 1.5) {
+      skipBy(-SKIP_SECONDS);
+    } else {
+      audio.currentTime = 0;
+    }
+  });
+})();
+</script>
 
 
 <script>
