@@ -9,15 +9,15 @@
     <div class="row">
       <div class="col-auto">
         <img
-          src="{% if channel.channel_image_url %}
-                 {{ channel.channel_image_url }}
-               {% else %}
-                 {% static 'podcasts/images/no-image.jpg' %}
-               {% endif %}"
-          alt="Image for {{ channel.channel_title }}"
-          style="width: 170px; height: 170px; border-radius: 6px; object-fit: cover;"
-          onerror="this.onerror=null;this.src='{% static 'podcasts/images/no-image.jpg' %}';"
-        >
+        src="{% if channel.channel_image_url %}
+                {{ channel.channel_image_url }}
+            {% else %}
+                {% static 'podcasts/images/no-image.jpg' %}
+            {% endif %}"
+        alt="Image for {{ channel.channel_title }}"
+        class="favorite-channel-img"
+        onerror="this.onerror=null;this.src='{% static 'podcasts/images/no-image.jpg' %}';"
+        />
       </div>
       <div class="col">
         <h4 class="fw-bold">{{ channel.channel_title }}</h4>

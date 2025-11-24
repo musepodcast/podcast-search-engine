@@ -11,17 +11,18 @@
           <img
             src="{{ channel.channel_image_url }}"
             alt="{{ channel.channel_title }}"
-            style="width:325px; height:325px; border-radius:6px; object-fit:cover;"
+            class="channel-header-img"
             onerror="this.onerror=null;this.src='{% static 'podcasts/images/no-image.jpg' %}';"
           >
         {% else %}
           <img
             src="{% static 'podcasts/images/no-image.jpg' %}"
             alt="{{ channel.channel_title }}"
-            style="width:325px; height:325px; border-radius:6px; object-fit:cover;"
+            class="channel-header-img"
           >
         {% endif %}
       </div>
+
 
 
         <div class="col">

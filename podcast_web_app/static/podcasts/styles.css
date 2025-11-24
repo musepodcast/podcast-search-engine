@@ -253,6 +253,51 @@ input[type="text"]::placeholder { color: var(--muted-color); }
 }
 
 /* =========================================================
+   Channel detail
+   ========================================================= */
+
+/* Base: Desktop (large screens) */
+.channel-header-img {
+  display: block;
+  width: 325px;        /* desktop size */
+  aspect-ratio: 1 / 1; /* keep it square */
+  height: auto;
+  border-radius: 6px;
+  object-fit: cover;
+}
+
+/* Small phones (very narrow, e.g. ≤400px wide) */
+@media (max-width: 400px) {
+  .channel-header-img {
+    width: 150px;      /* compact thumbnail */
+  }
+}
+
+/* Regular phones (401px–576px) – e.g. your 450px case */
+@media (min-width: 401px) and (max-width: 576px) {
+  .channel-header-img {
+    width: 180px;      /* still visible but not massive */
+  }
+}
+
+/* Tablets (577px–900px) */
+@media (min-width: 577px) and (max-width: 900px) {
+  .channel-header-img {
+    width: 200px;      /* mid-size on tablets */
+  }
+}
+
+/* Optional: explicitly re-affirm desktop (≥901px) */
+/* Not strictly needed since base rule handles it, but clear: */
+@media (min-width: 901px) {
+  .channel-header-img {
+    width: 325px;
+  }
+}
+
+
+
+/* =========================================================
    Sort Filter and Podcast Episodes or Channels
    ========================================================= */
 
@@ -1460,21 +1505,25 @@ html, body { max-width: 100%; overflow-x: hidden; }
 }
 
 
-
-
 /* =========================================================
    RESPONSIVE THUMBNAILS (episodes + channels)
    Desktop first (160px), then step down on smaller screens.
    ========================================================= */
 #episode-list .list-group-item .row,
-#channel-list  .list-group-item .row{
+#channel-list  .list-group-item .row,
+#favorites-list .list-group-item .row,
+#bookmarks-list .list-group-item .row,
+#notifications-list .list-group-item .row {
   display:grid;
   grid-template-columns:10rem 1fr; /* 160px + content */
   gap:1rem;
   align-items:start;
 }
 #episode-list .col-auto img,
-#channel-list  .col-auto img{
+#channel-list  .col-auto img,
+#favorites-list .col-auto .favorite-channel-img,
+#bookmarks-list .col-auto .bookmark-episode-img,
+#notifications-list .col-auto .notification-episode-img {
   width:10rem; height:10rem;
   aspect-ratio:1/1;
   object-fit:cover; object-position:center;
@@ -1486,12 +1535,18 @@ html, body { max-width: 100%; overflow-x: hidden; }
 /* Small tablets */
 @media (min-width:577px) and (max-width:768px){
   #episode-list .list-group-item .row,
-  #channel-list  .list-group-item .row{
+  #channel-list  .list-group-item .row,
+  #favorites-list .list-group-item .row,
+  #bookmarks-list .list-group-item .row,
+  #notifications-list .list-group-item .row {
     grid-template-columns:10rem 1fr; /* 128px + content */
     gap:.75rem;
   }
   #episode-list .col-auto img,
-  #channel-list  .col-auto img{
+  #channel-list  .col-auto img,
+  #favorites-list .col-auto .favorite-channel-img,
+  #bookmarks-list .col-auto .bookmark-episode-img,
+  #notifications-list .col-auto .notification-episode-img {
     width:10rem !important; height:10rem !important;
   }
 }
@@ -1499,12 +1554,18 @@ html, body { max-width: 100%; overflow-x: hidden; }
 /* Phones */
 @media (max-width:576px){
   #episode-list .list-group-item .row,
-  #channel-list  .list-group-item .row{
+  #channel-list  .list-group-item .row,
+  #favorites-list .list-group-item .row,
+  #bookmarks-list .list-group-item .row,
+  #notifications-list .list-group-item .row {
     grid-template-columns:10rem 1fr; /* 96px + content */
     gap:.5rem;
   }
   #episode-list .col-auto img,
-  #channel-list  .col-auto img{
+  #channel-list  .col-auto img,
+  #favorites-list .col-auto .favorite-channel-img,
+  #bookmarks-list .col-auto .bookmark-episode-img,
+  #notifications-list .col-auto .notification-episode-img {
     width:10rem !important; height:10rem !important;
     aspect-ratio:1/1; object-fit:cover; object-position:center;
   }
