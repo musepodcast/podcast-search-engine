@@ -242,10 +242,23 @@ input[type="text"]::placeholder { color: var(--muted-color); }
 .channel-image, .episode-image { max-width: 150px; height: auto; border-radius: 10px; }
 
 /* Readability helpers */
+/* Base clamp for summaries (desktop) */
 .summary-clamp {
-  display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical;
-  overflow: hidden; text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 7;   /* desktop lines */
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
+
+/* Expanded state: remove clamping */
+.summary-expanded {
+  display: block;
+  -webkit-line-clamp: unset;
+  max-height: none;
+  overflow: visible;
+}
+
 .highlight {
   background-color: var(--highlight-bg-color);
   color: var(--highlight-text-color);
@@ -1686,6 +1699,8 @@ html, body { max-width: 100%; overflow-x: hidden; }
     padding:.375rem .5rem; font-size:.9rem;
   }
 }
+
+
 
 /* Small tablets */
 @media (min-width:577px) and (max-width:768px){

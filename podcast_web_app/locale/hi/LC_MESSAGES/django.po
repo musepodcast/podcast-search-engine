@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-08 16:55-0600\n"
+"POT-Creation-Date: 2025-11-24 21:42-0600\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -157,51 +157,51 @@ msgid "Home"
 msgstr "घर"
 
 #: .\podcasts\templates\podcasts\base.html:113
-#: .\podcasts\templates\podcasts\channel_list.html:22
-#: .\podcasts\templates\podcasts\channel_list.html:79
-#: .\podcasts\templates\podcasts\channel_list_items.html:27
-#: .\podcasts\templates\podcasts\favorites_list.html:5
-#: .\podcasts\templates\podcasts\favorites_list.html:33
-#: .\podcasts\templates\podcasts\favorites_list_items.html:25
-#: .\podcasts\templates\podcasts\search_results_ch_items.html:60
+#: .\podcasts\templates\podcasts\channel_list.html:23
+#: .\podcasts\templates\podcasts\channel_list.html:82
+#: .\podcasts\templates\podcasts\channel_list_items.html:29
+#: .\podcasts\templates\podcasts\favorites_list.html:6
+#: .\podcasts\templates\podcasts\favorites_list.html:42
+#: .\podcasts\templates\podcasts\favorites_list_items.html:34
+#: .\podcasts\templates\podcasts\search_results_ch_items.html:54
 msgid "Favorites"
 msgstr "पसंदीदा"
 
 #: .\podcasts\templates\podcasts\base.html:118
-#: .\podcasts\templates\podcasts\channel_list.html:28
-#: .\podcasts\templates\podcasts\channel_list.html:83
-#: .\podcasts\templates\podcasts\channel_list_items.html:31
-#: .\podcasts\templates\podcasts\favorites_list.html:38
-#: .\podcasts\templates\podcasts\favorites_list_items.html:29
+#: .\podcasts\templates\podcasts\channel_list.html:29
+#: .\podcasts\templates\podcasts\channel_list.html:86
+#: .\podcasts\templates\podcasts\channel_list_items.html:33
+#: .\podcasts\templates\podcasts\favorites_list.html:47
+#: .\podcasts\templates\podcasts\favorites_list_items.html:38
 #: .\podcasts\templates\podcasts\notifications_list.html:6
-#: .\podcasts\templates\podcasts\search_results_ch_items.html:65
+#: .\podcasts\templates\podcasts\search_results_ch_items.html:59
 msgid "Notifications"
 msgstr "अधिसूचनाएँ"
 
 #: .\podcasts\templates\podcasts\base.html:124
-#: .\podcasts\templates\podcasts\bookmarks_list.html:65
-#: .\podcasts\templates\podcasts\bookmarks_list_items.html:57
-#: .\podcasts\templates\podcasts\channel_detail.html:160
-#: .\podcasts\templates\podcasts\channel_detail_item.html:46
-#: .\podcasts\templates\podcasts\episode_list.html:34
-#: .\podcasts\templates\podcasts\episode_list.html:101
-#: .\podcasts\templates\podcasts\episode_list_items.html:54
-#: .\podcasts\templates\podcasts\notifications_list.html:63
-#: .\podcasts\templates\podcasts\notifications_list_items.html:56
-#: .\podcasts\templates\podcasts\search_results_items.html:45
-#: .\podcasts\templates\podcasts\search_results_items.html:124
+#: .\podcasts\templates\podcasts\bookmarks_list.html:62
+#: .\podcasts\templates\podcasts\bookmarks_list_items.html:55
+#: .\podcasts\templates\podcasts\channel_detail.html:182
+#: .\podcasts\templates\podcasts\channel_detail_item.html:44
+#: .\podcasts\templates\podcasts\episode_list.html:35
+#: .\podcasts\templates\podcasts\episode_list.html:108
+#: .\podcasts\templates\podcasts\episode_list_items.html:53
+#: .\podcasts\templates\podcasts\notifications_list.html:56
+#: .\podcasts\templates\podcasts\notifications_list_items.html:48
+#: .\podcasts\templates\podcasts\search_results_items.html:47
+#: .\podcasts\templates\podcasts\search_results_items.html:126
 msgid "Bookmarks"
 msgstr "बुकमार्क"
 
 #: .\podcasts\templates\podcasts\base.html:126
-#: .\podcasts\templates\podcasts\base.html:232
+#: .\podcasts\templates\podcasts\base.html:236
 msgid "Channels"
 msgstr "चैनल"
 
 #: .\podcasts\templates\podcasts\base.html:127
-#: .\podcasts\templates\podcasts\base.html:226
-#: .\podcasts\templates\podcasts\channel_detail.html:122
-#: .\podcasts\templates\podcasts\channel_list.html:46
+#: .\podcasts\templates\podcasts\base.html:230
+#: .\podcasts\templates\podcasts\channel_detail.html:143
+#: .\podcasts\templates\podcasts\channel_list.html:47
 msgid "Episodes"
 msgstr "एपिसोड"
 
@@ -222,7 +222,7 @@ msgid "See Replies"
 msgstr "उत्तर देखें"
 
 #: .\podcasts\templates\podcasts\base.html:185
-#: .\podcasts\templates\podcasts\base.html:566
+#: .\podcasts\templates\podcasts\base.html:570
 msgid "Support Me"
 msgstr "मेरा समर्थन करो"
 
@@ -234,133 +234,153 @@ msgstr "समर्थन टिकट"
 msgid "Contribute"
 msgstr "योगदान करें"
 
-#: .\podcasts\templates\podcasts\base.html:203
+#: .\podcasts\templates\podcasts\base.html:206
 msgid "Sign Out"
 msgstr "साइन अप करें"
 
-#: .\podcasts\templates\podcasts\base.html:207
+#: .\podcasts\templates\podcasts\base.html:211
 msgid "Sign In"
 msgstr "साइन इन करें"
 
-#: .\podcasts\templates\podcasts\base.html:240
+#: .\podcasts\templates\podcasts\base.html:244
 msgid "Search episodes or channels..."
 msgstr "एपिसोड या चैनल खोजें..."
 
-#: .\podcasts\templates\podcasts\base.html:246
-#: .\podcasts\templates\podcasts\channel_detail.html:116
+#: .\podcasts\templates\podcasts\base.html:250
+#: .\podcasts\templates\podcasts\channel_detail.html:137
 msgid "Search"
 msgstr "खोज"
 
-#: .\podcasts\templates\podcasts\base.html:262
-#: .\podcasts\templates\podcasts\base.html:456
+#: .\podcasts\templates\podcasts\base.html:266
+#: .\podcasts\templates\podcasts\base.html:460
 msgid "Channel Title"
 msgstr "चैनल शीर्षक"
 
-#: .\podcasts\templates\podcasts\base.html:268
+#: .\podcasts\templates\podcasts\base.html:272
 msgid "Episode Title"
 msgstr "एपिसोड का शीर्षक"
 
-#: .\podcasts\templates\podcasts\base.html:274
+#: .\podcasts\templates\podcasts\base.html:278
 msgid "Episode Description"
 msgstr "एपिसोड विवरण"
 
-#: .\podcasts\templates\podcasts\base.html:280
+#: .\podcasts\templates\podcasts\base.html:284
 msgid "Transcript Text"
 msgstr "प्रतिलेख पाठ"
 
-#: .\podcasts\templates\podcasts\base.html:287
-#: .\podcasts\templates\podcasts\base.html:475
+#: .\podcasts\templates\podcasts\base.html:291
+#: .\podcasts\templates\podcasts\base.html:479
 msgid "Language"
 msgstr "भाषा"
 
-#: .\podcasts\templates\podcasts\base.html:367
+#: .\podcasts\templates\podcasts\base.html:371
 msgid "Date"
 msgstr "तारीख"
 
-#: .\podcasts\templates\podcasts\base.html:375
+#: .\podcasts\templates\podcasts\base.html:379
 msgid "Anytime"
 msgstr "किसी भी समय"
 
-#: .\podcasts\templates\podcasts\base.html:381
+#: .\podcasts\templates\podcasts\base.html:385
 msgid "Past Day"
 msgstr "बीते दिन"
 
-#: .\podcasts\templates\podcasts\base.html:387
+#: .\podcasts\templates\podcasts\base.html:391
 msgid "Past Week"
 msgstr "विगत सप्ताह"
 
-#: .\podcasts\templates\podcasts\base.html:393
+#: .\podcasts\templates\podcasts\base.html:397
 msgid "Past Month"
 msgstr "बीते हुए महीने में"
 
-#: .\podcasts\templates\podcasts\base.html:399
+#: .\podcasts\templates\podcasts\base.html:403
 msgid "Past Year"
 msgstr "पिछले एक साल"
 
-#: .\podcasts\templates\podcasts\base.html:405
+#: .\podcasts\templates\podcasts\base.html:409
 msgid "Past 2 Years"
 msgstr "पिछले 2 वर्ष"
 
-#: .\podcasts\templates\podcasts\base.html:411
+#: .\podcasts\templates\podcasts\base.html:415
 msgid "Past 3 Years"
 msgstr "पिछले 3 वर्ष"
 
-#: .\podcasts\templates\podcasts\base.html:417
+#: .\podcasts\templates\podcasts\base.html:421
 msgid "Past 4 Years"
 msgstr "पिछले 4 वर्ष"
 
-#: .\podcasts\templates\podcasts\base.html:423
+#: .\podcasts\templates\podcasts\base.html:427
 msgid "Past 5 Years"
 msgstr "पिछले 5 वर्ष"
 
-#: .\podcasts\templates\podcasts\base.html:429
+#: .\podcasts\templates\podcasts\base.html:433
 msgid "Past 10 Years"
 msgstr "पिछले 10 वर्ष"
 
-#: .\podcasts\templates\podcasts\base.html:435
+#: .\podcasts\templates\podcasts\base.html:439
 msgid "Past 15 Years"
 msgstr "पिछले 15 वर्ष"
 
-#: .\podcasts\templates\podcasts\base.html:462
+#: .\podcasts\templates\podcasts\base.html:466
 msgid "Channel Author"
 msgstr "चैनल लेखक"
 
-#: .\podcasts\templates\podcasts\base.html:468
+#: .\podcasts\templates\podcasts\base.html:472
 msgid "Channel Summary"
 msgstr "चैनल सारांश"
 
-#: .\podcasts\templates\podcasts\base.html:571
-#: .\podcasts\templates\podcasts\signup.html:175
-#: .\podcasts\templates\podcasts\signup.html:229
+#: .\podcasts\templates\podcasts\base.html:575
+#: .\podcasts\templates\podcasts\signup.html:173
+#: .\podcasts\templates\podcasts\signup.html:227
 #: .\podcasts\templates\podcasts\support_ticket.html:148
 #: .\podcasts\templates\socialaccount\signup.html:78
 #: .\podcasts\templates\socialaccount\signup.html:130
 msgid "Close"
 msgstr "निकट"
 
-#: .\podcasts\templates\podcasts\base.html:644
-#: .\podcasts\templates\podcasts\channel_detail.html:213
-#: .\podcasts\templates\podcasts\episode_detail.html:337
+#: .\podcasts\templates\podcasts\base.html:648
+#: .\podcasts\templates\podcasts\channel_detail.html:235
+#: .\podcasts\templates\podcasts\episode_detail.html:345
 msgid "Please sign in to complete this action."
 msgstr "कृपया इस कार्रवाई को पूरा करने के लिए साइन इन करें।"
 
-#: .\podcasts\templates\podcasts\base.html:646
-#: .\podcasts\templates\podcasts\channel_detail.html:214
-#: .\podcasts\templates\podcasts\episode_detail.html:338
+#: .\podcasts\templates\podcasts\base.html:650
+#: .\podcasts\templates\podcasts\channel_detail.html:236
+#: .\podcasts\templates\podcasts\episode_detail.html:346
 msgid "Sign in"
 msgstr "साइन इन करें"
 
-#: .\podcasts\templates\podcasts\base.html:652
+#: .\podcasts\templates\podcasts\base.html:657
+#: .\podcasts\templates\podcasts\home.html:113
+msgid ""
+"Our GitHub is temporarily unavailable. Please visit our up-to-date "
+"repository on GitLab instead."
+msgstr ""
+"हमारा GitHub अस्थायी रूप से अनुपलब्ध है. कृपया इसके बजाय GitLab पर हमारे "
+"अद्यतित रिपॉजिटरी पर जाएँ."
+
+#: .\podcasts\templates\podcasts\base.html:662
+#: .\podcasts\templates\podcasts\home.html:116
+msgid "Open GitLab"
+msgstr "GitLab खोलें"
+
+#: .\podcasts\templates\podcasts\base.html:669
 msgid "Contact Me"
 msgstr "मुझसे संपर्क करें"
 
-#: .\podcasts\templates\podcasts\base.html:739
-#: .\podcasts\templates\podcasts\base.html:740
+#: .\podcasts\templates\podcasts\base.html:773
+#: .\podcasts\templates\podcasts\home.html:150
+msgid "GitHub temporarily unavailable. Click to see GitLab link."
+msgstr ""
+"GitHub अस्थायी रूप से अनुपलब्ध है. GitLab लिंक देखने के लिए क्लिक करें."
+
+#: .\podcasts\templates\podcasts\base.html:810
+#: .\podcasts\templates\podcasts\base.html:811
 msgid "Switch to light mode"
 msgstr "प्रकाश मोड पर स्विच करें"
 
-#: .\podcasts\templates\podcasts\base.html:744
-#: .\podcasts\templates\podcasts\base.html:745
+#: .\podcasts\templates\podcasts\base.html:815
+#: .\podcasts\templates\podcasts\base.html:816
 msgid "Switch to dark mode"
 msgstr "अंधेरे मोड पर स्विच करें"
 
@@ -368,132 +388,132 @@ msgstr "अंधेरे मोड पर स्विच करें"
 msgid "Bookmarked Episodes"
 msgstr "बुकमार्क किए गए एपिसोड"
 
-#: .\podcasts\templates\podcasts\bookmarks_list.html:42
-#: .\podcasts\templates\podcasts\bookmarks_list_items.html:35
-#: .\podcasts\templates\podcasts\episode_detail.html:48
-#: .\podcasts\templates\podcasts\episode_list.html:90
-#: .\podcasts\templates\podcasts\episode_list_items.html:31
-#: .\podcasts\templates\podcasts\notifications_list.html:41
-#: .\podcasts\templates\podcasts\notifications_list_items.html:34
-#: .\podcasts\templates\podcasts\search_results_items.html:30
-#: .\podcasts\templates\podcasts\search_results_items.html:110
+#: .\podcasts\templates\podcasts\bookmarks_list.html:40
+#: .\podcasts\templates\podcasts\bookmarks_list_items.html:33
+#: .\podcasts\templates\podcasts\episode_detail.html:41
+#: .\podcasts\templates\podcasts\episode_list.html:97
+#: .\podcasts\templates\podcasts\episode_list_items.html:30
+#: .\podcasts\templates\podcasts\notifications_list.html:37
+#: .\podcasts\templates\podcasts\notifications_list_items.html:29
+#: .\podcasts\templates\podcasts\search_results_items.html:32
+#: .\podcasts\templates\podcasts\search_results_items.html:112
 msgid "from"
 msgstr "द्वारा"
 
-#: .\podcasts\templates\podcasts\bookmarks_list.html:57
-#: .\podcasts\templates\podcasts\bookmarks_list_items.html:50
-#: .\podcasts\templates\podcasts\channel_detail_item.html:39
-#: .\podcasts\templates\podcasts\episode_detail.html:70
-#: .\podcasts\templates\podcasts\episode_list.html:97
-#: .\podcasts\templates\podcasts\episode_list_items.html:46
-#: .\podcasts\templates\podcasts\notifications_list.html:56
-#: .\podcasts\templates\podcasts\notifications_list_items.html:49
-#: .\podcasts\templates\podcasts\search_results_items.html:40
-#: .\podcasts\templates\podcasts\search_results_items.html:120
+#: .\podcasts\templates\podcasts\bookmarks_list.html:55
+#: .\podcasts\templates\podcasts\bookmarks_list_items.html:48
+#: .\podcasts\templates\podcasts\channel_detail_item.html:37
+#: .\podcasts\templates\podcasts\episode_detail.html:63
+#: .\podcasts\templates\podcasts\episode_list.html:104
+#: .\podcasts\templates\podcasts\episode_list_items.html:45
+#: .\podcasts\templates\podcasts\notifications_list.html:51
+#: .\podcasts\templates\podcasts\notifications_list_items.html:43
+#: .\podcasts\templates\podcasts\search_results_items.html:42
+#: .\podcasts\templates\podcasts\search_results_items.html:122
 msgid "Explicit"
 msgstr "मुखर"
 
-#: .\podcasts\templates\podcasts\bookmarks_list.html:70
-#: .\podcasts\templates\podcasts\bookmarks_list_items.html:62
-#: .\podcasts\templates\podcasts\channel_detail.html:165
-#: .\podcasts\templates\podcasts\channel_detail_item.html:51
-#: .\podcasts\templates\podcasts\episode_detail.html:315
-#: .\podcasts\templates\podcasts\episode_list.html:40
-#: .\podcasts\templates\podcasts\episode_list.html:106
-#: .\podcasts\templates\podcasts\episode_list_items.html:59
-#: .\podcasts\templates\podcasts\notifications_list.html:68
-#: .\podcasts\templates\podcasts\notifications_list_items.html:61
-#: .\podcasts\templates\podcasts\search_results_items.html:49
-#: .\podcasts\templates\podcasts\search_results_items.html:128
+#: .\podcasts\templates\podcasts\bookmarks_list.html:67
+#: .\podcasts\templates\podcasts\bookmarks_list_items.html:60
+#: .\podcasts\templates\podcasts\channel_detail.html:187
+#: .\podcasts\templates\podcasts\channel_detail_item.html:49
+#: .\podcasts\templates\podcasts\episode_detail.html:323
+#: .\podcasts\templates\podcasts\episode_list.html:41
+#: .\podcasts\templates\podcasts\episode_list.html:113
+#: .\podcasts\templates\podcasts\episode_list_items.html:58
+#: .\podcasts\templates\podcasts\notifications_list.html:60
+#: .\podcasts\templates\podcasts\notifications_list_items.html:52
+#: .\podcasts\templates\podcasts\search_results_items.html:51
+#: .\podcasts\templates\podcasts\search_results_items.html:130
 msgid "Comments"
 msgstr "टिप्पणियाँ"
 
-#: .\podcasts\templates\podcasts\bookmarks_list.html:75
-#: .\podcasts\templates\podcasts\bookmarks_list_items.html:67
-#: .\podcasts\templates\podcasts\channel_detail.html:169
-#: .\podcasts\templates\podcasts\channel_detail_item.html:56
-#: .\podcasts\templates\podcasts\episode_list.html:111
-#: .\podcasts\templates\podcasts\episode_list_items.html:64
-#: .\podcasts\templates\podcasts\notifications_list.html:73
-#: .\podcasts\templates\podcasts\notifications_list_items.html:66
-#: .\podcasts\templates\podcasts\search_results_items.html:53
-#: .\podcasts\templates\podcasts\search_results_items.html:132
+#: .\podcasts\templates\podcasts\bookmarks_list.html:72
+#: .\podcasts\templates\podcasts\bookmarks_list_items.html:65
+#: .\podcasts\templates\podcasts\channel_detail.html:191
+#: .\podcasts\templates\podcasts\channel_detail_item.html:54
+#: .\podcasts\templates\podcasts\episode_list.html:118
+#: .\podcasts\templates\podcasts\episode_list_items.html:63
+#: .\podcasts\templates\podcasts\notifications_list.html:64
+#: .\podcasts\templates\podcasts\notifications_list_items.html:56
+#: .\podcasts\templates\podcasts\search_results_items.html:55
+#: .\podcasts\templates\podcasts\search_results_items.html:134
 msgid "Episode Rating"
 msgstr "एपिसोड रेटिंग"
 
-#: .\podcasts\templates\podcasts\bookmarks_list.html:84
-#: .\podcasts\templates\podcasts\bookmarks_list_items.html:76
-#: .\podcasts\templates\podcasts\channel_detail.html:177
-#: .\podcasts\templates\podcasts\channel_detail_item.html:65
-#: .\podcasts\templates\podcasts\channel_list.html:95
-#: .\podcasts\templates\podcasts\channel_list_items.html:43
-#: .\podcasts\templates\podcasts\episode_detail.html:147
-#: .\podcasts\templates\podcasts\episode_list.html:120
-#: .\podcasts\templates\podcasts\episode_list_items.html:73
-#: .\podcasts\templates\podcasts\favorites_list.html:52
-#: .\podcasts\templates\podcasts\favorites_list_items.html:41
-#: .\podcasts\templates\podcasts\notifications_list.html:82
-#: .\podcasts\templates\podcasts\notifications_list_items.html:75
-#: .\podcasts\templates\podcasts\search_results_ch_items.html:79
-#: .\podcasts\templates\podcasts\search_results_items.html:59
-#: .\podcasts\templates\podcasts\search_results_items.html:138
+#: .\podcasts\templates\podcasts\bookmarks_list.html:81
+#: .\podcasts\templates\podcasts\bookmarks_list_items.html:74
+#: .\podcasts\templates\podcasts\channel_detail.html:199
+#: .\podcasts\templates\podcasts\channel_detail_item.html:63
+#: .\podcasts\templates\podcasts\channel_list.html:98
+#: .\podcasts\templates\podcasts\channel_list_items.html:45
+#: .\podcasts\templates\podcasts\episode_detail.html:140
+#: .\podcasts\templates\podcasts\episode_list.html:127
+#: .\podcasts\templates\podcasts\episode_list_items.html:72
+#: .\podcasts\templates\podcasts\favorites_list.html:61
+#: .\podcasts\templates\podcasts\favorites_list_items.html:50
+#: .\podcasts\templates\podcasts\notifications_list.html:72
+#: .\podcasts\templates\podcasts\notifications_list_items.html:64
+#: .\podcasts\templates\podcasts\search_results_ch_items.html:73
+#: .\podcasts\templates\podcasts\search_results_items.html:61
+#: .\podcasts\templates\podcasts\search_results_items.html:140
 msgid "Total Views"
 msgstr "कुल दृश्य"
 
-#: .\podcasts\templates\podcasts\bookmarks_list.html:89
-#: .\podcasts\templates\podcasts\bookmarks_list_items.html:81
-#: .\podcasts\templates\podcasts\channel_detail.html:182
-#: .\podcasts\templates\podcasts\channel_detail_item.html:70
-#: .\podcasts\templates\podcasts\episode_list.html:125
-#: .\podcasts\templates\podcasts\episode_list_items.html:78
-#: .\podcasts\templates\podcasts\notifications_list.html:87
-#: .\podcasts\templates\podcasts\notifications_list_items.html:80
-#: .\podcasts\templates\podcasts\search_results_items.html:63
-#: .\podcasts\templates\podcasts\search_results_items.html:142
+#: .\podcasts\templates\podcasts\bookmarks_list.html:86
+#: .\podcasts\templates\podcasts\bookmarks_list_items.html:79
+#: .\podcasts\templates\podcasts\channel_detail.html:204
+#: .\podcasts\templates\podcasts\channel_detail_item.html:68
+#: .\podcasts\templates\podcasts\episode_list.html:132
+#: .\podcasts\templates\podcasts\episode_list_items.html:77
+#: .\podcasts\templates\podcasts\notifications_list.html:76
+#: .\podcasts\templates\podcasts\notifications_list_items.html:68
+#: .\podcasts\templates\podcasts\search_results_items.html:65
+#: .\podcasts\templates\podcasts\search_results_items.html:144
 msgid "Downloads"
 msgstr "डाउनलोड"
 
-#: .\podcasts\templates\podcasts\bookmarks_list.html:94
-#: .\podcasts\templates\podcasts\bookmarks_list_items.html:86
-#: .\podcasts\templates\podcasts\channel_detail.html:187
-#: .\podcasts\templates\podcasts\channel_detail_item.html:75
-#: .\podcasts\templates\podcasts\episode_list.html:130
-#: .\podcasts\templates\podcasts\episode_list_items.html:83
-#: .\podcasts\templates\podcasts\notifications_list.html:92
-#: .\podcasts\templates\podcasts\notifications_list_items.html:85
-#: .\podcasts\templates\podcasts\search_results_items.html:147
+#: .\podcasts\templates\podcasts\bookmarks_list.html:91
+#: .\podcasts\templates\podcasts\bookmarks_list_items.html:84
+#: .\podcasts\templates\podcasts\channel_detail.html:209
+#: .\podcasts\templates\podcasts\channel_detail_item.html:73
+#: .\podcasts\templates\podcasts\episode_list.html:137
+#: .\podcasts\templates\podcasts\episode_list_items.html:82
+#: .\podcasts\templates\podcasts\notifications_list.html:80
+#: .\podcasts\templates\podcasts\notifications_list_items.html:72
+#: .\podcasts\templates\podcasts\search_results_items.html:149
 msgid "Shares"
 msgstr "शेयर"
 
-#: .\podcasts\templates\podcasts\bookmarks_list.html:115
+#: .\podcasts\templates\podcasts\bookmarks_list.html:110
 msgid "No bookmarked episodes available."
 msgstr "कोई बुकमार्क किए गए एपिसोड उपलब्ध नहीं हैं।"
 
-#: .\podcasts\templates\podcasts\bookmarks_list.html:122
+#: .\podcasts\templates\podcasts\bookmarks_list.html:118
 msgid "Loading more bookmarked episodes..."
 msgstr "अधिक बुकमार्क किए गए एपिसोड लोड..."
 
-#: .\podcasts\templates\podcasts\bookmarks_list.html:152
-#: .\podcasts\templates\podcasts\bookmarks_list.html:159
-#: .\podcasts\templates\podcasts\channel_detail.html:219
-#: .\podcasts\templates\podcasts\channel_list.html:118
-#: .\podcasts\templates\podcasts\episode_list.html:188
+#: .\podcasts\templates\podcasts\bookmarks_list.html:148
+#: .\podcasts\templates\podcasts\bookmarks_list.html:155
+#: .\podcasts\templates\podcasts\channel_detail.html:241
+#: .\podcasts\templates\podcasts\channel_list.html:124
 #: .\podcasts\templates\podcasts\episode_list.html:195
-#: .\podcasts\templates\podcasts\favorites_list.html:79
-#: .\podcasts\templates\podcasts\notifications_list.html:144
-#: .\podcasts\templates\podcasts\notifications_list.html:151
+#: .\podcasts\templates\podcasts\episode_list.html:202
+#: .\podcasts\templates\podcasts\favorites_list.html:93
+#: .\podcasts\templates\podcasts\notifications_list.html:132
+#: .\podcasts\templates\podcasts\notifications_list.html:139
 #: .\podcasts\templates\podcasts\replies_list.html:20
-#: .\podcasts\templates\podcasts\search_results_ch_items.html:104
-#: .\podcasts\templates\podcasts\search_results_items.html:189
+#: .\podcasts\templates\podcasts\search_results_ch_items.html:98
+#: .\podcasts\templates\podcasts\search_results_items.html:195
 msgid "End of list..."
 msgstr "सूची का अंत..."
 
-#: .\podcasts\templates\podcasts\channel_detail.html:28
-#: .\podcasts\templates\podcasts\channel_list.html:71
-#: .\podcasts\templates\podcasts\channel_list_items.html:19
-#: .\podcasts\templates\podcasts\favorites_list.html:25
-#: .\podcasts\templates\podcasts\favorites_list_items.html:18
-#: .\podcasts\templates\podcasts\search_results_ch_items.html:41
+#: .\podcasts\templates\podcasts\channel_detail.html:32
+#: .\podcasts\templates\podcasts\channel_list.html:76
+#: .\podcasts\templates\podcasts\channel_list_items.html:23
+#: .\podcasts\templates\podcasts\favorites_list.html:33
+#: .\podcasts\templates\podcasts\favorites_list_items.html:27
+#: .\podcasts\templates\podcasts\search_results_ch_items.html:35
 msgid "by"
 msgstr "द्वारा"
 
@@ -502,12 +522,12 @@ msgid "Sign in to add favorites"
 msgstr "पसंदीदा जोड़ने के लिए साइन इन करें"
 
 #: .\podcasts\templates\podcasts\channel_detail.html:48
-#: .\podcasts\templates\podcasts\channel_detail.html:457
+#: .\podcasts\templates\podcasts\channel_detail.html:547
 msgid "Remove from Favorites"
 msgstr "पसंदीदा से हटाएँ"
 
 #: .\podcasts\templates\podcasts\channel_detail.html:48
-#: .\podcasts\templates\podcasts\channel_detail.html:463
+#: .\podcasts\templates\podcasts\channel_detail.html:553
 msgid "Add to Favorites"
 msgstr "पसंदीदा में जोड़ें"
 
@@ -516,23 +536,23 @@ msgid "Sign in to enable notifications"
 msgstr "सूचनाओं को सक्षम करने के लिए साइन इन करें"
 
 #: .\podcasts\templates\podcasts\channel_detail.html:62
-#: .\podcasts\templates\podcasts\channel_detail.html:506
+#: .\podcasts\templates\podcasts\channel_detail.html:596
 msgid "Remove from Notifications"
 msgstr "सूचनाओं से हटाएँ"
 
 #: .\podcasts\templates\podcasts\channel_detail.html:62
-#: .\podcasts\templates\podcasts\channel_detail.html:512
+#: .\podcasts\templates\podcasts\channel_detail.html:602
 msgid "Add to Notifications"
 msgstr "सूचनाओं में जोड़ें"
 
 #: .\podcasts\templates\podcasts\channel_detail.html:80
 #: .\podcasts\templates\podcasts\channel_detail.html:84
-#: .\podcasts\templates\podcasts\episode_detail.html:132
+#: .\podcasts\templates\podcasts\episode_detail.html:125
 msgid "Sign in to rate"
 msgstr "दर के लिए साइन इन करें"
 
 #: .\podcasts\templates\podcasts\channel_detail.html:80
-#: .\podcasts\templates\podcasts\episode_detail.html:122
+#: .\podcasts\templates\podcasts\episode_detail.html:115
 msgid "Update your rating"
 msgstr "अपनी रेटिंग को अपडेट करें"
 
@@ -540,23 +560,34 @@ msgstr "अपनी रेटिंग को अपडेट करें"
 msgid "Rate this channel"
 msgstr "इस चैनल को रेट करें"
 
-#: .\podcasts\templates\podcasts\channel_detail.html:107
+#: .\podcasts\templates\podcasts\channel_detail.html:117
+#: .\podcasts\templates\podcasts\channel_detail.html:120
+#| msgid "Show password"
+msgid "Show more"
+msgstr "अधिक दिखाएँ"
+
+#: .\podcasts\templates\podcasts\channel_detail.html:118
+#| msgid "Show password"
+msgid "Show less"
+msgstr "कम दिखाएँ"
+
+#: .\podcasts\templates\podcasts\channel_detail.html:128
 msgid "Search episodes in this channel"
 msgstr "इस चैनल में खोज एपिसोड"
 
-#: .\podcasts\templates\podcasts\channel_detail.html:113
+#: .\podcasts\templates\podcasts\channel_detail.html:134
 msgid "Search episodes in this channel…"
 msgstr "इस चैनल में खोज एपिसोड..."
 
-#: .\podcasts\templates\podcasts\channel_detail.html:200
+#: .\podcasts\templates\podcasts\channel_detail.html:222
 msgid "No episodes available for this channel."
 msgstr "इस चैनल के लिए कोई एपिसोड उपलब्ध नहीं है।"
 
-#: .\podcasts\templates\podcasts\channel_detail.html:207
-#: .\podcasts\templates\podcasts\channel_detail.html:220
-#: .\podcasts\templates\podcasts\episode_list.html:153
-#: .\podcasts\templates\podcasts\search_results_items.html:180
-#: .\podcasts\templates\podcasts\search_results_items.html:190
+#: .\podcasts\templates\podcasts\channel_detail.html:229
+#: .\podcasts\templates\podcasts\channel_detail.html:242
+#: .\podcasts\templates\podcasts\episode_list.html:160
+#: .\podcasts\templates\podcasts\search_results_items.html:186
+#: .\podcasts\templates\podcasts\search_results_items.html:196
 msgid "Loading more episodes..."
 msgstr "अधिक एपिसोड लोड हो रहे हैं..."
 
@@ -569,106 +600,98 @@ msgstr "पॉडकास्ट चैनल"
 msgid "Sort:"
 msgstr "वर्गीकरणः"
 
-#: .\podcasts\templates\podcasts\channel_list.html:16
-#: .\podcasts\templates\podcasts\episode_list.html:28
+#: .\podcasts\templates\podcasts\channel_list.html:17
+#: .\podcasts\templates\podcasts\episode_list.html:29
 msgid "Watched"
 msgstr "देख रहा है"
 
-#: .\podcasts\templates\podcasts\channel_list.html:17
-#: .\podcasts\templates\podcasts\episode_list.html:29
+#: .\podcasts\templates\podcasts\channel_list.html:18
+#: .\podcasts\templates\podcasts\episode_list.html:30
 msgid "Most watched"
 msgstr "सबसे अधिक देखी गई"
 
-#: .\podcasts\templates\podcasts\channel_list.html:18
-#: .\podcasts\templates\podcasts\episode_list.html:30
+#: .\podcasts\templates\podcasts\channel_list.html:19
+#: .\podcasts\templates\podcasts\episode_list.html:31
 msgid "Least watched"
 msgstr "कम से कम देखा"
 
-#: .\podcasts\templates\podcasts\channel_list.html:23
+#: .\podcasts\templates\podcasts\channel_list.html:24
 msgid "Most favorited"
 msgstr "सबसे पसंदीदा"
 
-#: .\podcasts\templates\podcasts\channel_list.html:24
+#: .\podcasts\templates\podcasts\channel_list.html:25
 msgid "Least favorited"
 msgstr "कम से कम पसंदीदा"
 
-#: .\podcasts\templates\podcasts\channel_list.html:29
+#: .\podcasts\templates\podcasts\channel_list.html:30
 msgid "Most notified"
 msgstr "सर्वाधिक अधिसूचित"
 
-#: .\podcasts\templates\podcasts\channel_list.html:30
+#: .\podcasts\templates\podcasts\channel_list.html:31
 msgid "Least notified"
 msgstr "कम से कम अधिसूचित"
 
-#: .\podcasts\templates\podcasts\channel_list.html:34
-#: .\podcasts\templates\podcasts\episode_list.html:46
+#: .\podcasts\templates\podcasts\channel_list.html:35
+#: .\podcasts\templates\podcasts\episode_list.html:47
 msgid "Stars"
 msgstr "सितारे"
 
-#: .\podcasts\templates\podcasts\channel_list.html:35
-#: .\podcasts\templates\podcasts\episode_list.html:47
+#: .\podcasts\templates\podcasts\channel_list.html:36
+#: .\podcasts\templates\podcasts\episode_list.html:48
 msgid "Most stars"
 msgstr "अधिकांश सितारे"
 
-#: .\podcasts\templates\podcasts\channel_list.html:36
-#: .\podcasts\templates\podcasts\episode_list.html:48
+#: .\podcasts\templates\podcasts\channel_list.html:37
+#: .\podcasts\templates\podcasts\episode_list.html:49
 msgid "Least stars"
 msgstr "कम से कम सितारे"
 
-#: .\podcasts\templates\podcasts\channel_list.html:40
-#: .\podcasts\templates\podcasts\episode_list.html:64
+#: .\podcasts\templates\podcasts\channel_list.html:41
+#: .\podcasts\templates\podcasts\episode_list.html:65
 msgid "Alphabetical"
 msgstr "वर्णमाला"
 
-#: .\podcasts\templates\podcasts\channel_list.html:41
-#: .\podcasts\templates\podcasts\episode_list.html:65
+#: .\podcasts\templates\podcasts\channel_list.html:42
+#: .\podcasts\templates\podcasts\episode_list.html:66
 msgid "A → Z"
 msgstr "A → Z"
 
-#: .\podcasts\templates\podcasts\channel_list.html:42
-#: .\podcasts\templates\podcasts\episode_list.html:66
+#: .\podcasts\templates\podcasts\channel_list.html:43
+#: .\podcasts\templates\podcasts\episode_list.html:67
 msgid "Z → A"
 msgstr "Z → A"
 
-#: .\podcasts\templates\podcasts\channel_list.html:47
+#: .\podcasts\templates\podcasts\channel_list.html:48
 msgid "Most episodes"
 msgstr "अधिकांश एपिसोड"
 
-#: .\podcasts\templates\podcasts\channel_list.html:48
+#: .\podcasts\templates\podcasts\channel_list.html:49
 msgid "Least episodes"
 msgstr "न्यूनतम एपिसोड"
 
-#: .\podcasts\templates\podcasts\channel_list.html:65
-#: .\podcasts\templates\podcasts\channel_list_items.html:13
-#: .\podcasts\templates\podcasts\favorites_list.html:19
-#: .\podcasts\templates\podcasts\favorites_list_items.html:12
-#: .\podcasts\templates\podcasts\replies_list_item.html:12
-msgid "No image available"
-msgstr "कोई छवि उपलब्ध नहीं"
-
-#: .\podcasts\templates\podcasts\channel_list.html:87
-#: .\podcasts\templates\podcasts\channel_list_items.html:35
-#: .\podcasts\templates\podcasts\favorites_list.html:43
-#: .\podcasts\templates\podcasts\favorites_list_items.html:33
-#: .\podcasts\templates\podcasts\search_results_ch_items.html:70
+#: .\podcasts\templates\podcasts\channel_list.html:90
+#: .\podcasts\templates\podcasts\channel_list_items.html:37
+#: .\podcasts\templates\podcasts\favorites_list.html:52
+#: .\podcasts\templates\podcasts\favorites_list_items.html:42
+#: .\podcasts\templates\podcasts\search_results_ch_items.html:64
 msgid "Channel Rating"
 msgstr "चैनल रेटिंग"
 
-#: .\podcasts\templates\podcasts\channel_list.html:99
-#: .\podcasts\templates\podcasts\channel_list_items.html:47
-#: .\podcasts\templates\podcasts\search_results_ch_items.html:84
+#: .\podcasts\templates\podcasts\channel_list.html:102
+#: .\podcasts\templates\podcasts\channel_list_items.html:49
+#: .\podcasts\templates\podcasts\search_results_ch_items.html:78
 msgid "Total Episodes"
 msgstr "कुल एपिसोड"
 
-#: .\podcasts\templates\podcasts\channel_list.html:108
+#: .\podcasts\templates\podcasts\channel_list.html:114
 msgid "No channels available."
 msgstr "कोई चैनल उपलब्ध नहीं है."
 
-#: .\podcasts\templates\podcasts\channel_list.html:114
-#: .\podcasts\templates\podcasts\channel_list.html:119
-#: .\podcasts\templates\podcasts\favorites_list.html:80
-#: .\podcasts\templates\podcasts\search_results_ch_items.html:100
-#: .\podcasts\templates\podcasts\search_results_ch_items.html:105
+#: .\podcasts\templates\podcasts\channel_list.html:120
+#: .\podcasts\templates\podcasts\channel_list.html:125
+#: .\podcasts\templates\podcasts\favorites_list.html:94
+#: .\podcasts\templates\podcasts\search_results_ch_items.html:94
+#: .\podcasts\templates\podcasts\search_results_ch_items.html:99
 msgid "Loading more channels..."
 msgstr "अधिक चैनल लोड हो रहे हैं..."
 
@@ -771,197 +794,161 @@ msgstr ""
 msgid "Disable 2FA"
 msgstr "2FA को अक्षम करें"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:40
-msgid "No channel image"
-msgstr "कोई चैनल छवि नहीं"
-
-#: .\podcasts\templates\podcasts\episode_detail.html:82
+#: .\podcasts\templates\podcasts\episode_detail.html:75
 msgid "Remove from Bookmarks"
 msgstr "बुकमार्क से हटाएँ"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:82
+#: .\podcasts\templates\podcasts\episode_detail.html:75
 msgid "Add to Bookmarks"
 msgstr "बुकमार्क में जोड़ें"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:92
+#: .\podcasts\templates\podcasts\episode_detail.html:85
 msgid "Sign in to bookmark"
 msgstr "बुकमार्क में साइन इन करें"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:96
+#: .\podcasts\templates\podcasts\episode_detail.html:89
 msgid "Number of Bookmarks"
 msgstr "बुकमार्क की संख्या"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:102
+#: .\podcasts\templates\podcasts\episode_detail.html:95
 msgid "Comment"
 msgstr "टिप्पणी"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:108
+#: .\podcasts\templates\podcasts\episode_detail.html:101
 msgid "Sign in to comment"
 msgstr "टिप्पणी करने के लिए साइन इन करें"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:113
+#: .\podcasts\templates\podcasts\episode_detail.html:106
 msgid "Number of Comments"
 msgstr "टिप्पणियों की संख्या"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:124
+#: .\podcasts\templates\podcasts\episode_detail.html:117
 msgid "Rate this episode"
 msgstr "इस एपिसोड को रेट करें"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:139
+#: .\podcasts\templates\podcasts\episode_detail.html:132
 msgid "Average rating and total ratings"
 msgstr "औसत रेटिंग और कुल रेटिंग"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:158
-#: .\podcasts\templates\podcasts\episode_detail.html:159
-#: .\podcasts\templates\podcasts\episode_detail.html:161
+#: .\podcasts\templates\podcasts\episode_detail.html:151
+#: .\podcasts\templates\podcasts\episode_detail.html:152
+#: .\podcasts\templates\podcasts\episode_detail.html:154
 msgid "Download JSON"
 msgstr "JSON डाउनलोड करें"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:167
+#: .\podcasts\templates\podcasts\episode_detail.html:160
 msgid "Sign in to download JSON"
 msgstr "JSON डाउनलोड करने के लिए साइन इन करें"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:172
+#: .\podcasts\templates\podcasts\episode_detail.html:165
 msgid "Total Downloads"
 msgstr "कुल डाउनलोड"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:183
+#: .\podcasts\templates\podcasts\episode_detail.html:176
 msgid "Share link to this episode"
 msgstr "इस एपिसोड का लिंक साझा करें"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:185
+#: .\podcasts\templates\podcasts\episode_detail.html:178
 msgid "Share link"
 msgstr "साझा लिंक"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:193
+#: .\podcasts\templates\podcasts\episode_detail.html:186
 msgid "Sign in to share"
 msgstr "साझा करने के लिए साइन इन करें"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:198
+#: .\podcasts\templates\podcasts\episode_detail.html:191
 msgid "Total Shares"
 msgstr "कुल शेयर"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:207
+#: .\podcasts\templates\podcasts\episode_detail.html:200
 msgid "Listen"
 msgstr "सुनो"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:223
-msgid "Rewind 15 seconds"
-msgstr "15 सेकंड पीछे मोड़ें"
-
-#: .\podcasts\templates\podcasts\episode_detail.html:223
-msgid "Back 15 seconds"
-msgstr "15 सेकंड वापस"
-
-#: .\podcasts\templates\podcasts\episode_detail.html:226
-msgid "Fast Forward 15 seconds"
-msgstr "तेजी से आगे 15 सेकंड"
-
-#: .\podcasts\templates\podcasts\episode_detail.html:226
-msgid "Forward 15 seconds"
-msgstr "आगे 15 सेकंड"
-
-#: .\podcasts\templates\podcasts\episode_detail.html:231
-msgid "Episode audio player"
-msgstr "एपिसोड ऑडियो प्लेयर"
-
-#: .\podcasts\templates\podcasts\episode_detail.html:233
-msgid "Your browser does not support the audio element."
-msgstr "आपका ब्राउज़र ऑडियो तत्व का समर्थन नहीं करता है।"
-
-#: .\podcasts\templates\podcasts\episode_detail.html:237
-msgid "Slower Audio"
-msgstr "धीमा ऑडियो"
-
-#: .\podcasts\templates\podcasts\episode_detail.html:237
-msgid "Decrease speed"
-msgstr "गति में कमी"
-
-#: .\podcasts\templates\podcasts\episode_detail.html:238
-msgid "Click to reset to 1×"
-msgstr "1x पर रीसेट करने के लिए क्लिक करें"
-
-#: .\podcasts\templates\podcasts\episode_detail.html:238
-msgid "Playback speed; click to reset to 1×"
-msgstr "प्लेबैक गति; 1× पर रीसेट करने के लिए क्लिक करें"
-
-#: .\podcasts\templates\podcasts\episode_detail.html:239
-msgid "Faster Audio"
-msgstr "तेज ऑडियो"
-
-#: .\podcasts\templates\podcasts\episode_detail.html:239
-msgid "Increase speed"
-msgstr "गति बढ़ाएँ"
-
-#: .\podcasts\templates\podcasts\episode_detail.html:243
+#: .\podcasts\templates\podcasts\episode_detail.html:250
 msgid "Audio:"
 msgstr "ऑडियोः"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:243
+#: .\podcasts\templates\podcasts\episode_detail.html:250
 msgid "No audio available"
 msgstr "कोई ऑडियो उपलब्ध नहीं"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:250
+#: .\podcasts\templates\podcasts\episode_detail.html:258
 msgid "Chapters"
 msgstr "अध्याय"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:257
+#: .\podcasts\templates\podcasts\episode_detail.html:265
 msgid "Jump to"
 msgstr "कूदने के लिए"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:262
+#: .\podcasts\templates\podcasts\episode_detail.html:270
 msgid "No chapters available for this episode."
 msgstr "इस एपिसोड के लिए कोई अध्याय उपलब्ध नहीं है।"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:272
+#: .\podcasts\templates\podcasts\episode_detail.html:280
 msgid "Transcript"
 msgstr "प्रतिलिपि"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:292
+#: .\podcasts\templates\podcasts\episode_detail.html:300
 msgid "No transcript available for this episode."
 msgstr "इस एपिसोड के लिए कोई प्रतिलिपि उपलब्ध नहीं है।"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:300
+#: .\podcasts\templates\podcasts\episode_detail.html:308
+#: .\podcasts\templates\podcasts\episode_detail.html:405
+#: .\podcasts\templates\podcasts\episode_detail.html:406
 msgid "Play"
 msgstr "खेलें"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:302
+#: .\podcasts\templates\podcasts\episode_detail.html:310
+#: .\podcasts\templates\podcasts\episode_detail.html:405
+#: .\podcasts\templates\podcasts\episode_detail.html:406
 msgid "Pause"
 msgstr "विराम"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:304
+#: .\podcasts\templates\podcasts\episode_detail.html:312
 msgid "Go to Audio"
 msgstr "ऑडियो पर जाएं"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:306
+#: .\podcasts\templates\podcasts\episode_detail.html:314
 msgid "Go to Transcript"
 msgstr "ट्रांसक्रिप्ट पर जाएं"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:321
+#: .\podcasts\templates\podcasts\episode_detail.html:329
 msgid "Write a comment..."
 msgstr "एक टिप्पणी लिखें ..."
 
-#: .\podcasts\templates\podcasts\episode_detail.html:324
+#: .\podcasts\templates\podcasts\episode_detail.html:332
 msgid "Submit Comment"
 msgstr "टिप्पणी प्रस्तुत करें"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:343
+#: .\podcasts\templates\podcasts\episode_detail.html:351
 msgid "Copied to clipboard"
 msgstr "क्लिपबोर्ड पर कॉपी किया गया"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:1231
+#: .\podcasts\templates\podcasts\episode_detail.html:413
+#: .\podcasts\templates\podcasts\episode_detail.html:414
+msgid "Unmute"
+msgstr "निर्विवाद"
+
+#: .\podcasts\templates\podcasts\episode_detail.html:417
+#: .\podcasts\templates\podcasts\episode_detail.html:418
+#: .\podcasts\templates\podcasts\episode_detail.html:421
+#: .\podcasts\templates\podcasts\episode_detail.html:422
+msgid "Mute"
+msgstr "मूक"
+
+#: .\podcasts\templates\podcasts\episode_detail.html:1325
 msgid "Remove episode from Bookmarks"
 msgstr "बुकमार्क से एपिसोड निकालें"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:1237
+#: .\podcasts\templates\podcasts\episode_detail.html:1331
 msgid "Add episode to Bookmarks"
 msgstr "बुकमार्क में एपिसोड जोड़ें"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:1363
+#: .\podcasts\templates\podcasts\episode_detail.html:1457
 msgid "No comments yet."
 msgstr "अभी तक कोई टिप्पणी नहीं।"
 
-#: .\podcasts\templates\podcasts\episode_detail.html:1427
+#: .\podcasts\templates\podcasts\episode_detail.html:1521
 msgid "Please enter a comment"
 msgstr "कृपया एक टिप्पणी दर्ज करें"
 
@@ -969,87 +956,85 @@ msgstr "कृपया एक टिप्पणी दर्ज करें"
 msgid "Podcast Episodes"
 msgstr "पॉडकास्ट एपिसोड"
 
-#: .\podcasts\templates\podcasts\episode_list.html:16
+#: .\podcasts\templates\podcasts\episode_list.html:17
 msgid "Trending"
 msgstr "प्रवृत्ति"
 
-#: .\podcasts\templates\podcasts\episode_list.html:17
-#| msgid "Most recent"
+#: .\podcasts\templates\podcasts\episode_list.html:18
 msgid "Most trending"
 msgstr "सबसे ट्रेंडिंग"
 
-#: .\podcasts\templates\podcasts\episode_list.html:18
-#| msgid "Least recent"
+#: .\podcasts\templates\podcasts\episode_list.html:19
 msgid "Least trending"
 msgstr "सबसे कम प्रवृत्ति"
 
-#: .\podcasts\templates\podcasts\episode_list.html:22
+#: .\podcasts\templates\podcasts\episode_list.html:23
 msgid "Recent"
 msgstr "हाल ही में"
 
-#: .\podcasts\templates\podcasts\episode_list.html:23
+#: .\podcasts\templates\podcasts\episode_list.html:24
 msgid "Most recent"
 msgstr "सबसे हालिया"
 
-#: .\podcasts\templates\podcasts\episode_list.html:24
+#: .\podcasts\templates\podcasts\episode_list.html:25
 msgid "Least recent"
 msgstr "हाल ही में"
 
-#: .\podcasts\templates\podcasts\episode_list.html:35
+#: .\podcasts\templates\podcasts\episode_list.html:36
 msgid "Most bookmarked"
 msgstr "अधिकांश बुकमार्क"
 
-#: .\podcasts\templates\podcasts\episode_list.html:36
+#: .\podcasts\templates\podcasts\episode_list.html:37
 msgid "Least bookmarked"
 msgstr "न्यूनतम बुकमार्क"
 
-#: .\podcasts\templates\podcasts\episode_list.html:41
+#: .\podcasts\templates\podcasts\episode_list.html:42
 msgid "Most commented"
 msgstr "अधिकांश टिप्पणी"
 
-#: .\podcasts\templates\podcasts\episode_list.html:42
+#: .\podcasts\templates\podcasts\episode_list.html:43
 msgid "Least commented"
 msgstr "कम से कम टिप्पणी की"
 
-#: .\podcasts\templates\podcasts\episode_list.html:52
+#: .\podcasts\templates\podcasts\episode_list.html:53
 msgid "Downloaded"
 msgstr "डाउनलोड किया गया"
 
-#: .\podcasts\templates\podcasts\episode_list.html:53
+#: .\podcasts\templates\podcasts\episode_list.html:54
 msgid "Most downloaded"
 msgstr "सबसे अधिक डाउनलोड किया गया"
 
-#: .\podcasts\templates\podcasts\episode_list.html:54
+#: .\podcasts\templates\podcasts\episode_list.html:55
 msgid "Least downloaded"
 msgstr "कम से कम डाउनलोड किया गया"
 
-#: .\podcasts\templates\podcasts\episode_list.html:58
+#: .\podcasts\templates\podcasts\episode_list.html:59
 msgid "Shared"
 msgstr "साझा किया गया"
 
-#: .\podcasts\templates\podcasts\episode_list.html:59
+#: .\podcasts\templates\podcasts\episode_list.html:60
 msgid "Most shared"
 msgstr "अधिकतर साझा"
 
-#: .\podcasts\templates\podcasts\episode_list.html:60
+#: .\podcasts\templates\podcasts\episode_list.html:61
 msgid "Least shared"
 msgstr "कम से कम साझा किया गया"
 
-#: .\podcasts\templates\podcasts\episode_list.html:146
-#: .\podcasts\templates\podcasts\episode_list_items.html:98
+#: .\podcasts\templates\podcasts\episode_list.html:153
+#: .\podcasts\templates\podcasts\episode_list_items.html:97
 msgid "No episodes available."
 msgstr "कोई एपिसोड उपलब्ध नहीं है।"
 
-#: .\podcasts\templates\podcasts\favorites_list.html:57
-#: .\podcasts\templates\podcasts\favorites_list_items.html:45
+#: .\podcasts\templates\podcasts\favorites_list.html:66
+#: .\podcasts\templates\podcasts\favorites_list_items.html:54
 msgid "Total episodes"
 msgstr "कुल एपिसोड"
 
-#: .\podcasts\templates\podcasts\favorites_list.html:68
+#: .\podcasts\templates\podcasts\favorites_list.html:81
 msgid "No favorite channels found."
 msgstr "कोई पसंदीदा चैनल नहीं मिला।"
 
-#: .\podcasts\templates\podcasts\favorites_list.html:74
+#: .\podcasts\templates\podcasts\favorites_list.html:88
 msgid "Loading more favorite channels..."
 msgstr "अधिक पसंदीदा चैनलों को लोड..."
 
@@ -1091,11 +1076,11 @@ msgstr "म्यूज़ पॉडकास्ट सर्च इंजन"
 msgid "License: GPL v3"
 msgstr "लाइसेंसः जीपीएल v3"
 
-#: .\podcasts\templates\podcasts\home.html:43
+#: .\podcasts\templates\podcasts\home.html:45
 msgid "🚀 About"
 msgstr " के बारे में"
 
-#: .\podcasts\templates\podcasts\home.html:44
+#: .\podcasts\templates\podcasts\home.html:46
 msgid ""
 "Muse is a free, AI-powered podcast search engine. Tired of scouring episode "
 "show notes for bits of information, we built a platform where you can:"
@@ -1103,7 +1088,7 @@ msgstr ""
 "म्यूज़ एक मुफ्त, एआई-संचालित पॉडकास्ट सर्च इंजन है एपिसोड शो नोट्स को खोजने "
 "से थक गया, हमने एक मंच बनाया जहां आप कर सकते हैंः"
 
-#: .\podcasts\templates\podcasts\home.html:46
+#: .\podcasts\templates\podcasts\home.html:48
 msgid ""
 "🔍 Search any podcast by keyword (titles, descriptions, or transcript "
 "content)"
@@ -1111,11 +1096,11 @@ msgstr ""
 "🔍 कुंजीशब्द द्वारा किसी भी पॉडकास्ट की खोज करें (शीर्षक, विवरण, या "
 "ट्रांसक्रिप्ट सामग्री)"
 
-#: .\podcasts\templates\podcasts\home.html:47
+#: .\podcasts\templates\podcasts\home.html:49
 msgid "📄 View full, time-stamped transcripts (speaker-diarized and formatted)"
 msgstr " पूर्ण, समय-स्टैम्प्ड ट्रांसक्रिप्ट देखें (स्पीकर डायरी और प्रारूपित)"
 
-#: .\podcasts\templates\podcasts\home.html:48
+#: .\podcasts\templates\podcasts\home.html:50
 msgid "✍️ Read AI-generated chapter summaries"
 msgstr ""
 "✍️ आर्टिफिशियल आर्टिफिशियल आर्टिफिशियल आर्टिफिशियल आर्टिफिशियल आर्टिफिशियल "
@@ -1127,7 +1112,7 @@ msgstr ""
 "आर्टिफिशियल आर्टिफिशियल आर्टिफिशियल आर्टिफिशियल आर्टिफिशियल आर्टिफिशियल "
 "आर्टिफिशियल आर्टिफिशियल आर्टिफिशियल आर्टिफिशियल"
 
-#: .\podcasts\templates\podcasts\home.html:49
+#: .\podcasts\templates\podcasts\home.html:51
 msgid ""
 "🌐 Find podcasts in 17 different languages natively transcribed or AI "
 "translated"
@@ -1135,15 +1120,15 @@ msgstr ""
 " 17 अलग-अलग भाषाओं में पॉडकास्ट खोजें मूल रूप से प्रतिलिपिबद्ध या एआई द्वारा"
 " अनुवादित"
 
-#: .\podcasts\templates\podcasts\home.html:50
+#: .\podcasts\templates\podcasts\home.html:52
 msgid "🎧 Click through to listen at the exact moment a topic is discussed"
 msgstr " किसी विषय पर चर्चा होने के सटीक समय सुनने के लिए क्लिक करें"
 
-#: .\podcasts\templates\podcasts\home.html:51
+#: .\podcasts\templates\podcasts\home.html:53
 msgid "🆕 Discover new channels or episodes based on your interests"
 msgstr " अपनी रुचियों के आधार पर नए चैनल या एपिसोड खोजें"
 
-#: .\podcasts\templates\podcasts\home.html:53
+#: .\podcasts\templates\podcasts\home.html:55
 msgid ""
 "Currently optimized for desktop browsers, tablets, foldables, and "
 "smartphones. Community contribution and native apps are coming soon!"
@@ -1151,15 +1136,15 @@ msgstr ""
 "वर्तमान में डेस्कटॉप ब्राउज़र, टैबलेट, फोल्डेबल और स्मार्टफोन के लिए "
 "अनुकूलित। सामुदायिक योगदान और मूल ऐप जल्द ही आ रहे हैं!"
 
-#: .\podcasts\templates\podcasts\home.html:55
+#: .\podcasts\templates\podcasts\home.html:57
 msgid "🌟 Key Features"
 msgstr " प्रमुख विशेषताएं"
 
-#: .\podcasts\templates\podcasts\home.html:57
+#: .\podcasts\templates\podcasts\home.html:59
 msgid "Account Signup & Management"
 msgstr "खाता पंजीकरण और प्रबंधन"
 
-#: .\podcasts\templates\podcasts\home.html:57
+#: .\podcasts\templates\podcasts\home.html:59
 msgid ""
 "Create a free account to save searches, bookmark episodes, and track "
 "listening history."
@@ -1167,11 +1152,11 @@ msgstr ""
 "खोजों, बुकमार्क एपिसोड को सहेजने और सुनने के इतिहास को ट्रैक करने के लिए एक "
 "मुफ्त खाता बनाएं।"
 
-#: .\podcasts\templates\podcasts\home.html:58
+#: .\podcasts\templates\podcasts\home.html:60
 msgid "Transcript Generation"
 msgstr "ट्रांसक्रिप्ट पीढ़ी"
 
-#: .\podcasts\templates\podcasts\home.html:58
+#: .\podcasts\templates\podcasts\home.html:60
 msgid ""
 "Ingests RSS feeds from any podcast; uses OpenAI Whisper Turbo on an NVIDIA "
 "GPU for fast, high-quality transcription; diarizes speakers and formats with"
@@ -1181,11 +1166,11 @@ msgstr ""
 " ट्रांसक्रिप्शन के लिए एनवीआईडीआईए जीपीयू पर ओपनएआई व्हिस्पर टर्बो का उपयोग "
 "करता है; टाइमस्टैम्प के साथ स्पीकर और प्रारूपों को डायरी करता है।"
 
-#: .\podcasts\templates\podcasts\home.html:59
+#: .\podcasts\templates\podcasts\home.html:61
 msgid "Chapter Summaries"
 msgstr "अध्याय सारांश"
 
-#: .\podcasts\templates\podcasts\home.html:59
+#: .\podcasts\templates\podcasts\home.html:61
 msgid ""
 "Generates concise summaries of each transcript segment using FalconsAI text-"
 "summarization."
@@ -1193,11 +1178,11 @@ msgstr ""
 "FalconsAI पाठ-संक्षेप का उपयोग करके प्रत्येक प्रतिलेख खंड के संक्षिप्त "
 "सारांश उत्पन्न करता है।"
 
-#: .\podcasts\templates\podcasts\home.html:60
+#: .\podcasts\templates\podcasts\home.html:62
 msgid "Transcript Translations"
 msgstr "ट्रांसक्रिप्ट अनुवाद"
 
-#: .\podcasts\templates\podcasts\home.html:60
+#: .\podcasts\templates\podcasts\home.html:62
 msgid ""
 "Takes podcasts and translates them into 17 different languages using "
 "nllb-200-distilled-600M translation model."
@@ -1205,11 +1190,11 @@ msgstr ""
 "nllb-200-distilled-600M अनुवाद मॉडल का उपयोग करके पॉडकास्ट लेता है और उन्हें"
 " 17 अलग-अलग भाषाओं में अनुवाद करता है।"
 
-#: .\podcasts\templates\podcasts\home.html:61
+#: .\podcasts\templates\podcasts\home.html:63
 msgid "Full-Text Search"
 msgstr "पूर्ण पाठ खोज"
 
-#: .\podcasts\templates\podcasts\home.html:61
+#: .\podcasts\templates\podcasts\home.html:63
 msgid ""
 "Powered by Elasticsearch for lightning-fast, fuzzy-match queries; filters by"
 " title, description, channel metadata, or transcript."
@@ -1217,114 +1202,114 @@ msgstr ""
 "बिजली की तेजी से, धुंधली-मैच क्वेरी के लिए Elasticsearch द्वारा संचालित; "
 "शीर्षक, विवरण, चैनल मेटाडेटा, या ट्रांसक्रिप्ट द्वारा फ़िल्टर।"
 
-#: .\podcasts\templates\podcasts\home.html:62
+#: .\podcasts\templates\podcasts\home.html:64
 msgid "Flexible Playback"
 msgstr "लचीली प्लेबैक"
 
-#: .\podcasts\templates\podcasts\home.html:62
+#: .\podcasts\templates\podcasts\home.html:64
 msgid ""
 "Jump directly to the moment a keyword appears in the audio player on the "
 "website."
 msgstr ""
 "सीधे वेबसाइट पर ऑडियो प्लेयर में एक कीवर्ड दिखाई देने के क्षण पर कूदें।"
 
-#: .\podcasts\templates\podcasts\home.html:65
+#: .\podcasts\templates\podcasts\home.html:67
 msgid "🏗️ Architecture & Tech Stack"
 msgstr "️ आर्किटेक्चर और टेक स्टैक"
 
-#: .\podcasts\templates\podcasts\home.html:69
+#: .\podcasts\templates\podcasts\home.html:71
 msgid "Layer"
 msgstr "परत"
 
-#: .\podcasts\templates\podcasts\home.html:70
+#: .\podcasts\templates\podcasts\home.html:72
 msgid "Technology"
 msgstr "प्रौद्योगिकी"
 
-#: .\podcasts\templates\podcasts\home.html:75
+#: .\podcasts\templates\podcasts\home.html:77
 msgid "Backend"
 msgstr "बैकेंड"
 
-#: .\podcasts\templates\podcasts\home.html:75
+#: .\podcasts\templates\podcasts\home.html:77
 msgid "Python, Django"
 msgstr "पायथन, डजंगो"
 
-#: .\podcasts\templates\podcasts\home.html:78
+#: .\podcasts\templates\podcasts\home.html:80
 msgid "Transcription"
 msgstr "प्रतिलिपि"
 
-#: .\podcasts\templates\podcasts\home.html:78
+#: .\podcasts\templates\podcasts\home.html:80
 msgid "OpenAI Whisper Turbo (GPU-accelerated)"
 msgstr "ओपनएआई व्हिस्पर टर्बो (जीपीयू-एक्सेलेरेटेड)"
 
-#: .\podcasts\templates\podcasts\home.html:81
+#: .\podcasts\templates\podcasts\home.html:83
 msgid "Summarization"
 msgstr "सारांश"
 
-#: .\podcasts\templates\podcasts\home.html:81
+#: .\podcasts\templates\podcasts\home.html:83
 msgid "FalconsAI / text_summarization"
 msgstr "FalconsAI / text_summary"
 
-#: .\podcasts\templates\podcasts\home.html:84
+#: .\podcasts\templates\podcasts\home.html:86
 msgid "Translation"
 msgstr "अनुवाद"
 
-#: .\podcasts\templates\podcasts\home.html:84
+#: .\podcasts\templates\podcasts\home.html:86
 msgid "Facebook / nllb-200-distilled-600M translation model"
 msgstr "फेसबुक / nllb-200-distilled-600M अनुवाद मॉडल"
 
-#: .\podcasts\templates\podcasts\home.html:87
+#: .\podcasts\templates\podcasts\home.html:89
 msgid "Connection Pooling"
 msgstr "कनेक्शन पूलिंग"
 
-#: .\podcasts\templates\podcasts\home.html:87
+#: .\podcasts\templates\podcasts\home.html:89
 msgid "PgBouncer"
 msgstr "PgBouncer"
 
-#: .\podcasts\templates\podcasts\home.html:90
+#: .\podcasts\templates\podcasts\home.html:92
 msgid "Email Services"
 msgstr "ईमेल सेवाएँ"
 
-#: .\podcasts\templates\podcasts\home.html:90
+#: .\podcasts\templates\podcasts\home.html:92
 msgid "Mailjet"
 msgstr "मेलजेट"
 
-#: .\podcasts\templates\podcasts\home.html:93
+#: .\podcasts\templates\podcasts\home.html:95
 msgid "Database"
 msgstr "डेटाबेस"
 
-#: .\podcasts\templates\podcasts\home.html:93
+#: .\podcasts\templates\podcasts\home.html:95
 msgid "PostgreSQL | MaraiaDB"
 msgstr "पोस्टग्रे एसक्यूएल"
 
-#: .\podcasts\templates\podcasts\home.html:96
+#: .\podcasts\templates\podcasts\home.html:98
 msgid "Search Engine"
 msgstr "खोज इंजन"
 
-#: .\podcasts\templates\podcasts\home.html:96
+#: .\podcasts\templates\podcasts\home.html:98
 msgid "Elasticsearch"
 msgstr "लचीली खोज"
 
-#: .\podcasts\templates\podcasts\home.html:99
+#: .\podcasts\templates\podcasts\home.html:101
 msgid "Frontend"
 msgstr "फ्रंट-एंड"
 
-#: .\podcasts\templates\podcasts\home.html:99
+#: .\podcasts\templates\podcasts\home.html:101
 msgid "Django templates | HTML | CSS | JavaScript"
 msgstr "Django टेम्पलेट्स HTML CSS जावास्क्रिप्ट"
 
-#: .\podcasts\templates\podcasts\home.html:102
+#: .\podcasts\templates\podcasts\home.html:104
 msgid "Deployment"
 msgstr "तैनाती"
 
-#: .\podcasts\templates\podcasts\home.html:102
+#: .\podcasts\templates\podcasts\home.html:104
 msgid "Docker | Ubuntu VM | Windows OS"
 msgstr "Docker उबंटू वर्म विंडोज ओएस"
 
-#: .\podcasts\templates\podcasts\notifications_list.html:107
+#: .\podcasts\templates\podcasts\notifications_list.html:96
 msgid "No notifications available."
 msgstr "कोई अधिसूचना उपलब्ध नहीं है।"
 
-#: .\podcasts\templates\podcasts\notifications_list.html:114
+#: .\podcasts\templates\podcasts\notifications_list.html:103
 msgid "Loading more notifications..."
 msgstr "अधिक सूचनाओं को लोड..."
 
@@ -1420,6 +1405,10 @@ msgstr "कोई उत्तर नहीं मिला।"
 msgid "Loading more replies..."
 msgstr "अधिक उत्तर लोड..."
 
+#: .\podcasts\templates\podcasts\replies_list_item.html:12
+msgid "No image available"
+msgstr "कोई छवि उपलब्ध नहीं"
+
 #: .\podcasts\templates\podcasts\replies_list_item.html:18
 msgid "Time:"
 msgstr "समय:"
@@ -1437,23 +1426,19 @@ msgstr "क्या आप मतलब"
 msgid "Channels matching"
 msgstr "मेल खाने वाले चैनल"
 
-#: .\podcasts\templates\podcasts\search_results_ch_items.html:26
-msgid "No image"
-msgstr "कोई छवि नहीं"
-
-#: .\podcasts\templates\podcasts\search_results_ch_items.html:94
+#: .\podcasts\templates\podcasts\search_results_ch_items.html:88
 msgid "No channels found matching your search."
 msgstr "आपके खोज से मेल खाने वाला कोई चैनल नहीं मिला।"
 
-#: .\podcasts\templates\podcasts\search_results_items.html:23
+#: .\podcasts\templates\podcasts\search_results_items.html:25
 msgid "No Title Available"
 msgstr "कोई शीर्षक उपलब्ध नहीं"
 
-#: .\podcasts\templates\podcasts\search_results_items.html:173
+#: .\podcasts\templates\podcasts\search_results_items.html:177
 msgid "No episodes found matching your search."
 msgstr "आपकी खोज से मेल खाता कोई एपिसोड नहीं मिला."
 
-#: .\podcasts\templates\podcasts\search_results_items.html:174
+#: .\podcasts\templates\podcasts\search_results_items.html:178
 msgid "Try different keywords or check your spelling."
 msgstr "अलग-अलग कीवर्ड आज़माएँ या अपनी वर्तनी जाँचें."
 
@@ -1529,17 +1514,17 @@ msgstr ""
 msgid "Sign Up"
 msgstr "साइन अप करें"
 
-#: .\podcasts\templates\podcasts\signup.html:174
+#: .\podcasts\templates\podcasts\signup.html:172
 #: .\podcasts\templates\socialaccount\signup.html:77
 msgid "Privacy Notice for Muse Podcast, LLC"
 msgstr "म्यूज़ पॉडकास्ट, एलएलसी के लिए गोपनीयता सूचना"
 
-#: .\podcasts\templates\podcasts\signup.html:178
+#: .\podcasts\templates\podcasts\signup.html:176
 #: .\podcasts\templates\socialaccount\signup.html:81
 msgid "Last updated:"
 msgstr "अंतिम अद्यतनः"
 
-#: .\podcasts\templates\podcasts\signup.html:179
+#: .\podcasts\templates\podcasts\signup.html:177
 #: .\podcasts\templates\socialaccount\signup.html:82
 msgid ""
 "Muse Podcast, LLC is committed to protecting your privacy. This Privacy "
@@ -1551,12 +1536,12 @@ msgstr ""
 " करते हैं तो हम आपकी जानकारी कैसे एकत्र करते हैं, उपयोग करते हैं, साझा करते "
 "हैं और संरक्षित करते हैं।"
 
-#: .\podcasts\templates\podcasts\signup.html:180
+#: .\podcasts\templates\podcasts\signup.html:178
 #: .\podcasts\templates\socialaccount\signup.html:83
 msgid "Information We Collect"
 msgstr "हम जो जानकारी इकट्ठा करते हैं"
 
-#: .\podcasts\templates\podcasts\signup.html:181
+#: .\podcasts\templates\podcasts\signup.html:179
 #: .\podcasts\templates\socialaccount\signup.html:84
 msgid ""
 "We collect the following information when you create an account or use our "
@@ -1565,102 +1550,102 @@ msgstr ""
 "जब आप एक खाता बनाते हैं या हमारी वेबसाइट का उपयोग करते हैं तो हम निम्नलिखित "
 "जानकारी एकत्र करते हैंः"
 
-#: .\podcasts\templates\podcasts\signup.html:183
+#: .\podcasts\templates\podcasts\signup.html:181
 #: .\podcasts\templates\socialaccount\signup.html:86
 msgid "Personal Information:"
 msgstr "व्यक्तिगत जानकारीः"
 
-#: .\podcasts\templates\podcasts\signup.html:185
+#: .\podcasts\templates\podcasts\signup.html:183
 #: .\podcasts\templates\socialaccount\signup.html:88
 msgid "First Name"
 msgstr "प्रथम नाम"
 
-#: .\podcasts\templates\podcasts\signup.html:186
+#: .\podcasts\templates\podcasts\signup.html:184
 #: .\podcasts\templates\socialaccount\signup.html:89
 msgid "Last Name"
 msgstr "उपनाम"
 
-#: .\podcasts\templates\podcasts\signup.html:187
+#: .\podcasts\templates\podcasts\signup.html:185
 msgid "Email Address"
 msgstr "ईमेल पता"
 
-#: .\podcasts\templates\podcasts\signup.html:188
+#: .\podcasts\templates\podcasts\signup.html:186
 #: .\podcasts\templates\socialaccount\signup.html:90
 msgid "Birthdate"
 msgstr "जन्म तिथि"
 
-#: .\podcasts\templates\podcasts\signup.html:189
+#: .\podcasts\templates\podcasts\signup.html:187
 #: .\podcasts\templates\socialaccount\signup.html:91
 msgid "Country"
 msgstr "देश"
 
-#: .\podcasts\templates\podcasts\signup.html:190
+#: .\podcasts\templates\podcasts\signup.html:188
 #: .\podcasts\templates\socialaccount\signup.html:92
 msgid "Phone Number"
 msgstr "फ़ोन नंबर"
 
-#: .\podcasts\templates\podcasts\signup.html:191
+#: .\podcasts\templates\podcasts\signup.html:189
 #: .\podcasts\templates\socialaccount\signup.html:93
 msgid "Gender"
 msgstr "लिंग"
 
-#: .\podcasts\templates\podcasts\signup.html:194
+#: .\podcasts\templates\podcasts\signup.html:192
 #: .\podcasts\templates\socialaccount\signup.html:96
 msgid "Technical Information:"
 msgstr "तकनीकी सूचनाः"
 
-#: .\podcasts\templates\podcasts\signup.html:196
+#: .\podcasts\templates\podcasts\signup.html:194
 #: .\podcasts\templates\socialaccount\signup.html:98
 msgid "Geolocation"
 msgstr "भू-स्थान"
 
-#: .\podcasts\templates\podcasts\signup.html:197
+#: .\podcasts\templates\podcasts\signup.html:195
 #: .\podcasts\templates\socialaccount\signup.html:99
 msgid "IP Addresses"
 msgstr "आईपी पते"
 
-#: .\podcasts\templates\podcasts\signup.html:200
+#: .\podcasts\templates\podcasts\signup.html:198
 #: .\podcasts\templates\socialaccount\signup.html:102
 msgid "Usage Information:"
 msgstr "उपयोग की जानकारीः"
 
-#: .\podcasts\templates\podcasts\signup.html:202
+#: .\podcasts\templates\podcasts\signup.html:200
 #: .\podcasts\templates\socialaccount\signup.html:104
 msgid "Data on what you search, view, or click within our website."
 msgstr ""
 "हमारी वेबसाइट में जो आप खोजते हैं, देखते हैं या क्लिक करते हैं, उस पर डेटा।"
 
-#: .\podcasts\templates\podcasts\signup.html:206
+#: .\podcasts\templates\podcasts\signup.html:204
 #: .\podcasts\templates\socialaccount\signup.html:108
 msgid "Purpose of Data Collection"
 msgstr "डेटा संग्रह का उद्देश्य"
 
-#: .\podcasts\templates\podcasts\signup.html:207
+#: .\podcasts\templates\podcasts\signup.html:205
 msgid "Muse Podcast, LLC collects this data to:"
 msgstr "म्यूज़ पॉडकास्ट, एलएलसी इस डेटा को इकट्ठा करता हैः"
 
-#: .\podcasts\templates\podcasts\signup.html:209
+#: .\podcasts\templates\podcasts\signup.html:207
 #: .\podcasts\templates\socialaccount\signup.html:110
 msgid "Provide, maintain, and improve our website services."
 msgstr "हमारी वेबसाइट सेवाएं प्रदान करें, बनाए रखें और सुधारें।"
 
-#: .\podcasts\templates\podcasts\signup.html:210
+#: .\podcasts\templates\podcasts\signup.html:208
 #: .\podcasts\templates\socialaccount\signup.html:111
 msgid "Protect our website and users against fraudulent activities and scams."
 msgstr ""
 "हमारी वेबसाइट और उपयोगकर्ताओं को धोखाधड़ी और धोखाधड़ी से बचाने के लिए।"
 
-#: .\podcasts\templates\podcasts\signup.html:211
+#: .\podcasts\templates\podcasts\signup.html:209
 #: .\podcasts\templates\socialaccount\signup.html:112
 msgid "Generate analytics to enhance user experience."
 msgstr "उपयोगकर्ता अनुभव को बढ़ाने के लिए एनालिटिक्स उत्पन्न करें।"
 
-#: .\podcasts\templates\podcasts\signup.html:213
+#: .\podcasts\templates\podcasts\signup.html:211
 #: .\podcasts\templates\socialaccount\signup.html:114
 msgid "Data Sharing and Selling"
 msgstr "डेटा साझा करना और बेचना"
 
-#: .\podcasts\templates\podcasts\signup.html:214
+#: .\podcasts\templates\podcasts\signup.html:212
 #: .\podcasts\templates\socialaccount\signup.html:115
 msgid ""
 "To keep our services free and advertisement-free, Muse Podcast, LLC may sell"
@@ -1678,12 +1663,12 @@ msgstr ""
 " पहचान आपकी गुमनामता बनाए रखने के लिए एक अद्वितीय, यादृच्छिक संख्या से "
 "प्रतिस्थापित की जाती है।"
 
-#: .\podcasts\templates\podcasts\signup.html:215
+#: .\podcasts\templates\podcasts\signup.html:213
 #: .\podcasts\templates\socialaccount\signup.html:116
 msgid "Data Security"
 msgstr "डेटा सुरक्षा"
 
-#: .\podcasts\templates\podcasts\signup.html:216
+#: .\podcasts\templates\podcasts\signup.html:214
 #: .\podcasts\templates\socialaccount\signup.html:117
 #, python-format
 msgid ""
@@ -1697,12 +1682,12 @@ msgstr ""
 " the internet or electronic storage is 100%% secure, so while we strive to "
 "protect your personal information, we cannot guarantee absolute security."
 
-#: .\podcasts\templates\podcasts\signup.html:217
+#: .\podcasts\templates\podcasts\signup.html:215
 #: .\podcasts\templates\socialaccount\signup.html:118
 msgid "Consent"
 msgstr "सहमति"
 
-#: .\podcasts\templates\podcasts\signup.html:218
+#: .\podcasts\templates\podcasts\signup.html:216
 #: .\podcasts\templates\socialaccount\signup.html:119
 msgid ""
 "By clicking the checkbox when creating an account, you consent to the "
@@ -1711,12 +1696,12 @@ msgstr ""
 "खाता बनाते समय चेकबॉक्स पर क्लिक करके, आप इस गोपनीयता सूचना में वर्णित "
 "संग्रह, उपयोग और साझाकरण प्रथाओं से सहमत हैं।"
 
-#: .\podcasts\templates\podcasts\signup.html:219
+#: .\podcasts\templates\podcasts\signup.html:217
 #: .\podcasts\templates\socialaccount\signup.html:120
 msgid "Your Rights and Choices"
 msgstr "आपके अधिकार और विकल्प"
 
-#: .\podcasts\templates\podcasts\signup.html:220
+#: .\podcasts\templates\podcasts\signup.html:218
 #: .\podcasts\templates\socialaccount\signup.html:121
 msgid ""
 "You have the right to access, correct, or request deletion of your personal "
@@ -1727,12 +1712,12 @@ msgstr ""
 "अधिकार है। इन अधिकारों का प्रयोग करने के लिए या यदि आपके पास इस गोपनीयता "
 "नीति के बारे में प्रश्न हैं, तो हमसे संपर्क करेंः"
 
-#: .\podcasts\templates\podcasts\signup.html:225
+#: .\podcasts\templates\podcasts\signup.html:223
 #: .\podcasts\templates\socialaccount\signup.html:126
 msgid "Changes to This Privacy Notice"
 msgstr "इस गोपनीयता सूचना में बदलाव"
 
-#: .\podcasts\templates\podcasts\signup.html:226
+#: .\podcasts\templates\podcasts\signup.html:224
 #: .\podcasts\templates\socialaccount\signup.html:127
 msgid ""
 "Muse Podcast, LLC reserves the right to modify this Privacy Notice at any "
@@ -1743,12 +1728,12 @@ msgstr ""
 "सुरक्षित रखता है। परिवर्तन हमारी वेबसाइट पर पोस्ट किए जाएंगे और पोस्ट करने "
 "के तुरंत बाद प्रभावी होंगे।"
 
-#: .\podcasts\templates\podcasts\signup.html:386
+#: .\podcasts\templates\podcasts\signup.html:391
 #: .\podcasts\templates\registration\password_change_form.html:152
 msgid "Passwords match"
 msgstr "पासवर्ड मिलान"
 
-#: .\podcasts\templates\podcasts\signup.html:388
+#: .\podcasts\templates\podcasts\signup.html:393
 #: .\podcasts\templates\registration\password_change_form.html:154
 msgid "Passwords do not match"
 msgstr "पासवर्ड मेल नहीं खाते"
@@ -2020,6 +2005,48 @@ msgstr "ओटीपी दर्ज करें"
 #: .\podcasts\templates\two_factor\core\otp.html:9
 msgid "Submit OTP"
 msgstr "ओटीपी सबमिट करें"
+
+#~ msgid "No channel image"
+#~ msgstr "कोई चैनल छवि नहीं"
+
+#~ msgid "Rewind 15 seconds"
+#~ msgstr "15 सेकंड पीछे मोड़ें"
+
+#~ msgid "Back 15 seconds"
+#~ msgstr "15 सेकंड वापस"
+
+#~ msgid "Fast Forward 15 seconds"
+#~ msgstr "तेजी से आगे 15 सेकंड"
+
+#~ msgid "Forward 15 seconds"
+#~ msgstr "आगे 15 सेकंड"
+
+#~ msgid "Episode audio player"
+#~ msgstr "एपिसोड ऑडियो प्लेयर"
+
+#~ msgid "Your browser does not support the audio element."
+#~ msgstr "आपका ब्राउज़र ऑडियो तत्व का समर्थन नहीं करता है।"
+
+#~ msgid "Slower Audio"
+#~ msgstr "धीमा ऑडियो"
+
+#~ msgid "Decrease speed"
+#~ msgstr "गति में कमी"
+
+#~ msgid "Click to reset to 1×"
+#~ msgstr "1x पर रीसेट करने के लिए क्लिक करें"
+
+#~ msgid "Playback speed; click to reset to 1×"
+#~ msgstr "प्लेबैक गति; 1× पर रीसेट करने के लिए क्लिक करें"
+
+#~ msgid "Faster Audio"
+#~ msgstr "तेज ऑडियो"
+
+#~ msgid "Increase speed"
+#~ msgstr "गति बढ़ाएँ"
+
+#~ msgid "No image"
+#~ msgstr "कोई छवि नहीं"
 
 #~ msgid "Audio"
 #~ msgstr "ऑडियो"

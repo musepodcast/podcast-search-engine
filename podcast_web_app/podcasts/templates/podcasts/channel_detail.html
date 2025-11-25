@@ -32,11 +32,7 @@
                     {% trans "by" %} {{ channel.channel_author }}
                 </p>
             {% endif %}
-            {% if channel.channel_summary %}
-                <p class="mb-0">
-                    {{ channel.channel_summary|clean_html }}
-                </p>
-            {% endif %}
+
 
             <!-- Buttons Section: Follow, Notification, Rating -->
             {# Buttons Section: Follow, Notification, Rating — render for everyone #}
@@ -104,6 +100,27 @@
                 <span class="total-episodes">{{ channel.total_episodes|default:"0" }}</span>
               </div>
             </div>
+          {% if channel.channel_summary %}
+            <div class="mt-3 channel-summary-block">
+              <p
+                class="mb-0 channel-summary-text summary-clamp"
+                id="channel-summary-text"
+              >
+                {{ channel.channel_summary|clean_html }}
+              </p>
+
+              <button
+                type="button"
+                class="btn btn-link p-0 mt-1 channel-summary-toggle"
+                id="channel-summary-toggle"
+                aria-expanded="false"
+                data-label-more="{% trans 'Show more' %}"
+                data-label-less="{% trans 'Show less' %}"
+              >
+                {% trans "Show more" %}
+              </button>
+            </div>
+          {% endif %}
         </div>
     </div>
 </div>
@@ -416,6 +433,72 @@
 
 
 </style>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const summary = document.getElementById("channel-summary-text");
+    const toggle  = document.getElementById("channel-summary-toggle");
+    if (!summary || !toggle) return;
+
+    const labelMore = toggle.dataset.labelMore || "Show more";
+    const labelLess = toggle.dataset.labelLess || "Show less";
+
+    let isExpanded = false;  // track current state
+
+    function isTruncated() {
+      // Ensure we check in "clamped" mode
+      summary.classList.add("summary-clamp");
+      summary.classList.remove("summary-expanded");
+      // tiny epsilon to avoid off-by-one issues
+      return summary.scrollHeight > summary.clientHeight + 1;
+    }
+
+    function applyState() {
+      if (isExpanded) {
+        // Fully expanded: no clamp, always show toggle as "Show less"
+        summary.classList.remove("summary-clamp");
+        summary.classList.add("summary-expanded");
+        toggle.style.display = "inline";
+        toggle.textContent = labelLess;
+        toggle.setAttribute("aria-expanded", "true");
+      } else {
+        // Collapsed: clamp and only show toggle if it actually truncates
+        summary.classList.add("summary-clamp");
+        summary.classList.remove("summary-expanded");
+        toggle.setAttribute("aria-expanded", "false");
+
+        if (isTruncated()) {
+          toggle.style.display = "inline";
+          toggle.textContent = labelMore;
+        } else {
+          toggle.style.display = "none";
+        }
+      }
+    }
+
+    // Click handler
+    toggle.addEventListener("click", function () {
+      isExpanded = !isExpanded;
+      applyState();
+    });
+
+    // Re-check on resize (so different line-clamp values on small screens work)
+    let resizeTimer = null;
+    window.addEventListener("resize", function () {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(function () {
+        // Only auto-adjust when collapsed; if user expanded, respect that
+        if (!isExpanded) {
+          applyState();
+        }
+      }, 150);
+    });
+
+    // Initial state
+    applyState();
+  });
+</script>
+
 
 <!-- AJAX & Button Behavior JavaScript -->
 <script>

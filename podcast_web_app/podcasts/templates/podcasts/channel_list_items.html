@@ -22,9 +22,7 @@
         {% if channel.channel_author %}
           <p class="text-muted mb-1">{% trans "by" %} {{ channel.channel_author }}</p>
         {% endif %}
-        {% if channel.channel_summary|clean_html %}
-          <p class="summary-clamp mb-0">{{ channel.channel_summary }}</p>
-        {% endif %}
+
 
         <!-- Aggregated channel data -->
         <div class="d-flex align-items-center flex-wrap mt-2">
@@ -53,6 +51,9 @@
             {{ channel.episode_count|default:"0" }}
           </span>
         </div>
+        {% if channel.channel_summary|clean_html %}
+          <p class="summary-clamp mb-0">{{ channel.channel_summary }}</p>
+        {% endif %}
       </div>
     </div>
   </a>

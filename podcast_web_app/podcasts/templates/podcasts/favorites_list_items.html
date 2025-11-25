@@ -28,9 +28,7 @@
           </p>
         {% endif %}
 
-        {% if channel.channel_summary %}
-          <p class="summary-clamp mb-0">{{ channel.channel_summary }}</p>
-        {% endif %}
+
 
         <div class="d-flex align-items-center flex-wrap mt-2">
           <span class="d-flex align-items-center me-3" title="{% trans 'Favorites' %}">
@@ -58,6 +56,9 @@
             {{ channel.episode_count|default:"0" }}
           </span>
         </div>
+        {% if channel.channel_summary %}
+          <p class="summary-clamp mb-0">{{ channel.channel_summary }}</p>
+        {% endif %}
       </div>
     </div>
   </a>
