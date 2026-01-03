@@ -24,15 +24,15 @@
   <link rel="stylesheet" href="{% static 'podcasts/fontawesome/css/all.min.css' %}">
 
   <!-- Favicons -->
-  <link rel="icon" type="image/png" sizes="32x32" href="{% static 'podcasts/images/favicon-32x32.png' %}">
-  <link rel="icon" type="image/png" sizes="192x192" href="{% static 'podcasts/images/favicon-192x192.png' %}">
-  <link rel="shortcut icon" href="{% static 'podcasts/favicon.ico' %}">
+  <link rel="icon" type="image/png" sizes="32x32" href="{% static 'podcasts/images/muse_retro_favicon-32x32.png' %}">
+  <link rel="icon" type="image/png" sizes="192x192" href="{% static 'podcasts/images/muse_retro_favicon-192x192.png' %}">
+  <link rel="shortcut icon" href="{% static 'podcasts/muse_retro_favicon.ico' %}">
 
   <!-- Apple touch icons -->
-  <link rel="apple-touch-icon" sizes="180x180" href="{% static 'podcasts/images/apple-touch-icon-180.png' %}">
-  <link rel="apple-touch-icon" sizes="167x167" href="{% static 'podcasts/images/apple-touch-icon-167.png' %}">
-  <link rel="apple-touch-icon" sizes="152x152" href="{% static 'podcasts/images/apple-touch-icon-152.png' %}">
-  <link rel="apple-touch-icon" sizes="120x120" href="{% static 'podcasts/images/apple-touch-icon-120.png' %}">
+  <link rel="apple-touch-icon" sizes="180x180" href="{% static 'podcasts/images/muse_retro_apple-touch-icon-180.png' %}">
+  <link rel="apple-touch-icon" sizes="167x167" href="{% static 'podcasts/images/muse_retro_apple-touch-icon-167.png' %}">
+  <link rel="apple-touch-icon" sizes="152x152" href="{% static 'podcasts/images/muse_retro_apple-touch-icon-152.png' %}">
+  <link rel="apple-touch-icon" sizes="120x120" href="{% static 'podcasts/images/muse_retro_apple-touch-icon-120.png' %}">
 
   <!-- Canonical URL (no query string like ?next=/...) -->
   <link rel="canonical" href="{{ request.build_absolute_uri|strip_querystring }}">
@@ -46,7 +46,7 @@
 
   <meta property="og:title" content="Muse Podcast – Podcast Search Engine">
   <meta property="og:description" content="Muse is a free podcast search engine that allows you to search and discover podcasts in 17+ languages.">
-  <meta property="og:image" content="https://musepodcast.com/static/podcasts/images/muse-og-1200x630.png">
+  <meta property="og:image" content="https://musepodcast.com/static/podcasts/images/muse_retro-og-1200x630.png">
   <meta property="og:url" content="https://musepodcast.com/">
   <meta property="og:type" content="website">
   {% endblock %}
@@ -67,7 +67,7 @@
   "@type":"Organization",
   "name":"Muse Podcast LLC",
   "url":"https://musepodcast.com/",
-  "logo":"https://musepodcast.com/static/podcasts/images/favicon-192x192.png",
+  "logo":"https://musepodcast.com/static/podcasts/images/muse_retro_favicon-192x192.png",
   "sameAs":[
     "https://x.com/musepodcastllc",
     "https://gitlab.com/musepodcast-group/podcast-search-engine-project",
@@ -84,7 +84,7 @@
       position: absolute; left: 0; top: 50%;
       transform: translateY(-50%);
       width: 1.75rem; height: 1.75rem;
-      background: url("{% static 'podcasts/images/favicon-mini.png' %}") no-repeat center/cover;
+      background: url("{% static 'podcasts/images/muse_retro_favicon-mini.png' %}") no-repeat center/cover;
       border-radius: 50%;
     }
     .lang-dropdown {
