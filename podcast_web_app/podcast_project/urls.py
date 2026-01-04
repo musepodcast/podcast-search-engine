@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.urls import path, include
-from django.contrib.sitemaps.views import sitemap
+from django.contrib.sitemaps.views import sitemap as sitemap_view, index as sitemap_index
+from django.views.decorators.cache import cache_page
 from podcasts.sitemaps import (
     StaticViewSitemap,
     ChannelSitemap,
@@ -33,6 +34,16 @@ def filter_valid_patterns(patterns):
             valid.extend(filter_valid_patterns(p))
     return valid
 
+def index_no_xrobots(request, *args, **kwargs):
+    resp = sitemap_index(request, *args, **kwargs)
+    resp.headers.pop("X-Robots-Tag", None)
+    return resp
+
+def sitemap_no_xrobots(request, *args, **kwargs):
+    resp = sitemap_view(request, *args, **kwargs)
+    resp.headers.pop("X-Robots-Tag", None)
+    return resp
+
 two_factor_patterns = filter_valid_patterns(two_factor_urls.urlpatterns)
 
 sitemaps = {
@@ -53,7 +64,8 @@ urlpatterns = [
     path('favicon.ico', favicon_view),
     path('', include((two_factor_patterns, 'two_factor'), namespace='two_factor')),
     path('', include('podcasts.urls', namespace='podcasts')),
-    path("sitemap.xml", sitemap, {"sitemaps": sitemaps}, name="django-sitemap"),
+    path("sitemap.xml", cache_page(60 * 60)(index_no_xrobots), {"sitemaps": sitemaps, "sitemap_url_name": "sitemap-sections"}, name="sitemap-index",),
+    path("sitemap-<section>.xml", cache_page(60 * 60)(sitemap_no_xrobots), {"sitemaps": sitemaps}, name="sitemap-sections",),
     path("robots.txt", TemplateView.as_view(template_name="podcasts/robots.txt", content_type="text/plain")),
     
 ]
