@@ -1,4 +1,18 @@
 User-agent: *
+Disallow: /admin/
+Disallow: /auth/
 Disallow: /login/
+Disallow: /logout/
 Disallow: /accounts/
+Disallow: /i18n/
+
+# Internal search result pages that can explode in combinations:
+Disallow: /search/
+
+# User-only areas:
+Disallow: /favorites/
+Disallow: /notifications/
+Disallow: /bookmarks/
+Disallow: /account/
+
 Sitemap: https://musepodcast.com/sitemap.xml
