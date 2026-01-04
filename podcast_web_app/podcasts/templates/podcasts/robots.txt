@@ -6,10 +6,10 @@ Disallow: /logout/
 Disallow: /accounts/
 Disallow: /i18n/
 
-# If you have internal search result pages that can explode in combinations:
+# Internal search result pages that can explode in combinations:
 Disallow: /search/
 
-# If you have user-only areas:
+# User-only areas:
 Disallow: /favorites/
 Disallow: /notifications/
 Disallow: /bookmarks/
