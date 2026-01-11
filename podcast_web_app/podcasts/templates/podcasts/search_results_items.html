@@ -195,6 +195,14 @@ document.addEventListener("DOMContentLoaded", function(){
   const endText = "{% trans 'End of list...' %}";
   const loadText= "{% trans 'Loading more episodes...' %}";
 
+  function updateDisplayedEpisodeCount() {
+    const displayed = listEl.querySelectorAll("a.list-group-item").length;
+    const el = document.getElementById("episodes-displayed-count");
+    if (el) el.textContent = String(displayed);
+  }
+
+  updateDisplayedEpisodeCount();
+
   window.addEventListener("scroll", ()=>{
     if(loading||!hasMore) return;
     if(window.innerHeight+window.scrollY >= document.body.offsetHeight-500){
@@ -220,6 +228,7 @@ document.addEventListener("DOMContentLoaded", function(){
             }else{
               items.forEach(i=> listEl.appendChild(i));
               spinner.style.display="none";
+              updateDisplayedEpisodeCount(); // ✅
             }
           }
           loading=false;
@@ -229,6 +238,7 @@ document.addEventListener("DOMContentLoaded", function(){
   });
 });
 </script>
+
 
 <style>
 .description-clamp{

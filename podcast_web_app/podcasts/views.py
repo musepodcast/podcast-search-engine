@@ -1319,7 +1319,7 @@ class ChannelDetailView(DetailView):
                            .params(collapse={'field': 'episode_id',
                                              'inner_hits': {'name': 'top_segment', 'size': 1}})
                            .sort({'_score': 'desc'})
-                           .extra(track_total_hits=True))
+                           .extra(track_total_hits=True))               
                 t_resp = tsearch[0:top_k].execute()
                 for h in t_resp:
                     try:
@@ -2333,16 +2333,28 @@ class SearchResultsView(LoginRequiredMixin, ListView):
 
 
     def paginate_queryset(self, qs, page_size):
-        from .models import Episode
+        """
+        Returns: (paginator, page_obj, object_list, has_other_pages)
+        where object_list is a list of Episodes (or Channels when search_type=channels).
 
-        q           = (self.request.GET.get('q', '') or '').strip()
-        search_type = self.request.GET.get('search_type', 'episodes')
+        Key behavior:
+        - Transcript-only searches use ES collapse + cardinality agg (no >10k window).
+        - Transcript + anything else uses OR/UNION behavior (so transcript+description >= transcript-only).
+        - channel_title + description are DB-only fields (because ES mapping often won't include them reliably).
+        - Other episode fields (episode_title, translations.*) use EpisodeDocument ES.
+        """
 
-        # 1) No query → default ListView pagination
+        # ---------------- basics ----------------
+        from .models import Episode  # keep local import pattern
+
+        q = (self.request.GET.get('q', '') or '').strip()
+        search_type = (self.request.GET.get('search_type', 'episodes') or 'episodes').strip()
+
+        # 1) No query → normal ListView pagination
         if not q:
             return super().paginate_queryset(qs, page_size)
 
-        # 2) CHANNELS branch (unchanged except using correct related name)
+        # ---------------- CHANNELS branch ----------------
         if search_type == 'channels':
             wants = self.request.GET.getlist('search_in')
             filters = []
@@ -2354,7 +2366,6 @@ class SearchResultsView(LoginRequiredMixin, ListView):
                 filters.append(Q(channel_summary__icontains=q))
 
             chans = Channel.objects.all()
-
             if filters:
                 combined = filters.pop()
                 for f in filters:
@@ -2377,7 +2388,6 @@ class SearchResultsView(LoginRequiredMixin, ListView):
                 .annotate(c=Count('*'))
                 .values('c')[:1]
             )
-            
 
             chans = (
                 chans
@@ -2401,50 +2411,71 @@ class SearchResultsView(LoginRequiredMixin, ListView):
                         distinct=True,
                     ),
                 )
-            ).only(
-                'id', 'channel_title', 'channel_author', 'channel_summary',
-                'channel_image_url', 'sanitized_channel_title'
+                .only(
+                    'id', 'channel_title', 'channel_author', 'channel_summary',
+                    'channel_image_url', 'sanitized_channel_title'
+                )
+                .order_by('channel_title', 'id')
             )
-            # inside SearchResultsView.paginate_queryset(...), channels branch — just before paginator
-            chans = chans.only(
-                'id', 'channel_title', 'channel_author', 'channel_summary',
-                'channel_image_url', 'sanitized_channel_title'
-            )
-
-            # ✅ add a stable ordering to silence UnorderedObjectListWarning
-            chans = chans.order_by('channel_title', 'id')
 
             paginator = Paginator(chans, page_size)
-            page_num  = int(self.request.GET.get('page', 1))
-            page_obj  = paginator.get_page(page_num)
+            page_num = int(self.request.GET.get('page', 1))
+            page_obj = paginator.get_page(page_num)
             return paginator, page_obj, list(page_obj.object_list), page_obj.has_other_pages()
 
-        # 4) FULL-TEXT / ELASTICSEARCH (episodes)
+        # ---------------- EPISODES branch ----------------
+
+        # Date window
         date_filter = self.request.GET.get('search_date', 'anytime')
         window = None
         if date_filter != 'anytime':
             days = int(date_filter)
-            window = (timezone.timedelta(hours=24) if days == 24
-                      else timezone.timedelta(days=days))
+            window = (timezone.timedelta(hours=24) if days == 24 else timezone.timedelta(days=days))
+        
+        # Build eligible episode ids for date filtering in TranscriptDocument (ES can't join)
+        eligible_episode_ids = None
+        if window:
+            eligible_episode_ids = list(
+                Episode.objects
+                .filter(publication_date__gte=timezone.now() - window)
+                .exclude(channel__sanitized_channel_title__isnull=True)
+                .exclude(channel__sanitized_channel_title='')
+                .values_list('id', flat=True)
+            )
 
+        # Selected UI fields
         selected = set(self.request.GET.getlist('search_in'))
-        transcript_only = [
-            {self.SEGMENT_FIELD},
-            {self.SEGMENT_ALIAS_FIELD},
-            {self.TRANSCRIPTS_FIELD},
-        ]
 
-        # 4b) Transcript-only ES query with phrase boost, then annotate
-        selected = set(self.request.GET.getlist('search_in'))
-        transcript_only = [{self.SEGMENT_FIELD}, {self.SEGMENT_ALIAS_FIELD}, {self.TRANSCRIPTS_FIELD}]
+        transcript_selectors = {self.SEGMENT_FIELD, self.SEGMENT_ALIAS_FIELD, self.TRANSCRIPTS_FIELD}
+        transcript_only_sets = [{self.SEGMENT_FIELD}, {self.SEGMENT_ALIAS_FIELD}, {self.TRANSCRIPTS_FIELD}]
 
-        if selected in transcript_only:
-            page      = int(self.request.GET.get('page', 1))
-            page_size = self.paginate_by
-            start     = (page - 1) * page_size
-            end       = start + page_size
+        # Fields that are DB-only because your ES mapping may not index them reliably
+        DB_ONLY = {'channel_title', 'description', 'episode_description'}
 
-            broad_q  = ES_Q('match',        segment_text={'query': q, 'operator': 'or'})
+        # Helper: stable dedupe
+        def _dedupe_preserve_order(items):
+            seen = set()
+            out = []
+            for x in items:
+                if x not in seen:
+                    seen.add(x)
+                    out.append(x)
+            return out
+
+        page = int(self.request.GET.get('page', 1))
+        start = (page - 1) * page_size
+        end = start + page_size
+
+        # -------- Transcript ES helper (SAFE: no >10k window) --------
+        def _transcript_page_episode_ids_with_total(start_, size_):
+            """
+            Returns (total_unique_episodes, [(episode_id, score)...page...])
+
+            - collapse episode_id => 1 hit per episode
+            - cardinality agg => total unique episodes (approx, typically very accurate)
+            - from/size stay small (page only), so never exceed 10k window
+            """
+            broad_q = ES_Q('match', segment_text={'query': q, 'operator': 'or'})
             phrase_q = ES_Q('match_phrase', segment_text={'query': q})
 
             tsearch = (
@@ -2461,45 +2492,118 @@ class SearchResultsView(LoginRequiredMixin, ListView):
                     'inner_hits': {'name': 'top_segment', 'size': 1}
                 })
                 .sort({'_score': 'desc'})
-                .extra(track_total_hits=True)
+                .extra(from_=start_, size=size_)
             )
 
-            if window:
-                tsearch = tsearch.filter(
-                    'nested',
-                    path='episode',
-                    query={'range': {
-                        'episode.publication_date': {
-                            'gte': (timezone.now() - window).isoformat()
-                        }
-                    }}
-                )
+            # cardinality aggregation to count unique episode_ids
+            tsearch.aggs.bucket('uniq_eps', 'cardinality', field='episode_id')
 
-            resp = tsearch[start:end].execute()
+            # ✅ Date window for transcripts MUST be applied via episode_id terms filter
+            # because TranscriptDocument doesn't have publication_date (and ES can't join).
+            if eligible_episode_ids is not None:
+                if not eligible_episode_ids:
+                    # No episodes in date window => no transcript matches possible
+                    return 0, []
+                tsearch = tsearch.filter('terms', episode_id=eligible_episode_ids)
+
+
+
+            resp = tsearch.execute()
+
+            try:
+                total_unique = int(resp.aggregations.uniq_eps.value or 0)
+            except Exception:
+                total_unique = 0
+
             hits = resp.hits.hits
-            scored_ids = [(hit['_source']['episode_id'], hit['_score']) for hit in hits]
+            page_ids_scores = [(int(h['_source']['episode_id']), float(h['_score'])) for h in hits]
+            return total_unique, page_ids_scores
 
-            # Pull & annotate, exclude empty channel slugs to avoid NoReverseMatch
+        # -------- DB helper (channel_title/description OR) --------
+        def _db_ids_for_db_only_fields(sel_set):
+            """
+            Returns a set of Episode IDs that match any selected DB-only fields (OR).
+            """
+            db_filters = Q()
+            if 'channel_title' in sel_set:
+                db_filters |= Q(channel__channel_title__icontains=q)
+            if 'description' in sel_set or 'episode_description' in sel_set:
+                db_filters |= Q(description__icontains=q)
+
+            if not db_filters:
+                return set()
+
+            db_qs = Episode.objects.filter(db_filters)
+            if window:
+                db_qs = db_qs.filter(publication_date__gte=timezone.now() - window)
+
+            return set(
+                db_qs.exclude(channel__sanitized_channel_title__isnull=True)
+                    .exclude(channel__sanitized_channel_title='')
+                    .values_list('id', flat=True)
+            )
+
+        # -------- EpisodeDocument ES helper (titles/translations/etc) --------
+        def _episode_es_ids_for_selected_fields(sel_set):
+            """
+            Returns a set of Episode IDs from EpisodeDocument based on selected ES-mapped fields.
+            NOTE: we do NOT include channel_title/description here (DB-only).
+            """
+            ES_FIELD_MAP = {
+                'episode_title': ['episode_title', 'translations.episode_title'],
+                # if you want description to be ES-backed too, add here (but you currently DB-only it)
+                # 'description': ['description', 'translations.description'],
+                # 'episode_description': ['description', 'translations.description'],
+            }
+
+            fields = []
+            for key in sel_set:
+                fields += ES_FIELD_MAP.get(key, [])
+
+            fields = _dedupe_preserve_order(fields)
+            if not fields:
+                return set()
+
+            es = EpisodeDocument.search()
+            if window:
+                es = es.filter('range', publication_date={'gte': timezone.now() - window})
+
+            broad_q = ES_Q('multi_match', query=q, fields=fields, type='best_fields', operator='or')
+            phrase_q = ES_Q('multi_match', query=q, fields=fields, type='phrase')
+
+            es = es.query(
+                'function_score',
+                query=broad_q,
+                functions=[{'filter': phrase_q, 'weight': 10}],
+                boost_mode='sum',
+                score_mode='sum'
+            )
+
+            # Pull only up to 10k IDs to avoid window issues (best-effort union)
+            # This is fine because the UI only shows pages; exact "total union" is complex without scroll/search_after.
+            es = es.extra(size=10000)
+
+            resp = es.execute()
+            return {int(hit.meta.id) for hit in resp}
+
+        # ============================================================
+        # 3) Transcript-only searches
+        # ============================================================
+        if selected in transcript_only_sets:
+            total_unique, page_ids_scores = _transcript_page_episode_ids_with_total(start, page_size)
+            page_ids = [eid for eid, _ in page_ids_scores]
+
             episode_qs = self._with_episode_stats(
-                Episode.objects.filter(id__in=[eid for eid, _ in scored_ids])
+                Episode.objects.filter(id__in=page_ids)
             ).select_related('channel') \
-             .prefetch_related('transcripts') \
-             .exclude(channel__sanitized_channel_title__isnull=True) \
-             .exclude(channel__sanitized_channel_title='')
+            .prefetch_related('transcripts') \
+            .exclude(channel__sanitized_channel_title__isnull=True) \
+            .exclude(channel__sanitized_channel_title='')
 
             id_map = {e.id: e for e in episode_qs}
+            page_list = [id_map[eid] for eid in page_ids if eid in id_map]
 
-            scored_eps = [(id_map.get(eid), score) for eid, score in scored_ids if id_map.get(eid)]
-            scored_eps.sort(
-                key=lambda pair: (
-                    -pair[1],
-                    -pair[0].publication_date.timestamp() if pair[0].publication_date else 0
-                )
-            )
-            page_list = [ep for ep, _ in scored_eps]
-
-            total     = resp.hits.total.value if hasattr(resp.hits, "total") else len(scored_eps)
-            paginator = Paginator(range(total), page_size)
+            paginator = Paginator(range(total_unique), page_size)
             try:
                 page_obj = paginator.page(page)
             except EmptyPage:
@@ -2507,56 +2611,110 @@ class SearchResultsView(LoginRequiredMixin, ListView):
 
             return paginator, page_obj, page_list, page_obj.has_other_pages()
 
-        # 4c) Multi-match ES across EpisodeDocument, then annotate
-        es = EpisodeDocument.search()
-        if window:
-            es = es.filter('range', publication_date={'gte': timezone.now() - window})
+        # ============================================================
+        # 4) Transcript + anything else (OR/UNION behavior)
+        # Ensures transcript+description >= transcript-only.
+        # ============================================================
+        if (selected & transcript_selectors) and (selected - transcript_selectors):
+            # A) transcript matches (we can compute total transcript unique; and for union display,
+            #    we will union in other ids and paginate in DB)
+            # We do NOT try to pull all transcript ids (could exceed 10k window).
+            # Instead, we union best-effort ids from:
+            #   - DB-only fields (channel_title/description)
+            #   - EpisodeDocument ES fields (episode_title/translations)
+            # and then *also* ensure transcript results are represented by using transcript paging source.
+            # The best UX here is: union ids we can fetch, then paginate DB.
 
-        fields = [
-            'episode_title',
-            'description',
-            'channel.channel_title',
-            'translations.episode_title',
-            'translations.description',
-            'full_transcript',
-        ]
+            # For union ID set, get:
+            db_ids = _db_ids_for_db_only_fields(selected & DB_ONLY)
 
-        broad_q  = ES_Q('multi_match', query=q, fields=fields, type='best_fields', operator='or')
-        phrase_q = ES_Q('multi_match', query=q, fields=fields, type='phrase')
+            selected_es = (selected - transcript_selectors - DB_ONLY)
+            es_ids = _episode_es_ids_for_selected_fields(selected_es)
 
-        es = es.query(
-            'function_score',
-            query=broad_q,
-            functions=[{'filter': phrase_q, 'weight': 10}],
-            boost_mode='sum',
-            score_mode='sum'
-        ).sort({'_score': 'desc'}, {'publication_date': 'desc'})
+            # Additionally: include transcript ids, but only up to 10k best hits.
+            # This prevents window errors. You will still see >= transcript-only for most queries.
+            # If you truly need *all* transcript ids, you must use scroll/search_after.
+            # Pull up to 10k transcript episode ids (already date-filtered inside helper)
+            _, t_page_ids_scores = _transcript_page_episode_ids_with_total(0, 10000)
+            transcript_ids = {eid for eid, _ in t_page_ids_scores}
 
-        total = es.count()
-        page  = int(self.request.GET.get('page', 1))
-        start = (page - 1) * page_size
-        end   = start + page_size
 
-        resp = es[start:end].execute()
-        ids  = [int(hit.meta.id) for hit in resp]
+            all_ids = list(db_ids | es_ids | transcript_ids)
 
-        episodes = self._with_episode_stats(
-            Episode.objects.filter(id__in=ids)
+            ep_qs = self._with_episode_stats(
+                Episode.objects.filter(id__in=all_ids)
+            ).select_related('channel') \
+            .prefetch_related('transcripts') \
+            .exclude(channel__sanitized_channel_title__isnull=True) \
+            .exclude(channel__sanitized_channel_title='') \
+            .order_by('-publication_date', '-id')
+
+            paginator = Paginator(ep_qs, page_size)
+            page_obj = paginator.get_page(page)
+            return paginator, page_obj, list(page_obj.object_list), page_obj.has_other_pages()
+
+        # ============================================================
+        # 5) DB-only searches (channel_title/description only) → OR across them
+        # ============================================================
+        if selected and selected.issubset(DB_ONLY):
+            ep_ids = _db_ids_for_db_only_fields(selected)
+            ep_qs = Episode.objects.filter(id__in=list(ep_ids))
+
+            ep_qs = self._with_episode_stats(ep_qs) \
+                .select_related('channel') \
+                .prefetch_related('transcripts') \
+                .exclude(channel__sanitized_channel_title__isnull=True) \
+                .exclude(channel__sanitized_channel_title='') \
+                .order_by('-publication_date', '-id')
+
+            paginator = Paginator(ep_qs, page_size)
+            page_obj = paginator.get_page(page)
+            return paginator, page_obj, list(page_obj.object_list), page_obj.has_other_pages()
+
+        # ============================================================
+        # 6) DB-only + other ES fields (UNION OR behavior)
+        # e.g. description + episode_title, channel_title + episode_title
+        # ============================================================
+        if selected & DB_ONLY:
+            db_ids = _db_ids_for_db_only_fields(selected & DB_ONLY)
+            es_ids = _episode_es_ids_for_selected_fields(selected - DB_ONLY)
+
+            all_ids = list(db_ids | es_ids)
+
+            ep_qs = self._with_episode_stats(
+                Episode.objects.filter(id__in=all_ids)
+            ).select_related('channel') \
+            .prefetch_related('transcripts') \
+            .exclude(channel__sanitized_channel_title__isnull=True) \
+            .exclude(channel__sanitized_channel_title='') \
+            .order_by('-publication_date', '-id')
+
+            paginator = Paginator(ep_qs, page_size)
+            page_obj = paginator.get_page(page)
+            return paginator, page_obj, list(page_obj.object_list), page_obj.has_other_pages()
+
+        # ============================================================
+        # 7) ES-only searches (episode_title/translations/etc)
+        # ============================================================
+        es_ids = _episode_es_ids_for_selected_fields(selected)
+        all_ids = list(es_ids)
+
+        # If ES returned nothing and user picked something unmapped, fall back to "title"
+        if not all_ids:
+            es_ids = _episode_es_ids_for_selected_fields({'episode_title'})
+            all_ids = list(es_ids)
+
+        ep_qs = self._with_episode_stats(
+            Episode.objects.filter(id__in=all_ids)
         ).select_related('channel') \
-         .prefetch_related('transcripts') \
-         .exclude(channel__sanitized_channel_title__isnull=True) \
-         .exclude(channel__sanitized_channel_title='')
+        .prefetch_related('transcripts') \
+        .exclude(channel__sanitized_channel_title__isnull=True) \
+        .exclude(channel__sanitized_channel_title='') \
+        .order_by('-publication_date', '-id')
 
-        id_map    = {e.id: e for e in episodes}
-        page_list = [id_map[i] for i in ids if i in id_map]
-
-        paginator = Paginator(range(total), page_size)
-        try:
-            page_obj = paginator.page(page)
-        except EmptyPage:
-            page_obj = paginator.page(1)
-
-        return paginator, page_obj, page_list, page_obj.has_other_pages()
+        paginator = Paginator(ep_qs, page_size)
+        page_obj = paginator.get_page(page)
+        return paginator, page_obj, list(page_obj.object_list), page_obj.has_other_pages()
 
     def _compute_suggestions(self, q, limit=10):
         sims = (
@@ -2619,6 +2777,47 @@ class SearchResultsView(LoginRequiredMixin, ListView):
                 ctx['did_you_mean'] = self._compute_channel_suggestions(q)
             else:
                 ctx['did_you_mean'] = self._compute_suggestions(q)
+
+        # ✅ EPISODES counts (non-channels searches)
+        if search_type != 'channels':
+            paginator = ctx.get('paginator')
+            page_obj  = ctx.get('page_obj')
+
+            if paginator is not None:
+                ctx['total_episodes'] = paginator.count
+            else:
+                eps = ctx.get('episodes', [])
+                ctx['total_episodes'] = len(eps)
+
+            if page_obj is not None:
+                try:
+                    ctx['displayed_episodes'] = page_obj.end_index()
+                except Exception:
+                    ctx['displayed_episodes'] = len(ctx.get('episodes', []))
+            else:
+                ctx['displayed_episodes'] = len(ctx.get('episodes', []))
+
+        # ✅ CHANNELS counts
+        if search_type == 'channels':
+            paginator = ctx.get('paginator')
+            page_obj  = ctx.get('page_obj')
+
+            # total matches for the query
+            if paginator is not None:
+                ctx['total_channels'] = paginator.count
+            else:
+                # fallback if paginator missing for any reason
+                chans = ctx.get('channels', [])
+                ctx['total_channels'] = len(chans)
+
+            # how many are currently displayed (page 1 shows 10, after scroll more, JS updates it)
+            if page_obj is not None:
+                try:
+                    ctx['displayed_channels'] = page_obj.end_index()
+                except Exception:
+                    ctx['displayed_channels'] = len(ctx.get('channels', []))
+            else:
+                ctx['displayed_channels'] = len(ctx.get('channels', []))
 
         return ctx
 

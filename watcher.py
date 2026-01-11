@@ -2,7 +2,7 @@
 
 import time
 import json
-
+from django.db import close_old_connections
 import sys
 import os
 from pathlib import Path
@@ -32,8 +32,8 @@ import django
 django.setup()
 
 # finally our models import will work
-from podcasts.models import Episode
-
+from podcasts.models import Episode, Transcript
+from podcasts.search.documents import TranscriptDocument
 import warnings
 from elastic_transport import SecurityWarning
 from urllib3.exceptions import InsecureRequestWarning
@@ -398,6 +398,43 @@ def insert_transcript_translation(conn, episode_id, segments, language):
             )
         conn.commit()
 
+def index_episode_transcripts_in_es(episode_id: int):
+    """
+    Ensure ALL Transcript rows for a given episode_id are indexed into ES 'transcripts'.
+
+    This fixes the core issue:
+    - psycopg2 inserts bypass Django signals
+    - so TranscriptDocument will not update unless we do it explicitly.
+
+    Safe to call repeatedly.
+    """
+    close_old_connections()
+
+    qs = (
+        Transcript.objects
+        .filter(episode_id=episode_id)
+        .only("id", "episode_id", "segment_text", "segment_time")
+    )
+
+    TranscriptDocument().update(qs.iterator(chunk_size=5000), refresh=False)
+
+    # Optional sanity logging (can be removed once stable)
+    try:
+        db_count = Transcript.objects.filter(episode_id=episode_id).count()
+        es_count = (
+            TranscriptDocument.search()
+            .query("term", episode_id=episode_id)
+            .extra(size=0, track_total_hits=True)
+            .execute()
+            .hits.total.value
+        )
+        logger.info(f"Transcript count DB={db_count} ES={es_count} for ep_id={episode_id}")
+    except Exception as e:
+        logger.warning(f"Transcript count sanity check failed for ep_id={episode_id}: {e}")
+
+
+
+
 # ----------------------------------------------------------------------------
 # PROCESS A SINGLE FILE
 # ----------------------------------------------------------------------------
@@ -467,18 +504,29 @@ def process_one_file(conn, json_path: Path):
             insert_chapters(conn, ep_id, chapters)
             insert_transcript(conn, ep_id, segments)
             logger.info(f"Inserted master episode: {ep_meta['episode_title']}")
-            # TRIGGER ES INDEXING
+
+            # TRIGGER ES INDEXING (Episode + Transcript)
             try:
+                close_old_connections()
+
+                # Index the episode document (episodes index)
                 ep = Episode.objects.get(pk=ep_id)
                 ep.save()
-                logger.info(f"Indexed master episode '{ep.episode_title}' (id={ep_id}) in Elasticsearch")
-                # on success, clear from any prior failures
+
+                # ✅ Index all transcripts for this episode (transcripts index)
+                index_episode_transcripts_in_es(ep_id)
+
+                logger.info(f"Indexed episode + transcripts in Elasticsearch (id={ep_id})")
+
+                # On success, clear from any prior failures
                 failed = load_failed_index()
                 if ep_id in failed:
                     failed.remove(ep_id)
                     save_failed_index(failed)
+
             except Exception as e:
-                logger.error(f"Failed to index episode id={ep_id}: {e}")
+                logger.error(f"Failed to index episode/transcripts id={ep_id}: {e}")
+
                 # record it for retry later
                 failed = load_failed_index()
                 failed.add(ep_id)
@@ -563,15 +611,22 @@ if __name__ == '__main__':
     failed = load_failed_index()
     if failed:
         logger.info(f"Retrying ES indexing for {len(failed)} episodes...")
-        from podcasts.models import Episode
         for pk in list(failed):
             try:
+                close_old_connections()
+
                 ep = Episode.objects.get(pk=pk)
-                ep.save()
+                ep.save()  # episodes index
+
+                # ✅ transcripts index
+                index_episode_transcripts_in_es(pk)
+
                 failed.remove(pk)
-                logger.info(f"✅ Re-indexed #{pk}")
+                logger.info(f"✅ Re-indexed episode + transcripts #{pk}")
+
             except Exception as e:
                 logger.warning(f"❌ Still failing to index #{pk}: {e}")
+
         save_failed_index(failed)
     last_seen = load_state()
     human = datetime.fromtimestamp(last_seen).strftime('%Y-%m-%d %H:%M:%S')

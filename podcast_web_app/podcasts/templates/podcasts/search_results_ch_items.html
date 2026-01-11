@@ -104,6 +104,15 @@
     const listEl = document.getElementById("channel-list");
     const spinner = document.getElementById("loading-spinner-ch");
 
+    function updateDisplayedChannelCount() {
+      // count only the channel <a> rows, not the empty-state <div>
+      const displayed = listEl.querySelectorAll("a.list-group-item").length;
+      const countEl = document.getElementById("channels-displayed-count");
+      if (countEl) countEl.textContent = String(displayed);
+    }
+
+    updateDisplayedChannelCount();
+
     window.addEventListener("scroll", () => {
       if (loading || !hasMore) return;
       if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 500) {
@@ -125,12 +134,14 @@
               const tmp = document.createElement("div");
               tmp.innerHTML = html;
               const items = tmp.querySelectorAll(".list-group-item");
+
               if (!items.length) {
                 hasMore = false;
                 spinner.innerHTML = `<p>${endOfListTextCh}</p>`;
               } else {
                 items.forEach(i => listEl.appendChild(i));
                 spinner.style.display = "none";
+                updateDisplayedChannelCount(); // ✅ update header "showing X"
               }
             }
             loading = false;
@@ -143,6 +154,7 @@
     });
   });
 </script>
+
 
 <style>
   .summary-clamp {
