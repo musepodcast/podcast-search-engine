@@ -3,7 +3,16 @@
 {% load static i18n custom_filters %}
 
 {% block content %}
-  <h2>{% trans "Results for" %} "{{ q }}"</h2>
+  <h2 class="mb-2">
+    {% blocktrans count total=total_episodes with q=q %}
+      {{ total }} result for "{{ q }}"
+    {% plural %}
+      {{ total }} results for "{{ q }}"
+    {% endblocktrans %}
+    <small class="text-muted ms-2">
+      ({% trans "showing" %} <span id="episodes-displayed-count">{{ displayed_episodes }}</span>)
+    </small>
+  </h2>
 
   {# Spelling suggestions #}
   {% if did_you_mean %}
