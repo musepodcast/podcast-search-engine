@@ -4,18 +4,23 @@
 <div id="episode-list" class="list-group mt-4">
   {% for item in episodes %}
 
-    {# Translation result (EpisodeTranslations) #}
+
     {% if item.episode %}
       {% with base=item.episode channel=item.episode.channel %}
       <a href="{% url 'podcasts:episode_detail' channel.sanitized_channel_title base.sanitized_episode_title %}"
-         class="list-group-item list-group-item-action mb-2" style="text-decoration:none;">
+         class="list-group-item list-group-item-action mb-2"
+         style="text-decoration:none;">
+
         <div class="row">
           <div class="col-auto">
-            <img src="{{ item.image_url|default:channel.channel_image_url|default:fallback_img }}"
-                 alt="{{ item.episode_title }}"
-                 style="width:150px;height:150px;border-radius:6px;"
-                 onerror="this.onerror=null;this.src='{{ fallback_img }}';">
+            <img
+              src="{{ item.image_url|default:channel.channel_image_url|default:fallback_img }}"
+              alt="{{ item.episode_title }}"
+              style="width:150px;height:150px;border-radius:6px;"
+              onerror="this.onerror=null;this.src='{{ fallback_img }}';"
+            >
           </div>
+
           <div class="col">
             <strong>
               {% with highlighted=item.episode_title|highlight_sentence:q %}
@@ -34,15 +39,17 @@
                   {{ ch|default:channel.channel_title|safe }}
                 {% endwith %}
               </span>
+
               {% if base.publication_date %}<span>| {{ base.publication_date|date:"F j, Y, g:i a" }}</span>{% endif %}
               {% if base.duration %}<span>| {{ base.duration }}</span>{% endif %}
               {% if base.categories %}
                 <span>| {% for cat in base.categories %}{{ cat }}{% if not forloop.last %}, {% endif %}{% endfor %}</span>
               {% endif %}
               {% if base.explicit %}<span>| {% trans "Explicit" %}</span>{% endif %}
+              {% if item.language %}<span>| {{ item.language|upper }}</span>{% endif %}
             </p>
 
-            {# Stats row #}
+            {# Stats row (these should be copied onto translation objects in the view) #}
             <div class="d-flex align-items-center flex-wrap mb-1">
               <span class="d-flex align-items-center me-3" title="{% trans 'Bookmarks' %}">
                 <i class="fa-solid fa-bookmark" style="font-size:1rem;margin-right:.25rem;"></i>
@@ -66,40 +73,71 @@
                 <i class="fa-solid fa-file-arrow-down" style="font-size:1rem;margin-right:.25rem;"></i>
                 {{ item.total_downloads|default:"0"|number_format }}
               </span>
+              <span class="d-flex align-items-center me-3" title="{% trans 'Shares' %}">
+                <i class="fa-solid fa-share-nodes" style="font-size: 1rem; margin-right: 0.25rem;"></i>
+                {{ item.total_shares|default:"0"|number_format }}
+              </span>
             </div>
 
-            {% if item.transcripts.all or item.transcriptstranslations.all %}
-              <p class="description-clamp mb-0">
-                {% with ts=item.transcriptstranslations.all|default:item.transcripts.all %}
-                  {% for t in ts %}
+            {# ---- Snippet logic (safe: NEVER reference item.transcripts on a translation) ---- #}
+            {% with tts=item.transcriptstranslations.all %}
+              {% if tts %}
+                <p class="description-clamp mb-0">
+                  {% for t in tts|slice:":3" %}
                     {% if t.segment_text|contains:q %}
                       {{ t.segment_text|highlight_sentence:q|safe }}{% if not forloop.last %} …{% endif %}
                     {% endif %}
                   {% endfor %}
+                  {% with more=tts|slice:"3:4" %}
+                    {% if more %}…{% endif %}
+                  {% endwith %}
+                </p>
+
+              {% else %}
+                {% with bts=base.transcripts.all %}
+                  {% if bts %}
+                    <p class="description-clamp mb-0">
+                      {% for t in bts|slice:":3" %}
+                        {% if t.segment_text|contains:q %}
+                          {{ t.segment_text|highlight_sentence:q|safe }}{% if not forloop.last %} …{% endif %}
+                        {% endif %}
+                      {% endfor %}
+                      {% with more=bts|slice:"3:4" %}
+                        {% if more %}…{% endif %}
+                      {% endwith %}
+                    </p>
+
+                  {% elif item.description %}
+                    <p class="description-clamp mb-0">{{ item.description|highlight_sentence:q|safe }}</p>
+                  {% elif base.description %}
+                    <p class="description-clamp mb-0">{{ base.description|highlight_sentence:q|safe }}</p>
+                  {% endif %}
                 {% endwith %}
-                {% if item.transcriptstranslations.all|length > 3 or item.transcripts.all|length > 3 %}…{% endif %}
-              </p>
-            {% elif base.description %}
-              <p class="description-clamp mb-0">{{ base.description|highlight_sentence:q|safe }}</p>
-            {% endif %}
+              {% endif %}
+            {% endwith %}
+
           </div>
         </div>
       </a>
-
       {% endwith %}
 
+
     {% else %}
-      {# Base Episode result #}
       {% with channel=item.channel %}
       <a href="{% url 'podcasts:episode_detail' channel.sanitized_channel_title item.sanitized_episode_title %}"
-         class="list-group-item list-group-item-action mb-2" style="text-decoration:none;">
+         class="list-group-item list-group-item-action mb-2"
+         style="text-decoration:none;">
+
         <div class="row">
           <div class="col-auto">
-            <img src="{{ item.image_url|default:channel.channel_image_url|default:fallback_img }}"
-                 alt="{{ item.episode_title }}"
-                 style="width:150px;height:150px;border-radius:6px;"
-                 onerror="this.onerror=null;this.src='{{ fallback_img }}';">
+            <img
+              src="{{ item.image_url|default:channel.channel_image_url|default:fallback_img }}"
+              alt="{{ item.episode_title }}"
+              style="width:150px;height:150px;border-radius:6px;"
+              onerror="this.onerror=null;this.src='{{ fallback_img }}';"
+            >
           </div>
+
           <div class="col">
             <strong>
               {% with ht=item.episode_title|highlight_sentence:q %}
@@ -120,6 +158,7 @@
                 <span>| {% for cat in item.categories %}{{ cat }}{% if not forloop.last %}, {% endif %}{% endfor %}</span>
               {% endif %}
               {% if item.explicit %}<span>| {% trans "Explicit" %}</span>{% endif %}
+              {% if item.language %}<span>| {{ item.language|upper }}</span>{% endif %}
             </p>
 
             <div class="d-flex align-items-center flex-wrap mb-1">
@@ -145,41 +184,44 @@
                 <i class="fa-solid fa-file-arrow-down" style="font-size:1rem;margin-right:.25rem;"></i>
                 {{ item.total_downloads|default:"0"|number_format }}
               </span>
-              <!-- Shares -->
               <span class="d-flex align-items-center me-3" title="{% trans 'Shares' %}">
                 <i class="fa-solid fa-share-nodes" style="font-size: 1rem; margin-right: 0.25rem;"></i>
                 {{ item.total_shares|default:"0"|number_format }}
               </span>
             </div>
 
-            {% if item.transcripts.all %}
-              <p class="description-clamp mb-0">
-                {% for t in item.transcripts.all %}
-                  {% if t.segment_text|contains:q %}
-                    {{ t.segment_text|highlight_sentence:q|safe }}{% if not forloop.last %} …{% endif %}
-                  {% endif %}
-                {% endfor %}
-                {% if item.transcripts.all|length > 3 %}…{% endif %}
-              </p>
-            {% elif item.description %}
-              <p class="description-clamp mb-0">{{ item.description|highlight_sentence:q|safe }}</p>
-            {% endif %}
+            {% with bts=item.transcripts.all %}
+              {% if bts %}
+                <p class="description-clamp mb-0">
+                  {% for t in bts|slice:":3" %}
+                    {% if t.segment_text|contains:q %}
+                      {{ t.segment_text|highlight_sentence:q|safe }}{% if not forloop.last %} …{% endif %}
+                    {% endif %}
+                  {% endfor %}
+                  {% with more=bts|slice:"3:4" %}
+                    {% if more %}…{% endif %}
+                  {% endwith %}
+                </p>
+              {% elif item.description %}
+                <p class="description-clamp mb-0">{{ item.description|highlight_sentence:q|safe }}</p>
+              {% endif %}
+            {% endwith %}
+
           </div>
         </div>
       </a>
       {% endwith %}
     {% endif %}
 
-{% empty %}
-  {# Only show this on the initial (non-AJAX) full-page load #}
-  {% if not request.GET.ajax %}
-    <div class="list-group-item">
-      <p>{% trans "No episodes found matching your search." %}</p>
-      <p>{% trans "Try different keywords or check your spelling." %}</p>
-    </div>
-  {% endif %}
-{% endfor %}
-
+  {% empty %}
+    {# Only show this on the initial (non-AJAX) full-page load #}
+    {% if request.GET.ajax != '1' %}
+      <div class="list-group-item">
+        <p>{% trans "No episodes found matching your search." %}</p>
+        <p>{% trans "Try different keywords or check your spelling." %}</p>
+      </div>
+    {% endif %}
+  {% endfor %}
 </div>
 
 <div id="loading-spinner" style="display:none;text-align:center;margin:1rem 0;">
@@ -228,7 +270,7 @@ document.addEventListener("DOMContentLoaded", function(){
             }else{
               items.forEach(i=> listEl.appendChild(i));
               spinner.style.display="none";
-              updateDisplayedEpisodeCount(); // ✅
+              updateDisplayedEpisodeCount();
             }
           }
           loading=false;
@@ -238,7 +280,6 @@ document.addEventListener("DOMContentLoaded", function(){
   });
 });
 </script>
-
 
 <style>
 .description-clamp{
