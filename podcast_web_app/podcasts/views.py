@@ -83,6 +83,12 @@ from django.utils import timezone
 from axes.models import AccessAttempt
 from axes.conf import settings as axes_settings
 from django.db import transaction
+from django.db.models import (
+    Avg, Case, Count, DateTimeField, F, FloatField, IntegerField, OuterRef,
+    Q, Subquery, Sum, Value, When
+)
+from elastic_transport import ConnectionTimeout
+from urllib3.exceptions import ReadTimeoutError
 
 _slug_non_alnum = re.compile(r"[^a-z0-9]+", re.IGNORECASE)
 
@@ -1881,12 +1887,10 @@ class EpisodeListView(ListView):
     context_object_name = 'episodes'
     paginate_by = 10
 
-    # include "recent"
     ALLOWED_SORTS = {'trending', 'recent', 'views', 'bookmarks', 'comments', 'stars', 'downloaded', 'shared', 'title'}
     ALLOWED_DIRS = {'asc', 'desc'}
 
     def _parse_sort(self):
-        # default: Most recent
         sort = (self.request.GET.get('sort') or 'trending').lower()
         direction = (self.request.GET.get('dir') or 'desc').lower()
         if sort not in self.ALLOWED_SORTS:
@@ -1902,10 +1906,16 @@ class EpisodeListView(ListView):
 
         # time windows
         now = timezone.now()
-        dt_24h = now - timedelta(hours=24)
-        dt_7d  = now - timedelta(days=7)
+        dt_24h  = now - timedelta(hours=24)
+        dt_7d   = now - timedelta(days=7)
+        dt_30d  = now - timedelta(days=30)
+        dt_365d = now - timedelta(days=365)
 
-        # --- Subqueries for views ---
+        old_pub_default = timezone.make_aware(datetime(1970, 1, 1))
+
+        # ============================================================
+        # Views subqueries (Episode base)
+        # ============================================================
         views_total_sq = (
             EpisodeVisit.objects
             .filter(episode=OuterRef('pk'))
@@ -1920,7 +1930,6 @@ class EpisodeListView(ListView):
             .annotate(total=Sum('count'))
             .values('total')[:1]
         )
-
         views_7d_sq = (
             EpisodeVisit.objects
             .filter(episode=OuterRef('pk'), last_visited__gte=dt_7d)
@@ -1928,8 +1937,24 @@ class EpisodeListView(ListView):
             .annotate(total=Sum('count'))
             .values('total')[:1]
         )
+        views_30d_sq = (
+            EpisodeVisit.objects
+            .filter(episode=OuterRef('pk'), last_visited__gte=dt_30d)
+            .values('episode')
+            .annotate(total=Sum('count'))
+            .values('total')[:1]
+        )
+        views_365d_sq = (
+            EpisodeVisit.objects
+            .filter(episode=OuterRef('pk'), last_visited__gte=dt_365d)
+            .values('episode')
+            .annotate(total=Sum('count'))
+            .values('total')[:1]
+        )
 
-        # --- NEW: Subqueries for views (EpisodeTranslations, non-EN branch uses OuterRef('episode')) ---
+        # ============================================================
+        # Views subqueries (Translations: OuterRef('episode'))
+        # ============================================================
         views_total_sq_tr = (
             EpisodeVisit.objects
             .filter(episode=OuterRef('episode'))
@@ -1951,30 +1976,47 @@ class EpisodeListView(ListView):
             .annotate(total=Sum('count'))
             .values('total')[:1]
         )
+        views_30d_sq_tr = (
+            EpisodeVisit.objects
+            .filter(episode=OuterRef('episode'), last_visited__gte=dt_30d)
+            .values('episode')
+            .annotate(total=Sum('count'))
+            .values('total')[:1]
+        )
+        views_365d_sq_tr = (
+            EpisodeVisit.objects
+            .filter(episode=OuterRef('episode'), last_visited__gte=dt_365d)
+            .values('episode')
+            .annotate(total=Sum('count'))
+            .values('total')[:1]
+        )
 
-        # --- Subqueries for total downloads ---
-        downloads_sq_base = (
+        # ============================================================
+        # Downloads/Shares totals (base + translations)
+        # ============================================================
+        downloads_total_sq = (
             EpisodeDownload.objects
             .filter(episode=OuterRef('pk'))
             .values('episode')
             .annotate(total=Sum('count'))
             .values('total')[:1]
         )
-        downloads_sq_tr = (
-            EpisodeDownload.objects
-            .filter(episode=OuterRef('episode'))  # note: EpisodeTranslations.episode FK
-            .values('episode')
-            .annotate(total=Sum('count'))
-            .values('total')[:1]
-        )
-        shares_sq_base = (
+        shares_total_sq = (
             EpisodeShare.objects
             .filter(episode=OuterRef('pk'))
             .values('episode')
             .annotate(total=Sum('count'))
             .values('total')[:1]
         )
-        shares_sq_tr = (
+
+        downloads_total_sq_tr = (
+            EpisodeDownload.objects
+            .filter(episode=OuterRef('episode'))
+            .values('episode')
+            .annotate(total=Sum('count'))
+            .values('total')[:1]
+        )
+        shares_total_sq_tr = (
             EpisodeShare.objects
             .filter(episode=OuterRef('episode'))
             .values('episode')
@@ -1982,13 +2024,109 @@ class EpisodeListView(ListView):
             .values('total')[:1]
         )
 
+        # ============================================================
+        # Downloads windows via subquery (avoid JOIN multiplication)
+        # ============================================================
+        downloads_7d_sq = (
+            EpisodeDownload.objects
+            .filter(episode=OuterRef('pk'), last_downloaded__gte=dt_7d)
+            .values('episode')
+            .annotate(total=Sum('count'))
+            .values('total')[:1]
+        )
+        downloads_30d_sq = (
+            EpisodeDownload.objects
+            .filter(episode=OuterRef('pk'), last_downloaded__gte=dt_30d)
+            .values('episode')
+            .annotate(total=Sum('count'))
+            .values('total')[:1]
+        )
+        downloads_365d_sq = (
+            EpisodeDownload.objects
+            .filter(episode=OuterRef('pk'), last_downloaded__gte=dt_365d)
+            .values('episode')
+            .annotate(total=Sum('count'))
+            .values('total')[:1]
+        )
+
+        downloads_7d_sq_tr = (
+            EpisodeDownload.objects
+            .filter(episode=OuterRef('episode'), last_downloaded__gte=dt_7d)
+            .values('episode')
+            .annotate(total=Sum('count'))
+            .values('total')[:1]
+        )
+        downloads_30d_sq_tr = (
+            EpisodeDownload.objects
+            .filter(episode=OuterRef('episode'), last_downloaded__gte=dt_30d)
+            .values('episode')
+            .annotate(total=Sum('count'))
+            .values('total')[:1]
+        )
+        downloads_365d_sq_tr = (
+            EpisodeDownload.objects
+            .filter(episode=OuterRef('episode'), last_downloaded__gte=dt_365d)
+            .values('episode')
+            .annotate(total=Sum('count'))
+            .values('total')[:1]
+        )
+
+        # ============================================================
+        # Shares windows via subquery (avoid JOIN multiplication)
+        # ============================================================
+        shares_7d_sq = (
+            EpisodeShare.objects
+            .filter(episode=OuterRef('pk'), last_shared__gte=dt_7d)
+            .values('episode')
+            .annotate(total=Sum('count'))
+            .values('total')[:1]
+        )
+        shares_30d_sq = (
+            EpisodeShare.objects
+            .filter(episode=OuterRef('pk'), last_shared__gte=dt_30d)
+            .values('episode')
+            .annotate(total=Sum('count'))
+            .values('total')[:1]
+        )
+        shares_365d_sq = (
+            EpisodeShare.objects
+            .filter(episode=OuterRef('pk'), last_shared__gte=dt_365d)
+            .values('episode')
+            .annotate(total=Sum('count'))
+            .values('total')[:1]
+        )
+
+        shares_7d_sq_tr = (
+            EpisodeShare.objects
+            .filter(episode=OuterRef('episode'), last_shared__gte=dt_7d)
+            .values('episode')
+            .annotate(total=Sum('count'))
+            .values('total')[:1]
+        )
+        shares_30d_sq_tr = (
+            EpisodeShare.objects
+            .filter(episode=OuterRef('episode'), last_shared__gte=dt_30d)
+            .values('episode')
+            .annotate(total=Sum('count'))
+            .values('total')[:1]
+        )
+        shares_365d_sq_tr = (
+            EpisodeShare.objects
+            .filter(episode=OuterRef('episode'), last_shared__gte=dt_365d)
+            .values('episode')
+            .annotate(total=Sum('count'))
+            .values('total')[:1]
+        )
+
+        # ============================================================
+        # EN branch (Episode)
+        # ============================================================
         if lang in ('en', 'en-us'):
             qs = (
                 Episode.objects
                 .select_related('channel')
                 .prefetch_related('transcripts', 'chapters')
                 .annotate(
-                    # existing aggregates
                     bookmarks_count=Count(
                         'episode_interactions',
                         filter=Q(episode_interactions__bookmarked=True),
@@ -2001,61 +2139,134 @@ class EpisodeListView(ListView):
                         filter=Q(episode_interactions__rating__isnull=False),
                         distinct=True
                     ),
-                    # ✅ now coming from subquery, so it exists for ordering
-                    total_episode_views=Coalesce(
-                        Subquery(views_total_sq, output_field=IntegerField()),
-                        Value(0)
-                    ),
-                    total_downloads=Coalesce(Subquery(downloads_sq_base, output_field=IntegerField()), Value(0)),
-                    total_shares=Coalesce(Subquery(shares_sq_base, output_field=IntegerField()), Value(0)),
 
-                    # NEW: 24h and 7d windows (velocity)
-                    views_24h=Coalesce(
-                        Subquery(views_24h_sq, output_field=IntegerField()),
-                        Value(0)
-                    ),
-                    views_7d=Coalesce(
-                        Subquery(views_7d_sq, output_field=IntegerField()),
-                        Value(0)
-                    ),
-                    downloads_7d=Coalesce(
-                        Sum('downloads__count', filter=Q(downloads__last_downloaded__gte=dt_7d)),
-                        0
-                    ),
-                    shares_7d=Coalesce(
-                        Sum('shares__count', filter=Q(shares__last_shared__gte=dt_7d)),
-                        0
-                    ),
+                    total_episode_views=Coalesce(Subquery(views_total_sq, output_field=IntegerField()), Value(0)),
+                    total_downloads=Coalesce(Subquery(downloads_total_sq, output_field=IntegerField()), Value(0)),
+                    total_shares=Coalesce(Subquery(shares_total_sq, output_field=IntegerField()), Value(0)),
+
+                    # views windows
+                    views_24h=Coalesce(Subquery(views_24h_sq, output_field=IntegerField()), Value(0)),
+                    views_7d=Coalesce(Subquery(views_7d_sq, output_field=IntegerField()), Value(0)),
+                    views_30d=Coalesce(Subquery(views_30d_sq, output_field=IntegerField()), Value(0)),
+                    views_365d=Coalesce(Subquery(views_365d_sq, output_field=IntegerField()), Value(0)),
+
+                    # downloads windows (subquery = correct even with other joins)
+                    downloads_7d=Coalesce(Subquery(downloads_7d_sq, output_field=IntegerField()), Value(0)),
+                    downloads_30d=Coalesce(Subquery(downloads_30d_sq, output_field=IntegerField()), Value(0)),
+                    downloads_365d=Coalesce(Subquery(downloads_365d_sq, output_field=IntegerField()), Value(0)),
+
+                    # shares windows
+                    shares_7d=Coalesce(Subquery(shares_7d_sq, output_field=IntegerField()), Value(0)),
+                    shares_30d=Coalesce(Subquery(shares_30d_sq, output_field=IntegerField()), Value(0)),
+                    shares_365d=Coalesce(Subquery(shares_365d_sq, output_field=IntegerField()), Value(0)),
+
+                    # comments windows (Count distinct is safe)
                     comments_7d=Coalesce(
                         Count('comments', filter=Q(comments__created_at__gte=dt_7d), distinct=True),
                         0
                     ),
+                    comments_30d=Coalesce(
+                        Count('comments', filter=Q(comments__created_at__gte=dt_30d), distinct=True),
+                        0
+                    ),
+                    comments_365d=Coalesce(
+                        Count('comments', filter=Q(comments__created_at__gte=dt_365d), distinct=True),
+                        0
+                    ),
                 )
                 .annotate(
-                    # Weighted trending score — tweak weights as you like
-                    trending_score=(
+                    # Windowed weighted scores
+                    trending_score_7d=(
                         F('views_7d') * 1.0 +
                         F('downloads_7d') * 3.0 +
                         F('shares_7d') * 4.0 +
                         F('comments_7d') * 2.0 +
                         F('ep_rating_count') * 1.0
+                    ),
+                    trending_score_30d=(
+                        F('views_30d') * 1.0 +
+                        F('downloads_30d') * 3.0 +
+                        F('shares_30d') * 4.0 +
+                        F('comments_30d') * 2.0 +
+                        F('ep_rating_count') * 1.0
+                    ),
+                    trending_score_365d=(
+                        F('views_365d') * 1.0 +
+                        F('downloads_365d') * 3.0 +
+                        F('shares_365d') * 4.0 +
+                        F('comments_365d') * 2.0 +
+                        F('ep_rating_count') * 1.0
+                    ),
+                    trending_score_all=(
+                        F('total_episode_views') * 1.0 +
+                        F('total_downloads') * 3.0 +
+                        F('total_shares') * 4.0 +
+                        F('comments_count') * 2.0 +
+                        F('ep_rating_count') * 1.0
+                    ),
+                )
+                .annotate(
+                    pub_date=F('publication_date'),
+                    trend_bucket=Case(
+                        When(publication_date__isnull=True, then=Value(4)),   # unknown last
+                        When(publication_date__gte=dt_7d, then=Value(0)),      # <= 7d
+                        When(publication_date__gte=dt_30d, then=Value(1)),     # 8-30d
+                        When(publication_date__gte=dt_365d, then=Value(2)),    # 31-365d
+                        default=Value(3),                                      # >365d
+                        output_field=IntegerField(),
+                    ),
+                )
+                .annotate(
+                    # choose correct score by bucket
+                    trending_score=Case(
+                        When(trend_bucket=0, then=F('trending_score_7d')),
+                        When(trend_bucket=1, then=F('trending_score_30d')),
+                        When(trend_bucket=2, then=F('trending_score_365d')),
+                        default=F('trending_score_all'),
+                        output_field=FloatField(),
                     )
+                )
+                .annotate(
+                    views_24h_sort=Case(
+                        When(trend_bucket__lt=3, then=F('views_24h')),
+                        default=Value(0),
+                        output_field=IntegerField(),
+                    ),
+                    pub_sort=Case(
+                        When(trend_bucket__lt=3, then=F('pub_date')),
+                        default=Value(old_pub_default),  # bucket 3 ignores recency
+                        output_field=DateTimeField(),
+                    ),
+                    old_views_sort=Case(
+                        When(trend_bucket__gte=3, then=F('total_episode_views')),
+                        default=Value(0),
+                        output_field=IntegerField(),
+                    ),
                 )
             )
 
             if sort == 'trending':
-                # Desc: most trending. Add tie breakers: 24h velocity, then recency
-                ordering = [
-                    F('trending_score').desc(nulls_last=True) if direction == 'desc'
-                    else F('trending_score').asc(nulls_last=True),
-                    F('views_24h').desc(nulls_last=True) if direction == 'desc'
-                    else F('views_24h').asc(nulls_last=True),
-                    F('publication_date').desc(nulls_last=True) if direction == 'desc'
-                    else F('publication_date').asc(nulls_last=True),
-                    'episode_title',
-                ]
+                # bucket order fixed; direction affects ranking inside buckets
+                if direction == 'desc':
+                    ordering = [
+                        'trend_bucket',
+                        F('trending_score').desc(nulls_last=True),
+                        F('views_24h_sort').desc(nulls_last=True),
+                        F('pub_sort').desc(nulls_last=True),
+                        F('old_views_sort').desc(nulls_last=True),
+                        'episode_title',
+                    ]
+                else:
+                    ordering = [
+                        'trend_bucket',
+                        F('trending_score').asc(nulls_last=True),
+                        F('views_24h_sort').asc(nulls_last=True),
+                        F('pub_sort').desc(nulls_last=True),   # keep newest first when tied
+                        F('old_views_sort').asc(nulls_last=True),
+                        'episode_title',
+                    ]
+
             elif sort == 'recent':
-                # publication_date with A–Z tie-break; unrated/NULL dates go last either way
                 if direction == 'desc':
                     ordering = [F('publication_date').desc(nulls_last=True), 'episode_title']
                 else:
@@ -2091,16 +2302,16 @@ class EpisodeListView(ListView):
                 ordering = [f'{dir_prefix}total_shares', 'episode_title']
 
             elif sort == 'title':
-                # pure alphabetical
                 ordering = [f'{dir_prefix}episode_title']
 
             else:
-                # safety default
                 ordering = [F('publication_date').desc(nulls_last=True), 'episode_title']
 
             return qs.order_by(*ordering)
-        
-        # Non-English (EpisodeTranslations)
+
+        # ============================================================
+        # Non-English branch (EpisodeTranslations)
+        # ============================================================
         qs = (
             EpisodeTranslations.objects
             .filter(language=lang, translated=True)
@@ -2113,64 +2324,142 @@ class EpisodeListView(ListView):
                     distinct=True
                 ),
                 comments_count=Count('episode__comments', distinct=True),
+
+                # Use translation date if present, else episode date
+                pub_date=Coalesce(F('publication_date'), F('episode__publication_date')),
+
                 ep_avg_rating=Avg('episode__episode_interactions__rating'),
                 ep_rating_count=Count(
                     'episode__episode_interactions__user',
                     filter=Q(episode__episode_interactions__rating__isnull=False),
                     distinct=True
                 ),
-                total_downloads=Coalesce(Subquery(downloads_sq_tr, output_field=IntegerField()), Value(0)),
-                total_shares=Coalesce(Subquery(shares_sq_tr, output_field=IntegerField()), Value(0)),
-                # ✅ translations: views via Episode FK
-                total_episode_views=Coalesce(
-                    Subquery(views_total_sq_tr, output_field=IntegerField()),
-                    Value(0)
-                ),
-                # ✅ NEW (via subqueries matching EpisodeDetailView semantics):
-                views_24h=Coalesce(
-                    Subquery(views_24h_sq_tr, output_field=IntegerField()),
-                    Value(0)
-                ),
-                views_7d=Coalesce(
-                    Subquery(views_7d_sq_tr, output_field=IntegerField()),
-                    Value(0)
-                ),
-                downloads_7d=Coalesce(
-                    Sum('episode__downloads__count', filter=Q(episode__downloads__last_downloaded__gte=dt_7d)), 0
-                ),
-                shares_7d=Coalesce(
-                    Sum('episode__shares__count', filter=Q(episode__shares__last_shared__gte=dt_7d)), 0
-                ),
+
+                total_downloads=Coalesce(Subquery(downloads_total_sq_tr, output_field=IntegerField()), Value(0)),
+                total_shares=Coalesce(Subquery(shares_total_sq_tr, output_field=IntegerField()), Value(0)),
+                total_episode_views=Coalesce(Subquery(views_total_sq_tr, output_field=IntegerField()), Value(0)),
+
+                # views windows
+                views_24h=Coalesce(Subquery(views_24h_sq_tr, output_field=IntegerField()), Value(0)),
+                views_7d=Coalesce(Subquery(views_7d_sq_tr, output_field=IntegerField()), Value(0)),
+                views_30d=Coalesce(Subquery(views_30d_sq_tr, output_field=IntegerField()), Value(0)),
+                views_365d=Coalesce(Subquery(views_365d_sq_tr, output_field=IntegerField()), Value(0)),
+
+                # downloads windows
+                downloads_7d=Coalesce(Subquery(downloads_7d_sq_tr, output_field=IntegerField()), Value(0)),
+                downloads_30d=Coalesce(Subquery(downloads_30d_sq_tr, output_field=IntegerField()), Value(0)),
+                downloads_365d=Coalesce(Subquery(downloads_365d_sq_tr, output_field=IntegerField()), Value(0)),
+
+                # shares windows
+                shares_7d=Coalesce(Subquery(shares_7d_sq_tr, output_field=IntegerField()), Value(0)),
+                shares_30d=Coalesce(Subquery(shares_30d_sq_tr, output_field=IntegerField()), Value(0)),
+                shares_365d=Coalesce(Subquery(shares_365d_sq_tr, output_field=IntegerField()), Value(0)),
+
+                # comments windows (Count distinct is safe)
                 comments_7d=Coalesce(
-                    Count('episode__comments', filter=Q(episode__comments__created_at__gte=dt_7d), distinct=True), 0
+                    Count('episode__comments', filter=Q(episode__comments__created_at__gte=dt_7d), distinct=True),
+                    0
+                ),
+                comments_30d=Coalesce(
+                    Count('episode__comments', filter=Q(episode__comments__created_at__gte=dt_30d), distinct=True),
+                    0
+                ),
+                comments_365d=Coalesce(
+                    Count('episode__comments', filter=Q(episode__comments__created_at__gte=dt_365d), distinct=True),
+                    0
                 ),
             )
             .annotate(
-                trending_score=(
-                    F('views_7d')      * 1.0 +
-                    F('downloads_7d')  * 3.0 +
-                    F('shares_7d')     * 4.0 +
-                    F('comments_7d')   * 2.0 +
+                trending_score_7d=(
+                    F('views_7d') * 1.0 +
+                    F('downloads_7d') * 3.0 +
+                    F('shares_7d') * 4.0 +
+                    F('comments_7d') * 2.0 +
                     F('ep_rating_count') * 1.0
-                )
+                ),
+                trending_score_30d=(
+                    F('views_30d') * 1.0 +
+                    F('downloads_30d') * 3.0 +
+                    F('shares_30d') * 4.0 +
+                    F('comments_30d') * 2.0 +
+                    F('ep_rating_count') * 1.0
+                ),
+                trending_score_365d=(
+                    F('views_365d') * 1.0 +
+                    F('downloads_365d') * 3.0 +
+                    F('shares_365d') * 4.0 +
+                    F('comments_365d') * 2.0 +
+                    F('ep_rating_count') * 1.0
+                ),
+                trending_score_all=(
+                    F('total_episode_views') * 1.0 +
+                    F('total_downloads') * 3.0 +
+                    F('total_shares') * 4.0 +
+                    F('comments_count') * 2.0 +
+                    F('ep_rating_count') * 1.0
+                ),
+            )
+            .annotate(
+                trend_bucket=Case(
+                    When(pub_date__isnull=True, then=Value(4)),
+                    When(pub_date__gte=dt_7d, then=Value(0)),
+                    When(pub_date__gte=dt_30d, then=Value(1)),
+                    When(pub_date__gte=dt_365d, then=Value(2)),
+                    default=Value(3),
+                    output_field=IntegerField(),
+                ),
+            )
+            .annotate(
+                trending_score=Case(
+                    When(trend_bucket=0, then=F('trending_score_7d')),
+                    When(trend_bucket=1, then=F('trending_score_30d')),
+                    When(trend_bucket=2, then=F('trending_score_365d')),
+                    default=F('trending_score_all'),
+                    output_field=FloatField(),
+                ),
+                views_24h_sort=Case(
+                    When(trend_bucket__lt=3, then=F('views_24h')),
+                    default=Value(0),
+                    output_field=IntegerField(),
+                ),
+                pub_sort=Case(
+                    When(trend_bucket__lt=3, then=F('pub_date')),
+                    default=Value(old_pub_default),
+                    output_field=DateTimeField(),
+                ),
+                old_views_sort=Case(
+                    When(trend_bucket__gte=3, then=F('total_episode_views')),
+                    default=Value(0),
+                    output_field=IntegerField(),
+                ),
             )
         )
 
         if sort == 'trending':
-            ordering = [
-                F('trending_score').desc(nulls_last=True) if direction == 'desc'
-                else F('trending_score').asc(nulls_last=True),
-                F('views_24h').desc(nulls_last=True) if direction == 'desc'
-                else F('views_24h').asc(nulls_last=True),
-                F('publication_date').desc(nulls_last=True) if direction == 'desc'
-                else F('publication_date').asc(nulls_last=True),
-                'episode_title',
-            ]
+            if direction == 'desc':
+                ordering = [
+                    'trend_bucket',
+                    F('trending_score').desc(nulls_last=True),
+                    F('views_24h_sort').desc(nulls_last=True),
+                    F('pub_sort').desc(nulls_last=True),
+                    F('old_views_sort').desc(nulls_last=True),
+                    'episode_title',
+                ]
+            else:
+                ordering = [
+                    'trend_bucket',
+                    F('trending_score').asc(nulls_last=True),
+                    F('views_24h_sort').asc(nulls_last=True),
+                    F('pub_sort').desc(nulls_last=True),
+                    F('old_views_sort').asc(nulls_last=True),
+                    'episode_title',
+                ]
 
         elif sort == 'recent':
+            # IMPORTANT: use pub_date (translation date fallback to episode date)
             ordering = [
-                F('publication_date').desc(nulls_last=True) if direction == 'desc'
-                else F('publication_date').asc(nulls_last=True),
+                F('pub_date').desc(nulls_last=True) if direction == 'desc'
+                else F('pub_date').asc(nulls_last=True),
                 'episode_title',
             ]
 
@@ -2201,7 +2490,7 @@ class EpisodeListView(ListView):
             ordering = [f'{dir_prefix}episode_title']
 
         else:
-            ordering = [F('publication_date').desc(nulls_last=True), 'episode_title']
+            ordering = [F('pub_date').desc(nulls_last=True), 'episode_title']
 
         return qs.order_by(*ordering)
 
@@ -2250,7 +2539,6 @@ class EpisodeListView(ListView):
         if self.request.GET.get('ajax') == '1':
             return render(self.request, 'podcasts/episode_list_items.html', context)
         return super().render_to_response(context, **response_kwargs)
-
 
 
 class SearchResultsView(LoginRequiredMixin, ListView):
@@ -2331,6 +2619,219 @@ class SearchResultsView(LoginRequiredMixin, ListView):
             )
         )
 
+    def _expand_multi_language_items(self, ep_qs, selected_langs):
+        """
+        Turn an Episode queryset into a list of items that can include:
+        - EpisodeTranslations rows for each selected non-English language
+        - Episode rows if English is selected
+
+        This is what you need if you want to *see multiple languages at once*,
+        not just choose one display overlay.
+        """
+        EN_ALIASES = {"en", "eng", "english"}
+
+        langs = [l.strip().lower() for l in (selected_langs or []) if (l or "").strip()]
+        wants_en = any(l in EN_ALIASES for l in langs)
+        non_en = [l for l in langs if l not in EN_ALIASES]
+
+        # Evaluate episodes once (these already have your stats annotations)
+        base_eps = list(ep_qs)
+        if not base_eps:
+            return []
+
+        # If user only wants English, we're done
+        if not non_en:
+            return base_eps if wants_en else base_eps  # (base_eps should already be English filtered upstream)
+
+        ep_by_id = {e.id: e for e in base_eps}
+        ep_ids = list(ep_by_id.keys())
+
+        # Pull translations for ALL selected non-English languages
+        q_lang = Q()
+        for lang in non_en:
+            q_lang |= Q(language=lang) | Q(language__istartswith=f"{lang}-")
+
+        t_qs = (
+            EpisodeTranslations.objects
+            .filter(episode_id__in=ep_ids)
+            .filter(q_lang)
+            .select_related("episode", "episode__channel")
+        )
+
+
+        et_fields = {f.name for f in EpisodeTranslations._meta.get_fields()}
+        if "translated" in et_fields:
+            t_qs = t_qs.filter(translated=True)
+
+        trans_items = list(t_qs)
+
+        # Copy the per-episode stats from the base Episode objects onto translation objects
+        stats_fields = (
+            "bookmarks_count",
+            "comments_count",
+            "ep_avg_rating",
+            "ep_rating_count",
+            "total_episode_views",
+            "total_downloads",
+            "total_shares",
+        )
+        for t in trans_items:
+            base = ep_by_id.get(t.episode_id)
+            if base:
+                for f in stats_fields:
+                    setattr(t, f, getattr(base, f, 0))
+
+        # Build a combined list:
+        # - translations for each selected lang
+        # - plus English base episodes if English selected
+        combined = []
+        combined.extend(trans_items)
+        if wants_en:
+            combined.extend(base_eps)
+
+        # Sort: newest episode first; within same episode, respect selected language order; English last
+        # Sort: newest episode first; within same episode, respect selected language order; English last
+        lang_rank = {lang: i for i, lang in enumerate(non_en)}
+
+        def _pub_dt(obj):
+            if hasattr(obj, "episode") and getattr(obj, "episode", None) is not None:
+                return obj.episode.publication_date
+            return obj.publication_date
+
+        def _master_id(obj):
+            return obj.episode_id if hasattr(obj, "episode_id") else obj.id
+
+        def _lang_order(obj):
+            # translations first, in non_en order; base episode after
+            if hasattr(obj, "language") and (obj.language or "").lower() in lang_rank:
+                return lang_rank[(obj.language or "").lower()]
+            return 9999  # base episode goes last
+
+        combined.sort(
+            key=lambda o: (
+                _pub_dt(o) or datetime.min.replace(tzinfo=timezone.get_current_timezone()),
+                _master_id(o),
+                -_lang_order(o),   # we’ll reverse overall, so invert to keep translations first
+            ),
+            reverse=True
+        )
+
+        return combined
+
+    def _apply_episode_display_language(self, qs, selected_langs):
+        """
+        Annotate Episodes with display_* fields, picking the "best" translation
+        when user selects one OR multiple languages.
+
+        Priority:
+        - languages in the order user selected them (non-English only)
+        - fallback to base Episode fields if no translation exists
+        """
+        EN_ALIASES = {"en", "eng", "english"}
+
+        langs = [l.strip().lower() for l in (selected_langs or []) if (l or "").strip()]
+        non_en = [l for l in langs if l not in EN_ALIASES]
+
+        # If user didn't pick any non-English, do nothing
+        if not non_en:
+            return qs
+
+        et_fields = {f.name for f in EpisodeTranslations._meta.get_fields()}
+
+        # translation base queryset: translation row for this episode, limited to selected langs
+        et_qs = EpisodeTranslations.objects.filter(
+            episode_id=OuterRef("pk"),
+            language__in=non_en,
+        )
+
+        if "translated" in et_fields:
+            et_qs = et_qs.filter(translated=True)
+
+        # We want deterministic choice when multiple langs:
+        # pick translation row with language priority by selected order.
+        # Use a CASE expression for ordering.
+
+
+        whens = [When(language=lang, then=idx) for idx, lang in enumerate(non_en)]
+        et_qs = et_qs.annotate(_prio=Case(*whens, default=9999, output_field=IntegerField())).order_by("_prio")
+
+        # choose which translation fields exist
+        title_field = "episode_title" if "episode_title" in et_fields else None
+
+        desc_field = None
+        for cand in ("description", "episode_description"):
+            if cand in et_fields:
+                desc_field = cand
+                break
+
+        slug_field = "sanitized_episode_title" if "sanitized_episode_title" in et_fields else None
+        image_field = "image_url" if "image_url" in et_fields else None
+
+        annotations = {}
+
+        annotations["display_episode_title"] = (
+            Coalesce(Subquery(et_qs.values(title_field)[:1]), F("episode_title"))
+            if title_field else F("episode_title")
+        )
+
+        annotations["display_description"] = (
+            Coalesce(Subquery(et_qs.values(desc_field)[:1]), F("description"))
+            if desc_field else F("description")
+        )
+
+        annotations["display_sanitized_episode_title"] = (
+            Coalesce(Subquery(et_qs.values(slug_field)[:1]), F("sanitized_episode_title"))
+            if slug_field else F("sanitized_episode_title")
+        )
+
+        annotations["display_image_url"] = (
+            Coalesce(Subquery(et_qs.values(image_field)[:1]), F("image_url"))
+            if image_field else F("image_url")
+        )
+
+        return qs.annotate(**annotations)
+
+    def _set_total_display_from_base_qs(self, base_qs, selected_langs):
+        """
+        Computes how many *display rows* exist when multi-language expand is enabled.
+        Stores it on self for get_context_data().
+        """
+        def _norm_lang(x):
+            return (x or "").strip().lower().replace("_", "-")
+
+        def _is_english_code(x):
+            x = _norm_lang(x)
+            return x == "en" or x.startswith("en-") or x in ("eng", "english")
+
+        langs = [_norm_lang(l) for l in (selected_langs or []) if (l or "").strip()]
+        wants_en = any(_is_english_code(l) for l in langs)
+        non_en = [l for l in langs if l and not _is_english_code(l)]
+
+        base_total = base_qs.count()
+
+        # default: if you aren't in multi-language mode, total == base episodes
+        self._total_display_items = base_total
+
+        # only adjust when user selected multiple languages AND at least one non-English
+        if not (len(langs) > 1 and len(non_en) >= 1):
+            return
+
+        # count translation rows for these episodes and langs
+        q_lang = Q()
+        for lang in non_en:
+            q_lang |= Q(language=lang) | Q(language__istartswith=f"{lang}-")
+
+        t_qs = EpisodeTranslations.objects.filter(episode__in=base_qs).filter(q_lang)
+
+        et_fields = {f.name for f in EpisodeTranslations._meta.get_fields()}
+        if "translated" in et_fields:
+            t_qs = t_qs.filter(translated=True)
+
+        trans_total = t_qs.count()
+
+        # display rows = translations + (optional) base episodes if English selected
+        self._total_display_items = (base_total if wants_en else 0) + trans_total
+
 
     def paginate_queryset(self, qs, page_size):
         """
@@ -2350,12 +2851,209 @@ class SearchResultsView(LoginRequiredMixin, ListView):
         q = (self.request.GET.get('q', '') or '').strip()
         search_type = (self.request.GET.get('search_type', 'episodes') or 'episodes').strip()
 
+        # Language filter (episodes + channels)
+        selected_langs = self.request.GET.getlist("search_language")  # e.g. ["en"], ["pt"], ["en","pt"]
+        selected_langs = [l.strip().lower() for l in selected_langs if (l or "").strip()]
+        if not selected_langs:
+            selected_langs = ["en"]  # default
+
+        EN_ALIASES = {"en", "eng", "english"}
+
+        def _needs_multi_language_expand(selected_langs):
+            EN_ALIASES = {"en", "eng", "english"}
+            langs = [l.strip().lower() for l in (selected_langs or []) if (l or "").strip()]
+            non_en = [l for l in langs if l not in EN_ALIASES]
+            # expand only when user selected 2+ languages OR multiple non-English
+            return len(langs) > 1 and (len(non_en) >= 1)
+
+
+        def _norm_lang(x):
+            return (x or "").strip().lower().replace("_", "-")
+
+        def _is_english_code(x):
+            x = _norm_lang(x)
+            return x == "en" or x.startswith("en-") or x in ("eng", "english")
+
+        def _lang_wants_english(langs):
+            return any(_is_english_code(l) for l in (langs or []))
+
+        def _lang_non_english(langs):
+            # keep original codes (pt, pt-br, es, etc) but normalized
+            out = []
+            for l in (langs or []):
+                nl = _norm_lang(l)
+                if nl and not _is_english_code(nl):
+                    out.append(nl)
+            return out
+
+        #HERE
+        def _episode_allowed_ids_by_language():
+            wants_en = _lang_wants_english(selected_langs)
+            non_en = _lang_non_english(selected_langs)
+
+            ids = set()
+
+            if wants_en:
+                ids |= set(
+                    Episode.objects.filter(
+                        Q(language__istartswith="en") | Q(language__isnull=True) | Q(language__exact="")
+                    ).values_list("id", flat=True)
+                )
+
+            if non_en:
+                q_lang = Q()
+                for lang in non_en:
+                    # match exact (pt) and regional variants (pt-br)
+                    q_lang |= Q(language=lang) | Q(language__istartswith=f"{lang}-")
+
+                ids |= set(
+                    EpisodeTranslations.objects
+                    .filter(q_lang)
+                    .values_list("episode_id", flat=True)
+                )
+
+            return ids
+
+
+        def _paginate_ids_fast(base_qs, order_by=('-publication_date', '-id')):
+            """
+            base_qs MUST be un-annotated (no _with_episode_stats).
+            Returns: (paginator, page_obj, page_ids)
+            """
+            # total count (cheap when base_qs is simple)
+            total = base_qs.count()
+
+            # build paginator without triggering count on an annotated qs
+            paginator = Paginator(range(total), page_size)
+            page_obj = paginator.get_page(page)
+
+            # get IDs for this page (cheap)
+            qs_ids = (
+                base_qs.order_by(*order_by)
+                .values_list('id', flat=True)[start:end]
+            )
+            page_ids = list(qs_ids)
+
+            return paginator, page_obj, page_ids
+
+        def _fetch_page_items_with_stats(page_ids):
+            """
+            Fetch only the page's Episodes, apply heavy stats, then optionally expand into
+            EpisodeTranslations objects for each selected language.
+            Returns a list of items to render (Episodes and/or EpisodeTranslations).
+            """
+            if not page_ids:
+                return []
+
+            order = Case(
+                *[When(id=pk, then=pos) for pos, pk in enumerate(page_ids)],
+                output_field=IntegerField(),
+            )
+
+            ep_qs = self._with_episode_stats(
+                Episode.objects.filter(id__in=page_ids)
+            ).select_related("channel") \
+            .exclude(channel__sanitized_channel_title__isnull=True) \
+            .exclude(channel__sanitized_channel_title='') \
+            .order_by(order)
+
+            # Only prefetch transcripts when transcript searching (base episodes)
+            needs_transcripts = bool(selected & transcript_selectors)
+            if needs_transcripts:
+                ep_qs = ep_qs.prefetch_related("transcripts")
+
+            # MULTI-LANGUAGE MODE: show multiple language items (translations + english)
+            if _needs_multi_language_expand(selected_langs):
+                # IMPORTANT: do NOT apply overlay annotations here; expand creates per-language rows
+                items = self._expand_multi_language_items(ep_qs, selected_langs)
+
+                # If transcript searching, also prefetch translation transcripts so template can show segments
+                if needs_transcripts:
+                    # Your template checks item.transcriptstranslations for translation objects
+                    # Make sure this related_name exists on EpisodeTranslations model.
+                    # If your related_name differs, change it here.
+                    for obj in items:
+                        pass  # nothing; prefetch happens below
+
+                    # Efficiently re-fetch translations with prefetch (only for translation objs)
+                    trans_ids = [t.id for t in items if hasattr(t, "episode") and hasattr(t, "language")]
+                    if trans_ids:
+                        t_qs = (
+                            EpisodeTranslations.objects
+                            .filter(id__in=trans_ids)
+                            .select_related("episode", "episode__channel")
+                            .prefetch_related("transcriptstranslations")  # <-- adjust if your related_name differs
+                        )
+                        t_map = {t.id: t for t in t_qs}
+                        # replace translation objects with prefetched versions
+                        items = [t_map.get(x.id, x) if hasattr(x, "episode") and hasattr(x, "language") else x for x in items]
+
+                return items
+
+            # SINGLE-LANGUAGE MODE: overlay display_* fields for that language selection
+            ep_qs = self._apply_episode_display_language(ep_qs, selected_langs)
+            return list(ep_qs)
+
+
+        def _channel_allowed_ids_by_language():
+            """
+            Returns a set of Channel IDs allowed by selected_langs.
+
+            English:
+            - include all Channels
+            Non-English:
+            - include channels that have a translation row in ChannelTranslations for that language
+                (maps back to master channel id)
+            """
+            wants_en = _lang_wants_english(selected_langs)
+            non_en = _lang_non_english(selected_langs)
+
+            ids = set()
+
+            if wants_en:
+                ids |= set(Channel.objects.values_list("id", flat=True))
+
+            if non_en:
+                qs = ChannelTranslations.objects.filter(language__in=non_en)
+                # If your translation table has a boolean:
+                if "translated" in {f.name for f in ChannelTranslations._meta.get_fields()}:
+                    qs = qs.filter(translated=True)
+
+                # Figure out how to map translation rows -> master Channel id
+                field_names = {f.name for f in ChannelTranslations._meta.get_fields()}
+
+                if "channel" in field_names:
+                    # FK named `channel`
+                    ids |= set(qs.values_list("channel_id", flat=True))
+                elif "channel_id" in field_names:
+                    # plain integer field actually named channel_id
+                    ids |= set(qs.values_list("channel_id", flat=True))
+                elif "master_channel" in field_names:
+                    ids |= set(qs.values_list("master_channel_id", flat=True))
+                elif "channel_ref" in field_names:
+                    ids |= set(qs.values_list("channel_ref_id", flat=True))
+                else:
+                    # last resort: raise a helpful error with the actual fields
+                    raise RuntimeError(
+                        f"ChannelTranslations has no recognizable link field. Fields: {sorted(field_names)}"
+                    )
+
+            return ids
+
+
+        # Compute once (cheap and keeps logic consistent everywhere)
+
+        allowed_episode_ids = _episode_allowed_ids_by_language()
+
+
+
         # 1) No query → normal ListView pagination
         if not q:
             return super().paginate_queryset(qs, page_size)
 
         # ---------------- CHANNELS branch ----------------
         if search_type == 'channels':
+            allowed_channel_ids = _channel_allowed_ids_by_language()
             wants = self.request.GET.getlist('search_in')
             filters = []
             if 'channel_title' in wants:
@@ -2365,7 +3063,7 @@ class SearchResultsView(LoginRequiredMixin, ListView):
             if 'channel_summary' in wants:
                 filters.append(Q(channel_summary__icontains=q))
 
-            chans = Channel.objects.all()
+            chans = Channel.objects.all().filter(id__in=allowed_channel_ids)
             if filters:
                 combined = filters.pop()
                 for f in filters:
@@ -2434,14 +3132,20 @@ class SearchResultsView(LoginRequiredMixin, ListView):
         
         # Build eligible episode ids for date filtering in TranscriptDocument (ES can't join)
         eligible_episode_ids = None
+
+        base_eligible_qs = (
+            Episode.objects
+            .filter(id__in=allowed_episode_ids)
+            .exclude(channel__sanitized_channel_title__isnull=True)
+            .exclude(channel__sanitized_channel_title='')
+        )
+
         if window:
-            eligible_episode_ids = list(
-                Episode.objects
-                .filter(publication_date__gte=timezone.now() - window)
-                .exclude(channel__sanitized_channel_title__isnull=True)
-                .exclude(channel__sanitized_channel_title='')
-                .values_list('id', flat=True)
-            )
+            base_eligible_qs = base_eligible_qs.filter(publication_date__gte=timezone.now() - window)
+
+        # Always set it when transcript searching (keeps counts consistent)
+        eligible_episode_ids = list(base_eligible_qs.values_list("id", flat=True))
+
 
         # Selected UI fields
         selected = set(self.request.GET.getlist('search_in'))
@@ -2468,56 +3172,172 @@ class SearchResultsView(LoginRequiredMixin, ListView):
 
         # -------- Transcript ES helper (SAFE: no >10k window) --------
         def _transcript_page_episode_ids_with_total(start_, size_):
-            """
-            Returns (total_unique_episodes, [(episode_id, score)...page...])
+            wants_en = _lang_wants_english(selected_langs)
+            non_en = _lang_non_english(selected_langs)
 
-            - collapse episode_id => 1 hit per episode
-            - cardinality agg => total unique episodes (approx, typically very accurate)
-            - from/size stay small (page only), so never exceed 10k window
-            """
-            broad_q = ES_Q('match', segment_text={'query': q, 'operator': 'or'})
-            phrase_q = ES_Q('match_phrase', segment_text={'query': q})
+            def _base_search(doc_cls):
+                broad_q = ES_Q("match", segment_text={"query": q, "operator": "or"})
+                phrase_q = ES_Q("match_phrase", segment_text={"query": q})
 
-            tsearch = (
-                TranscriptDocument.search()
-                .query(
-                    'function_score',
-                    query=broad_q,
-                    functions=[{'filter': phrase_q, 'weight': 10}],
-                    boost_mode='sum',
-                    score_mode='sum'
+                s = (
+                    doc_cls.search()
+                    .query(
+                        "function_score",
+                        query=broad_q,
+                        functions=[{"filter": phrase_q, "weight": 10}],
+                        boost_mode="sum",
+                        score_mode="sum",
+                    )
+                    .params(collapse={"field": "episode_id", "inner_hits": {"name": "top_segment", "size": 1}})
+                    .sort({"_score": "desc"})
                 )
-                .params(collapse={
-                    'field': 'episode_id',
-                    'inner_hits': {'name': 'top_segment', 'size': 1}
-                })
-                .sort({'_score': 'desc'})
-                .extra(from_=start_, size=size_)
-            )
 
-            # cardinality aggregation to count unique episode_ids
-            tsearch.aggs.bucket('uniq_eps', 'cardinality', field='episode_id')
+                # Date window (episode_id terms filter)
+                if eligible_episode_ids is not None:
+                    if not eligible_episode_ids:
+                        return None
+                    s = s.filter("terms", episode_id=eligible_episode_ids)
 
-            # ✅ Date window for transcripts MUST be applied via episode_id terms filter
-            # because TranscriptDocument doesn't have publication_date (and ES can't join).
-            if eligible_episode_ids is not None:
-                if not eligible_episode_ids:
-                    # No episodes in date window => no transcript matches possible
+                return s
+
+            def _cardinality_total(s):
+                # count unique episode_id without being limited by size/from
+                s0 = s.extra(size=0)
+                s0.aggs.bucket("uniq_eps", "cardinality", field="episode_id")
+                resp = s0.execute()
+                try:
+                    return int(resp.aggregations.uniq_eps.value or 0)
+                except Exception:
+                    return 0
+
+            def _page_ids_scores(s, from_, size_):
+                resp = s.extra(from_=from_, size=size_).execute()
+                hits = resp.hits.hits
+                return [(int(h["_source"]["episode_id"]), float(h["_score"])) for h in hits]
+
+            # ------------------------------------------------------------
+            # 1) FAST + EXACT for the common cases (single “source”)
+            # ------------------------------------------------------------
+
+            # English only
+            if wants_en and not non_en:
+                s = _base_search(TranscriptDocument)
+                if s is None:
                     return 0, []
-                tsearch = tsearch.filter('terms', episode_id=eligible_episode_ids)
+                total_unique = _cardinality_total(s)
+                page_ids_scores = _page_ids_scores(s, start_, size_)
+                return total_unique, page_ids_scores
+
+            # Single non-English language only
+            if (not wants_en) and len(non_en) == 1:
+                lang = non_en[0]
+                s = _base_search(TranscriptTranslationsDocument)
+                if s is None:
+                    return 0, []
+                s = s.filter("term", language=lang)
+                total_unique = _cardinality_total(s)
+                page_ids_scores = _page_ids_scores(s, start_, size_)
+                return total_unique, page_ids_scores
+
+            # ------------------------------------------------------------
+            # 2) Multi-language union (your current “merge by best score”)
+            #    We must fetch enough hits to fill the requested page.
+            # ------------------------------------------------------------
+
+            need = start_ + size_
+            fetch_n = max(500, need)  # <<< key change: don’t start at 100
+
+            collected = []
+
+            if wants_en:
+                s_en = _base_search(TranscriptDocument)
+                if s_en is not None:
+                    collected += _page_ids_scores(s_en, 0, fetch_n)
+
+            if non_en:
+                s_tr = _base_search(TranscriptTranslationsDocument)
+                if s_tr is not None:
+                    s_tr = s_tr.filter("terms", language=non_en)
+                    collected += _page_ids_scores(s_tr, 0, fetch_n)
+
+            # Merge + dedupe by episode_id keeping best score
+            best = {}
+            for eid, sc in collected:
+                if eid not in best or sc > best[eid]:
+                    best[eid] = sc
+
+            sorted_items = sorted(best.items(), key=lambda x: x[1], reverse=True)
+            page_items = sorted_items[start_:start_ + size_]
+
+            # NOTE: this is an approximation for multi-language union unless you do the heavier exact-union count
+            total_unique = len(best)
+
+            return total_unique, [(eid, score) for eid, score in page_items]
 
 
 
-            resp = tsearch.execute()
 
-            try:
-                total_unique = int(resp.aggregations.uniq_eps.value or 0)
-            except Exception:
-                total_unique = 0
+        #HERE
+        def _transcript_ids_for_union_fast(cap):
+            """
+            Cheap way to get episode_ids for UNION:
+            - no inner_hits
+            - only fetch episode_id
+            - collapse by episode_id
+            - cap results to avoid timeouts
+            """
+            wants_en = _lang_wants_english(selected_langs)
+            non_en   = _lang_non_english(selected_langs)
 
-            hits = resp.hits.hits
-            page_ids_scores = [(int(h['_source']['episode_id']), float(h['_score'])) for h in hits]
-            return total_unique, page_ids_scores
+            def _run(doc_cls, lang=None):
+                s = (
+                    doc_cls.search()
+                    .query("match", segment_text={"query": q, "operator": "or"})
+                    .params(collapse={"field": "episode_id"})
+                    .source(["episode_id"])
+                    .sort({"_score": "desc"})
+                    .extra(size=cap)
+                    .params(request_timeout=30)
+                )
+
+                if eligible_episode_ids is not None:
+                    if not eligible_episode_ids:
+                        return set()
+                    s = s.filter("terms", episode_id=eligible_episode_ids)
+
+                if lang is not None:
+                    s = s.filter("term", language=lang)
+
+                resp = s.execute()
+                return {int(h.episode_id) for h in resp}
+
+            out = set()
+            if wants_en:
+                out |= _run(TranscriptDocument)
+
+            if non_en:
+                # important: translations doc supports terms
+                s = (
+                    TranscriptTranslationsDocument.search()
+                    .query("match", segment_text={"query": q, "operator": "or"})
+                    .filter("terms", language=non_en)
+                    .params(collapse={"field": "episode_id"})
+                    .source(["episode_id"])
+                    .sort({"_score": "desc"})
+                    .extra(size=cap)
+                    .params(request_timeout=30)
+                )
+                if eligible_episode_ids is not None:
+                    if not eligible_episode_ids:
+                        return out
+                    s = s.filter("terms", episode_id=eligible_episode_ids)
+
+                resp = s.execute()
+                out |= {int(h.episode_id) for h in resp}
+
+            return out
+
+
 
         # -------- DB helper (channel_title/description OR) --------
         def _db_ids_for_db_only_fields(sel_set):
@@ -2526,7 +3346,26 @@ class SearchResultsView(LoginRequiredMixin, ListView):
             """
             db_filters = Q()
             if 'channel_title' in sel_set:
+                # master channel title match (English/original)
                 db_filters |= Q(channel__channel_title__icontains=q)
+
+                # translated channel title match (Portuguese/etc) via slug mapping
+                non_en = _lang_non_english(selected_langs)
+                if non_en:
+                    ct_fields = {f.name for f in ChannelTranslations._meta.get_fields()}
+                    ct_qs = ChannelTranslations.objects.filter(
+                        language__in=non_en,
+                        channel_title__icontains=q,
+                    )
+                    if "translated" in ct_fields:
+                        ct_qs = ct_qs.filter(translated=True)
+
+                    translated_slugs = ct_qs.values_list("sanitized_channel_title", flat=True)
+
+                    # map translated channel slugs -> master channels -> episodes
+                    db_filters |= Q(channel__sanitized_channel_title__in=translated_slugs)
+
+
             if 'description' in sel_set or 'episode_description' in sel_set:
                 db_filters |= Q(description__icontains=q)
 
@@ -2534,6 +3373,10 @@ class SearchResultsView(LoginRequiredMixin, ListView):
                 return set()
 
             db_qs = Episode.objects.filter(db_filters)
+
+            # ✅ apply language filter
+            db_qs = db_qs.filter(id__in=allowed_episode_ids)
+
             if window:
                 db_qs = db_qs.filter(publication_date__gte=timezone.now() - window)
 
@@ -2543,48 +3386,82 @@ class SearchResultsView(LoginRequiredMixin, ListView):
                     .values_list('id', flat=True)
             )
 
+
         # -------- EpisodeDocument ES helper (titles/translations/etc) --------
         def _episode_es_ids_for_selected_fields(sel_set):
             """
-            Returns a set of Episode IDs from EpisodeDocument based on selected ES-mapped fields.
-            NOTE: we do NOT include channel_title/description here (DB-only).
+            Returns a set of master Episode IDs that match selected ES fields, respecting language.
+            - English => search EpisodeDocument (masters)
+            - Non-English => search EpisodeTranslationsDocument and map to master episode_id
+            - English + Non-English => union
             """
-            ES_FIELD_MAP = {
-                'episode_title': ['episode_title', 'translations.episode_title'],
-                # if you want description to be ES-backed too, add here (but you currently DB-only it)
-                # 'description': ['description', 'translations.description'],
-                # 'episode_description': ['description', 'translations.description'],
+            ES_FIELD_MAP_MASTER = {
+                "episode_title": ["episode_title"],
+            }
+            ES_FIELD_MAP_TRANSL = {
+                "episode_title": ["episode_title"],
             }
 
-            fields = []
+            fields_master = []
+            fields_transl = []
             for key in sel_set:
-                fields += ES_FIELD_MAP.get(key, [])
+                fields_master += ES_FIELD_MAP_MASTER.get(key, [])
+                fields_transl += ES_FIELD_MAP_TRANSL.get(key, [])
 
-            fields = _dedupe_preserve_order(fields)
-            if not fields:
-                return set()
+            fields_master = _dedupe_preserve_order(fields_master)
+            fields_transl = _dedupe_preserve_order(fields_transl)
 
-            es = EpisodeDocument.search()
-            if window:
-                es = es.filter('range', publication_date={'gte': timezone.now() - window})
+            wants_en = _lang_wants_english(selected_langs)
+            non_en = _lang_non_english(selected_langs)
 
-            broad_q = ES_Q('multi_match', query=q, fields=fields, type='best_fields', operator='or')
-            phrase_q = ES_Q('multi_match', query=q, fields=fields, type='phrase')
+            out_ids = set()
 
-            es = es.query(
-                'function_score',
-                query=broad_q,
-                functions=[{'filter': phrase_q, 'weight': 10}],
-                boost_mode='sum',
-                score_mode='sum'
-            )
+            # ---- Masters (English/untranslated) ----
+            if wants_en and fields_master:
+                es = EpisodeDocument.search()
+                if window:
+                    es = es.filter("range", publication_date={"gte": timezone.now() - window})
 
-            # Pull only up to 10k IDs to avoid window issues (best-effort union)
-            # This is fine because the UI only shows pages; exact "total union" is complex without scroll/search_after.
-            es = es.extra(size=10000)
+                broad_q = ES_Q("multi_match", query=q, fields=fields_master, type="best_fields", operator="or")
+                phrase_q = ES_Q("multi_match", query=q, fields=fields_master, type="phrase")
 
-            resp = es.execute()
-            return {int(hit.meta.id) for hit in resp}
+                es = es.query(
+                    "function_score",
+                    query=broad_q,
+                    functions=[{"filter": phrase_q, "weight": 10}],
+                    boost_mode="sum",
+                    score_mode="sum",
+                ).extra(size=10000)
+
+                resp = es.execute()
+                out_ids |= {int(hit.meta.id) for hit in resp}
+
+            # ---- Translations (Portuguese, etc) ----
+            if non_en and fields_transl:
+                tes = EpisodeTranslationsDocument.search()
+                tes = tes.filter("terms", language=non_en)
+
+                if window:
+                    tes = tes.filter("range", publication_date={"gte": timezone.now() - window})
+
+                broad_q = ES_Q("multi_match", query=q, fields=fields_transl, type="best_fields", operator="or")
+                phrase_q = ES_Q("multi_match", query=q, fields=fields_transl, type="phrase")
+
+                tes = tes.query(
+                    "function_score",
+                    query=broad_q,
+                    functions=[{"filter": phrase_q, "weight": 10}],
+                    boost_mode="sum",
+                    score_mode="sum",
+                ).extra(size=10000)
+
+                tresp = tes.execute()
+                # EpisodeTranslationsDocument has episode_id field that is the master episode id
+                out_ids |= {int(hit.episode_id) for hit in tresp}
+
+            return out_ids & allowed_episode_ids
+
+
 
         # ============================================================
         # 3) Transcript-only searches
@@ -2594,7 +3471,7 @@ class SearchResultsView(LoginRequiredMixin, ListView):
             page_ids = [eid for eid, _ in page_ids_scores]
 
             episode_qs = self._with_episode_stats(
-                Episode.objects.filter(id__in=page_ids)
+                Episode.objects.filter(id__in=page_ids).filter(id__in=allowed_episode_ids)
             ).select_related('channel') \
             .prefetch_related('transcripts') \
             .exclude(channel__sanitized_channel_title__isnull=True) \
@@ -2616,60 +3493,63 @@ class SearchResultsView(LoginRequiredMixin, ListView):
         # Ensures transcript+description >= transcript-only.
         # ============================================================
         if (selected & transcript_selectors) and (selected - transcript_selectors):
-            # A) transcript matches (we can compute total transcript unique; and for union display,
-            #    we will union in other ids and paginate in DB)
-            # We do NOT try to pull all transcript ids (could exceed 10k window).
-            # Instead, we union best-effort ids from:
-            #   - DB-only fields (channel_title/description)
-            #   - EpisodeDocument ES fields (episode_title/translations)
-            # and then *also* ensure transcript results are represented by using transcript paging source.
-            # The best UX here is: union ids we can fetch, then paginate DB.
-
-            # For union ID set, get:
             db_ids = _db_ids_for_db_only_fields(selected & DB_ONLY)
-
             selected_es = (selected - transcript_selectors - DB_ONLY)
             es_ids = _episode_es_ids_for_selected_fields(selected_es)
 
-            # Additionally: include transcript ids, but only up to 10k best hits.
-            # This prevents window errors. You will still see >= transcript-only for most queries.
-            # If you truly need *all* transcript ids, you must use scroll/search_after.
-            # Pull up to 10k transcript episode ids (already date-filtered inside helper)
-            _, t_page_ids_scores = _transcript_page_episode_ids_with_total(0, 10000)
-            transcript_ids = {eid for eid, _ in t_page_ids_scores}
+            TRANSCRIPT_UNION_CAP = 10000  # start smaller; tune later (500-1500)
+            try:
+                transcript_ids = _transcript_ids_for_union_fast(TRANSCRIPT_UNION_CAP)
+            except (ConnectionTimeout, ReadTimeoutError, Exception):
+                transcript_ids = set()   # degrade gracefully instead of 500 error
 
+            all_ids = list((db_ids | es_ids | transcript_ids) & allowed_episode_ids)
 
-            all_ids = list(db_ids | es_ids | transcript_ids)
-
-            ep_qs = self._with_episode_stats(
+            base_qs = (
                 Episode.objects.filter(id__in=all_ids)
-            ).select_related('channel') \
-            .prefetch_related('transcripts') \
-            .exclude(channel__sanitized_channel_title__isnull=True) \
-            .exclude(channel__sanitized_channel_title='') \
-            .order_by('-publication_date', '-id')
+                .exclude(channel__sanitized_channel_title__isnull=True)
+                .exclude(channel__sanitized_channel_title='')
+                .order_by("-publication_date", "-id")
+            )
+            if window:
+                base_qs = base_qs.filter(publication_date__gte=timezone.now() - window)
 
-            paginator = Paginator(ep_qs, page_size)
-            page_obj = paginator.get_page(page)
-            return paginator, page_obj, list(page_obj.object_list), page_obj.has_other_pages()
+            # ✅ store expanded total for the UI (see helper below)
+            self._set_total_display_from_base_qs(base_qs, selected_langs)
+
+            paginator, page_obj, page_ids = _paginate_ids_fast(base_qs, order_by=("-publication_date", "-id"))
+            page_list = _fetch_page_items_with_stats(page_ids)  # ✅ this is where multi-language expansion happens
+            return paginator, page_obj, page_list, page_obj.has_other_pages()
+
+
 
         # ============================================================
-        # 5) DB-only searches (channel_title/description only) → OR across them
+        # 5) DB-only searches (channel_title/description only)
         # ============================================================
         if selected and selected.issubset(DB_ONLY):
             ep_ids = _db_ids_for_db_only_fields(selected)
-            ep_qs = Episode.objects.filter(id__in=list(ep_ids))
+            ep_ids = set(ep_ids) & allowed_episode_ids
 
-            ep_qs = self._with_episode_stats(ep_qs) \
-                .select_related('channel') \
-                .prefetch_related('transcripts') \
-                .exclude(channel__sanitized_channel_title__isnull=True) \
-                .exclude(channel__sanitized_channel_title='') \
-                .order_by('-publication_date', '-id')
+            all_ids = list(ep_ids)  # ✅ define all_ids here
 
-            paginator = Paginator(ep_qs, page_size)
-            page_obj = paginator.get_page(page)
-            return paginator, page_obj, list(page_obj.object_list), page_obj.has_other_pages()
+            base_qs = (
+                Episode.objects.filter(id__in=all_ids)
+                .exclude(channel__sanitized_channel_title__isnull=True)
+                .exclude(channel__sanitized_channel_title='')
+            )
+
+            if window:
+                base_qs = base_qs.filter(publication_date__gte=timezone.now() - window)
+
+            self._set_total_display_from_base_qs(base_qs, selected_langs)  # ✅ ADD
+
+            paginator, page_obj, page_ids = _paginate_ids_fast(base_qs)
+            page_list = _fetch_page_items_with_stats(page_ids)
+            return paginator, page_obj, page_list, page_obj.has_other_pages()
+
+
+
+
 
         # ============================================================
         # 6) DB-only + other ES fields (UNION OR behavior)
@@ -2679,42 +3559,51 @@ class SearchResultsView(LoginRequiredMixin, ListView):
             db_ids = _db_ids_for_db_only_fields(selected & DB_ONLY)
             es_ids = _episode_es_ids_for_selected_fields(selected - DB_ONLY)
 
-            all_ids = list(db_ids | es_ids)
+            all_ids = list(set(db_ids | es_ids) & allowed_episode_ids)
 
-            ep_qs = self._with_episode_stats(
-                Episode.objects.filter(id__in=all_ids)
-            ).select_related('channel') \
-            .prefetch_related('transcripts') \
-            .exclude(channel__sanitized_channel_title__isnull=True) \
-            .exclude(channel__sanitized_channel_title='') \
-            .order_by('-publication_date', '-id')
+            base_qs = Episode.objects.filter(id__in=all_ids)
+            base_qs = base_qs.exclude(channel__sanitized_channel_title__isnull=True).exclude(channel__sanitized_channel_title='')
 
-            paginator = Paginator(ep_qs, page_size)
-            page_obj = paginator.get_page(page)
-            return paginator, page_obj, list(page_obj.object_list), page_obj.has_other_pages()
+            if window:
+                base_qs = base_qs.filter(publication_date__gte=timezone.now() - window)
+
+            self._set_total_display_from_base_qs(base_qs, selected_langs)  # ✅ ADD
+
+            paginator, page_obj, page_ids = _paginate_ids_fast(base_qs)
+            page_list = _fetch_page_items_with_stats(page_ids)
+
+
+            return paginator, page_obj, page_list, page_obj.has_other_pages()
+
 
         # ============================================================
         # 7) ES-only searches (episode_title/translations/etc)
         # ============================================================
+        # ES-only searches
         es_ids = _episode_es_ids_for_selected_fields(selected)
+        es_ids = set(es_ids) & allowed_episode_ids
         all_ids = list(es_ids)
 
-        # If ES returned nothing and user picked something unmapped, fall back to "title"
         if not all_ids:
             es_ids = _episode_es_ids_for_selected_fields({'episode_title'})
+            es_ids = set(es_ids) & allowed_episode_ids
             all_ids = list(es_ids)
 
-        ep_qs = self._with_episode_stats(
-            Episode.objects.filter(id__in=all_ids)
-        ).select_related('channel') \
-        .prefetch_related('transcripts') \
-        .exclude(channel__sanitized_channel_title__isnull=True) \
-        .exclude(channel__sanitized_channel_title='') \
-        .order_by('-publication_date', '-id')
+        base_qs = Episode.objects.filter(id__in=all_ids) \
+            .exclude(channel__sanitized_channel_title__isnull=True) \
+            .exclude(channel__sanitized_channel_title='')
 
-        paginator = Paginator(ep_qs, page_size)
-        page_obj = paginator.get_page(page)
-        return paginator, page_obj, list(page_obj.object_list), page_obj.has_other_pages()
+        if window:
+            base_qs = base_qs.filter(publication_date__gte=timezone.now() - window)
+
+        self._set_total_display_from_base_qs(base_qs, selected_langs)  # ✅ ADD
+
+        paginator, page_obj, page_ids = _paginate_ids_fast(base_qs)
+        page_list = _fetch_page_items_with_stats(page_ids)
+
+        return paginator, page_obj, page_list, page_obj.has_other_pages()
+
+
 
     def _compute_suggestions(self, q, limit=10):
         sims = (
@@ -2783,11 +3672,13 @@ class SearchResultsView(LoginRequiredMixin, ListView):
             paginator = ctx.get('paginator')
             page_obj  = ctx.get('page_obj')
 
-            if paginator is not None:
-                ctx['total_episodes'] = paginator.count
+            if hasattr(self, "_total_display_items"):
+                ctx["total_episodes"] = self._total_display_items
+            elif paginator is not None:
+                ctx["total_episodes"] = paginator.count
             else:
-                eps = ctx.get('episodes', [])
-                ctx['total_episodes'] = len(eps)
+                ctx["total_episodes"] = len(ctx.get("episodes", []))
+
 
             if page_obj is not None:
                 try:
@@ -2840,24 +3731,20 @@ class SearchResultsView(LoginRequiredMixin, ListView):
                 and 'podcasts/search_results_ch.html'
                 or 'podcasts/search_results.html' )
         return render(self.request, tpl, context)
-
+    
+    #HERE
     def get(self, request, *args, **kwargs):
-        # record non-AJAX searches
+        # record non-AJAX searches (keep your existing block unchanged)
         if request.GET.get('ajax') != '1':
             query  = request.GET.get('q','')
             in_str = ",".join(request.GET.getlist('search_in'))
             date_f = request.GET.get('search_date','anytime')
-            ip     = request.META.get('HTTP_X_FORWARDED_FOR',
-                                     request.META.get('REMOTE_ADDR'))
+            ip     = request.META.get('HTTP_X_FORWARDED_FOR', request.META.get('REMOTE_ADDR'))
             user   = request.user if request.user.is_authenticated else None
             try:
                 sq, created = SearchQuery.objects.get_or_create(
                     user=user, query=query,
-                    defaults={
-                        'search_in': in_str,
-                        'search_date': date_f,
-                        'ip_address': ip
-                    }
+                    defaults={'search_in': in_str, 'search_date': date_f, 'ip_address': ip}
                 )
                 if not created:
                     sq.count += 1
@@ -2867,13 +3754,18 @@ class SearchResultsView(LoginRequiredMixin, ListView):
             except:
                 pass
 
-        # guard out-of-range AJAX
-        paginator, page_obj, _, _ = self.paginate_queryset(
-            self.get_queryset(), self.paginate_by
-        )
-        if request.GET.get('ajax') == '1' and int(request.GET.get('page',1)) > paginator.num_pages:
-            return HttpResponse('', status=200)
+        # AJAX: handle fully here (NO double-run, NO super().get())
+        if request.GET.get('ajax') == '1':
+            paginator, page_obj, object_list, _ = self.paginate_queryset(
+                self.get_queryset(), self.paginate_by
+            )
+            if int(request.GET.get('page', 1)) > paginator.num_pages:
+                return HttpResponse('', status=200)
 
+            context = self.get_context_data(object_list=object_list)
+            return self.render_to_response(context)
+
+        # Non-AJAX: normal flow (paginate_queryset runs once)
         return super().get(request, *args, **kwargs)
 
 
