@@ -3,18 +3,17 @@
 {% load static i18n custom_filters %}
 
 {% block content %}
-  <h2 class="mb-2">
-    {% blocktrans count total=total_channels with q=q %}
-      {{ total }} channel matching "{{ q }}"
-    {% plural %}
-      {{ total }} channels matching "{{ q }}"
-    {% endblocktrans %}
-    <small class="text-muted ms-2">
-      ({% trans "showing" %} <span id="channels-displayed-count">{{ displayed_channels }}</span>)
-    </small>
-  </h2>
+  {% with shown=displayed_channels total=total_channels query=q %}
+    <h2 class="mb-2">
+      {% blocktrans count total=total with total=total query=query %}
+        Showing <span id="channels-displayed-count">{{ shown }}</span> of {{ total }} channel matching "{{ query }}"
+      {% plural %}
+        Showing <span id="channels-displayed-count">{{ shown }}</span> of {{ total }} channels matching "{{ query }}"
+      {% endblocktrans %}
+    </h2>
+  {% endwith %}
 
-   {% if did_you_mean %}
+  {% if did_you_mean %}
     <p class="text-muted">
       {% trans "Did you mean" %}
       {% for suggestion in did_you_mean %}

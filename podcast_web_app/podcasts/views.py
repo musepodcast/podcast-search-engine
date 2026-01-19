@@ -65,7 +65,7 @@ from django.contrib.postgres.search import SearchVector, SearchQuery as PgSearch
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST, require_GET, require_http_methods
 
-from podcasts.search.documents import EpisodeDocument, TranscriptDocument
+from podcasts.search.documents import EpisodeDocument, TranscriptDocument, EpisodeTranslationsDocument
 from elasticsearch_dsl import Q as ES_Q
 from elasticsearch_dsl.connections import connections
 
@@ -89,6 +89,7 @@ from django.db.models import (
 )
 from elastic_transport import ConnectionTimeout
 from urllib3.exceptions import ReadTimeoutError
+
 
 _slug_non_alnum = re.compile(r"[^a-z0-9]+", re.IGNORECASE)
 
@@ -2618,6 +2619,49 @@ class SearchResultsView(LoginRequiredMixin, ListView):
                 ),
             )
         )
+    def _decorate_items_for_episode_links(self, items, selected_langs):
+        """
+        Adds:
+        - item.base_slug_ch  (channel slug for URL)
+        - item.base_slug_ep  (episode base slug for URL)
+        - item.link_lang     (lang query param that matches the row being displayed)
+        """
+        from .models import EpisodeTranslations
+
+        def _norm(x):
+            return (x or "").strip().lower().replace("_", "-")
+
+        def _is_en(x):
+            x = _norm(x)
+            return x == "en" or x.startswith("en-") or x in ("eng", "english")
+
+        langs = [_norm(l) for l in (selected_langs or []) if (l or "").strip()]
+        non_en = [l for l in langs if l and not _is_en(l)]
+        multi_mode = (len(langs) > 1 and len(non_en) >= 1)
+
+        single_lang = non_en[0] if non_en else "en"
+
+        for obj in items:
+            # Translation row (multi-language expand mode)
+            if isinstance(obj, EpisodeTranslations) or (hasattr(obj, "episode") and getattr(obj, "episode", None) is not None):
+                base_ep = obj.episode
+                obj.base_slug_ch = base_ep.channel.sanitized_channel_title
+                obj.base_slug_ep = base_ep.sanitized_episode_title
+                obj.link_lang = (getattr(obj, "language", None) or single_lang or "en")
+
+                # Optional: makes templates consistent
+                obj.channel = base_ep.channel
+                obj.sanitized_episode_title = base_ep.sanitized_episode_title
+
+            else:
+                # Base Episode row
+                obj.base_slug_ch = obj.channel.sanitized_channel_title
+                obj.base_slug_ep = obj.sanitized_episode_title
+
+                # Multi-mode shows EN base rows; single-lang overlay should open in that lang
+                obj.link_lang = ("en" if multi_mode else single_lang)
+
+
 
     def _expand_multi_language_items(self, ep_qs, selected_langs):
         """
@@ -2858,6 +2902,17 @@ class SearchResultsView(LoginRequiredMixin, ListView):
             selected_langs = ["en"]  # default
 
         EN_ALIASES = {"en", "eng", "english"}
+        def _lang_base(x):
+            # "pt-br" -> "pt"
+            return _norm_lang(x).split("-", 1)[0]
+
+        def _single_non_english_only():
+            wants_en = _lang_wants_english(selected_langs)
+            non_en = _lang_non_english(selected_langs)
+            if (not wants_en) and len(non_en) == 1:
+                return _norm_lang(non_en[0])
+            return None
+
 
         def _needs_multi_language_expand(selected_langs):
             EN_ALIASES = {"en", "eng", "english"}
@@ -2935,12 +2990,13 @@ class SearchResultsView(LoginRequiredMixin, ListView):
             page_ids = list(qs_ids)
 
             return paginator, page_obj, page_ids
-
+        #HERE
         def _fetch_page_items_with_stats(page_ids):
             """
-            Fetch only the page's Episodes, apply heavy stats, then optionally expand into
-            EpisodeTranslations objects for each selected language.
-            Returns a list of items to render (Episodes and/or EpisodeTranslations).
+            Fetch only the page's Episodes, apply heavy stats, then:
+            - multi-language mode: expand into multiple rows (translations + optional EN)
+            - single non-English only: return EpisodeTranslations rows (so templates show translated fields)
+            - otherwise: return Episodes with display_* overlay (your existing behavior)
             """
             if not page_ids:
                 return []
@@ -2962,35 +3018,94 @@ class SearchResultsView(LoginRequiredMixin, ListView):
             if needs_transcripts:
                 ep_qs = ep_qs.prefetch_related("transcripts")
 
-            # MULTI-LANGUAGE MODE: show multiple language items (translations + english)
+            # MULTI-LANGUAGE MODE (unchanged)
             if _needs_multi_language_expand(selected_langs):
-                # IMPORTANT: do NOT apply overlay annotations here; expand creates per-language rows
                 items = self._expand_multi_language_items(ep_qs, selected_langs)
 
-                # If transcript searching, also prefetch translation transcripts so template can show segments
+                # Prefetch translation transcripts if transcript search
                 if needs_transcripts:
-                    # Your template checks item.transcriptstranslations for translation objects
-                    # Make sure this related_name exists on EpisodeTranslations model.
-                    # If your related_name differs, change it here.
-                    for obj in items:
-                        pass  # nothing; prefetch happens below
-
-                    # Efficiently re-fetch translations with prefetch (only for translation objs)
                     trans_ids = [t.id for t in items if hasattr(t, "episode") and hasattr(t, "language")]
                     if trans_ids:
                         t_qs = (
                             EpisodeTranslations.objects
                             .filter(id__in=trans_ids)
                             .select_related("episode", "episode__channel")
-                            .prefetch_related("transcriptstranslations")  # <-- adjust if your related_name differs
+                            .prefetch_related("transcriptstranslations")  # adjust if your related_name differs
                         )
                         t_map = {t.id: t for t in t_qs}
-                        # replace translation objects with prefetched versions
                         items = [t_map.get(x.id, x) if hasattr(x, "episode") and hasattr(x, "language") else x for x in items]
 
                 return items
 
-            # SINGLE-LANGUAGE MODE: overlay display_* fields for that language selection
+            # ✅ SINGLE NON-ENGLISH ONLY MODE (NEW)
+            single_lang = _single_non_english_only()
+            if single_lang:
+                base_code = _lang_base(single_lang)  # pt-br -> pt
+
+                # Build priority: exact match first, then base-code fallback
+                prio_whens = [
+                    When(language=single_lang, then=Value(0)),
+                    When(language=base_code, then=Value(1)),
+                ]
+
+                t_qs = (
+                    EpisodeTranslations.objects
+                    .filter(episode_id__in=page_ids)
+                    .filter(Q(language=single_lang) | Q(language__istartswith=f"{base_code}-") | Q(language=base_code))
+                    .select_related("episode", "episode__channel")
+                )
+
+                et_fields = {f.name for f in EpisodeTranslations._meta.get_fields()}
+                if "translated" in et_fields:
+                    t_qs = t_qs.filter(translated=True)
+
+                # If transcript searching, pull translated segments too
+                if needs_transcripts:
+                    t_qs = t_qs.prefetch_related("transcriptstranslations")  # adjust if needed
+
+                t_qs = t_qs.annotate(
+                    _prio=Case(*prio_whens, default=Value(9999), output_field=IntegerField())
+                ).order_by("episode_id", "_prio", "id")
+
+                # Take the best translation per episode_id
+                tr_map = {}
+                for tr in t_qs:
+                    if tr.episode_id not in tr_map:
+                        tr_map[tr.episode_id] = tr
+
+                # Copy stats fields from base episode rows onto translations
+                base_by_id = {e.id: e for e in ep_qs}
+                stats_fields = (
+                    "bookmarks_count",
+                    "comments_count",
+                    "ep_avg_rating",
+                    "ep_rating_count",
+                    "total_episode_views",
+                    "total_downloads",
+                    "total_shares",
+                )
+
+                items = []
+                for eid in page_ids:
+                    tr = tr_map.get(eid)
+                    if tr:
+                        base = base_by_id.get(eid)
+                        if base:
+                            for f in stats_fields:
+                                setattr(tr, f, getattr(base, f, 0))
+
+                        # Template compatibility (same trick you used elsewhere)
+                        tr.channel = tr.episode.channel
+                        tr.sanitized_episode_title = tr.episode.sanitized_episode_title
+
+                        items.append(tr)
+                    else:
+                        # Fallback to base episode if somehow missing translation
+                        items.append(base_by_id.get(eid))
+
+                return [x for x in items if x is not None]
+
+            # SINGLE-LANGUAGE (English or English+something but not expand): keep your overlay behavior
             ep_qs = self._apply_episode_display_language(ep_qs, selected_langs)
             return list(ep_qs)
 
@@ -3480,12 +3595,70 @@ class SearchResultsView(LoginRequiredMixin, ListView):
             id_map = {e.id: e for e in episode_qs}
             page_list = [id_map[eid] for eid in page_ids if eid in id_map]
 
+            # ✅ If single foreign language, show EpisodeTranslations rows (not base Episode rows)
+            single_lang = _single_non_english_only()
+            if single_lang:
+                base_code = _lang_base(single_lang)
+
+                t_qs = (
+                    EpisodeTranslations.objects
+                    .filter(episode_id__in=page_ids)
+                    .filter(Q(language=single_lang) | Q(language__istartswith=f"{base_code}-") | Q(language=base_code))
+                    .select_related("episode", "episode__channel")
+                    .prefetch_related("transcriptstranslations")  # adjust if needed
+                )
+                et_fields = {f.name for f in EpisodeTranslations._meta.get_fields()}
+                if "translated" in et_fields:
+                    t_qs = t_qs.filter(translated=True)
+
+                # Choose best translation per episode (exact lang first)
+                t_qs = t_qs.annotate(
+                    _prio=Case(
+                        When(language=single_lang, then=Value(0)),
+                        When(language=base_code, then=Value(1)),
+                        default=Value(9999),
+                        output_field=IntegerField(),
+                    )
+                ).order_by("episode_id", "_prio", "id")
+
+                tr_map = {}
+                for tr in t_qs:
+                    if tr.episode_id not in tr_map:
+                        tr_map[tr.episode_id] = tr
+
+                stats_fields = (
+                    "bookmarks_count",
+                    "comments_count",
+                    "ep_avg_rating",
+                    "ep_rating_count",
+                    "total_episode_views",
+                    "total_downloads",
+                    "total_shares",
+                )
+
+                page_list_tr = []
+                for eid in page_ids:
+                    tr = tr_map.get(eid)
+                    base = id_map.get(eid)
+                    if tr:
+                        if base:
+                            for f in stats_fields:
+                                setattr(tr, f, getattr(base, f, 0))
+                        tr.channel = tr.episode.channel
+                        tr.sanitized_episode_title = tr.episode.sanitized_episode_title
+                        page_list_tr.append(tr)
+                    elif base:
+                        page_list_tr.append(base)
+
+                page_list = page_list_tr
+
+
             paginator = Paginator(range(total_unique), page_size)
             try:
                 page_obj = paginator.page(page)
             except EmptyPage:
                 page_obj = paginator.page(1)
-
+            self._decorate_items_for_episode_links(page_list, selected_langs)
             return paginator, page_obj, page_list, page_obj.has_other_pages()
 
         # ============================================================
@@ -3518,7 +3691,8 @@ class SearchResultsView(LoginRequiredMixin, ListView):
             self._set_total_display_from_base_qs(base_qs, selected_langs)
 
             paginator, page_obj, page_ids = _paginate_ids_fast(base_qs, order_by=("-publication_date", "-id"))
-            page_list = _fetch_page_items_with_stats(page_ids)  # ✅ this is where multi-language expansion happens
+            page_list = _fetch_page_items_with_stats(page_ids)
+            self._decorate_items_for_episode_links(page_list, selected_langs)
             return paginator, page_obj, page_list, page_obj.has_other_pages()
 
 
@@ -3545,6 +3719,7 @@ class SearchResultsView(LoginRequiredMixin, ListView):
 
             paginator, page_obj, page_ids = _paginate_ids_fast(base_qs)
             page_list = _fetch_page_items_with_stats(page_ids)
+            self._decorate_items_for_episode_links(page_list, selected_langs)
             return paginator, page_obj, page_list, page_obj.has_other_pages()
 
 
@@ -3571,8 +3746,7 @@ class SearchResultsView(LoginRequiredMixin, ListView):
 
             paginator, page_obj, page_ids = _paginate_ids_fast(base_qs)
             page_list = _fetch_page_items_with_stats(page_ids)
-
-
+            self._decorate_items_for_episode_links(page_list, selected_langs)
             return paginator, page_obj, page_list, page_obj.has_other_pages()
 
 
@@ -3600,7 +3774,7 @@ class SearchResultsView(LoginRequiredMixin, ListView):
 
         paginator, page_obj, page_ids = _paginate_ids_fast(base_qs)
         page_list = _fetch_page_items_with_stats(page_ids)
-
+        self._decorate_items_for_episode_links(page_list, selected_langs)
         return paginator, page_obj, page_list, page_obj.has_other_pages()
 
 

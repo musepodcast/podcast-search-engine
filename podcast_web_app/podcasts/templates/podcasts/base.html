@@ -473,12 +473,13 @@
             </div>
 
             {# Channel language #}
-                  <div class="dropdown ms-3">
-                    {% with selected_langs=request.GET|get_list:"search_language" %}
-                      <button class="btn lang-select-btn dropdown-toggle" type="button" id="chlanguageDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                        {% trans "Language" %}
-                      </button>
-                      <div class="dropdown-menu lang-dropdown p-3" aria-labelledby="chlanguageDropdown">
+              <div data-lock-channel-language hidden aria-hidden="true">
+                <div class="dropdown ms-3">
+                  {% with selected_langs=request.GET|get_list:"search_language" %}
+                    <button class="btn lang-select-btn dropdown-toggle" type="button" id="chlanguageDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                      {% trans "Language" %}
+                    </button>
+                    <div class="dropdown-menu lang-dropdown p-3" aria-labelledby="chlanguageDropdown">
                         <div class="form-check">
                           <input class="form-check-input" type="checkbox" name="search_language" id="lang-en" value="en" {% if selected_langs|default_if_none:""|length == 0 or 'en' in selected_langs %}checked{% endif %}>
                           <label class="form-check-label" for="lang-en">English</label>
@@ -549,10 +550,10 @@
                         </div>
                       </div>
                     {% endwith %}
-                  </div>
-          
-          </div>
-
+                  </div>         
+                </div>
+                <!-- Force channel searches to English (this will be auto-disabled when channel-filters are disabled) -->
+                <input type="hidden" name="search_language" value="en">
         </form>
       </div>
     </div>
@@ -818,27 +819,42 @@
     })();
 
     // search-type toggle logic
-    document.addEventListener('DOMContentLoaded', ()=>{
-      const ep  = document.getElementById('search_type_episodes'),
-            ch  = document.getElementById('search_type_channels'),
-            epF = document.getElementById('episode-filters'),
-            chF = document.getElementById('channel-filters');
+document.addEventListener('DOMContentLoaded', () => {
+  const ep  = document.getElementById('search_type_episodes');
+  const ch  = document.getElementById('search_type_channels');
+  const epF = document.getElementById('episode-filters');
+  const chF = document.getElementById('channel-filters');
 
-      function refresh(){
-        if(ch.checked){
-          epF.style.display='none'; chF.style.display='flex';
-          epF.querySelectorAll('input,select').forEach(e=>e.disabled=true);
-          chF.querySelectorAll('input,select').forEach(e=>e.disabled=false);
-        } else {
-          chF.style.display='none'; epF.style.display='flex';
-          chF.querySelectorAll('input,select').forEach(e=>e.disabled=true);
-          epF.querySelectorAll('input,select').forEach(e=>e.disabled=false);
-        }
-      }
-      ep.addEventListener('change', refresh);
-      ch.addEventListener('change', refresh);
-      refresh();
-    });
+  function refresh() {
+    if (ch && ch.checked) {
+      epF.style.display = 'none';
+      chF.style.display = 'flex';
+
+      // disable episode filters
+      epF.querySelectorAll('input,select,button').forEach(el => el.disabled = true);
+
+      // enable channel filters EXCEPT locked language section
+      chF.querySelectorAll('input,select,button').forEach(el => {
+        el.disabled = !!el.closest('[data-lock-channel-language]');
+      });
+
+    } else {
+      chF.style.display = 'none';
+      epF.style.display = 'flex';
+
+      // disable channel filters
+      chF.querySelectorAll('input,select,button').forEach(el => el.disabled = true);
+
+      // enable episode filters
+      epF.querySelectorAll('input,select,button').forEach(el => el.disabled = false);
+    }
+  }
+
+  ep?.addEventListener('change', refresh);
+  ch?.addEventListener('change', refresh);
+  refresh();
+});
+
 document.addEventListener('DOMContentLoaded', () => {
   const toggleBtn = document.getElementById('toggleBarBtn');
   const searchBar      = document.getElementById('globalSearchBar');
@@ -971,9 +987,12 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 </style>
 
-
-
-
+<style>
+  /* Hidden visually, still in DOM (inputs still submit as long as they are NOT disabled) */
+  .invisible-inert {
+    display: none !important;
+  }
+</style>
 
 
 </body>

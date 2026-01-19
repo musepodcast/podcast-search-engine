@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-24 21:42-0600\n"
+"POT-Creation-Date: 2026-01-19 12:13-0600\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -194,8 +194,8 @@ msgstr "Mga pahibalo"
 #: .\podcasts\templates\podcasts\episode_list_items.html:53
 #: .\podcasts\templates\podcasts\notifications_list.html:56
 #: .\podcasts\templates\podcasts\notifications_list_items.html:48
-#: .\podcasts\templates\podcasts\search_results_items.html:47
-#: .\podcasts\templates\podcasts\search_results_items.html:126
+#: .\podcasts\templates\podcasts\search_results_items.html:55
+#: .\podcasts\templates\podcasts\search_results_items.html:166
 msgid "Bookmarks"
 msgstr "Mga bookmark"
 
@@ -228,7 +228,7 @@ msgid "See Replies"
 msgstr "Tingnan ang mga Sagot"
 
 #: .\podcasts\templates\podcasts\base.html:185
-#: .\podcasts\templates\podcasts\base.html:570
+#: .\podcasts\templates\podcasts\base.html:571
 msgid "Support Me"
 msgstr "Suportahan Mo Ako"
 
@@ -275,7 +275,7 @@ msgid "Transcript Text"
 msgstr "Transcript Text"
 
 #: .\podcasts\templates\podcasts\base.html:291
-#: .\podcasts\templates\podcasts\base.html:479
+#: .\podcasts\templates\podcasts\base.html:480
 msgid "Language"
 msgstr "Wika"
 
@@ -335,7 +335,7 @@ msgstr "Manunulat ng Channel"
 msgid "Channel Summary"
 msgstr "Sumaryo ng Channel"
 
-#: .\podcasts\templates\podcasts\base.html:575
+#: .\podcasts\templates\podcasts\base.html:576
 #: .\podcasts\templates\podcasts\signup.html:173
 #: .\podcasts\templates\podcasts\signup.html:227
 #: .\podcasts\templates\podcasts\support_ticket.html:148
@@ -344,20 +344,20 @@ msgstr "Sumaryo ng Channel"
 msgid "Close"
 msgstr "Malapit"
 
-#: .\podcasts\templates\podcasts\base.html:648
+#: .\podcasts\templates\podcasts\base.html:649
 #: .\podcasts\templates\podcasts\channel_detail.html:235
 #: .\podcasts\templates\podcasts\episode_detail.html:345
 msgid "Please sign in to complete this action."
 msgstr "Mangyaring mag-sign in upang makumpleto ang aksyon na ito."
 
-#: .\podcasts\templates\podcasts\base.html:650
+#: .\podcasts\templates\podcasts\base.html:651
 #: .\podcasts\templates\podcasts\channel_detail.html:236
 #: .\podcasts\templates\podcasts\episode_detail.html:346
 msgid "Sign in"
 msgstr "Mag-sign in"
 
-#: .\podcasts\templates\podcasts\base.html:657
-#: .\podcasts\templates\podcasts\home.html:113
+#: .\podcasts\templates\podcasts\base.html:658
+#: .\podcasts\templates\podcasts\home.html:111
 msgid ""
 "Our GitHub is temporarily unavailable. Please visit our up-to-date "
 "repository on GitLab instead."
@@ -365,17 +365,17 @@ msgstr ""
 "Ang aming GitHub ay pansamantalang hindi magagamit. Mangyaring bisitahin ang"
 " aming up-to-date repository sa GitLab sa halip."
 
-#: .\podcasts\templates\podcasts\base.html:662
-#: .\podcasts\templates\podcasts\home.html:116
+#: .\podcasts\templates\podcasts\base.html:663
+#: .\podcasts\templates\podcasts\home.html:114
 msgid "Open GitLab"
 msgstr "Buksan ang GitLab"
 
-#: .\podcasts\templates\podcasts\base.html:669
+#: .\podcasts\templates\podcasts\base.html:670
 msgid "Contact Me"
 msgstr "Makipag-ugnay sa Akin"
 
 #: .\podcasts\templates\podcasts\base.html:773
-#: .\podcasts\templates\podcasts\home.html:150
+#: .\podcasts\templates\podcasts\home.html:148
 msgid "GitHub temporarily unavailable. Click to see GitLab link."
 msgstr ""
 "GitHub ay pansamantalang hindi magagamit. I-click upang makita ang GitLab "
@@ -402,8 +402,8 @@ msgstr "Mga Episodio na Naglalaman ng Libro"
 #: .\podcasts\templates\podcasts\episode_list_items.html:30
 #: .\podcasts\templates\podcasts\notifications_list.html:37
 #: .\podcasts\templates\podcasts\notifications_list_items.html:29
-#: .\podcasts\templates\podcasts\search_results_items.html:32
-#: .\podcasts\templates\podcasts\search_results_items.html:112
+#: .\podcasts\templates\podcasts\search_results_items.html:38
+#: .\podcasts\templates\podcasts\search_results_items.html:151
 msgid "from"
 msgstr "mula sa"
 
@@ -415,8 +415,8 @@ msgstr "mula sa"
 #: .\podcasts\templates\podcasts\episode_list_items.html:45
 #: .\podcasts\templates\podcasts\notifications_list.html:51
 #: .\podcasts\templates\podcasts\notifications_list_items.html:43
-#: .\podcasts\templates\podcasts\search_results_items.html:42
-#: .\podcasts\templates\podcasts\search_results_items.html:122
+#: .\podcasts\templates\podcasts\search_results_items.html:49
+#: .\podcasts\templates\podcasts\search_results_items.html:161
 msgid "Explicit"
 msgstr "Malinaw"
 
@@ -430,8 +430,8 @@ msgstr "Malinaw"
 #: .\podcasts\templates\podcasts\episode_list_items.html:58
 #: .\podcasts\templates\podcasts\notifications_list.html:60
 #: .\podcasts\templates\podcasts\notifications_list_items.html:52
-#: .\podcasts\templates\podcasts\search_results_items.html:51
-#: .\podcasts\templates\podcasts\search_results_items.html:130
+#: .\podcasts\templates\podcasts\search_results_items.html:59
+#: .\podcasts\templates\podcasts\search_results_items.html:170
 msgid "Comments"
 msgstr "Mga komento"
 
@@ -443,8 +443,8 @@ msgstr "Mga komento"
 #: .\podcasts\templates\podcasts\episode_list_items.html:63
 #: .\podcasts\templates\podcasts\notifications_list.html:64
 #: .\podcasts\templates\podcasts\notifications_list_items.html:56
-#: .\podcasts\templates\podcasts\search_results_items.html:55
-#: .\podcasts\templates\podcasts\search_results_items.html:134
+#: .\podcasts\templates\podcasts\search_results_items.html:63
+#: .\podcasts\templates\podcasts\search_results_items.html:174
 msgid "Episode Rating"
 msgstr "Rating ng episodyo"
 
@@ -462,8 +462,8 @@ msgstr "Rating ng episodyo"
 #: .\podcasts\templates\podcasts\notifications_list.html:72
 #: .\podcasts\templates\podcasts\notifications_list_items.html:64
 #: .\podcasts\templates\podcasts\search_results_ch_items.html:73
-#: .\podcasts\templates\podcasts\search_results_items.html:61
-#: .\podcasts\templates\podcasts\search_results_items.html:140
+#: .\podcasts\templates\podcasts\search_results_items.html:69
+#: .\podcasts\templates\podcasts\search_results_items.html:180
 msgid "Total Views"
 msgstr "Total na mga pananaw"
 
@@ -475,8 +475,8 @@ msgstr "Total na mga pananaw"
 #: .\podcasts\templates\podcasts\episode_list_items.html:77
 #: .\podcasts\templates\podcasts\notifications_list.html:76
 #: .\podcasts\templates\podcasts\notifications_list_items.html:68
-#: .\podcasts\templates\podcasts\search_results_items.html:65
-#: .\podcasts\templates\podcasts\search_results_items.html:144
+#: .\podcasts\templates\podcasts\search_results_items.html:73
+#: .\podcasts\templates\podcasts\search_results_items.html:184
 msgid "Downloads"
 msgstr "Mga pag-download"
 
@@ -488,7 +488,8 @@ msgstr "Mga pag-download"
 #: .\podcasts\templates\podcasts\episode_list_items.html:82
 #: .\podcasts\templates\podcasts\notifications_list.html:80
 #: .\podcasts\templates\podcasts\notifications_list_items.html:72
-#: .\podcasts\templates\podcasts\search_results_items.html:149
+#: .\podcasts\templates\podcasts\search_results_items.html:77
+#: .\podcasts\templates\podcasts\search_results_items.html:188
 msgid "Shares"
 msgstr "Mga Aktibo"
 
@@ -511,7 +512,7 @@ msgstr "Nag-load ng higit pang mga bookmarked na episodes..."
 #: .\podcasts\templates\podcasts\notifications_list.html:139
 #: .\podcasts\templates\podcasts\replies_list.html:20
 #: .\podcasts\templates\podcasts\search_results_ch_items.html:98
-#: .\podcasts\templates\podcasts\search_results_items.html:195
+#: .\podcasts\templates\podcasts\search_results_items.html:238
 msgid "End of list..."
 msgstr "Katapusan ng listahan..."
 
@@ -569,12 +570,10 @@ msgstr "I-rate ang channel na ito"
 
 #: .\podcasts\templates\podcasts\channel_detail.html:117
 #: .\podcasts\templates\podcasts\channel_detail.html:120
-#| msgid "Show password"
 msgid "Show more"
 msgstr "Ipakita ang higit pa"
 
 #: .\podcasts\templates\podcasts\channel_detail.html:118
-#| msgid "Show password"
 msgid "Show less"
 msgstr "Ipakita ang mas mababa"
 
@@ -593,8 +592,8 @@ msgstr "Walang mga episodong magagamit para sa kanal na ito."
 #: .\podcasts\templates\podcasts\channel_detail.html:229
 #: .\podcasts\templates\podcasts\channel_detail.html:242
 #: .\podcasts\templates\podcasts\episode_list.html:160
-#: .\podcasts\templates\podcasts\search_results_items.html:186
-#: .\podcasts\templates\podcasts\search_results_items.html:196
+#: .\podcasts\templates\podcasts\search_results_items.html:229
+#: .\podcasts\templates\podcasts\search_results_items.html:239
 msgid "Loading more episodes..."
 msgstr "Naglo-load ng higit pang mga yugto..."
 
@@ -1086,17 +1085,17 @@ msgstr "Muse Podcast Search Engine"
 msgid "License: GPL v3"
 msgstr "Lisensya: GPL v3"
 
-#: .\podcasts\templates\podcasts\home.html:45
+#: .\podcasts\templates\podcasts\home.html:43
 msgid "🚀 About"
 msgstr " Tungkol sa"
 
-#: .\podcasts\templates\podcasts\home.html:46
+#: .\podcasts\templates\podcasts\home.html:44
 msgid ""
 "Muse is a free, AI-powered podcast search engine. Tired of scouring episode "
 "show notes for bits of information, we built a platform where you can:"
 msgstr "Ang Muse ay isang libreng, AI-powered podcast search engine."
 
-#: .\podcasts\templates\podcasts\home.html:48
+#: .\podcasts\templates\podcasts\home.html:46
 msgid ""
 "🔍 Search any podcast by keyword (titles, descriptions, or transcript "
 "content)"
@@ -1104,17 +1103,17 @@ msgstr ""
 "🔍 Maghanap ng anumang podcast sa pamamagitan ng keyword (titulo, "
 "paglalarawan, o nilalaman ng transcript)"
 
-#: .\podcasts\templates\podcasts\home.html:49
+#: .\podcasts\templates\podcasts\home.html:47
 msgid "📄 View full, time-stamped transcripts (speaker-diarized and formatted)"
 msgstr ""
 " Tingnan ang kumpletong mga transkripto na may time-stamp (diarized at "
 "formatted sa mga tagapagsalita)"
 
-#: .\podcasts\templates\podcasts\home.html:50
+#: .\podcasts\templates\podcasts\home.html:48
 msgid "✍️ Read AI-generated chapter summaries"
 msgstr "✍️ Basahin ang mga sumaryo ng kabanata na nilikha ng AI"
 
-#: .\podcasts\templates\podcasts\home.html:51
+#: .\podcasts\templates\podcasts\home.html:49
 msgid ""
 "🌐 Find podcasts in 17 different languages natively transcribed or AI "
 "translated"
@@ -1122,16 +1121,16 @@ msgstr ""
 " Hanapin ang mga podcast sa 17 iba't ibang wika na orihinal na nai-"
 "transcribe o nai-translate ng AI"
 
-#: .\podcasts\templates\podcasts\home.html:52
+#: .\podcasts\templates\podcasts\home.html:50
 msgid "🎧 Click through to listen at the exact moment a topic is discussed"
 msgstr ""
 " I-click upang makinig sa eksaktong sandali ng pag-uusapan ang isang paksa"
 
-#: .\podcasts\templates\podcasts\home.html:53
+#: .\podcasts\templates\podcasts\home.html:51
 msgid "🆕 Discover new channels or episodes based on your interests"
 msgstr " Alamin ang mga bagong channel o episode batay sa iyong mga interes"
 
-#: .\podcasts\templates\podcasts\home.html:55
+#: .\podcasts\templates\podcasts\home.html:53
 msgid ""
 "Currently optimized for desktop browsers, tablets, foldables, and "
 "smartphones. Community contribution and native apps are coming soon!"
@@ -1140,15 +1139,15 @@ msgstr ""
 " at smartphone. Ang kontribusyon ng komunidad at mga katutubong app ay "
 "darating sa lalong madaling panahon!"
 
-#: .\podcasts\templates\podcasts\home.html:57
+#: .\podcasts\templates\podcasts\home.html:55
 msgid "🌟 Key Features"
 msgstr " Mga pangunahing katangian"
 
-#: .\podcasts\templates\podcasts\home.html:59
+#: .\podcasts\templates\podcasts\home.html:57
 msgid "Account Signup & Management"
 msgstr "Pagrehistro at Pamamahala ng Account"
 
-#: .\podcasts\templates\podcasts\home.html:59
+#: .\podcasts\templates\podcasts\home.html:57
 msgid ""
 "Create a free account to save searches, bookmark episodes, and track "
 "listening history."
@@ -1156,11 +1155,11 @@ msgstr ""
 "Gumawa ng isang libreng account upang i-save ang mga paghahanap, bookmark "
 "episodes, at suriin ang kasaysayan ng pakikinig."
 
-#: .\podcasts\templates\podcasts\home.html:60
+#: .\podcasts\templates\podcasts\home.html:58
 msgid "Transcript Generation"
 msgstr "Paglikha ng mga transcript"
 
-#: .\podcasts\templates\podcasts\home.html:60
+#: .\podcasts\templates\podcasts\home.html:58
 msgid ""
 "Ingests RSS feeds from any podcast; uses OpenAI Whisper Turbo on an NVIDIA "
 "GPU for fast, high-quality transcription; diarizes speakers and formats with"
@@ -1171,11 +1170,11 @@ msgstr ""
 "transkripsyon; nag-diary ng mga tagapagsalita at format na may mga "
 "timestamp."
 
-#: .\podcasts\templates\podcasts\home.html:61
+#: .\podcasts\templates\podcasts\home.html:59
 msgid "Chapter Summaries"
 msgstr "Mga Sumaryo ng Kapitulo"
 
-#: .\podcasts\templates\podcasts\home.html:61
+#: .\podcasts\templates\podcasts\home.html:59
 msgid ""
 "Generates concise summaries of each transcript segment using FalconsAI text-"
 "summarization."
@@ -1183,11 +1182,11 @@ msgstr ""
 "Naglikha ng maikling summarizes ng bawat transcript segment gamit ang "
 "FalconsAI text-summarization."
 
-#: .\podcasts\templates\podcasts\home.html:62
+#: .\podcasts\templates\podcasts\home.html:60
 msgid "Transcript Translations"
 msgstr "Mga Patalos ng Transkripto"
 
-#: .\podcasts\templates\podcasts\home.html:62
+#: .\podcasts\templates\podcasts\home.html:60
 msgid ""
 "Takes podcasts and translates them into 17 different languages using "
 "nllb-200-distilled-600M translation model."
@@ -1195,11 +1194,11 @@ msgstr ""
 "Nagkuha ng mga podcast at binago ito sa 17 iba't ibang wika gamit ang "
 "nllb-200-distilled-600M translation model."
 
-#: .\podcasts\templates\podcasts\home.html:63
+#: .\podcasts\templates\podcasts\home.html:61
 msgid "Full-Text Search"
 msgstr "Paghahanap ng Bugtong-Teksto"
 
-#: .\podcasts\templates\podcasts\home.html:63
+#: .\podcasts\templates\podcasts\home.html:61
 msgid ""
 "Powered by Elasticsearch for lightning-fast, fuzzy-match queries; filters by"
 " title, description, channel metadata, or transcript."
@@ -1208,11 +1207,11 @@ msgstr ""
 "filter sa pamamagitan ng pamagat, paglalarawan, channel metadata, o "
 "transcript."
 
-#: .\podcasts\templates\podcasts\home.html:64
+#: .\podcasts\templates\podcasts\home.html:62
 msgid "Flexible Playback"
 msgstr "Mabilis na Pag-play"
 
-#: .\podcasts\templates\podcasts\home.html:64
+#: .\podcasts\templates\podcasts\home.html:62
 msgid ""
 "Jump directly to the moment a keyword appears in the audio player on the "
 "website."
@@ -1220,97 +1219,97 @@ msgstr ""
 "Tumalon nang direkta sa sandaling lumitaw ang isang keyword sa audio player "
 "sa website."
 
-#: .\podcasts\templates\podcasts\home.html:67
+#: .\podcasts\templates\podcasts\home.html:65
 msgid "🏗️ Architecture & Tech Stack"
 msgstr "️ Arkitektura & Tech Stack"
 
-#: .\podcasts\templates\podcasts\home.html:71
+#: .\podcasts\templates\podcasts\home.html:69
 msgid "Layer"
 msgstr "Layer"
 
-#: .\podcasts\templates\podcasts\home.html:72
+#: .\podcasts\templates\podcasts\home.html:70
 msgid "Technology"
 msgstr "Teknolohiya"
 
-#: .\podcasts\templates\podcasts\home.html:77
+#: .\podcasts\templates\podcasts\home.html:75
 msgid "Backend"
 msgstr "Backend"
 
-#: .\podcasts\templates\podcasts\home.html:77
+#: .\podcasts\templates\podcasts\home.html:75
 msgid "Python, Django"
 msgstr "Python, Django"
 
-#: .\podcasts\templates\podcasts\home.html:80
+#: .\podcasts\templates\podcasts\home.html:78
 msgid "Transcription"
 msgstr "Transkripsyon"
 
-#: .\podcasts\templates\podcasts\home.html:80
+#: .\podcasts\templates\podcasts\home.html:78
 msgid "OpenAI Whisper Turbo (GPU-accelerated)"
 msgstr "OpenAI Whisper Turbo (GPU-accelerated)"
 
-#: .\podcasts\templates\podcasts\home.html:83
+#: .\podcasts\templates\podcasts\home.html:81
 msgid "Summarization"
 msgstr "Pagtipun-tipun"
 
-#: .\podcasts\templates\podcasts\home.html:83
+#: .\podcasts\templates\podcasts\home.html:81
 msgid "FalconsAI / text_summarization"
 msgstr "FalconsAI / text_summary"
 
-#: .\podcasts\templates\podcasts\home.html:86
+#: .\podcasts\templates\podcasts\home.html:84
 msgid "Translation"
 msgstr "Paglipat"
 
-#: .\podcasts\templates\podcasts\home.html:86
+#: .\podcasts\templates\podcasts\home.html:84
 msgid "Facebook / nllb-200-distilled-600M translation model"
 msgstr "Facebook / nllb-200-distilled-600M modelo ng pagsasalin"
 
-#: .\podcasts\templates\podcasts\home.html:89
+#: .\podcasts\templates\podcasts\home.html:87
 msgid "Connection Pooling"
 msgstr "Pagsasama ng Pagkakonekta"
 
-#: .\podcasts\templates\podcasts\home.html:89
+#: .\podcasts\templates\podcasts\home.html:87
 msgid "PgBouncer"
 msgstr "PgBouncer"
 
-#: .\podcasts\templates\podcasts\home.html:92
+#: .\podcasts\templates\podcasts\home.html:90
 msgid "Email Services"
 msgstr "Mga Serbisyo sa Email"
 
-#: .\podcasts\templates\podcasts\home.html:92
+#: .\podcasts\templates\podcasts\home.html:90
 msgid "Mailjet"
 msgstr "Mailjet"
 
-#: .\podcasts\templates\podcasts\home.html:95
+#: .\podcasts\templates\podcasts\home.html:93
 msgid "Database"
 msgstr "Database"
 
-#: .\podcasts\templates\podcasts\home.html:95
+#: .\podcasts\templates\podcasts\home.html:93
 msgid "PostgreSQL | MaraiaDB"
 msgstr ""
 "PostgreSQL"
 "                                                                                                                                                                                                                                                           "
 
-#: .\podcasts\templates\podcasts\home.html:98
+#: .\podcasts\templates\podcasts\home.html:96
 msgid "Search Engine"
 msgstr "Search Engine"
 
-#: .\podcasts\templates\podcasts\home.html:98
+#: .\podcasts\templates\podcasts\home.html:96
 msgid "Elasticsearch"
 msgstr "Elasticsearch"
 
-#: .\podcasts\templates\podcasts\home.html:101
+#: .\podcasts\templates\podcasts\home.html:99
 msgid "Frontend"
 msgstr "Frontend"
 
-#: .\podcasts\templates\podcasts\home.html:101
+#: .\podcasts\templates\podcasts\home.html:99
 msgid "Django templates | HTML | CSS | JavaScript"
 msgstr "Mga template ng Django . HTML CSS JavaScript ."
 
-#: .\podcasts\templates\podcasts\home.html:104
+#: .\podcasts\templates\podcasts\home.html:102
 msgid "Deployment"
 msgstr "Paglalagay"
 
-#: .\podcasts\templates\podcasts\home.html:104
+#: .\podcasts\templates\podcasts\home.html:102
 msgid "Docker | Ubuntu VM | Windows OS"
 msgstr "Docker  Ubuntu VM  Windows OS "
 
@@ -1422,32 +1421,62 @@ msgstr "Walang larawan na magagamit"
 msgid "Time:"
 msgstr "Oras:"
 
-#: .\podcasts\templates\podcasts\search_results.html:6
-msgid "Results for"
-msgstr "Mga resulta para sa"
+#: .\podcasts\templates\podcasts\search_results.html:8
+#, python-format
+msgid ""
+"\n"
+"        Showing <span id=\"episodes-displayed-count\">%(shown)s</span> of %(total)s result for \"%(query)s\"\n"
+"      "
+msgid_plural ""
+"\n"
+"        Showing <span id=\"episodes-displayed-count\">%(shown)s</span> of %(total)s results for \"%(query)s\"\n"
+"      "
+msgstr[0] ""
+"\n"
+"Pagpapakita <span id=\"episodes-displayed-count\">%(shown)s</span>ng %(total)sresulta para sa \"%(query)s\"\n"
+"      "
+msgstr[1] ""
+"\n"
+"Pagpapakita <span id=\"episodes-displayed-count\">%(shown)s</span>ng %(total)smga resulta para sa \"%(query)s\"\n"
+"      "
 
-#: .\podcasts\templates\podcasts\search_results.html:11
-#: .\podcasts\templates\podcasts\search_results_ch.html:10
+#: .\podcasts\templates\podcasts\search_results.html:19
+#: .\podcasts\templates\podcasts\search_results_ch.html:18
 msgid "Did you mean"
 msgstr "Ibig mong sabihin"
 
-#: .\podcasts\templates\podcasts\search_results_ch.html:6
-msgid "Channels matching"
-msgstr "Pagkakasama ng mga channel"
+#: .\podcasts\templates\podcasts\search_results_ch.html:8
+#, python-format
+msgid ""
+"\n"
+"        Showing <span id=\"channels-displayed-count\">%(shown)s</span> of %(total)s channel matching \"%(query)s\"\n"
+"      "
+msgid_plural ""
+"\n"
+"        Showing <span id=\"channels-displayed-count\">%(shown)s</span> of %(total)s channels matching \"%(query)s\"\n"
+"      "
+msgstr[0] ""
+"\n"
+"Pagpapakita <span id=\"channels-displayed-count\">%(shown)s</span>ng %(total)schannel matching \"%(query)s\"\n"
+"      "
+msgstr[1] ""
+"\n"
+"Pagpapakita <span id=\"channels-displayed-count\">%(shown)s</span>ng %(total)smga channel na tumutugma \"%(query)s\"\n"
+"      "
 
 #: .\podcasts\templates\podcasts\search_results_ch_items.html:88
 msgid "No channels found matching your search."
 msgstr "Walang mga channel na may katumbas sa iyong paghahanap."
 
-#: .\podcasts\templates\podcasts\search_results_items.html:25
+#: .\podcasts\templates\podcasts\search_results_items.html:31
 msgid "No Title Available"
 msgstr "Walang Titulo"
 
-#: .\podcasts\templates\podcasts\search_results_items.html:177
+#: .\podcasts\templates\podcasts\search_results_items.html:221
 msgid "No episodes found matching your search."
 msgstr "Walang nakitang mga episode na tumutugma sa iyong paghahanap."
 
-#: .\podcasts\templates\podcasts\search_results_items.html:178
+#: .\podcasts\templates\podcasts\search_results_items.html:222
 msgid "Try different keywords or check your spelling."
 msgstr "Subukan ang iba't ibang mga keyword o suriin ang iyong pagbabaybay."
 
@@ -2024,6 +2053,12 @@ msgstr "I-enter ang OTP"
 #: .\podcasts\templates\two_factor\core\otp.html:9
 msgid "Submit OTP"
 msgstr "Ipadala ang OTP"
+
+#~ msgid "Results for"
+#~ msgstr "Mga resulta para sa"
+
+#~ msgid "Channels matching"
+#~ msgstr "Pagkakasama ng mga channel"
 
 #~ msgid "No channel image"
 #~ msgstr "Walang larawan ng channel"

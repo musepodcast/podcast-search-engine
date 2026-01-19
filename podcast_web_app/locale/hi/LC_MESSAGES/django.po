@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-24 21:42-0600\n"
+"POT-Creation-Date: 2026-01-19 12:13-0600\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -188,8 +188,8 @@ msgstr "अधिसूचनाएँ"
 #: .\podcasts\templates\podcasts\episode_list_items.html:53
 #: .\podcasts\templates\podcasts\notifications_list.html:56
 #: .\podcasts\templates\podcasts\notifications_list_items.html:48
-#: .\podcasts\templates\podcasts\search_results_items.html:47
-#: .\podcasts\templates\podcasts\search_results_items.html:126
+#: .\podcasts\templates\podcasts\search_results_items.html:55
+#: .\podcasts\templates\podcasts\search_results_items.html:166
 msgid "Bookmarks"
 msgstr "बुकमार्क"
 
@@ -222,7 +222,7 @@ msgid "See Replies"
 msgstr "उत्तर देखें"
 
 #: .\podcasts\templates\podcasts\base.html:185
-#: .\podcasts\templates\podcasts\base.html:570
+#: .\podcasts\templates\podcasts\base.html:571
 msgid "Support Me"
 msgstr "मेरा समर्थन करो"
 
@@ -269,7 +269,7 @@ msgid "Transcript Text"
 msgstr "प्रतिलेख पाठ"
 
 #: .\podcasts\templates\podcasts\base.html:291
-#: .\podcasts\templates\podcasts\base.html:479
+#: .\podcasts\templates\podcasts\base.html:480
 msgid "Language"
 msgstr "भाषा"
 
@@ -329,7 +329,7 @@ msgstr "चैनल लेखक"
 msgid "Channel Summary"
 msgstr "चैनल सारांश"
 
-#: .\podcasts\templates\podcasts\base.html:575
+#: .\podcasts\templates\podcasts\base.html:576
 #: .\podcasts\templates\podcasts\signup.html:173
 #: .\podcasts\templates\podcasts\signup.html:227
 #: .\podcasts\templates\podcasts\support_ticket.html:148
@@ -338,20 +338,20 @@ msgstr "चैनल सारांश"
 msgid "Close"
 msgstr "निकट"
 
-#: .\podcasts\templates\podcasts\base.html:648
+#: .\podcasts\templates\podcasts\base.html:649
 #: .\podcasts\templates\podcasts\channel_detail.html:235
 #: .\podcasts\templates\podcasts\episode_detail.html:345
 msgid "Please sign in to complete this action."
 msgstr "कृपया इस कार्रवाई को पूरा करने के लिए साइन इन करें।"
 
-#: .\podcasts\templates\podcasts\base.html:650
+#: .\podcasts\templates\podcasts\base.html:651
 #: .\podcasts\templates\podcasts\channel_detail.html:236
 #: .\podcasts\templates\podcasts\episode_detail.html:346
 msgid "Sign in"
 msgstr "साइन इन करें"
 
-#: .\podcasts\templates\podcasts\base.html:657
-#: .\podcasts\templates\podcasts\home.html:113
+#: .\podcasts\templates\podcasts\base.html:658
+#: .\podcasts\templates\podcasts\home.html:111
 msgid ""
 "Our GitHub is temporarily unavailable. Please visit our up-to-date "
 "repository on GitLab instead."
@@ -359,17 +359,17 @@ msgstr ""
 "हमारा GitHub अस्थायी रूप से अनुपलब्ध है. कृपया इसके बजाय GitLab पर हमारे "
 "अद्यतित रिपॉजिटरी पर जाएँ."
 
-#: .\podcasts\templates\podcasts\base.html:662
-#: .\podcasts\templates\podcasts\home.html:116
+#: .\podcasts\templates\podcasts\base.html:663
+#: .\podcasts\templates\podcasts\home.html:114
 msgid "Open GitLab"
 msgstr "GitLab खोलें"
 
-#: .\podcasts\templates\podcasts\base.html:669
+#: .\podcasts\templates\podcasts\base.html:670
 msgid "Contact Me"
 msgstr "मुझसे संपर्क करें"
 
 #: .\podcasts\templates\podcasts\base.html:773
-#: .\podcasts\templates\podcasts\home.html:150
+#: .\podcasts\templates\podcasts\home.html:148
 msgid "GitHub temporarily unavailable. Click to see GitLab link."
 msgstr ""
 "GitHub अस्थायी रूप से अनुपलब्ध है. GitLab लिंक देखने के लिए क्लिक करें."
@@ -395,8 +395,8 @@ msgstr "बुकमार्क किए गए एपिसोड"
 #: .\podcasts\templates\podcasts\episode_list_items.html:30
 #: .\podcasts\templates\podcasts\notifications_list.html:37
 #: .\podcasts\templates\podcasts\notifications_list_items.html:29
-#: .\podcasts\templates\podcasts\search_results_items.html:32
-#: .\podcasts\templates\podcasts\search_results_items.html:112
+#: .\podcasts\templates\podcasts\search_results_items.html:38
+#: .\podcasts\templates\podcasts\search_results_items.html:151
 msgid "from"
 msgstr "द्वारा"
 
@@ -408,8 +408,8 @@ msgstr "द्वारा"
 #: .\podcasts\templates\podcasts\episode_list_items.html:45
 #: .\podcasts\templates\podcasts\notifications_list.html:51
 #: .\podcasts\templates\podcasts\notifications_list_items.html:43
-#: .\podcasts\templates\podcasts\search_results_items.html:42
-#: .\podcasts\templates\podcasts\search_results_items.html:122
+#: .\podcasts\templates\podcasts\search_results_items.html:49
+#: .\podcasts\templates\podcasts\search_results_items.html:161
 msgid "Explicit"
 msgstr "मुखर"
 
@@ -423,8 +423,8 @@ msgstr "मुखर"
 #: .\podcasts\templates\podcasts\episode_list_items.html:58
 #: .\podcasts\templates\podcasts\notifications_list.html:60
 #: .\podcasts\templates\podcasts\notifications_list_items.html:52
-#: .\podcasts\templates\podcasts\search_results_items.html:51
-#: .\podcasts\templates\podcasts\search_results_items.html:130
+#: .\podcasts\templates\podcasts\search_results_items.html:59
+#: .\podcasts\templates\podcasts\search_results_items.html:170
 msgid "Comments"
 msgstr "टिप्पणियाँ"
 
@@ -436,8 +436,8 @@ msgstr "टिप्पणियाँ"
 #: .\podcasts\templates\podcasts\episode_list_items.html:63
 #: .\podcasts\templates\podcasts\notifications_list.html:64
 #: .\podcasts\templates\podcasts\notifications_list_items.html:56
-#: .\podcasts\templates\podcasts\search_results_items.html:55
-#: .\podcasts\templates\podcasts\search_results_items.html:134
+#: .\podcasts\templates\podcasts\search_results_items.html:63
+#: .\podcasts\templates\podcasts\search_results_items.html:174
 msgid "Episode Rating"
 msgstr "एपिसोड रेटिंग"
 
@@ -455,8 +455,8 @@ msgstr "एपिसोड रेटिंग"
 #: .\podcasts\templates\podcasts\notifications_list.html:72
 #: .\podcasts\templates\podcasts\notifications_list_items.html:64
 #: .\podcasts\templates\podcasts\search_results_ch_items.html:73
-#: .\podcasts\templates\podcasts\search_results_items.html:61
-#: .\podcasts\templates\podcasts\search_results_items.html:140
+#: .\podcasts\templates\podcasts\search_results_items.html:69
+#: .\podcasts\templates\podcasts\search_results_items.html:180
 msgid "Total Views"
 msgstr "कुल दृश्य"
 
@@ -468,8 +468,8 @@ msgstr "कुल दृश्य"
 #: .\podcasts\templates\podcasts\episode_list_items.html:77
 #: .\podcasts\templates\podcasts\notifications_list.html:76
 #: .\podcasts\templates\podcasts\notifications_list_items.html:68
-#: .\podcasts\templates\podcasts\search_results_items.html:65
-#: .\podcasts\templates\podcasts\search_results_items.html:144
+#: .\podcasts\templates\podcasts\search_results_items.html:73
+#: .\podcasts\templates\podcasts\search_results_items.html:184
 msgid "Downloads"
 msgstr "डाउनलोड"
 
@@ -481,7 +481,8 @@ msgstr "डाउनलोड"
 #: .\podcasts\templates\podcasts\episode_list_items.html:82
 #: .\podcasts\templates\podcasts\notifications_list.html:80
 #: .\podcasts\templates\podcasts\notifications_list_items.html:72
-#: .\podcasts\templates\podcasts\search_results_items.html:149
+#: .\podcasts\templates\podcasts\search_results_items.html:77
+#: .\podcasts\templates\podcasts\search_results_items.html:188
 msgid "Shares"
 msgstr "शेयर"
 
@@ -504,7 +505,7 @@ msgstr "अधिक बुकमार्क किए गए एपिसो�
 #: .\podcasts\templates\podcasts\notifications_list.html:139
 #: .\podcasts\templates\podcasts\replies_list.html:20
 #: .\podcasts\templates\podcasts\search_results_ch_items.html:98
-#: .\podcasts\templates\podcasts\search_results_items.html:195
+#: .\podcasts\templates\podcasts\search_results_items.html:238
 msgid "End of list..."
 msgstr "सूची का अंत..."
 
@@ -562,12 +563,10 @@ msgstr "इस चैनल को रेट करें"
 
 #: .\podcasts\templates\podcasts\channel_detail.html:117
 #: .\podcasts\templates\podcasts\channel_detail.html:120
-#| msgid "Show password"
 msgid "Show more"
 msgstr "अधिक दिखाएँ"
 
 #: .\podcasts\templates\podcasts\channel_detail.html:118
-#| msgid "Show password"
 msgid "Show less"
 msgstr "कम दिखाएँ"
 
@@ -586,8 +585,8 @@ msgstr "इस चैनल के लिए कोई एपिसोड उप
 #: .\podcasts\templates\podcasts\channel_detail.html:229
 #: .\podcasts\templates\podcasts\channel_detail.html:242
 #: .\podcasts\templates\podcasts\episode_list.html:160
-#: .\podcasts\templates\podcasts\search_results_items.html:186
-#: .\podcasts\templates\podcasts\search_results_items.html:196
+#: .\podcasts\templates\podcasts\search_results_items.html:229
+#: .\podcasts\templates\podcasts\search_results_items.html:239
 msgid "Loading more episodes..."
 msgstr "अधिक एपिसोड लोड हो रहे हैं..."
 
@@ -1076,11 +1075,11 @@ msgstr "म्यूज़ पॉडकास्ट सर्च इंजन"
 msgid "License: GPL v3"
 msgstr "लाइसेंसः जीपीएल v3"
 
-#: .\podcasts\templates\podcasts\home.html:45
+#: .\podcasts\templates\podcasts\home.html:43
 msgid "🚀 About"
 msgstr " के बारे में"
 
-#: .\podcasts\templates\podcasts\home.html:46
+#: .\podcasts\templates\podcasts\home.html:44
 msgid ""
 "Muse is a free, AI-powered podcast search engine. Tired of scouring episode "
 "show notes for bits of information, we built a platform where you can:"
@@ -1088,7 +1087,7 @@ msgstr ""
 "म्यूज़ एक मुफ्त, एआई-संचालित पॉडकास्ट सर्च इंजन है एपिसोड शो नोट्स को खोजने "
 "से थक गया, हमने एक मंच बनाया जहां आप कर सकते हैंः"
 
-#: .\podcasts\templates\podcasts\home.html:48
+#: .\podcasts\templates\podcasts\home.html:46
 msgid ""
 "🔍 Search any podcast by keyword (titles, descriptions, or transcript "
 "content)"
@@ -1096,11 +1095,11 @@ msgstr ""
 "🔍 कुंजीशब्द द्वारा किसी भी पॉडकास्ट की खोज करें (शीर्षक, विवरण, या "
 "ट्रांसक्रिप्ट सामग्री)"
 
-#: .\podcasts\templates\podcasts\home.html:49
+#: .\podcasts\templates\podcasts\home.html:47
 msgid "📄 View full, time-stamped transcripts (speaker-diarized and formatted)"
 msgstr " पूर्ण, समय-स्टैम्प्ड ट्रांसक्रिप्ट देखें (स्पीकर डायरी और प्रारूपित)"
 
-#: .\podcasts\templates\podcasts\home.html:50
+#: .\podcasts\templates\podcasts\home.html:48
 msgid "✍️ Read AI-generated chapter summaries"
 msgstr ""
 "✍️ आर्टिफिशियल आर्टिफिशियल आर्टिफिशियल आर्टिफिशियल आर्टिफिशियल आर्टिफिशियल "
@@ -1112,7 +1111,7 @@ msgstr ""
 "आर्टिफिशियल आर्टिफिशियल आर्टिफिशियल आर्टिफिशियल आर्टिफिशियल आर्टिफिशियल "
 "आर्टिफिशियल आर्टिफिशियल आर्टिफिशियल आर्टिफिशियल"
 
-#: .\podcasts\templates\podcasts\home.html:51
+#: .\podcasts\templates\podcasts\home.html:49
 msgid ""
 "🌐 Find podcasts in 17 different languages natively transcribed or AI "
 "translated"
@@ -1120,15 +1119,15 @@ msgstr ""
 " 17 अलग-अलग भाषाओं में पॉडकास्ट खोजें मूल रूप से प्रतिलिपिबद्ध या एआई द्वारा"
 " अनुवादित"
 
-#: .\podcasts\templates\podcasts\home.html:52
+#: .\podcasts\templates\podcasts\home.html:50
 msgid "🎧 Click through to listen at the exact moment a topic is discussed"
 msgstr " किसी विषय पर चर्चा होने के सटीक समय सुनने के लिए क्लिक करें"
 
-#: .\podcasts\templates\podcasts\home.html:53
+#: .\podcasts\templates\podcasts\home.html:51
 msgid "🆕 Discover new channels or episodes based on your interests"
 msgstr " अपनी रुचियों के आधार पर नए चैनल या एपिसोड खोजें"
 
-#: .\podcasts\templates\podcasts\home.html:55
+#: .\podcasts\templates\podcasts\home.html:53
 msgid ""
 "Currently optimized for desktop browsers, tablets, foldables, and "
 "smartphones. Community contribution and native apps are coming soon!"
@@ -1136,15 +1135,15 @@ msgstr ""
 "वर्तमान में डेस्कटॉप ब्राउज़र, टैबलेट, फोल्डेबल और स्मार्टफोन के लिए "
 "अनुकूलित। सामुदायिक योगदान और मूल ऐप जल्द ही आ रहे हैं!"
 
-#: .\podcasts\templates\podcasts\home.html:57
+#: .\podcasts\templates\podcasts\home.html:55
 msgid "🌟 Key Features"
 msgstr " प्रमुख विशेषताएं"
 
-#: .\podcasts\templates\podcasts\home.html:59
+#: .\podcasts\templates\podcasts\home.html:57
 msgid "Account Signup & Management"
 msgstr "खाता पंजीकरण और प्रबंधन"
 
-#: .\podcasts\templates\podcasts\home.html:59
+#: .\podcasts\templates\podcasts\home.html:57
 msgid ""
 "Create a free account to save searches, bookmark episodes, and track "
 "listening history."
@@ -1152,11 +1151,11 @@ msgstr ""
 "खोजों, बुकमार्क एपिसोड को सहेजने और सुनने के इतिहास को ट्रैक करने के लिए एक "
 "मुफ्त खाता बनाएं।"
 
-#: .\podcasts\templates\podcasts\home.html:60
+#: .\podcasts\templates\podcasts\home.html:58
 msgid "Transcript Generation"
 msgstr "ट्रांसक्रिप्ट पीढ़ी"
 
-#: .\podcasts\templates\podcasts\home.html:60
+#: .\podcasts\templates\podcasts\home.html:58
 msgid ""
 "Ingests RSS feeds from any podcast; uses OpenAI Whisper Turbo on an NVIDIA "
 "GPU for fast, high-quality transcription; diarizes speakers and formats with"
@@ -1166,11 +1165,11 @@ msgstr ""
 " ट्रांसक्रिप्शन के लिए एनवीआईडीआईए जीपीयू पर ओपनएआई व्हिस्पर टर्बो का उपयोग "
 "करता है; टाइमस्टैम्प के साथ स्पीकर और प्रारूपों को डायरी करता है।"
 
-#: .\podcasts\templates\podcasts\home.html:61
+#: .\podcasts\templates\podcasts\home.html:59
 msgid "Chapter Summaries"
 msgstr "अध्याय सारांश"
 
-#: .\podcasts\templates\podcasts\home.html:61
+#: .\podcasts\templates\podcasts\home.html:59
 msgid ""
 "Generates concise summaries of each transcript segment using FalconsAI text-"
 "summarization."
@@ -1178,11 +1177,11 @@ msgstr ""
 "FalconsAI पाठ-संक्षेप का उपयोग करके प्रत्येक प्रतिलेख खंड के संक्षिप्त "
 "सारांश उत्पन्न करता है।"
 
-#: .\podcasts\templates\podcasts\home.html:62
+#: .\podcasts\templates\podcasts\home.html:60
 msgid "Transcript Translations"
 msgstr "ट्रांसक्रिप्ट अनुवाद"
 
-#: .\podcasts\templates\podcasts\home.html:62
+#: .\podcasts\templates\podcasts\home.html:60
 msgid ""
 "Takes podcasts and translates them into 17 different languages using "
 "nllb-200-distilled-600M translation model."
@@ -1190,11 +1189,11 @@ msgstr ""
 "nllb-200-distilled-600M अनुवाद मॉडल का उपयोग करके पॉडकास्ट लेता है और उन्हें"
 " 17 अलग-अलग भाषाओं में अनुवाद करता है।"
 
-#: .\podcasts\templates\podcasts\home.html:63
+#: .\podcasts\templates\podcasts\home.html:61
 msgid "Full-Text Search"
 msgstr "पूर्ण पाठ खोज"
 
-#: .\podcasts\templates\podcasts\home.html:63
+#: .\podcasts\templates\podcasts\home.html:61
 msgid ""
 "Powered by Elasticsearch for lightning-fast, fuzzy-match queries; filters by"
 " title, description, channel metadata, or transcript."
@@ -1202,106 +1201,106 @@ msgstr ""
 "बिजली की तेजी से, धुंधली-मैच क्वेरी के लिए Elasticsearch द्वारा संचालित; "
 "शीर्षक, विवरण, चैनल मेटाडेटा, या ट्रांसक्रिप्ट द्वारा फ़िल्टर।"
 
-#: .\podcasts\templates\podcasts\home.html:64
+#: .\podcasts\templates\podcasts\home.html:62
 msgid "Flexible Playback"
 msgstr "लचीली प्लेबैक"
 
-#: .\podcasts\templates\podcasts\home.html:64
+#: .\podcasts\templates\podcasts\home.html:62
 msgid ""
 "Jump directly to the moment a keyword appears in the audio player on the "
 "website."
 msgstr ""
 "सीधे वेबसाइट पर ऑडियो प्लेयर में एक कीवर्ड दिखाई देने के क्षण पर कूदें।"
 
-#: .\podcasts\templates\podcasts\home.html:67
+#: .\podcasts\templates\podcasts\home.html:65
 msgid "🏗️ Architecture & Tech Stack"
 msgstr "️ आर्किटेक्चर और टेक स्टैक"
 
-#: .\podcasts\templates\podcasts\home.html:71
+#: .\podcasts\templates\podcasts\home.html:69
 msgid "Layer"
 msgstr "परत"
 
-#: .\podcasts\templates\podcasts\home.html:72
+#: .\podcasts\templates\podcasts\home.html:70
 msgid "Technology"
 msgstr "प्रौद्योगिकी"
 
-#: .\podcasts\templates\podcasts\home.html:77
+#: .\podcasts\templates\podcasts\home.html:75
 msgid "Backend"
 msgstr "बैकेंड"
 
-#: .\podcasts\templates\podcasts\home.html:77
+#: .\podcasts\templates\podcasts\home.html:75
 msgid "Python, Django"
 msgstr "पायथन, डजंगो"
 
-#: .\podcasts\templates\podcasts\home.html:80
+#: .\podcasts\templates\podcasts\home.html:78
 msgid "Transcription"
 msgstr "प्रतिलिपि"
 
-#: .\podcasts\templates\podcasts\home.html:80
+#: .\podcasts\templates\podcasts\home.html:78
 msgid "OpenAI Whisper Turbo (GPU-accelerated)"
 msgstr "ओपनएआई व्हिस्पर टर्बो (जीपीयू-एक्सेलेरेटेड)"
 
-#: .\podcasts\templates\podcasts\home.html:83
+#: .\podcasts\templates\podcasts\home.html:81
 msgid "Summarization"
 msgstr "सारांश"
 
-#: .\podcasts\templates\podcasts\home.html:83
+#: .\podcasts\templates\podcasts\home.html:81
 msgid "FalconsAI / text_summarization"
 msgstr "FalconsAI / text_summary"
 
-#: .\podcasts\templates\podcasts\home.html:86
+#: .\podcasts\templates\podcasts\home.html:84
 msgid "Translation"
 msgstr "अनुवाद"
 
-#: .\podcasts\templates\podcasts\home.html:86
+#: .\podcasts\templates\podcasts\home.html:84
 msgid "Facebook / nllb-200-distilled-600M translation model"
 msgstr "फेसबुक / nllb-200-distilled-600M अनुवाद मॉडल"
 
-#: .\podcasts\templates\podcasts\home.html:89
+#: .\podcasts\templates\podcasts\home.html:87
 msgid "Connection Pooling"
 msgstr "कनेक्शन पूलिंग"
 
-#: .\podcasts\templates\podcasts\home.html:89
+#: .\podcasts\templates\podcasts\home.html:87
 msgid "PgBouncer"
 msgstr "PgBouncer"
 
-#: .\podcasts\templates\podcasts\home.html:92
+#: .\podcasts\templates\podcasts\home.html:90
 msgid "Email Services"
 msgstr "ईमेल सेवाएँ"
 
-#: .\podcasts\templates\podcasts\home.html:92
+#: .\podcasts\templates\podcasts\home.html:90
 msgid "Mailjet"
 msgstr "मेलजेट"
 
-#: .\podcasts\templates\podcasts\home.html:95
+#: .\podcasts\templates\podcasts\home.html:93
 msgid "Database"
 msgstr "डेटाबेस"
 
-#: .\podcasts\templates\podcasts\home.html:95
+#: .\podcasts\templates\podcasts\home.html:93
 msgid "PostgreSQL | MaraiaDB"
 msgstr "पोस्टग्रे एसक्यूएल"
 
-#: .\podcasts\templates\podcasts\home.html:98
+#: .\podcasts\templates\podcasts\home.html:96
 msgid "Search Engine"
 msgstr "खोज इंजन"
 
-#: .\podcasts\templates\podcasts\home.html:98
+#: .\podcasts\templates\podcasts\home.html:96
 msgid "Elasticsearch"
 msgstr "लचीली खोज"
 
-#: .\podcasts\templates\podcasts\home.html:101
+#: .\podcasts\templates\podcasts\home.html:99
 msgid "Frontend"
 msgstr "फ्रंट-एंड"
 
-#: .\podcasts\templates\podcasts\home.html:101
+#: .\podcasts\templates\podcasts\home.html:99
 msgid "Django templates | HTML | CSS | JavaScript"
 msgstr "Django टेम्पलेट्स HTML CSS जावास्क्रिप्ट"
 
-#: .\podcasts\templates\podcasts\home.html:104
+#: .\podcasts\templates\podcasts\home.html:102
 msgid "Deployment"
 msgstr "तैनाती"
 
-#: .\podcasts\templates\podcasts\home.html:104
+#: .\podcasts\templates\podcasts\home.html:102
 msgid "Docker | Ubuntu VM | Windows OS"
 msgstr "Docker उबंटू वर्म विंडोज ओएस"
 
@@ -1413,32 +1412,62 @@ msgstr "कोई छवि उपलब्ध नहीं"
 msgid "Time:"
 msgstr "समय:"
 
-#: .\podcasts\templates\podcasts\search_results.html:6
-msgid "Results for"
-msgstr "के परिणाम"
+#: .\podcasts\templates\podcasts\search_results.html:8
+#, python-format
+msgid ""
+"\n"
+"        Showing <span id=\"episodes-displayed-count\">%(shown)s</span> of %(total)s result for \"%(query)s\"\n"
+"      "
+msgid_plural ""
+"\n"
+"        Showing <span id=\"episodes-displayed-count\">%(shown)s</span> of %(total)s results for \"%(query)s\"\n"
+"      "
+msgstr[0] ""
+"\n"
+"दिखाना <span id=\"episodes-displayed-count\">%(shown)s</span>के %(total)sपरिणाम के लिए \"%(query)s\"\n"
+"      "
+msgstr[1] ""
+"\n"
+"दिखाना <span id=\"episodes-displayed-count\">%(shown)s</span>के %(total)sपरिणामों के लिए \"%(query)s\"\n"
+"      "
 
-#: .\podcasts\templates\podcasts\search_results.html:11
-#: .\podcasts\templates\podcasts\search_results_ch.html:10
+#: .\podcasts\templates\podcasts\search_results.html:19
+#: .\podcasts\templates\podcasts\search_results_ch.html:18
 msgid "Did you mean"
 msgstr "क्या आप मतलब"
 
-#: .\podcasts\templates\podcasts\search_results_ch.html:6
-msgid "Channels matching"
-msgstr "मेल खाने वाले चैनल"
+#: .\podcasts\templates\podcasts\search_results_ch.html:8
+#, python-format
+msgid ""
+"\n"
+"        Showing <span id=\"channels-displayed-count\">%(shown)s</span> of %(total)s channel matching \"%(query)s\"\n"
+"      "
+msgid_plural ""
+"\n"
+"        Showing <span id=\"channels-displayed-count\">%(shown)s</span> of %(total)s channels matching \"%(query)s\"\n"
+"      "
+msgstr[0] ""
+"\n"
+"दिखाना <span id=\"channels-displayed-count\">%(shown)s</span>के %(total)sचैनल मिलान \"%(query)s\"\n"
+"      "
+msgstr[1] ""
+"\n"
+"दिखाना <span id=\"channels-displayed-count\">%(shown)s</span>के %(total)sमेल खाने वाले चैनल \"%(query)s\"\n"
+"      "
 
 #: .\podcasts\templates\podcasts\search_results_ch_items.html:88
 msgid "No channels found matching your search."
 msgstr "आपके खोज से मेल खाने वाला कोई चैनल नहीं मिला।"
 
-#: .\podcasts\templates\podcasts\search_results_items.html:25
+#: .\podcasts\templates\podcasts\search_results_items.html:31
 msgid "No Title Available"
 msgstr "कोई शीर्षक उपलब्ध नहीं"
 
-#: .\podcasts\templates\podcasts\search_results_items.html:177
+#: .\podcasts\templates\podcasts\search_results_items.html:221
 msgid "No episodes found matching your search."
 msgstr "आपकी खोज से मेल खाता कोई एपिसोड नहीं मिला."
 
-#: .\podcasts\templates\podcasts\search_results_items.html:178
+#: .\podcasts\templates\podcasts\search_results_items.html:222
 msgid "Try different keywords or check your spelling."
 msgstr "अलग-अलग कीवर्ड आज़माएँ या अपनी वर्तनी जाँचें."
 
@@ -2005,6 +2034,12 @@ msgstr "ओटीपी दर्ज करें"
 #: .\podcasts\templates\two_factor\core\otp.html:9
 msgid "Submit OTP"
 msgstr "ओटीपी सबमिट करें"
+
+#~ msgid "Results for"
+#~ msgstr "के परिणाम"
+
+#~ msgid "Channels matching"
+#~ msgstr "मेल खाने वाले चैनल"
 
 #~ msgid "No channel image"
 #~ msgstr "कोई चैनल छवि नहीं"

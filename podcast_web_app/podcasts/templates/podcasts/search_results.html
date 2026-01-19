@@ -3,21 +3,20 @@
 {% load static i18n custom_filters %}
 
 {% block content %}
-  <h2 class="mb-2">
-    {% blocktrans count total=total_episodes with q=q %}
-      {{ total }} result for "{{ q }}"
-    {% plural %}
-      {{ total }} results for "{{ q }}"
-    {% endblocktrans %}
-    <small class="text-muted ms-2">
-      ({% trans "showing" %} <span id="episodes-displayed-count">{{ displayed_episodes }}</span>)
-    </small>
-  </h2>
+  {% with shown=displayed_episodes total=total_episodes query=q %}
+    <h2 class="mb-2">
+      {% blocktrans count total=total with total=total query=query %}
+        Showing <span id="episodes-displayed-count">{{ shown }}</span> of {{ total }} result for "{{ query }}"
+      {% plural %}
+        Showing <span id="episodes-displayed-count">{{ shown }}</span> of {{ total }} results for "{{ query }}"
+      {% endblocktrans %}
+    </h2>
+  {% endwith %}
 
   {# Spelling suggestions #}
   {% if did_you_mean %}
     <p class="text-muted">
-      {% trans "Did you mean" %} 
+      {% trans "Did you mean" %}
       {% for suggestion in did_you_mean %}
         <a href="?q={{ suggestion|urlencode }}&amp;{% for k,v in request.GET.items %}{% if k != 'q' %}{{ k }}={{ v|urlencode }}&amp;{% endif %}{% endfor %}">
           <em>{{ suggestion }}</em>
@@ -27,6 +26,5 @@
     </p>
   {% endif %}
 
-  {# Include the episode‐items partial #}
   {% include 'podcasts/search_results_items.html' %}
 {% endblock %}
