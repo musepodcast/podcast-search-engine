@@ -637,64 +637,250 @@ Create Account button uses theme tokens
 .lang-select-btn.dropdown-toggle:focus-visible {
   box-shadow: 0 0 0 3px var(--hover-ring);
 }
+#languageSelect,
+.lang-select-btn {
+  cursor: pointer !important;
+}
 
 /* =========================================================
-   PROFILE MENU
+   PROFILE MENU (match Language dropdown)
    ========================================================= */
-.profile-btn {
+
+/* Button: NO permanent border, only a hover/focus ring */
+.btn.profile-btn {
   background-image: none !important;
-  display: inline-block;
   background-color: var(--profile-btn-bg) !important;
   color: var(--profile-btn-text) !important;
-  width: auto !important;
-  text-align: center;
-  border: none !important;
-  padding: .25rem .5rem;
+  margin-left: .35rem;
+  border: none !important;              /* <- key: no gray box */
   border-radius: .25rem;
-  font-size: 1rem;
-  transition: background-color .3s ease, color .3s ease, outline-color .2s ease;
+  padding: .25rem .5rem;                /* keep it consistent with language btn */
+
+  /* ring like lang-select-btn */
+  --ring-size: 3px;
+  --hover-ring: color-mix(in srgb, var(--focus-outline) 45%, transparent);
+  transition: background-color .2s ease, color .2s ease, box-shadow .15s ease;
 }
-.profile-btn:hover,
-.profile-btn:focus-visible {
-  outline: 2px solid var(--focus-outline);
-  outline-offset: 2px;
+
+/* hover + focus ring */
+.btn.profile-btn:hover,
+.btn.profile-btn:focus-visible {
+  outline: none !important;
+  box-shadow: 0 0 0 var(--ring-size) var(--hover-ring) !important;
+}
+
+/* keep ring when dropdown is open */
+.show > .btn.profile-btn.dropdown-toggle {
+  box-shadow: 0 0 0 var(--ring-size) var(--hover-ring) !important;
 }
 
 .profile-dropdown-menu {
   min-width: .25rem !important;
   width: auto !important;
+
   background-color: var(--profile-btn-bg) !important;
-  border: 2px solid var(--profile-border) !important;
+
+  /* match Bootstrap dropdown border + radius */
+  border: 1px solid var(--bs-border-color-translucent) !important;
+  border-radius: .375rem !important;
+
+  /* helps corners look “solid” */
+  background-clip: padding-box;
+  overflow: hidden;
+
   box-shadow: none !important;
   padding: 0;
-  text-align: center; /* for right-edge align use .dropdown-menu-end in markup */
+  text-align: center;
 }
+
+
 .profile-dropdown-menu .dropdown-item {
   background-color: var(--profile-btn-bg) !important;
   color: var(--profile-btn-text) !important;
   border: none !important;
   padding: .25rem .5rem;
-  transition: background-color .3s ease, color .3s ease;
+  transition: background-color .2s ease, color .2s ease;
 }
 
-/* hover/focus ring (no layout shift) */
-.profile-btn:hover,
-.profile-btn:focus-visible {
-  outline: none; /* replace old outline */
-  box-shadow: 0 0 0 var(--ring-size) var(--hover-ring);
+.profile-dropdown-menu .dropdown-item:hover,
+.profile-dropdown-menu .dropdown-item:focus {
+  background-color: var(--profile-hover-bg) !important;
+  color: var(--profile-btn-text) !important;
 }
 
-/* If it's a Bootstrap dropdown toggle, keep the same ring */
-.profile-btn.dropdown-toggle:hover,
-.profile-btn.dropdown-toggle:focus-visible {
-  box-shadow: 0 0 0 var(--ring-size) var(--hover-ring);
+
+/* =========================================================
+   SUPPORT TICKET: file upload Browse button match "Guest" style
+   ========================================================= */
+
+/* The file input itself */
+.support-ticket-page input[type="file"].form-control {
+  background-color: var(--list-bg);
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
+}
+
+/* The "Browse" button part (Bootstrap 5) */
+.support-ticket-page input[type="file"].form-control::file-selector-button {
+  /* mimic your .btn.btn-secondary tokens (Guest button) */
+  background: var(--accent-contrast);
+  color: var(--accent);
+  border: 1px solid var(--accent-contrast);
+  border-right: 1px solid var(--border-color);
+  padding: .375rem .75rem;
+  margin-right: .75rem;
+  border-radius: .25rem;
+  cursor: pointer;
+  transition: filter .15s ease;
+}
+
+.support-ticket-page input[type="file"].form-control::file-selector-button:hover {
+  filter: brightness(.96);
+}
+
+/* Firefox prefix */
+.support-ticket-page input[type="file"].form-control::-webkit-file-upload-button {
+  background: var(--accent-contrast);
+  color: var(--accent);
+  border: 1px solid var(--accent-contrast);
+  border-right: 1px solid var(--border-color);
+  padding: .375rem .75rem;
+  margin-right: .75rem;
+  border-radius: .25rem;
+  cursor: pointer;
 }
 
 /* =========================================================
-   FILTERS LAYOUT
+   SUPPORT TICKET: tooltips themed (background/text + native blue)
    ========================================================= */
-#filters-container { position: relative; min-height: 3rem; }
-#episode-filters, #channel-filters { position: absolute; top: 0; left: 0; width: 100%; }
+
+.support-ticket-page .tooltip .tooltip-inner {
+  background-color: var(--list-bg) !important;
+  color: var(--list-text) !important;
+  border: 1px solid var(--link-color) !important;  /* native blue */
+  box-shadow: 0 8px 22px rgba(0,0,0,.25);
+  max-width: min(520px, 90vw);
+  text-align: left;
+}
+
+/* Arrow color depends on placement */
+.support-ticket-page .tooltip.bs-tooltip-top .tooltip-arrow::before {
+  border-top-color: var(--link-color) !important;
+}
+.support-ticket-page .tooltip.bs-tooltip-bottom .tooltip-arrow::before {
+  border-bottom-color: var(--link-color) !important;
+}
+.support-ticket-page .tooltip.bs-tooltip-start .tooltip-arrow::before {
+  border-left-color: var(--link-color) !important;
+}
+.support-ticket-page .tooltip.bs-tooltip-end .tooltip-arrow::before {
+  border-right-color: var(--link-color) !important;
+}
+
+/* Make attachment help text match label color (same as Subject/Message label) */
+.support-ticket-page .support-help {
+  color: var(--text-color) !important;
+  opacity: 1 !important;
+}
+
+.support-ticket-page table.support-table thead th {
+  background-color: var(--header-bg-color) !important;
+  color: var(--header-text-color) !important;
+  border-bottom: 2px solid var(--link-color) !important;
+}
+.support-ticket-page .support-table tbody td {
+  background-color: var(--list-bg) !important;
+  color: var(--list-text) !important;
+}
+.support-ticket-page .support-table tbody tr {
+  border-bottom: 1px solid var(--border-color) !important;
+}
+
+/* Keep the wrapper rounding */
+.table-responsive.bubble {
+  border-radius: 1rem !important;
+  overflow: hidden !important;
+}
+
+/* Also round the table so its background respects corners */
+.table-responsive.bubble table.support-table {
+  border-collapse: separate !important;  /* important for radius */
+  border-spacing: 0 !important;
+  border-radius: 1rem !important;
+  overflow: hidden;                       /* helps in some browsers */
+}
+
+/* Round the actual corner cells (top + bottom) */
+.table-responsive.bubble thead tr:first-child th:first-child {
+  border-top-left-radius: 1rem !important;
+}
+.table-responsive.bubble thead tr:first-child th:last-child {
+  border-top-right-radius: 1rem !important;
+}
+.table-responsive.bubble tbody tr:last-child td:first-child {
+  border-bottom-left-radius: 1rem !important;
+}
+.table-responsive.bubble tbody tr:last-child td:last-child {
+  border-bottom-right-radius: 1rem !important;
+}
+
+/* Ensure last row doesn't draw a border that "squares" the corner */
+.table-responsive.bubble tbody tr:last-child {
+  border-bottom: none !important;
+}
+
+/* =========================================================
+   BOOTSTRAP TOOLTIP THEME OVERRIDE (Support tickets)
+   ========================================================= */
+
+/* Tooltips are appended to <body>, so page-scoped ancestors won't match.
+   Use an attribute selector that only affects YOUR ticket tooltips. */
+[data-bs-toggle="tooltip"] + .tooltip,
+.tooltip {
+  /* nothing here; just ensuring selector compiles */
+}
+
+/* Force tooltip panel colors (Bootstrap uses .tooltip-inner) */
+.tooltip .tooltip-inner {
+  background-color: var(--list-bg) !important;
+  color: var(--list-text) !important;
+  border: 1px solid var(--link-color) !important;  /* native blue */
+  box-shadow: 0 8px 22px rgba(0,0,0,.25) !important;
+  opacity: 1 !important;
+  max-width: min(520px, 90vw) !important;
+  text-align: left !important;
+}
+
+/* Arrow color (BS5 uses ::before on .tooltip-arrow) */
+.tooltip.bs-tooltip-top .tooltip-arrow::before    { border-top-color:    var(--link-color) !important; }
+.tooltip.bs-tooltip-bottom .tooltip-arrow::before { border-bottom-color: var(--link-color) !important; }
+.tooltip.bs-tooltip-start .tooltip-arrow::before  { border-left-color:   var(--link-color) !important; }
+.tooltip.bs-tooltip-end .tooltip-arrow::before    { border-right-color:  var(--link-color) !important; }
+
+/* =========================================================
+   SUPPORT TICKET: lighten the message textarea + placeholder
+   ========================================================= */
+.support-ticket-page textarea,
+.support-ticket-page textarea.form-control {
+  background-color: color-mix(in srgb, var(--list-bg) 85%, white 15%) !important;
+  color: var(--text-color) !important;
+  border: 1px solid var(--border-color) !important;
+}
+
+/* placeholder ("Describe your request") */
+.support-ticket-page textarea::placeholder {
+  color: var(--muted-color) !important;
+  opacity: 1 !important; /* Firefox */
+}
+
+/* nice focus ring consistent with your theme */
+.support-ticket-page textarea:focus {
+  border-color: var(--link-color) !important;
+  box-shadow: 0 0 0 .2rem color-mix(in srgb, var(--link-color) 25%, transparent) !important;
+  outline: none;
+}
+
+
 
 /* =========================================================
    SCROLLABLE DROPDOWN (channel multi-select)
@@ -2025,7 +2211,7 @@ html, body { max-width: 100%; overflow-x: hidden; }
     font-size: .85rem !important;
     white-space: nowrap;
   }
-  .profile-btn { font-size: .9rem; padding: 1rem 1rem; max-width: 22vw; }
+  .profile-btn { font-size: .9rem; padding: 1rem 1rem; max-width: 42vw; }
   .lang-select-btn { font-size: .9rem; max-width: 42vw; }
   .theme-toggle-icon { width: 16px; height: 16px; } /* compact icon on phones */
 

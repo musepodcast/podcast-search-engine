@@ -2,7 +2,7 @@
 {% load i18n %}
 
 {% block content %}
-<div class="container my-4 flex-grow-1">
+<div class="container my-4 flex-grow-1 support-ticket-page">
 
   <!-- Submit Ticket Form -->
   <h1 class="mb-4">{% trans "Submit a Support Ticket" %}</h1>
@@ -21,7 +21,7 @@
     <div class="mb-3">
       {{ form.attachment.label_tag }}
       {{ form.attachment }}
-      <small class="form-text text-muted">{{ form.attachment.help_text }}</small>
+      <small class="form-text support-help">{{ form.attachment.help_text }}</small>
       {{ form.attachment.errors }}
     </div>
     <button type="submit" class="btn btn-primary btn-pulse-hover">
@@ -32,60 +32,7 @@
   <!-- Your Tickets -->
   <h2 class="mb-3">{% trans "Your Tickets" %}</h2>
 
-  <!-- Scoped CSS for Your Tickets table -->
-  <style>
-    .table-responsive.bubble {
-      border-radius: 1rem !important;
-      overflow: hidden !important;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.15) !important;
-    }
-    table.support-table {
-      margin-bottom: 0;
-    }
-    table.support-table thead th {
-      background-color: #093145 !important;
-      color:            #fff     !important;
-      border-bottom:    2px solid #0b5ed7 !important;
-    }
-    .support-table tbody td {
-      background-color: #2f3337 !important;
-      color:             #e3e6e8 !important;
-    }
-    .support-table tbody tr {
-      border-bottom: 1px solid #7C7D7D !important;
-    }
-    .support-table tbody tr:last-child {
-      border-bottom: none !important;
-    }
-      /* Header style → same as support-table thead th */
-    .modal-header.custom-header {
-        background-color: #093145 !important;
-        color:            #fff     !important;
-        border-bottom:    2px solid #0b5ed7 !important;
-    }
-    /* Body style → same as support-table tbody td */
-    .modal-body.custom-body {
-        padding: 0 !important;
-        background-color: #2f3337 !important;
-        color:            #e3e6e8 !important;
-    }
-    /* Footer style → same as support-table row bottom border */
-    .modal-footer.custom-footer {
-        padding: 0 !important;
-        background-color: #2f3337 !important;
-        border-top: 1px solid #7C7D7D !important;
-    }
-     .modal-footer.custom-footer .btn {
-        border: none;
-        border-radius: 0.5rem !important;      /* rounded corners */
-        background-color: #0b5ed7 !important;  /* blue button */
-        color: #fff !important;
-        font-weight: bold;
-        padding: 0.5rem 1rem !important;    /* smaller size */
-        display: inline-block !important;
-        margin: 0 auto !important;             /* centers it */
-    }
-  </style>
+
 
   <div class="table-responsive bubble">
     <table class="table support-table">
