@@ -182,3 +182,4 @@ wheel==0.44.0
 win-inet-pton @ file:///C:/Users/dev-admin/perseverance-python-buildout/croot/win_inet_pton_1699472992992/work
 xxhash==3.5.0
 yarl==1.15.2
+yt-dlp==2026.2.4

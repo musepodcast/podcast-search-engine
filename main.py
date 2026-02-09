@@ -7,7 +7,7 @@ import subprocess
 import os
 import yaml  # For handling YAML files
 from transformers import pipeline as transformers_pipeline  # Renamed for clarity
-from downloader import parse_feed, download_audio
+from downloader import parse_feed, download_audio, yt_dlp_info
 from transcriber import transcribe_and_diarize, initialize_diarization_pipeline, validate_audio
 from utils import sanitize_filename
 from pydub import AudioSegment
@@ -32,6 +32,7 @@ import argparse
 import glob
 import gc
 import psutil
+
 
 
 os.environ.setdefault("OMP_NUM_THREADS", "1")
@@ -353,6 +354,103 @@ if torch.cuda.is_available():
 # ────────────────────────────────────────────────────────────────────────────
 
 # --------------------------- Integrated Metadata Extraction Functions ---------------------------
+
+_YT_HEADERS = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+                  "(KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36",
+    "Accept-Language": "en-US,en;q=0.9",
+}
+
+def _pick_largest_url(urls):
+    """Pick the 'largest' thumbnail by common size hints if present."""
+    if not urls:
+        return None
+    # Prefer URLs containing s176, s240, s400, s800 etc.
+    def score(u: str) -> int:
+        m = re.search(r"[=/-]s(\d+)", u)
+        return int(m.group(1)) if m else 0
+    return sorted(urls, key=score, reverse=True)[0]
+
+def scrape_youtube_channel_avatar(channel_url: str, timeout: int = 15) -> str | None:
+    """
+    Fetch a YouTube channel page and extract the channel avatar URL.
+
+    Works with:
+      - https://www.youtube.com/channel/UC...
+      - https://www.youtube.com/@handle
+    """
+    if not channel_url:
+        return None
+
+    # normalize
+    channel_url = channel_url.strip()
+    if channel_url.startswith("//"):
+        channel_url = "https:" + channel_url
+    if channel_url.startswith("www."):
+        channel_url = "https://" + channel_url
+
+    try:
+        r = requests.get(channel_url, headers=_YT_HEADERS, timeout=timeout, allow_redirects=True)
+        r.raise_for_status()
+        html = r.text
+    except Exception as e:
+        logging.warning(f"Channel page fetch failed for {channel_url}: {e}")
+        return None
+
+    # 1) meta og:image
+    m = re.search(r'<meta[^>]+property=["\']og:image["\'][^>]+content=["\']([^"\']+)["\']', html, re.I)
+    if m:
+        return m.group(1)
+
+    # 2) try to parse ytInitialData JSON and find avatar thumbnails
+    # ytInitialData = {...};
+    m = re.search(r"var ytInitialData\s*=\s*({.*?});\s*</script>", html, re.S)
+    if m:
+        blob = m.group(1)
+        try:
+            data = json.loads(blob)
+            # Search common paths for avatar thumbnails
+            # We'll just walk recursively and collect thumbnail URLs.
+            urls = []
+
+            def walk(o):
+                if isinstance(o, dict):
+                    for k, v in o.items():
+                        if k in ("avatar", "thumbnails", "thumbnail"):
+                            # collect any URLs
+                            if isinstance(v, dict):
+                                if "thumbnails" in v and isinstance(v["thumbnails"], list):
+                                    for t in v["thumbnails"]:
+                                        u = t.get("url")
+                                        if u:
+                                            urls.append(u)
+                                if "url" in v and isinstance(v["url"], str):
+                                    urls.append(v["url"])
+                            elif isinstance(v, list):
+                                for t in v:
+                                    if isinstance(t, dict) and t.get("url"):
+                                        urls.append(t["url"])
+                        walk(v)
+                elif isinstance(o, list):
+                    for it in o:
+                        walk(it)
+
+            walk(data)
+
+            # Filter to typical YT avatar hosts
+            urls = [u for u in urls if "yt3." in u or "googleusercontent.com" in u or "ggpht.com" in u]
+            picked = _pick_largest_url(urls)
+            if picked:
+                return picked
+        except Exception:
+            pass
+
+    # 3) brute regex fallback: any yt3.* image URL
+    m = re.search(r'(https://yt3\.(?:ggpht|googleusercontent)\.com/[^\s"\'<>]+)', html)
+    if m:
+        return m.group(1)
+
+    return None
 
 def safe_parse_boolean(value):
     """
@@ -1534,6 +1632,53 @@ def process_entry(entry, channel_transcript_dir, download_dir, channel_title, pi
         #Translated is False unless the .json has been modified by translated.py then the value is equal to true
         translated = False
 
+        link = entry.get("link") or (entry.get("id") if isinstance(entry.get("id"), str) else None)
+
+        is_youtube = bool(link) and ("youtube.com/watch" in link or "youtu.be/" in link)
+
+        yt = yt_dlp_info(link) if is_youtube else None
+
+        link = entry.get("link")
+        if link and "/shorts/" in link:
+            logging.info(f"Skipping YouTube Short: {link}")
+            return None, pipeline
+
+
+        # Fill missing pieces from yt-dlp
+        if yt:
+            # duration (seconds -> HH:MM:SS)
+            if not duration and yt.get("duration") is not None:
+                duration = normalize_duration(int(yt["duration"]))
+
+            # episode thumbnail
+            if not episode_image_url:
+                episode_image_url = yt.get("thumbnail")
+
+            # channel avatar (sometimes present)
+            if not channel_image_url:
+                channel_image_url = yt.get("channel_avatar") or yt.get("uploader_avatar") or yt.get("channel_thumbnail") or yt.get("uploader_thumbnail")
+
+            # channel avatar (scraped)    
+            if (yt is not None) and (not channel_image_url):
+                ch_url = yt.get("channel_url") or yt.get("uploader_url")
+                if ch_url:
+                    channel_image_url = scrape_youtube_channel_avatar(ch_url)
+                    logging.info(f"Channel Image URL (scraped): {channel_image_url if channel_image_url else 'None'}")
+
+            # description fallback
+            if (not clean_description) or (clean_description == "No Description Available"):
+                clean_description = yt.get("description") or clean_description
+
+            # explicit-ish (yt doesn't always have a clean boolean; keep yours unless missing)
+            # categories/tags
+            if not categories:
+                categories = yt.get("categories") or []
+            # language: yt-dlp may not give; keep feed default unless you add detect later
+
+        # For YouTube specifically: ensure audio_url isn't null
+        audio_url = (entry.enclosures[0].get('url') if entry.enclosures else None) or link
+
+
         # Compile episode metadata
         metadata = {
             'channel_title': channel_title,
@@ -1546,15 +1691,27 @@ def process_entry(entry, channel_transcript_dir, download_dir, channel_title, pi
             "author": episode_author,
             'summary': channel_summary,
             'guid': entry.get('guid'),
-            'audio_url': entry.enclosures[0].get('url') if entry.enclosures else None,
-            'image_url': episode_image_url,         # Episode image
-            'channel_image_url': channel_image_url, # Channel image
-            'description': clean_description, 
-            'categories': categories,  # Included feed-level categories
-            'language': language,      # Included feed-level language
-            'link': entry.get('link'),
+            'audio_url': audio_url,                 # ✅ will not be null for YT now
+            'image_url': episode_image_url,         # ✅ from yt if missing
+            'channel_image_url': channel_image_url, # ✅ from yt if missing
+            'description': clean_description,
+            'categories': categories or [],
+            'language': language,
+            'link': link,
             'translated': translated,
+            'extra': (  # optional, safe
+                {
+                    "view_count": yt.get("view_count"),
+                    "like_count": yt.get("like_count"),
+                    "comment_count": yt.get("comment_count"),
+                    "upload_date": yt.get("upload_date"),
+                    "channel_id": yt.get("channel_id"),
+                    "channel_url": yt.get("channel_url"),
+                    "tags": yt.get("tags"),
+                } if yt else {}
+            ),
         }
+
 
         # Log the extracted metadata
         logging.info("\n--- Extracted Episode Metadata ---")
@@ -1671,11 +1828,24 @@ def run_cycle(feeds_filename='master_rss.json', limit_per_feed=0,
             logging.warning(f"No entries to process for feed: {feed_url}")
             failed_feeds.append(feed_url)
             continue
+        is_youtube = "youtube.com/feeds/videos.xml" in feed_url.lower()
 
-        feed_data = parse_podcast_feed(feed_url)
-        if not feed_data:
-            logging.error(f"Failed to parse feed data for: {feed_url}")
-            continue
+        if is_youtube:
+            # Minimal feed_data so the rest of your code has what it needs
+            channel_title = (getattr(feed.feed, "title", None) or "YouTube_Channel")
+            feed_data = {
+                "title": channel_title,
+                "language": "en",
+                "summary": getattr(feed.feed, "subtitle", None) or getattr(feed.feed, "description", None),
+                "authors": [getattr(feed.feed, "author", None)] if getattr(feed.feed, "author", None) else [],
+            }
+        else:
+            feed_data = parse_podcast_feed(feed_url)
+            if not feed_data:
+                logging.error(f"Failed to parse feed data for: {feed_url}")
+                continue
+
+
 
         channel_title = feed_data.get('title', 'Unknown_Channel')
         sanitized_channel_title = sanitize_filename(channel_title)
