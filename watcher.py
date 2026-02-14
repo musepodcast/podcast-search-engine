@@ -42,6 +42,14 @@ import urllib3
 
 SITE_TZ = ZoneInfo("America/Chicago")
 
+SKIP_JSON_FILENAMES = {
+    "processed_index.json",
+    "last_seen.json",
+    "failed_index.json",
+    "failed_feeds.json",
+}
+
+
 ## Silence ES’s SecurityWarning about TLS+verify_certs=False
 warnings.filterwarnings("ignore", category=SecurityWarning)
 # And also silence urllib3’s InsecureRequestWarning
@@ -595,8 +603,12 @@ def process_one_file(conn, json_path: Path):
 # SCAN & MAIN LOOP
 # ----------------------------------------------------------------------------
 def scan_and_process(conn, last_seen):
-    files = list(ROOT_DIR.rglob("*.json"))
+    files = [
+        p for p in ROOT_DIR.rglob("*.json")
+        if p.name not in SKIP_JSON_FILENAMES
+    ]
     files.sort(key=lambda p: p.stat().st_mtime, reverse=True)
+
     max_seen = last_seen
     for f in files:
         m = f.stat().st_mtime
@@ -605,6 +617,7 @@ def scan_and_process(conn, last_seen):
         process_one_file(conn, f)
         max_seen = max(max_seen, m)
     return max_seen
+
 
 if __name__ == '__main__':
     conn = connect_db()
