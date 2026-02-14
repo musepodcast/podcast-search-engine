@@ -287,9 +287,16 @@
             {# Episode language #}
             <div class="dropdown ms-3">
               {% with selected_langs=request.GET|get_list:"search_language" %}
-                <button class="btn lang-select-btn dropdown-toggle" type="button" id="languageDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                  {% trans "Language" %}
-                </button>
+                <button class="btn lang-select-btn dropdown-toggle"
+                      type="button"
+                      id="languageDropdown"
+                      {% if request.user.is_authenticated %}
+                        data-bs-toggle="dropdown" aria-expanded="false"
+                      {% else %}
+                        disabled aria-disabled="true" tabindex="-1"
+                      {% endif %}>
+                {% trans "Language" %}
+              </button>
                 <div class="dropdown-menu lang-dropdown p-3" aria-labelledby="languageDropdown">
                   <div class="form-check">
                     <input class="form-check-input" type="checkbox" name="search_language" id="lang-en" value="en" {% if selected_langs|default_if_none:""|length == 0 or 'en' in selected_langs %}checked{% endif %}>
@@ -366,10 +373,16 @@
 
             <div class="dropdown ms-3">
               {% with selected_date=request.GET.search_date %}
-                <button class="btn lang-select-btn dropdown-toggle" type="button"
-                        id="dateDropdown" data-bs-toggle="dropdown">
-                  {% trans "Date" %}
-                </button>
+                <button class="btn lang-select-btn dropdown-toggle"
+                      type="button"
+                      id="dateDropdown"
+                      {% if request.user.is_authenticated %}
+                        data-bs-toggle="dropdown"
+                      {% else %}
+                        disabled aria-disabled="true" tabindex="-1"
+                      {% endif %}>
+                {% trans "Date" %}
+              </button>
                 <div class="dropdown-menu lang-dropdown p-3" aria-labelledby="dateDropdown">
             
                   <div class="form-check">
@@ -726,7 +739,7 @@
     </ul>
   </div>
 
-  <p class="mb-0">&copy; 2025 Muse Podcast LLC</p>
+  <p class="mb-0">&copy; 2026 Muse Podcast LLC</p>
 </footer>
 
 
@@ -825,28 +838,66 @@ document.addEventListener('DOMContentLoaded', () => {
   const epF = document.getElementById('episode-filters');
   const chF = document.getElementById('channel-filters');
 
+  const authed = document.body.getAttribute('data-authenticated') === 'true';
+
+  function disableBlock(block) {
+    block.querySelectorAll('input,select,textarea,button').forEach(el => {
+      el.disabled = true;
+      el.setAttribute('aria-disabled', 'true');
+      el.setAttribute('tabindex', '-1');
+
+      // IMPORTANT: prevent Bootstrap dropdown from activating
+      if (el.hasAttribute('data-bs-toggle') && el.getAttribute('data-bs-toggle') === 'dropdown') {
+        el.removeAttribute('data-bs-toggle');
+      }
+    });
+
+    // If any dropdown is currently open, force close it
+    block.querySelectorAll('.dropdown-menu.show').forEach(menu => menu.classList.remove('show'));
+    block.querySelectorAll('.dropdown-toggle.show').forEach(btn => btn.classList.remove('show'));
+  }
+
+  function enableBlock(block) {
+    block.querySelectorAll('input,select,textarea,button').forEach(el => {
+      el.disabled = false;
+      el.removeAttribute('aria-disabled');
+      el.removeAttribute('tabindex');
+    });
+  }
+
   function refresh() {
+    // Guests: ALWAYS keep both sets disabled (and don’t allow dropdown toggle)
+    if (!authed) {
+      // still show/hide based on selection so layout matches
+      if (ch && ch.checked) {
+        epF.style.display = 'none';
+        chF.style.display = 'flex';
+      } else {
+        chF.style.display = 'none';
+        epF.style.display = 'flex';
+      }
+      disableBlock(epF);
+      disableBlock(chF);
+      return;
+    }
+
+    // Authed: normal behavior
     if (ch && ch.checked) {
       epF.style.display = 'none';
       chF.style.display = 'flex';
 
-      // disable episode filters
-      epF.querySelectorAll('input,select,button').forEach(el => el.disabled = true);
+      disableBlock(epF);
 
       // enable channel filters EXCEPT locked language section
-      chF.querySelectorAll('input,select,button').forEach(el => {
+      chF.querySelectorAll('input,select,button,textarea').forEach(el => {
         el.disabled = !!el.closest('[data-lock-channel-language]');
       });
-
     } else {
       chF.style.display = 'none';
       epF.style.display = 'flex';
 
-      // disable channel filters
-      chF.querySelectorAll('input,select,button').forEach(el => el.disabled = true);
-
-      // enable episode filters
-      epF.querySelectorAll('input,select,button').forEach(el => el.disabled = false);
+      disableBlock(chF);
+      enableBlock(epF);
     }
   }
 
@@ -854,6 +905,7 @@ document.addEventListener('DOMContentLoaded', () => {
   ch?.addEventListener('change', refresh);
   refresh();
 });
+
 
 document.addEventListener('DOMContentLoaded', () => {
   const toggleBtn = document.getElementById('toggleBarBtn');
@@ -992,6 +1044,14 @@ document.addEventListener('DOMContentLoaded', () => {
   .invisible-inert {
     display: none !important;
   }
+  body[data-authenticated="false"] [data-requires-auth] button,
+  body[data-authenticated="false"] [data-requires-auth] input,
+  body[data-authenticated="false"] [data-requires-auth] select,
+  body[data-authenticated="false"] [data-requires-auth] textarea,
+  body[data-authenticated="false"] [data-requires-auth] .dropdown-toggle {
+    cursor: not-allowed !important;
+  }
+
 </style>
 
 
