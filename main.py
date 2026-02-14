@@ -9,7 +9,7 @@ import yaml  # For handling YAML files
 from transformers import pipeline as transformers_pipeline  # Renamed for clarity
 from downloader import parse_feed, download_audio, yt_dlp_info
 from transcriber import transcribe_and_diarize, initialize_diarization_pipeline, validate_audio
-from utils import sanitize_filename
+from utils import sanitize_filename, make_episode_stem_with_suffix, stable_id_suffix
 from pydub import AudioSegment
 from pydub.utils import make_chunks
 import logging
@@ -32,7 +32,8 @@ import argparse
 import glob
 import gc
 import psutil
-
+from urllib.parse import urlparse, parse_qs
+import shutil
 
 
 os.environ.setdefault("OMP_NUM_THREADS", "1")
@@ -360,6 +361,598 @@ _YT_HEADERS = {
                   "(KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36",
     "Accept-Language": "en-US,en;q=0.9",
 }
+
+# In-memory cache: { "<channel_transcript_dir>": {"version":1, "suffixes":{suffix: filename}} }
+_INDEX_CACHE: dict[str, dict] = {}
+
+# Matches files already in new scheme: ...__<suffix>.json
+_SUFFIX_RE = re.compile(r"__(?P<suffix>[A-Za-z0-9_\-]{4,})\.json$", re.IGNORECASE)
+
+def migrate_legacy_transcripts(
+    root: Path,
+    max_len: int = 100,
+    report_dir: Path | None = None,
+    report_name: str = "legacy_migration_report.json",
+    dry_run: bool = False,
+    size_limit_mb: float | None = None,   # optional safety guard; set None to scan all
+) -> dict:
+    """
+    Bulk migration:
+      - Build processed_index.json everywhere
+      - Rename legacy files (no __suffix) into new scheme where suffix can be derived
+      - Leave unmapped legacy files alone and report them
+
+    Returns a summary dict with:
+      total_scanned, already_good, renamed, indexed_only, unmatched, errors
+    """
+
+    root = Path(root)
+    if report_dir is None:
+        # keep reports alongside other state; matches your folder convention
+        report_dir = (root.parent / "watcher_json") if root.parent else Path.cwd()
+    report_dir.mkdir(parents=True, exist_ok=True)
+    report_path = report_dir / report_name
+
+    # Local suffix matcher (don’t depend on any duplicate global defs)
+    _SUFFIX_RE_LOCAL = re.compile(r"__(?P<suffix>[A-Za-z0-9_\-]{4,})\.json$", re.IGNORECASE)
+
+    def _load_index(dirpath: Path) -> dict:
+        idx_file = dirpath / "processed_index.json"
+        if idx_file.exists():
+            try:
+                data = json.loads(idx_file.read_text(encoding="utf-8"))
+                if isinstance(data, dict) and data.get("version") == 1 and isinstance(data.get("suffixes"), dict):
+                    return data
+            except Exception:
+                pass
+        return {"version": 1, "suffixes": {}}
+
+    def _save_index(dirpath: Path, idx: dict) -> None:
+        idx_file = dirpath / "processed_index.json"
+        if dry_run:
+            return
+        idx_file.write_text(json.dumps(idx, indent=2, ensure_ascii=False), encoding="utf-8")
+
+    def _vid_from_any(guid: str | None, link: str | None, audio_url: str | None) -> str | None:
+        # guid canonical
+        if guid and isinstance(guid, str) and guid.startswith("yt:video:"):
+            v = guid.split("yt:video:", 1)[1].strip()
+            return v or None
+
+        # url parse via your helper if available
+        for u in (link, audio_url):
+            try:
+                v = youtube_video_id(u)  # uses your existing helper
+                if v:
+                    return v
+            except Exception:
+                pass
+        return None
+
+    def _derive_suffix_from_json(fp: Path) -> tuple[str | None, dict | None]:
+        """
+        Returns (suffix, metadata_dict) or (None, metadata_dict/None).
+        Reads JSON; expects combined_data style with 'metadata'.
+        """
+        try:
+            data = json.loads(fp.read_text(encoding="utf-8"))
+            md = (data or {}).get("metadata") or None
+            if not isinstance(md, dict):
+                return None, None
+
+            guid = md.get("guid")
+            link = md.get("link")
+            audio_url = md.get("audio_url")
+
+            vid = _vid_from_any(guid, link, audio_url)
+
+            # Use your stable suffix function
+            suffix = stable_id_suffix(vid=vid, guid=guid, link=(link or audio_url))
+            return suffix, md
+        except Exception:
+            return None, None
+
+    summary = {
+        "started_at": datetime.now().isoformat(timespec="seconds"),
+        "root": str(root),
+        "dry_run": dry_run,
+        "total_scanned": 0,
+        "already_good": 0,     # already *has* __suffix
+        "renamed": 0,          # legacy -> renamed into __suffix
+        "indexed_only": 0,     # legacy not renamed (name collision), but indexed
+        "unmatched": 0,        # legacy suffix not derivable
+        "errors": 0,
+        "folders_touched": 0,
+        "report": str(report_path),
+    }
+
+    unmatched_records = []  # detailed report
+    touched_dirs = set()
+
+    if not root.exists():
+        raise FileNotFoundError(f"transcripts root does not exist: {root}")
+
+    # Find language directories: .../<channel>/<lang>/
+    # We’ll treat any directory that contains JSONs (excluding processed_index.json) as a target.
+    candidate_dirs = set()
+    for fp in root.rglob("*.json"):
+        if fp.name == "processed_index.json":
+            continue
+        candidate_dirs.add(fp.parent)
+
+    for d in sorted(candidate_dirs):
+        try:
+            idx = _load_index(d)
+            suffixes = idx["suffixes"]
+
+            # 1) Index all already-suffixed files (fast)
+            json_files = sorted(d.glob("*.json"))
+            for fp in json_files:
+                if fp.name == "processed_index.json":
+                    continue
+                m = _SUFFIX_RE_LOCAL.search(fp.name)
+                if m:
+                    suffix = m.group("suffix")
+                    if suffixes.get(suffix) != fp.name:
+                        suffixes[suffix] = fp.name
+                        touched_dirs.add(d)
+                    summary["already_good"] += 1
+
+            # 2) Process legacy files (no suffix)
+            for fp in json_files:
+                if fp.name == "processed_index.json":
+                    continue
+
+                summary["total_scanned"] += 1
+
+                if _SUFFIX_RE_LOCAL.search(fp.name):
+                    # already handled
+                    continue
+
+                # optional size guard
+                if size_limit_mb is not None:
+                    try:
+                        mb = fp.stat().st_size / (1024 * 1024)
+                        if mb > float(size_limit_mb):
+                            unmatched_records.append({
+                                "path": str(fp),
+                                "reason": f"skipped_size>{size_limit_mb}MB",
+                            })
+                            summary["unmatched"] += 1
+                            continue
+                    except Exception:
+                        pass
+
+                suffix, md = _derive_suffix_from_json(fp)
+                if not suffix or not md:
+                    unmatched_records.append({
+                        "path": str(fp),
+                        "reason": "no_metadata_or_no_stable_suffix",
+                    })
+                    summary["unmatched"] += 1
+                    continue
+
+                # Determine desired new name based on metadata episode_title
+                ep_title = (md.get("episode_title") or fp.stem or "Unknown Title")
+                new_stem = make_episode_stem_with_suffix(ep_title, suffix, max_len=max_len)
+                new_name = f"{new_stem}.json"
+                new_path = d / new_name
+
+                # If index already has this suffix mapped, prefer the existing mapping
+                mapped = suffixes.get(suffix)
+                if mapped:
+                    mapped_path = d / mapped
+                    if mapped_path.exists():
+                        # If mapped exists, do nothing except ensure it’s consistent
+                        # (This avoids duplicates from weird legacy situations)
+                        continue
+
+                # Rename if safe
+                if fp.name != new_name:
+                    if new_path.exists():
+                        # Collision: don't overwrite; just index the existing file and keep legacy in place
+                        suffixes[suffix] = new_path.name
+                        touched_dirs.add(d)
+                        summary["indexed_only"] += 1
+
+                        unmatched_records.append({
+                            "path": str(fp),
+                            "reason": "name_collision_target_exists_index_points_to_existing",
+                            "suffix": suffix,
+                            "target": str(new_path),
+                        })
+                        continue
+
+                    # Actually rename
+                    try:
+                        if not dry_run:
+                            os.replace(str(fp), str(new_path))
+                        suffixes[suffix] = new_path.name
+                        touched_dirs.add(d)
+                        summary["renamed"] += 1
+                    except Exception as e:
+                        summary["errors"] += 1
+                        unmatched_records.append({
+                            "path": str(fp),
+                            "reason": f"rename_failed: {e}",
+                            "suffix": suffix,
+                            "target": str(new_path),
+                        })
+                        continue
+                else:
+                    # Same name already; just ensure indexed
+                    suffixes[suffix] = fp.name
+                    touched_dirs.add(d)
+
+            # Persist index if anything changed for this folder
+            if d in touched_dirs:
+                _save_index(d, idx)
+
+        except Exception as e:
+            summary["errors"] += 1
+            unmatched_records.append({
+                "folder": str(d),
+                "reason": f"folder_processing_error: {e}",
+            })
+
+    summary["folders_touched"] = len(touched_dirs)
+
+    # Write report
+    report_obj = {
+        "summary": summary,
+        "unmatched": unmatched_records,
+    }
+    if not dry_run:
+        report_path.write_text(json.dumps(report_obj, indent=2, ensure_ascii=False), encoding="utf-8")
+
+    return summary
+
+def _vid_from_any(guid: str | None, link: str | None, audio_url: str | None) -> str | None:
+    """
+    Try to derive a YouTube video id from guid/link/audio_url.
+    Works with:
+      - guid: yt:video:<id>
+      - link/audio_url: https://www.youtube.com/watch?v=<id> or https://youtu.be/<id>
+    """
+    # 1) guid canonical
+    if guid and isinstance(guid, str) and guid.startswith("yt:video:"):
+        v = guid.split("yt:video:", 1)[1].strip()
+        return v or None
+
+    # 2) urls
+    for u in (link, audio_url):
+        try:
+            v = youtube_video_id(u)  # you already have this helper
+            if v:
+                return v
+        except Exception:
+            pass
+
+    return None
+
+def _derive_suffix_from_legacy_json(fp: Path) -> str | None:
+    """
+    Read a legacy title-only JSON and derive the stable suffix from its metadata.
+    Returns suffix or None if cannot derive.
+    """
+    try:
+        with open(fp, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        md = (data or {}).get("metadata") or {}
+
+        guid = md.get("guid")
+        link = md.get("link")
+        audio_url = md.get("audio_url")
+
+        vid = _vid_from_any(guid, link, audio_url)
+
+        # Use the same stable function you already use in process_entry
+        suffix = stable_id_suffix(vid=vid, guid=guid, link=link or audio_url)
+        return suffix
+    except Exception:
+        return None
+
+def bootstrap_index_from_folder(channel_transcript_dir: str) -> dict:
+    """
+    One-time scan of channel_transcript_dir to populate index from existing files.
+
+    Adds:
+      - New scheme: any '*__<suffix>.json' -> suffix map
+      - Legacy: any '*.json' without suffix -> parse metadata -> derive suffix -> suffix map
+
+    Legacy scan runs ONCE per channel (legacy_scanned flag) to avoid repeated heavy loads.
+    """
+    idx = load_index(channel_transcript_dir)
+    suffixes = idx["suffixes"]
+    base = Path(channel_transcript_dir)
+
+    if not base.exists():
+        return idx
+
+    # Ensure structure
+    if idx.get("version") != 1 or not isinstance(suffixes, dict):
+        idx.clear()
+        idx.update({"version": 1, "suffixes": {}, "legacy_scanned": False})
+        suffixes = idx["suffixes"]
+
+    # 1) Always: index new-scheme files quickly
+    added_new = 0
+    for fp in base.glob("*.json"):
+        m = _SUFFIX_RE.search(fp.name)
+        if not m:
+            continue
+        suffix = m.group("suffix")
+        if suffix not in suffixes:
+            suffixes[suffix] = fp.name
+            added_new += 1
+
+    if added_new:
+        logging.info(f"Bootstrapped NEW-scheme index for {base} (+{added_new})")
+
+    # 2) Legacy scan (heavy): only do once
+    if not idx.get("legacy_scanned", False):
+        added_legacy = 0
+        scanned = 0
+        skipped_big = 0
+
+        # Tweakable guard: skip huge legacy files to avoid brutal load times
+        # (If you want, set this to None to scan everything)
+        MAX_LEGACY_MB = 250
+
+        for fp in base.glob("*.json"):
+            name = fp.name
+
+            # skip the index file itself if present
+            if name == "processed_index.json":
+                continue
+
+            # skip already-suffixed files (we already indexed those)
+            if _SUFFIX_RE.search(name):
+                continue
+
+            # size guard
+            if MAX_LEGACY_MB is not None:
+                try:
+                    size_mb = fp.stat().st_size / (1024 * 1024)
+                    if size_mb > MAX_LEGACY_MB:
+                        skipped_big += 1
+                        continue
+                except Exception:
+                    pass
+
+            scanned += 1
+            suffix = _derive_suffix_from_legacy_json(fp)
+            if not suffix:
+                continue
+
+            if suffix not in suffixes:
+                # Map suffix -> legacy filename (do NOT rename here)
+                suffixes[suffix] = fp.name
+                added_legacy += 1
+
+        idx["legacy_scanned"] = True
+        logging.info(
+            f"Bootstrapped LEGACY index for {base} "
+            f"(scanned={scanned}, added={added_legacy}, skipped_big={skipped_big})"
+        )
+
+    # Persist if anything changed / legacy scan ran
+    save_index(channel_transcript_dir)
+    return idx
+
+def _index_path(channel_transcript_dir: str) -> Path:
+    return Path(channel_transcript_dir) / "processed_index.json"
+
+def load_index(channel_transcript_dir: str) -> dict:
+    """
+    Load per-channel processed index (cached in memory).
+    """
+    key = str(Path(channel_transcript_dir).resolve())
+    if key in _INDEX_CACHE:
+        return _INDEX_CACHE[key]
+
+    idx_file = _index_path(channel_transcript_dir)
+    if idx_file.exists():
+        try:
+            data = json.loads(idx_file.read_text(encoding="utf-8"))
+            if not isinstance(data, dict):
+                raise ValueError("index is not a dict")
+        except Exception as e:
+            logging.warning(f"Index read failed, will rebuild: {idx_file} ({e})")
+            data = {}
+    else:
+        data = {}
+
+    # normalize structure
+    if data.get("version") != 1 or "suffixes" not in data or not isinstance(data.get("suffixes"), dict):
+        data = {"version": 1, "suffixes": {}}
+
+    _INDEX_CACHE[key] = data
+    return data
+
+def save_index(channel_transcript_dir: str) -> None:
+    """
+    Persist cached index to disk.
+    """
+    key = str(Path(channel_transcript_dir).resolve())
+    data = _INDEX_CACHE.get(key)
+    if not data:
+        return
+    idx_file = _index_path(channel_transcript_dir)
+    try:
+        idx_file.write_text(json.dumps(data, indent=2, ensure_ascii=False), encoding="utf-8")
+    except Exception as e:
+        logging.warning(f"Failed to write index: {idx_file} ({e})", exc_info=True)
+
+
+
+def find_existing_episode_json(channel_root: str, suffix: str, guid: str | None, vid: str | None, link: str | None) -> str | None:
+    """
+    Find an existing JSON for this episode.
+
+    Supports:
+      - New scheme: *__<suffix>.json
+      - Legacy: title-only .json where metadata.guid/link/audio_url matches this episode
+    Searches under channel_root recursively.
+    """
+    root = Path(channel_root)
+    if not root.exists():
+        return None
+
+    # 1) New scheme by suffix
+    hit = next(root.rglob(f"*__{suffix}.json"), None)
+    if hit:
+        return str(hit)
+
+    # 2) Legacy scheme: scan json metadata (only if we have an identifier)
+    targets = set()
+    for t in (guid, link):
+        if t:
+            targets.add(str(t).strip())
+    if vid:
+        targets.add(f"yt:video:{vid}")
+        targets.add(f"https://www.youtube.com/watch?v={vid}")
+        targets.add(f"https://youtu.be/{vid}")
+
+    if not targets:
+        return None
+
+    # Scan json files (lightweight read: only metadata)
+    for fp in root.rglob("*.json"):
+        try:
+            with open(fp, "r", encoding="utf-8") as f:
+                data = json.load(f)
+            md = (data or {}).get("metadata") or {}
+            mguid = (md.get("guid") or "").strip()
+            mlink = (md.get("link") or "").strip()
+            maudio = (md.get("audio_url") or "").strip()
+
+            if mguid in targets or mlink in targets or maudio in targets:
+                return str(fp)
+        except Exception:
+            # ignore bad/partial json
+            continue
+
+    return None
+
+
+def episode_already_processed_by_suffix(channel_transcript_dir: str, suffix: str) -> bool:
+    p = Path(channel_transcript_dir)
+    if not p.exists():
+        return False
+    # any json whose stem ends with "__<suffix>"
+    pattern = f"*__{suffix}.json"
+    return any(p.glob(pattern))
+
+def resolve_guid(entry: dict, yt: dict | None, vid: str | None, link: str | None) -> str | None:
+    """
+    Return a stable GUID for both RSS and YouTube entries.
+
+    Priority:
+      1) RSS guid (stable)
+      2) YouTube video id in canonical form: yt:video:<id>
+      3) Atom/RSS id (only if it is NOT just a URL placeholder)
+      4) yt-dlp id (fallback)
+      5) link
+    """
+    # 1) RSS/Feed guid always wins
+    if isinstance(entry, dict):
+        g = entry.get("guid")
+        if isinstance(g, str) and g.strip():
+            return g.strip()
+
+    # 2) For YouTube (or anything where vid is known), ALWAYS use canonical form
+    if vid:
+        return f"yt:video:{vid}"
+
+    # 3) Atom feeds often store stable id in "id" — but your YT synthetic entries put a URL here.
+    if isinstance(entry, dict):
+        g = entry.get("id")
+        if isinstance(g, str) and g.strip():
+            s = g.strip()
+            # If "id" is just a URL (common in your YT synthetic entries), don't treat it as GUID
+            if not (s.startswith("http://") or s.startswith("https://")):
+                return s
+
+    # 4) fallback: yt-dlp
+    if yt and yt.get("id"):
+        return f"yt:video:{yt['id']}"
+
+    # 5) last resort
+    return link
+
+
+
+
+
+
+def youtube_video_id(url: str) -> str | None:
+    try:
+        if not url:
+            return None
+        u = url.strip()
+        if "youtu.be/" in u:
+            return u.split("youtu.be/", 1)[1].split("?", 1)[0].split("/", 1)[0]
+        if "youtube.com/watch" in u:
+            qs = parse_qs(urlparse(u).query)
+            return (qs.get("v") or [None])[0]
+        return None
+    except Exception:
+        return None
+
+def youtube_channel_id_from_feed_url(feed_url: str) -> str | None:
+    # e.g. https://www.youtube.com/feeds/videos.xml?channel_id=UCxxxx
+    try:
+        qs = parse_qs(urlparse(feed_url).query)
+        cid = (qs.get("channel_id") or [None])[0]
+        return cid if cid and cid.startswith("UC") else None
+    except Exception:
+        return None
+
+def youtube_uploads_playlist_id(channel_id: str) -> str | None:
+    # UCxxxx -> UUxxxx
+    if channel_id and channel_id.startswith("UC") and len(channel_id) > 2:
+        return "UU" + channel_id[2:]
+    return None
+
+
+def get_youtube_channel_video_urls(channel_id: str, limit: int | None = None) -> list[str]:
+    """
+    Uses yt-dlp to list many uploads from the channel uploads playlist.
+    Returns watch URLs.
+    """
+    pl = youtube_uploads_playlist_id(channel_id)
+    if not pl:
+        return []
+
+    playlist_url = f"https://www.youtube.com/playlist?list={pl}"
+
+    ydl_opts = {
+        "quiet": True,
+        "skip_download": True,
+        "extract_flat": True,      # fast list, no per-video deep extraction
+    }
+
+    # Only add playlistend if caller requested a limit
+    if limit and limit > 0:
+        ydl_opts["playlistend"] = limit
+
+    try:
+        import yt_dlp
+        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+            info = ydl.extract_info(playlist_url, download=False)
+
+        items = info.get("entries") or []
+        urls = []
+        for it in items:
+            vid = (it or {}).get("id")
+            if vid:
+                urls.append(f"https://www.youtube.com/watch?v={vid}")
+        return urls
+    except Exception as e:
+        logging.warning(f"yt-dlp playlist fetch failed: {e}", exc_info=True)
+        return []
+
 
 def _pick_largest_url(urls):
     """Pick the 'largest' thumbnail by common size hints if present."""
@@ -1000,6 +1593,14 @@ def preprocess_text(text):
         logging.error(f"Error preprocessing text: {e}", exc_info=True)
         return text
 
+def get_entry_field(entry, key, default=None):
+    return entry.get(key, default) if isinstance(entry, dict) else getattr(entry, key, default)
+
+def get_entry_enclosures(entry):
+    enc = get_entry_field(entry, "enclosures", []) or []
+    return enc if isinstance(enc, list) else []
+
+
 def clean_title(title):
     """
     Normalize spacing and Title Case (do NOT force dropping punctuation or add periods).
@@ -1404,6 +2005,14 @@ def parse_cli_args():
                         help='TEST ONLY: sleep this many seconds at the start of each feed to simulate work.')
     parser.add_argument('--simulate-entry-secs', type=float, default=0.0,
                         help='TEST ONLY: sleep this many seconds for each entry to simulate work.')
+    parser.add_argument("--migrate-legacy", action="store_true")
+    parser.add_argument("--migrate-dry-run", action="store_true")
+    parser.add_argument('--dry-run', action='store_true',
+                    help='Do not download/transcribe; only resolve IDs and report what would be processed/skipped')
+    parser.add_argument("--migrate-size-limit-mb", type=float, default=None)
+    parser.add_argument("--migrate-report-name", default="legacy_migration_report.json")
+    parser.add_argument("--migrate-max-len", type=int, default=100)
+
 
     args, unknown = parser.parse_known_args()
 
@@ -1416,7 +2025,7 @@ def parse_cli_args():
 
 
 
-def process_entry(entry, channel_transcript_dir, download_dir, channel_title, pipeline, config, feed_data, channel_summary, channel_author):
+def process_entry(entry, channel_transcript_dir, download_dir, channel_title, pipeline, config, feed_data, channel_summary, channel_author, dry_run=False):
     """
     Process a single podcast episode entry:
     - Download audio
@@ -1431,14 +2040,96 @@ def process_entry(entry, channel_transcript_dir, download_dir, channel_title, pi
     REFRESH_EVERY = 80  # keep 5-min chunks; refresh every ~6.5 hours if busy
 
     try:
-        # Extract episode metadata
-        raw_title = entry.get('title', 'Unknown Title')
-        sanitized_title = sanitize_filename(raw_title)
-        logging.debug(f"Sanitized Episode Title: {sanitized_title}")
+        # 0) Resolve link early
+        link = entry.get("link") or (entry.get("id") if isinstance(entry.get("id"), str) else None)
+        is_youtube = bool(link) and ("youtube.com/watch" in link or "youtu.be/" in link)
 
-        mp3_filename = f"{sanitized_title}.mp3"
+        # Skip shorts early
+        if link and "/shorts/" in link:
+            logging.info(f"Skipping YouTube Short: {link}")
+            return None, pipeline
+
+        # 1) Pull yt-dlp metadata FIRST (so title/ids are correct)
+        yt = yt_dlp_info(link) if is_youtube else None
+
+        # 2) Decide a stable base id for filenames (prefer yt-dlp id)
+        vid = None
+        if yt and yt.get("id"):
+            vid = yt["id"]
+        else:
+            vid = youtube_video_id(link)
+        
+
+        # 3) Choose the *real* episode title (for metadata/display)
+        raw_title = (yt.get("title") if yt else None) or entry.get("title") or "Unknown Title"
+        sanitized_title = sanitize_filename(raw_title)
+
+        # ✅ Option A: compute a stable guid EARLY (before filenames)
+        guid = resolve_guid(entry, yt, vid, link)
+        suffix = stable_id_suffix(vid=vid, guid=guid, link=link)
+        logging.debug(f"Resolved guid={guid} suffix={suffix} channel_transcript_dir={channel_transcript_dir}")
+        logging.debug(f"Looking for existing json pattern: *__{suffix}.json (recursive under {Path(channel_transcript_dir).parent})")
+
+
+        # ✅ RENAME-AWARE "already processed" check (REPLACES episode_already_processed_by_suffix)
+        # Ensure index exists / populated (fast after first run)
+        idx = bootstrap_index_from_folder(channel_transcript_dir)
+        suffix_map = idx["suffixes"]
+        if dry_run:
+            logging.info(f"[DRY RUN] Would process (suffix={suffix}) title={raw_title}")
+            return None, pipeline
+
+        # Desired filename for THIS run (title truncated + stable suffix)
+        new_stem = make_episode_stem_with_suffix(raw_title, suffix, max_len=100)
+        new_name = f"{new_stem}.json"
+        new_path = Path(channel_transcript_dir) / new_name
+
+        # ✅ O(1) check: if suffix already processed, rename if needed, then skip
+        old_name = suffix_map.get(suffix)
+        if old_name:
+            old_path = Path(channel_transcript_dir) / old_name
+
+            # If index points to a missing file, try to recover by searching on disk
+            if not old_path.exists():
+                # Quick recovery scan just for this suffix
+                hit = next(Path(channel_transcript_dir).glob(f"*__{suffix}.json"), None)
+                if hit:
+                    old_path = hit
+                    suffix_map[suffix] = hit.name
+                    save_index(channel_transcript_dir)
+
+            if old_path.exists():
+                if old_path.name != new_name:
+                    try:
+                        if new_path.exists():
+                            logging.warning(f"Target already exists, leaving existing: {new_path.name}")
+                            # Update index to point to the target that exists
+                            suffix_map[suffix] = new_path.name
+                        else:
+                            os.replace(str(old_path), str(new_path))
+                            suffix_map[suffix] = new_path.name
+                            logging.info(f"Renamed JSON: {old_path.name} -> {new_path.name}")
+                        save_index(channel_transcript_dir)
+                    except Exception as e:
+                        logging.warning(f"Rename failed {old_path.name} -> {new_name}: {e}", exc_info=True)
+
+                logging.info(f"Already processed (suffix={suffix}); skipping.")
+                return None, pipeline
+
+
+
+
+        # Now that we know it hasn't been processed, compute the stem/paths for THIS run
+        file_stem = make_episode_stem_with_suffix(raw_title, suffix)
+
+        mp3_filename = f"{file_stem}.mp3"
         mp3_file_path = os.path.join(download_dir, mp3_filename)
-        transcript_filename = os.path.join(channel_transcript_dir, f"{sanitized_title}.json")
+        transcript_filename = os.path.join(channel_transcript_dir, f"{file_stem}.json")
+
+
+
+        logging.debug(f"Episode title: {raw_title}")
+        logging.debug(f"File stem: {file_stem}")
 
         # Check if transcript already exists
         if os.path.exists(transcript_filename):
@@ -1543,7 +2234,7 @@ def process_entry(entry, channel_transcript_dir, download_dir, channel_title, pi
             cumulative_time += chunk_length_ms / 1000.0  # Increment by 5 minutes
 
         # Extract and clean description from 'description' field
-        raw_description = entry.get('description', 'No Description Available')
+        raw_description = get_entry_field(entry, "description", "No Description Available")
         logging.debug(f"Raw Description for '{sanitized_title}': {raw_description}")
 
         if raw_description != 'No Description Available':
@@ -1561,8 +2252,30 @@ def process_entry(entry, channel_transcript_dir, download_dir, channel_title, pi
             entry.get('pubDate') or
             entry.get('date')
         )
+        # ✅ YouTube fallback (yt-dlp) if RSS was null
+        if publication_date is None and yt:
+            try:
+                # 1) Best: exact timestamp (seconds since epoch)
+                ts = yt.get("timestamp") or yt.get("release_timestamp")
+                if ts:
+                    publication_date = datetime.fromtimestamp(int(ts), tz=timezone.utc)
 
-        # Convert publication_date to ISO format string if not None
+                # 2) Sometimes release_date exists (YYYYMMDD)
+                if publication_date is None:
+                    rd = yt.get("release_date")
+                    if rd:
+                        publication_date = datetime.strptime(str(rd), "%Y%m%d").replace(tzinfo=timezone.utc)
+
+                # 3) Fallback: upload_date (YYYYMMDD)
+                if publication_date is None:
+                    ud = yt.get("upload_date")
+                    if ud:
+                        # upload_date has no time-of-day; pick midnight UTC
+                        publication_date = datetime.strptime(str(ud), "%Y%m%d").replace(tzinfo=timezone.utc)
+
+            except Exception as e:
+                logging.warning(f"Failed to derive publication_date from yt-dlp fields: {e}", exc_info=True)
+
         publication_date_str = publication_date.isoformat() if publication_date else None
 
         # Extract episode image URL using the integrated function
@@ -1636,7 +2349,6 @@ def process_entry(entry, channel_transcript_dir, download_dir, channel_title, pi
 
         is_youtube = bool(link) and ("youtube.com/watch" in link or "youtu.be/" in link)
 
-        yt = yt_dlp_info(link) if is_youtube else None
 
         link = entry.get("link")
         if link and "/shorts/" in link:
@@ -1676,7 +2388,14 @@ def process_entry(entry, channel_transcript_dir, download_dir, channel_title, pi
             # language: yt-dlp may not give; keep feed default unless you add detect later
 
         # For YouTube specifically: ensure audio_url isn't null
-        audio_url = (entry.enclosures[0].get('url') if entry.enclosures else None) or link
+        enclosures = get_entry_enclosures(entry)
+        audio_url = None
+        if enclosures:
+            first = enclosures[0]
+            audio_url = (first.get("href") if isinstance(first, dict) else getattr(first, "href", None)) \
+                        or (first.get("url") if isinstance(first, dict) else getattr(first, "url", None))
+        audio_url = audio_url or link
+
 
 
         # Compile episode metadata
@@ -1690,7 +2409,7 @@ def process_entry(entry, channel_transcript_dir, download_dir, channel_title, pi
             'explicit': explicit,
             "author": episode_author,
             'summary': channel_summary,
-            'guid': entry.get('guid'),
+            'guid': guid,
             'audio_url': audio_url,                 # ✅ will not be null for YT now
             'image_url': episode_image_url,         # ✅ from yt if missing
             'channel_image_url': channel_image_url, # ✅ from yt if missing
@@ -1741,6 +2460,15 @@ def process_entry(entry, channel_transcript_dir, download_dir, channel_title, pi
         except Exception as e:
             logging.error(f"Failed to save combined data: {e}", exc_info=True)
             return None, pipeline
+        
+        
+        # ✅ record in index AFTER successful save (so next run skips instantly)
+        try:
+            idx = load_index(channel_transcript_dir)
+            idx["suffixes"][suffix] = Path(transcript_filename).name
+            save_index(channel_transcript_dir)
+        except Exception as e:
+            logging.warning(f"Failed to update processed index for suffix={suffix}: {e}", exc_info=True)
 
         # Add chapters to the transcript with summarization
         add_chapters_to_transcript(transcript_filename, config)
@@ -1859,10 +2587,39 @@ def run_cycle(feeds_filename='master_rss.json', limit_per_feed=0,
         channel_transcript_dir = os.path.join(base_transcript_dir, sanitized_channel_title, source_lang)
         os.makedirs(channel_transcript_dir, exist_ok=True)
 
-        if limit_per_feed and limit_per_feed > 0:
-            entries_to_process = entries[:limit_per_feed]
+        if is_youtube:
+            # channel_id usually exists on yt feeds; log it to verify
+            channel_id = (
+                youtube_channel_id_from_feed_url(feed_url)
+                or (getattr(feed.feed, "yt_channelid", None) if str(getattr(feed.feed, "yt_channelid", "")).startswith("UC") else None)
+                or (getattr(feed.feed, "channelid", None) if str(getattr(feed.feed, "channelid", "")).startswith("UC") else None)
+            )
+
+            logging.info(f"YouTube channel_id resolved: {channel_id} (feed_url={feed_url})")
+
+
+            video_urls = get_youtube_channel_video_urls(
+                channel_id,
+                limit=limit_per_feed if (limit_per_feed and limit_per_feed > 0) else None
+            )
+            logging.info(f"yt-dlp uploads playlist returned {len(video_urls)} video urls")
+
+            # Make "entry-like" dicts for your existing process_entry()
+            entries_to_process = [{
+                "title": "",     # process_entry will fetch real title via yt-dlp_info
+                "link": url,
+                "id": url,
+                "description": None,
+                "published": None,
+                "enclosures": [{"url": url}],
+            } for url in video_urls]
         else:
-            entries_to_process = entries
+            # Normal RSS handling for podcasts
+            if limit_per_feed and limit_per_feed > 0:
+                entries_to_process = entries[:limit_per_feed]
+            else:
+                entries_to_process = entries
+
 
         logging.info(f"Will process {len(entries_to_process)} entries for this feed.")
 
@@ -1967,13 +2724,14 @@ def main(feeds_filename='master_rss.json', limit_per_feed=0, interval_seconds=No
 if __name__ == "__main__":
     try:
         args = parse_cli_args()
+
         feeds_filename = (
             args.feeds_file
             or ("master_rss_mini.json" if args.master_rss_mini else "master_rss.json")
         )
         limit = args.limit or 0  # 0/None = ALL
 
-        # Resolve restart interval (seconds has priority if both provided)
+        # Resolve restart interval (seconds has priority)
         if args.restart_seconds is not None and args.restart_hours is not None:
             logging.warning("Both --restart-hours and --restart-seconds provided; using seconds.")
 
@@ -1987,7 +2745,7 @@ if __name__ == "__main__":
         logging.info(
             f"CLI parsed → feeds={feeds_filename}, limit={limit}, "
             f"interval_seconds={interval_seconds}, simulate_feed_secs={args.simulate_feed_secs}, "
-            f"simulate_entry_secs={args.simulate_entry_secs}"
+            f"simulate_entry_secs={args.simulate_entry_secs}, migrate_legacy={args.migrate_legacy}"
         )
 
         main(
@@ -1997,6 +2755,17 @@ if __name__ == "__main__":
             simulate_feed_secs=args.simulate_feed_secs,
             simulate_entry_secs=args.simulate_entry_secs
         )
+
+        # ✅ ONLY run migration when requested
+        if args.migrate_legacy:
+            stats = migrate_legacy_transcripts(
+                root=DATABASE_ROOT / "transcripts",
+                max_len=args.migrate_max_len,
+                dry_run=args.migrate_dry_run,
+                size_limit_mb=args.migrate_size_limit_mb,
+                report_name=args.migrate_report_name,
+            )
+            logging.info(f"Legacy migration stats: {stats}")
 
     except KeyboardInterrupt:
         logging.info("Interrupted by user; exiting.")
