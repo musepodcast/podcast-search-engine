@@ -5,6 +5,7 @@ import time
 from datetime import datetime, timezone, timedelta
 import subprocess
 import os
+import sys
 import yaml  # For handling YAML files
 from transformers import pipeline as transformers_pipeline  # Renamed for clarity
 from downloader import parse_feed, download_audio, yt_dlp_info
@@ -34,6 +35,8 @@ import gc
 import psutil
 from urllib.parse import urlparse, parse_qs
 import shutil
+from logging.handlers import RotatingFileHandler
+
 
 
 os.environ.setdefault("OMP_NUM_THREADS", "1")
@@ -54,15 +57,26 @@ warnings.filterwarnings("ignore", category=UserWarning, module='pyannote.audio')
 # AudioSegment.converter = r"C:\ffmpeg\bin\ffmpeg.exe"
 # AudioSegment.ffprobe = r"C:\ffmpeg\bin\ffprobe.exe"
 
-# Configure logging (centralized configuration)
+# Configure logging (centralized configuration) — ROTATING FILES
+log_dir = DATABASE_ROOT / "log"
+log_dir.mkdir(parents=True, exist_ok=True)
+
+log_file = log_dir / "transcription.log"
+
 logging.basicConfig(
-    level=logging.DEBUG,  # Set to DEBUG for detailed logs during troubleshooting
+    level=logging.DEBUG,
     format='%(asctime)s - %(levelname)s - %(message)s',
     handlers=[
         logging.StreamHandler(),  # Console
-        logging.FileHandler(str(DATABASE_ROOT / "log" / "transcription.log"), encoding='utf-8')
+        RotatingFileHandler(
+            filename=str(log_file),
+            maxBytes=20 * 1024 * 1024,  # 10 MB per file
+            backupCount=20,             # keep last 10 files
+            encoding="utf-8"
+        ),
     ]
 )
+
 
 # Automatic download of NLTK stopwords and punkt if not present
 try:
@@ -1916,70 +1930,33 @@ def add_chapters_to_transcript(transcript_json_path, config):
     except Exception as e:
         logging.error(f"Failed to add chapters: {e}", exc_info=True)
 
+def restart_self(reason: str):
+    logging.critical(f"{reason} → restarting process with same CLI args: {' '.join(sys.argv)}")
+    # flush logs so you don’t lose the last lines
+    for h in logging.getLogger().handlers:
+        try:
+            h.flush()
+        except Exception:
+            pass
+    os.execv(sys.executable, [sys.executable] + sys.argv)
 
 
 
 def process_chunk(chunk, pipeline):
-    """
-    Process a single audio chunk:
-    - Transcribe audio
-    - Perform speaker diarization
-    - Return transcription data
-    """
     try:
-        transcription_data = transcribe_and_diarize(
-            chunk,          # Pass as positional argument
-            pipeline        # Pass as positional argument
-        )
+        transcription_data = transcribe_and_diarize(chunk, pipeline)
         return transcription_data
-    except TypeError as e:
-        logging.error(f"Error processing chunk {chunk}: {e}")
-        return None
+
     except Exception as e:
-        logging.error(f"Unexpected error processing chunk {chunk}: {e}")
+        msg = str(e)
+
+        # 🔥 Fatal CUDA state: must restart whole process
+        if "device-side assert triggered" in msg:
+            restart_self(f"FATAL CUDA device-side assert triggered while processing chunk: {chunk}")
+
+        logging.error(f"Unexpected error processing chunk {chunk}: {e}", exc_info=True)
         return None
 
-def _repeat_every(restart_hours, fn, *args, **kwargs):
-    """
-    Re-run `fn(*args, **kwargs)` on a fixed cadence of `restart_hours`.
-    If a run takes longer than the interval, the next run starts immediately,
-    and the cadence is preserved (no drift) using time.monotonic().
-    """
-    interval = float(restart_hours) * 3600.0
-    if interval <= 0:
-        fn(*args, **kwargs)
-        return
-
-    cycle = 1
-    next_tick = time.monotonic()  # start now
-    while True:
-        start_wall = datetime.now().isoformat(timespec='seconds')
-        start_mono = time.monotonic()
-        logging.info(f"=== Cycle {cycle} start @ {start_wall} (interval={restart_hours}h) ===")
-
-        try:
-            fn(*args, **kwargs)
-        except Exception:
-            logging.exception("Cycle crashed; continuing.")
-
-        # Advance next_tick by fixed interval (preserve cadence, avoid drift)
-        next_tick += interval
-        now = time.monotonic()
-        delay = max(0.0, next_tick - now)
-        elapsed = now - start_mono
-        next_wall = (datetime.now() + timedelta(seconds=delay)).isoformat(timespec='seconds')
-        logging.info(
-            f"=== Cycle {cycle} complete in {elapsed/3600:.2f}h. "
-            f"Next run in {delay/3600:.2f}h @ {next_wall} ==="
-        )
-
-        try:
-            time.sleep(delay)
-        except KeyboardInterrupt:
-            logging.info("Received Ctrl+C; exiting cleanly.")
-            break
-
-        cycle += 1
 
 
 def parse_cli_args():
@@ -2025,16 +2002,14 @@ def parse_cli_args():
 
 
 
-def process_entry(entry, channel_transcript_dir, download_dir, channel_title, pipeline, config, feed_data, channel_summary, channel_author, dry_run=False):
+def process_entry(entry, channel_transcript_dir, download_dir, channel_title, pipeline, config,
+                  feed_data, channel_summary, channel_author, dry_run=False, suffix_map=None):
     """
-    Process a single podcast episode entry:
-    - Download audio
-    - Convert MP3 to WAV
-    - Split WAV into chunks
-    - Transcribe each chunk with speaker diarization
-    - Adjust segment times based on chunk offsets
-    - Generate chapter titles from the transcript segments
-    - Save a combined JSON with all transcripts, segments, and chapters
+    Process a single podcast episode entry.
+    Optimized:
+      - For YouTube: compute vid/guid/suffix WITHOUT yt-dlp, skip fast if already processed
+      - Only call yt-dlp when we truly need to process (download/transcribe or metadata fill)
+      - suffix_map can be passed in from the feed loop to avoid repeated bootstraps
     """
     chunks_since_refresh = 0
     REFRESH_EVERY = 80  # keep 5-min chunks; refresh every ~6.5 hours if busy
@@ -2049,75 +2024,65 @@ def process_entry(entry, channel_transcript_dir, download_dir, channel_title, pi
             logging.info(f"Skipping YouTube Short: {link}")
             return None, pipeline
 
-        # 1) Pull yt-dlp metadata FIRST (so title/ids are correct)
-        yt = yt_dlp_info(link) if is_youtube else None
-
-        # 2) Decide a stable base id for filenames (prefer yt-dlp id)
+        # 1) FAST ID path (NO yt-dlp): compute vid/guid/suffix for YouTube
+        yt = None
         vid = None
-        if yt and yt.get("id"):
-            vid = yt["id"]
-        else:
+
+        if is_youtube:
+            # URL parse is cheap and usually enough to get stable id
             vid = youtube_video_id(link)
-        
+            # Canonical GUID for YouTube, stable across title changes
+            guid = resolve_guid(entry, yt=None, vid=vid, link=link)  # -> yt:video:<id> when vid exists
+        else:
+            guid = resolve_guid(entry, yt=None, vid=None, link=link)
 
-        # 3) Choose the *real* episode title (for metadata/display)
-        raw_title = (yt.get("title") if yt else None) or entry.get("title") or "Unknown Title"
-        sanitized_title = sanitize_filename(raw_title)
-
-        # ✅ Option A: compute a stable guid EARLY (before filenames)
-        guid = resolve_guid(entry, yt, vid, link)
         suffix = stable_id_suffix(vid=vid, guid=guid, link=link)
+
         logging.debug(f"Resolved guid={guid} suffix={suffix} channel_transcript_dir={channel_transcript_dir}")
-        logging.debug(f"Looking for existing json pattern: *__{suffix}.json (recursive under {Path(channel_transcript_dir).parent})")
+        logging.debug(f"Looking for existing json pattern: *__{suffix}.json (under {channel_transcript_dir})")
 
+        # Ensure we have a suffix_map (prefer caller-provided)
+        if suffix_map is None:
+            # fallback (still works) but slower; ideally you pass it from the feed loop
+            idx = bootstrap_index_from_folder(channel_transcript_dir)
+            suffix_map = idx["suffixes"]
 
-        # ✅ RENAME-AWARE "already processed" check (REPLACES episode_already_processed_by_suffix)
-        # Ensure index exists / populated (fast after first run)
-        idx = bootstrap_index_from_folder(channel_transcript_dir)
-        suffix_map = idx["suffixes"]
+        # DRY RUN: report and stop here (no yt-dlp)
         if dry_run:
-            logging.info(f"[DRY RUN] Would process (suffix={suffix}) title={raw_title}")
+            logging.info(f"[DRY RUN] Would process (suffix={suffix}) link={link}")
             return None, pipeline
 
-        # Desired filename for THIS run (title truncated + stable suffix)
-        new_stem = make_episode_stem_with_suffix(raw_title, suffix, max_len=100)
-        new_name = f"{new_stem}.json"
-        new_path = Path(channel_transcript_dir) / new_name
-
-        # ✅ O(1) check: if suffix already processed, rename if needed, then skip
+        # Desired filename for THIS run (needs title, but we can defer title until we know it’s new)
         old_name = suffix_map.get(suffix)
         if old_name:
+            # Light recovery if index points to missing file (rare, but keep your behavior)
             old_path = Path(channel_transcript_dir) / old_name
-
-            # If index points to a missing file, try to recover by searching on disk
             if not old_path.exists():
-                # Quick recovery scan just for this suffix
                 hit = next(Path(channel_transcript_dir).glob(f"*__{suffix}.json"), None)
                 if hit:
-                    old_path = hit
                     suffix_map[suffix] = hit.name
                     save_index(channel_transcript_dir)
 
-            if old_path.exists():
-                if old_path.name != new_name:
-                    try:
-                        if new_path.exists():
-                            logging.warning(f"Target already exists, leaving existing: {new_path.name}")
-                            # Update index to point to the target that exists
-                            suffix_map[suffix] = new_path.name
-                        else:
-                            os.replace(str(old_path), str(new_path))
-                            suffix_map[suffix] = new_path.name
-                            logging.info(f"Renamed JSON: {old_path.name} -> {new_path.name}")
-                        save_index(channel_transcript_dir)
-                    except Exception as e:
-                        logging.warning(f"Rename failed {old_path.name} -> {new_name}: {e}", exc_info=True)
+            logging.info(f"Already processed (suffix={suffix}); skipping.")
+            return None, pipeline
 
-                logging.info(f"Already processed (suffix={suffix}); skipping.")
-                return None, pipeline
+        # 2) Only NOW pay for yt-dlp metadata (because we know it’s not processed)
+        if is_youtube:
+            yt = yt_dlp_info(link)  # can be slow; we avoided it for already-processed entries
+            if yt and yt.get("id"):
+                vid = yt["id"]  # may be same as URL id; ok if it’s more canonical
+                guid = f"yt:video:{vid}"
+                suffix = stable_id_suffix(vid=vid, guid=guid, link=link)
 
+                # If re-derived suffix differs, check skip again (rare edge case)
+                old_name2 = suffix_map.get(suffix)
+                if old_name2:
+                    logging.info(f"Already processed after yt-dlp canonicalization (suffix={suffix}); skipping.")
+                    return None, pipeline
 
-
+        # 3) Now we can pick the real title
+        raw_title = (yt.get("title") if yt else None) or entry.get("title") or "Unknown Title"
+        sanitized_title = sanitize_filename(raw_title)
 
         # Now that we know it hasn't been processed, compute the stem/paths for THIS run
         file_stem = make_episode_stem_with_suffix(raw_title, suffix)
@@ -2125,8 +2090,6 @@ def process_entry(entry, channel_transcript_dir, download_dir, channel_title, pi
         mp3_filename = f"{file_stem}.mp3"
         mp3_file_path = os.path.join(download_dir, mp3_filename)
         transcript_filename = os.path.join(channel_transcript_dir, f"{file_stem}.json")
-
-
 
         logging.debug(f"Episode title: {raw_title}")
         logging.debug(f"File stem: {file_stem}")
@@ -2178,6 +2141,7 @@ def process_entry(entry, channel_transcript_dir, download_dir, channel_title, pi
                 logging.error(f"Invalid audio file: {chunk}. Skipping.")
                 cumulative_time += chunk_length_ms / 1000.0  # Still increment time
                 continue
+
 
             # Transcribe and diarize
             transcription_data = process_chunk(chunk, pipeline)  # Corrected call
@@ -2233,6 +2197,14 @@ def process_entry(entry, channel_transcript_dir, download_dir, channel_title, pi
 
             cumulative_time += chunk_length_ms / 1000.0  # Increment by 5 minutes
 
+        # ✅ GUARD: if GPU blew up and we got nothing, DO NOT WRITE/OVERWRITE JSON
+        if (not combined_data.get("segments")) and (not (combined_data.get("transcript") or "").strip()):
+            logging.critical(
+                f"EMPTY transcript for suffix={suffix} title={raw_title} "
+                f"(likely CUDA failure). Not writing JSON."
+            )
+            return None, pipeline
+        
         # Extract and clean description from 'description' field
         raw_description = get_entry_field(entry, "description", "No Description Available")
         logging.debug(f"Raw Description for '{sanitized_title}': {raw_description}")
