@@ -69,7 +69,6 @@ from podcasts.search.documents import EpisodeDocument, TranscriptDocument, Episo
 from elasticsearch_dsl import Q as ES_Q
 from elasticsearch_dsl.connections import connections
 
-from django.contrib.postgres.search import TrigramSimilarity
 from datetime import datetime, timedelta
 from axes.models import AccessAttempt
 from axes.conf import settings as axes_settings
@@ -91,7 +90,34 @@ from elastic_transport import ConnectionTimeout
 from urllib3.exceptions import ReadTimeoutError
 
 
+_LANG_ALIAS_TO_CODE = {
+    "en": "en", "en-us": "en", "en_gb": "en", "en-gb": "en",
+    "pt": "pt", "pt-br": "pt", "pt_br": "pt",
+    "es": "es", "es-mx": "es", "es_es": "es",
+    "it": "it", "fr": "fr", "ru": "ru", "uk": "uk",
+    "zh": "cn", "zh-cn": "cn", "zh_hans": "cn", "zh-hans": "cn",
+    "zh-tw": "tw", "zh_hant": "tw", "zh-hant": "tw",
+    "cn": "cn", "tw": "tw",
+    "ko": "ko", "ja": "ja", "tr": "tr", "de": "de",
+    "ar": "ar", "hi": "hi", "vi": "vi", "tl": "tl",
+}
+
 _slug_non_alnum = re.compile(r"[^a-z0-9]+", re.IGNORECASE)
+
+def canon_lang(lang: str) -> str:
+    """Collapse locale variants to your folder/index codes."""
+    if not lang:
+        return "en"
+    s = lang.strip().lower().replace("_", "-")
+    return _LANG_ALIAS_TO_CODE.get(s, _LANG_ALIAS_TO_CODE.get(s.split("-")[0], s.split("-")[0]))
+
+def slug_norm(s: str) -> str:
+    """Diacritic-insensitive, lower, non-alnum→_ normalizer for URL slugs/filenames."""
+    s = unicodedata.normalize("NFKD", s or "")
+    s = "".join(ch for ch in s if not unicodedata.combining(ch))
+    s = s.lower()
+    s = _slug_non_alnum.sub("_", s)
+    return re.sub(r"_+", "_", s).strip("_")
 
 def slug_norm(s: str) -> str:
     """Diacritic-insensitive, lower, non-alnum→_ normalizer for episode slugs."""
@@ -811,8 +837,8 @@ logger = logging.getLogger(__name__)
 
 
 def get_selected_language(request):
-    # Use the GET parameter "lang" if provided; otherwise, fall back to request.LANGUAGE_CODE
-    return request.GET.get('lang', getattr(request, 'LANGUAGE_CODE', 'en')).lower()
+    raw = request.GET.get('lang', getattr(request, 'LANGUAGE_CODE', 'en'))
+    return canon_lang(raw)   # <- returns 'en', 'pt', 'es', 'cn', 'tw', etc.
 
 
 
@@ -948,7 +974,8 @@ class ChannelListView(ListView):
             self.LABELS[('views', 'desc')]  # fallback aligns with your default
         )
         
-        if lang not in ('en', 'en-us'):
+        lang = get_selected_language(self.request)
+        if lang != 'en':
             translations = ChannelTranslations.objects.filter(
                 language=lang,
                 translated=True,
@@ -1119,7 +1146,7 @@ class ChannelDetailView(DetailView):
     # ---------- resolve base vs translated channel ----------
     def get_object(self):
         slug = self.kwargs['sanitized_channel_title']
-        lang = _norm_lang(self.request)
+        lang = get_selected_language(self.request)
 
         base = get_object_or_404(Channel, sanitized_channel_title=slug)
         if lang == 'en':
@@ -1600,7 +1627,7 @@ class EpisodeDetailView(DetailView):
     def get_object(self):
         slug_ch = self.kwargs['sanitized_channel_title']
         slug_ep = self.kwargs['sanitized_episode_title']
-        lang    = (get_selected_language(self.request) or 'en').lower().split('-', 1)[0]
+        lang    = get_selected_language(self.request)
 
         incoming_norm = slug_norm(slug_ep)
 
@@ -1678,13 +1705,15 @@ class EpisodeDetailView(DetailView):
         self.base_episode = base
 
         # 4) language-specific display
-        if lang != 'en':
-            tr = (
-                EpisodeTranslations.objects
-                .select_related('episode', 'episode__channel')
-                .filter(episode=base, language__startswith=lang, translated=True)
-                .first()
-            )
+        lang_raw  = get_selected_language(self.request) or 'en'
+        lang_code = lang_raw.lower().split('-', 1)[0]
+
+        if lang_code != 'en':
+            tr = EpisodeTranslations.objects.select_related('episode', 'episode__channel').filter(
+                episode=base,
+                language__istartswith=lang_code,
+                translated=True
+            ).first()
             if tr:
                 return tr
 
@@ -1693,36 +1722,41 @@ class EpisodeDetailView(DetailView):
 
 
     def get_queryset(self):
-        lang = get_selected_language(self.request)
-        if lang in ('en','en-us'):
+        lang_raw  = (get_selected_language(self.request) or 'en')
+        lang_code = lang_raw.lower().split('-', 1)[0]
+
+        if lang_code == 'en':
             return Episode.objects.select_related('channel')
-        return EpisodeTranslations.objects.filter(language=lang, translated=True)
+        return EpisodeTranslations.objects.filter(language__istartswith=lang_code, translated=True)
 
     def get_context_data(self, **kwargs):
         ctx  = super().get_context_data(**kwargs)
         disp = self.display_episode
         base = self.base_episode
-        lang = get_selected_language(self.request)
+
+        lang_raw  = (get_selected_language(self.request) or 'en')
+        lang_code = lang_raw.lower().split('-', 1)[0]
+
 
         # 1) TRANSCRIPTS
         if isinstance(disp, EpisodeTranslations):
             tr_qs = TranscriptTranslations.objects.filter(
-                episodetranslations=disp,
-                language=lang
-            ).order_by('segment_time')
+                episode=base,
+                language__istartswith=lang_code,
+            ).order_by("segment_time")
+
             segments = tr_qs if tr_qs.exists() else Transcript.objects.filter(
                 episode=base
-            ).order_by('segment_time')
+            ).order_by("segment_time")
         else:
-            segments = Transcript.objects.filter(
-                episode=base
-            ).order_by('segment_time')
+            segments = Transcript.objects.filter(episode=base).order_by("segment_time")
 
-        # 2) CHAPTERS (translated first, fallback to originals)
+
+        # 2) CHAPTERS
         if isinstance(disp, EpisodeTranslations):
             ch_qs = ChapterTranslations.objects.filter(
-                episodetranslations=disp,
-                language=lang
+                episode=base,
+                language__istartswith=lang_code,
             )
             if not ch_qs.exists():
                 ch_qs = Chapter.objects.filter(episode=base)
@@ -1780,10 +1814,11 @@ class EpisodeDetailView(DetailView):
         )
 
         # per-language downloads
+        # per-language downloads
         try:
-            canon_lang = _canon_lang(lang)
+            canon_lang = _canon_lang(lang_raw)   # or lang_code
         except NameError:
-            canon_lang = (lang or 'en').split('-', 1)[0].lower()
+            canon_lang = lang_code
 
         ctx['downloads_for_lang'] = (
             EpisodeDownload.objects
@@ -1815,7 +1850,7 @@ class EpisodeDetailView(DetailView):
         ctx['merged_segments']   = self.merge_consecutive_speakers(segments)
         ctx['chapters']          = chapters
         ctx['post_episode_id']   = self.base_episode.id
-        ctx['selected_language'] = lang
+        ctx['selected_language'] = lang_code
         ctx['episode']           = disp
         ctx['base_slug_ch']      = self.base_episode.channel.sanitized_channel_title
         ctx['base_slug_ep']      = self.base_episode.sanitized_episode_title

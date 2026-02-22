@@ -377,31 +377,40 @@ def insert_episode_translation(conn, episode_id, meta):
         conn.commit()
         return res[0] if res else None
 
-def insert_chapters_translation(conn, episode_id, chapters, language):
+def insert_chapters_translation(conn, eptr_id, chapters, language):
     with conn.cursor() as cur:
         rows = []
         for ch in chapters:
             t = ch.get('title'); tm = ch.get('time')
             if t and tm:
-                rows.append((episode_id, t, tm, language))
+                rows.append((eptr_id, t, tm, language))
         if rows:
             cur.executemany(
-                'INSERT INTO ChaptersTranslations(episode_id,chapter_title,chapter_time,language) VALUES(%s,%s,%s,%s) ON CONFLICT(episode_id,chapter_title,language) DO NOTHING;',
+                '''
+                INSERT INTO ChaptersTranslations(episodetranslations_id, chapter_title, chapter_time, language)
+                VALUES(%s,%s,%s,%s)
+                ON CONFLICT(episodetranslations_id, chapter_title, language) DO NOTHING;
+                ''',
                 rows
             )
         conn.commit()
 
-def insert_transcript_translation(conn, episode_id, segments, language):
+def insert_transcript_translation(conn, eptr_id, segments, language):
     with conn.cursor() as cur:
         rows = []
         for seg in segments:
             st, en = seg.get('start'), seg.get('end')
-            if st is None or en is None: continue
+            if st is None or en is None:
+                continue
             t = f"{seconds_to_hms(st)} - {seconds_to_hms(en)}"
-            rows.append((episode_id, t, seg.get('text',''), seg.get('speaker','Unknown'), language))
+            rows.append((eptr_id, t, seg.get('text',''), seg.get('speaker','Unknown'), language))
         if rows:
             cur.executemany(
-                'INSERT INTO TranscriptsTranslations(episode_id,segment_time,segment_text,speaker,language) VALUES(%s,%s,%s,%s,%s) ON CONFLICT(episode_id,segment_time,language) DO NOTHING;',
+                '''
+                INSERT INTO TranscriptsTranslations(episodetranslations_id, segment_time, segment_text, speaker, language)
+                VALUES(%s,%s,%s,%s,%s)
+                ON CONFLICT(episodetranslations_id, segment_time, language) DO NOTHING;
+                ''',
                 rows
             )
         conn.commit()
@@ -582,11 +591,11 @@ def process_one_file(conn, json_path: Path):
             'transcript': data.get('transcript', ''),
             'translated': True
         }
-        insert_episode_translation(conn, master_id, ep_meta)
+        eptr_id = insert_episode_translation(conn, master_id, ep_meta)
 
         # Chapters & transcript translations
-        insert_chapters_translation(conn, master_id, chapters, meta.get('language'))
-        insert_transcript_translation(conn, master_id, segments, meta.get('language'))
+        insert_chapters_translation(conn, eptr_id, chapters, meta.get('language'))
+        insert_transcript_translation(conn, eptr_id, segments, meta.get('language'))
 
         logger.info(f"Inserted translation for episode: {ep_meta['episode_title']}")
         # RE-INDEX MASTER EPISODE WITH TRANSLATION

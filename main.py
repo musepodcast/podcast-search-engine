@@ -2506,6 +2506,8 @@ def run_cycle(feeds_filename='master_rss.json', limit_per_feed=0,
         return False
 
     full_pass = True  # assume success unless we abort early
+    processed_channel_lang_dirs = []
+    seen_channel_lang_dirs = set()
 
     for feed_idx, feed_url in enumerate(podcast_feeds, start=1):
         if _deadline_hit():
@@ -2558,6 +2560,12 @@ def run_cycle(feeds_filename='master_rss.json', limit_per_feed=0,
 
         channel_transcript_dir = os.path.join(base_transcript_dir, sanitized_channel_title, source_lang)
         os.makedirs(channel_transcript_dir, exist_ok=True)
+
+        # Track channel/lang dirs in FEED ORDER so translate.py can follow the same order
+        key = str(Path(channel_transcript_dir).resolve())
+        if key not in seen_channel_lang_dirs:
+            seen_channel_lang_dirs.add(key)
+            processed_channel_lang_dirs.append(key)
 
         if is_youtube:
             # channel_id usually exists on yt feeds; log it to verify
@@ -2623,13 +2631,34 @@ def run_cycle(feeds_filename='master_rss.json', limit_per_feed=0,
     logging.info(f"Saved {len(failed_feeds)} failed feeds to {failed_file}")
 
     # Only run translate when we actually finished the whole pass
+    # Only run translate when we actually finished the whole pass
     if full_pass:
-        logging.info("All feeds processed. Running translation script...")
+        logging.info("All feeds processed. Writing channel order file + running translation script...")
         try:
-            subprocess.run(["python", "translate.py"], check=True)
+            translate_path = BASE / "translate.py"
+            transcripts_dir = DATABASE_ROOT / "transcripts"
+
+            order_file = DATABASE_ROOT / "watcher_json" / "channels_in_order.json"
+            order_file.parent.mkdir(parents=True, exist_ok=True)
+
+            # Write the exact channel/lang dirs in order
+            order_file.write_text(
+                json.dumps(processed_channel_lang_dirs, indent=2, ensure_ascii=False),
+                encoding="utf-8"
+            )
+            logging.info(f"Wrote channel order file: {order_file}")
+
+            subprocess.run(
+                [
+                    sys.executable, str(translate_path),
+                    "--input_dir", str(transcripts_dir),
+                    "--channel_order_file", str(order_file),
+                ],
+                check=True
+            )
             logging.info("Translation script completed successfully.")
         except Exception as e:
-            logging.error(f"Translation script failed: {e}")
+            logging.error(f"Translation script failed: {e}", exc_info=True)
     else:
         logging.info("Partial pass; skipping translation this cycle.")
 
