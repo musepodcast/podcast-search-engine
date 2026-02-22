@@ -30,7 +30,72 @@ from datasets import Dataset
 # Constants
 # -----------------------------
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-DEFAULT_INPUT = os.path.normpath(os.path.join(SCRIPT_DIR, "..", "podcasts_data", "transcripts"))
+DEFAULT_INPUT = os.path.normpath(os.path.join(SCRIPT_DIR, "..", "podcast_data", "transcripts"))
+DATABASE_ROOT_DEFAULT = os.path.normpath(os.path.join(SCRIPT_DIR, "..", "podcast_data"))
+DEFAULT_ORDER_FILE = os.path.join(DATABASE_ROOT_DEFAULT, "watcher_json", "channels_in_order.json")
+
+def translate_many_texts(texts, translation_pipeline, max_gen_length=400, batch_size=16):
+    # keep empty entries aligned
+    clean = [t if isinstance(t, str) and t.strip() else "" for t in texts]
+    ds = Dataset.from_dict({"text": clean})
+
+    def _batched(batch):
+        outs = translation_pipeline(
+            batch["text"],
+            max_length=max_gen_length,
+            batch_size=batch_size
+        )
+        return {"translation": [o["translation_text"] for o in outs]}
+
+    out_ds = ds.map(_batched, batched=True, batch_size=batch_size)
+    return out_ds["translation"]
+
+def load_channel_order(order_file: str) -> list[str]:
+    """
+    order_file is a JSON list of absolute paths to channel language dirs, e.g.
+      C:\\Users\\isaac\\podcast_data\\transcripts\\Archaix\\en
+    OR channel roots; we will normalize to channel roots.
+    Returns a list of channel ROOT directories in correct order:
+      ...\\transcripts\\Archaix
+    """
+    try:
+        with open(order_file, "r", encoding="utf-8") as f:
+            items = json.load(f)
+        if not isinstance(items, list):
+            return []
+    except Exception:
+        return []
+
+    channel_roots = []
+    seen = set()
+
+    for p in items:
+        if not isinstance(p, str) or not p.strip():
+            continue
+        p = os.path.normpath(p)
+
+        # If list contains ...\transcripts\<channel>\<lang>, convert to channel root
+        # by stripping the last component.
+        if os.path.isdir(p):
+            parent = os.path.dirname(p)  # ...\transcripts\<channel>
+            # detect if p looks like a language folder by checking its parent inside transcripts
+            # We treat p as lang-dir if its parent exists and contains lang-like folder name.
+            # Either way, parent is channel root if p ends in 'en'/'en-us' etc.
+            if os.path.isdir(parent):
+                # If parent is inside transcripts, keep it as channel root
+                # (This will be correct for ...\<channel>\<lang>)
+                channel_root = parent
+            else:
+                channel_root = p
+        else:
+            continue
+
+        channel_root = os.path.normpath(channel_root)
+        if channel_root not in seen and os.path.isdir(channel_root):
+            seen.add(channel_root)
+            channel_roots.append(channel_root)
+
+    return channel_roots
 
 # -----------------------------
 # Custom Speaker Translator
@@ -54,57 +119,43 @@ def custom_translate_speaker(speaker_text, target_lang_code):
 # -----------------------------
 def translate_text(text, translation_pipeline, tokenizer, max_gen_length=400, chunk_size=350, batch_size=8):
     """
-    Translate a long text by:
-      1. Encoding the text into tokens,
-      2. Splitting the tokens into fixed-size chunks (of size `chunk_size`),
-      3. Creating a Hugging Face Dataset from the chunks,
-      4. Running the translation pipeline on the dataset in batches,
-      5. And joining the results into a final translation.
-
-    Args:
-        text (str): The text to translate.
-        translation_pipeline: The Hugging Face translation pipeline.
-        tokenizer: The tokenizer used by the model.
-        max_gen_length (int): Maximum generation length for translation.
-        chunk_size (int): Maximum number of tokens per chunk (should be <= model max, e.g. 350).
-        batch_size (int): Number of chunks to process in one batch.
-
-    Returns:
-        str: The translated text.
+    Translate a long text by chunking input_ids (no full-sequence encode),
+    then translating chunks in batches via a HF Dataset.
     """
-    # Tokenize the entire text.
-    tokens = tokenizer.encode(text, add_special_tokens=True)
-    
+    if not text:
+        return ""
+
+    # ✅ Tokenize WITHOUT creating a single huge encoded sequence with special tokens
+    # This avoids warnings like: (108689 > 1024)
+    enc = tokenizer(text, add_special_tokens=False, truncation=False)
+    input_ids = enc["input_ids"]
+
     # If the text is short enough, translate it directly.
-    if len(tokens) <= chunk_size:
+    if len(input_ids) <= chunk_size:
         result = translation_pipeline(text, max_length=max_gen_length)
-        return result[0]['translation_text']
-    
-    # Split the token list into chunks.
+        return result[0]["translation_text"]
+
+    # Split the token list into chunks (by ids), then decode each chunk back to text.
     chunks = []
-    for i in range(0, len(tokens), chunk_size):
-        chunk_tokens = tokens[i:i+chunk_size]
-        chunk_text = tokenizer.decode(chunk_tokens, skip_special_tokens=True)
-        chunks.append(chunk_text)
-    
+    for i in range(0, len(input_ids), chunk_size):
+        chunk_ids = input_ids[i:i + chunk_size]
+        chunk_text = tokenizer.decode(chunk_ids, skip_special_tokens=True)
+        if chunk_text.strip():
+            chunks.append(chunk_text)
+
     # Create a Hugging Face dataset from the chunks.
     ds = Dataset.from_dict({"text": chunks})
-    
-    # Define a batched translation function.
+
     def translate_batch(batch):
-        # Pass the batch list to the pipeline with explicit batch_size.
         translations = translation_pipeline(
             batch["text"],
             max_length=max_gen_length,
-            batch_size=batch_size  # explicitly set the batch size here
+            batch_size=batch_size
         )
-        # Extract the translation text for each item.
         return {"translation": [t["translation_text"] for t in translations]}
-    
-    # Map over the dataset in batches.
+
     ds_translated = ds.map(translate_batch, batched=True, batch_size=batch_size)
-    
-    # Extract translated texts and join them.
+
     translated_chunks = ds_translated["translation"]
     return " ".join(translated_chunks)
 
@@ -125,12 +176,26 @@ def translate_json(data, translation_pipeline, tokenizer, target_lang, folder_co
         data["transcript"] = translate_text(data["transcript"], translation_pipeline, tokenizer, max_gen_length)
     
     # Translate each segment's text and speaker.
-    if "segments" in data and isinstance(data["segments"], list):
+    # Translate each segment's text in one big batch (much faster), then translate speaker labels.
+    if "segments" in data and isinstance(data["segments"], list) and data["segments"]:
+        seg_texts = [
+            (s.get("text", "") if isinstance(s.get("text", ""), str) else "")
+            for s in data["segments"]
+        ]
+
+        translated_seg_texts = translate_many_texts(
+            seg_texts,
+            translation_pipeline,
+            max_gen_length=max_gen_length,
+            batch_size=16,   # bump this up/down depending on VRAM
+        )
+
+        for s, t in zip(data["segments"], translated_seg_texts):
+            s["text"] = t
+
+        # Speaker labels are cheap; keep your custom mapping
         for segment in data["segments"]:
-            if "text" in segment and isinstance(segment["text"], str):
-                segment["text"] = translate_text(segment["text"], translation_pipeline, tokenizer, max_gen_length)
             if "speaker" in segment and isinstance(segment["speaker"], str):
-                # Use our custom function to translate the speaker label.
                 segment["speaker"] = custom_translate_speaker(segment["speaker"], target_lang)
     
     # Translate selected metadata fields.
@@ -168,10 +233,25 @@ def main():
         description="Translate podcast episode JSON files from English to multiple target languages."
     )
     parser.add_argument(
-    "--input_dir",
-    default=DEFAULT_INPUT,
-    help=f"Path to the transcripts directory (default: {DEFAULT_INPUT})"
-)
+        "--input_dir",
+        default=DEFAULT_INPUT,
+        help=f"Path to the transcripts directory (default: {DEFAULT_INPUT})"
+    )
+    parser.add_argument(
+        "--feeds_file",
+        default=None,
+        help="Optional: watcher_json feeds list (e.g. youtube_rss.json). If set, only translate channels from this file, in file order."
+    )
+    parser.add_argument(
+        "--database_root",
+        default=None,
+        help="Optional: override database root (the folder that contains watcher_json/ and transcripts/)."
+    )
+    parser.add_argument(
+        "--channel_order_file",
+        default=DEFAULT_ORDER_FILE,
+        help=f"JSON list of channel dirs (in order) written by main.py (default: {DEFAULT_ORDER_FILE})"
+    )
     args = parser.parse_args()
 
     # List of target languages to process.
@@ -203,11 +283,10 @@ def main():
     device = 0 if torch.cuda.is_available() else -1
 
     # Process each target language in turn.
+    tokenizer = AutoTokenizer.from_pretrained("facebook/nllb-200-distilled-600M")
+    model = AutoModelForSeq2SeqLM.from_pretrained("facebook/nllb-200-distilled-600M")
+
     for lang_folder, tgt_lang in target_languages:
-        print(f"\n=== Translating to {lang_folder} ({tgt_lang}) ===")
-        print("Loading translation model on device:", "GPU" if device >= 0 else "CPU")
-        tokenizer = AutoTokenizer.from_pretrained("facebook/nllb-200-distilled-600M")
-        model = AutoModelForSeq2SeqLM.from_pretrained("facebook/nllb-200-distilled-600M")
         translation_pipeline_obj = pipeline(
             "translation",
             model=model,
@@ -219,14 +298,28 @@ def main():
         print("Translation model loaded for", tgt_lang)
 
         # Walk through the transcripts folder.
-        for channel in os.listdir(args.input_dir):
-            channel_path = os.path.join(args.input_dir, channel)
-            if not os.path.isdir(channel_path):
-                continue
+        # Decide channel processing order:
+        # 1) If channel_order_file exists and has entries -> use it (exact order from main.py)
+        # 2) Else -> fallback to alphabetical os.listdir (old behavior)
+        ordered_channel_paths = []
+        if args.channel_order_file and os.path.exists(args.channel_order_file):
+            ordered_channel_paths = load_channel_order(args.channel_order_file)
 
-            # Skip directories that are already target language folders
-            if channel.lower() == lang_folder.lower():
-                continue
+        if ordered_channel_paths:
+            channel_paths = ordered_channel_paths
+        else:
+            channel_paths = [
+                os.path.join(args.input_dir, d)
+                for d in os.listdir(args.input_dir)
+                if os.path.isdir(os.path.join(args.input_dir, d))
+            ]
+
+        # Walk channels in the chosen order
+        for channel_path in channel_paths:
+            channel_path = os.path.normpath(channel_path)
+
+            # channel name (for prints only)
+            channel = os.path.basename(channel_path)
 
             print(f"Processing channel: {channel}")
 

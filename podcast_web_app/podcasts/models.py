@@ -348,11 +348,11 @@ class EpisodeTranslations(models.Model):
 
 
 class TranscriptTranslations(models.Model):
-    episodetranslations = models.ForeignKey(
-        EpisodeTranslations,
+    episode = models.ForeignKey(
+        Episode,
         on_delete=models.CASCADE,
-        db_column='episode_id',  # This tells Django to use the "episode_id" column
-        related_name='transcriptstranslations',
+        db_column='episode_id',
+        related_name='transcript_translations',
         blank=True,
         null=True
     )
@@ -360,7 +360,7 @@ class TranscriptTranslations(models.Model):
     segment_text = models.TextField()
     speaker = models.CharField(max_length=50, blank=True, null=True)
     language = models.CharField(max_length=50, blank=True, null=True)
-    
+
     class Meta:
         managed = False
         db_table = 'transcriptstranslations'
@@ -372,18 +372,18 @@ class TranscriptTranslations(models.Model):
 
 
 class ChapterTranslations(models.Model):
-    episodetranslations = models.ForeignKey(
-        EpisodeTranslations,
+    episode = models.ForeignKey(
+        Episode,
         on_delete=models.CASCADE,
-        db_column='episode_id',  # Use the same column as defined in your DB
-        related_name='chapterstranslations',
+        db_column='episode_id',
+        related_name='chapter_translations',
         blank=True,
         null=True
     )
     chapter_title = models.TextField()
     chapter_time = models.CharField(max_length=10)
     language = models.CharField(max_length=50, blank=True, null=True)
-    
+
     class Meta:
         managed = False
         db_table = 'chapterstranslations'
