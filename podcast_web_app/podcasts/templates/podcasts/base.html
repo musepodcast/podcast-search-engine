@@ -129,26 +129,44 @@
         </div>
         <div class="d-flex align-items-center">
           <!-- Language selector -->
-          <select id="languageSelect" class="lang-select-btn me-2">
-            <option value="en" {% if LANGUAGE_CODE == "en" %}selected{% endif %}>English</option>
-            <option value="pt" {% if LANGUAGE_CODE == "pt" %}selected{% endif %}>Português</option>
-            <option value="es" {% if LANGUAGE_CODE == "es" %}selected{% endif %}>Español</option>
-            <option value="it" {% if LANGUAGE_CODE == "it" %}selected{% endif %}>Italiano</option>
-            <option value="fr" {% if LANGUAGE_CODE == "fr" %}selected{% endif %}>Français</option>
-            <option value="ru" {% if LANGUAGE_CODE == "ru" %}selected{% endif %}>Русский</option>
-            <option value="uk" {% if LANGUAGE_CODE == "uk" %}selected{% endif %}>українська</option>
-            <option value="cn" {% if LANGUAGE_CODE == "cn" %}selected{% endif %}>中文 (简体)</option>
-            <option value="tw" {% if LANGUAGE_CODE == "tw" %}selected{% endif %}>中文 (繁體)</option>
-            <option value="ko" {% if LANGUAGE_CODE == "ko" %}selected{% endif %}>한국어</option>
-            <option value="ja" {% if LANGUAGE_CODE == "ja" %}selected{% endif %}>日本語</option>
-            <option value="tr" {% if LANGUAGE_CODE == "tr" %}selected{% endif %}>Türkçe</option>
-            <option value="de" {% if LANGUAGE_CODE == "de" %}selected{% endif %}>Deutsch</option>
-            <option value="ar" {% if LANGUAGE_CODE == "ar" %}selected{% endif %}>العربية</option>
-            <option value="hi" {% if LANGUAGE_CODE == "hi" %}selected{% endif %}>हिन्दी</option>
-            <option value="vi" {% if LANGUAGE_CODE == "vi" %}selected{% endif %}>Tiếng Việt</option>
-            <option value="tl" {% if LANGUAGE_CODE == "tl" %}selected{% endif %}>Tagalog</option>
-          </select>
-          
+          <div class="dropdown me-2">
+            <button class="btn lang-select-btn dropdown-toggle"
+                    type="button"
+                    id="languageSelectBtn"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false">
+              {% if LANGUAGE_CODE == "en" %}English{% elif LANGUAGE_CODE == "pt" %}Português
+              {% elif LANGUAGE_CODE == "es" %}Español{% elif LANGUAGE_CODE == "it" %}Italiano
+              {% elif LANGUAGE_CODE == "fr" %}Français{% elif LANGUAGE_CODE == "ru" %}Русский
+              {% elif LANGUAGE_CODE == "uk" %}українська{% elif LANGUAGE_CODE == "cn" %}中文 (简体)
+              {% elif LANGUAGE_CODE == "tw" %}中文 (繁體){% elif LANGUAGE_CODE == "ko" %}한국어
+              {% elif LANGUAGE_CODE == "ja" %}日本語{% elif LANGUAGE_CODE == "tr" %}Türkçe
+              {% elif LANGUAGE_CODE == "de" %}Deutsch{% elif LANGUAGE_CODE == "ar" %}العربية
+              {% elif LANGUAGE_CODE == "hi" %}हिन्दी{% elif LANGUAGE_CODE == "vi" %}Tiếng Việt
+              {% elif LANGUAGE_CODE == "tl" %}Tagalog{% else %}English{% endif %}
+            </button>
+
+            <ul class="dropdown-menu lang-dropdown p-2" aria-labelledby="languageSelectBtn">
+              <li><button class="dropdown-item" type="button" data-lang="en">English</button></li>
+              <li><button class="dropdown-item" type="button" data-lang="pt">Português</button></li>
+              <li><button class="dropdown-item" type="button" data-lang="es">Español</button></li>
+              <li><button class="dropdown-item" type="button" data-lang="it">Italiano</button></li>
+              <li><button class="dropdown-item" type="button" data-lang="fr">Français</button></li>
+              <li><button class="dropdown-item" type="button" data-lang="ru">Русский</button></li>
+              <li><button class="dropdown-item" type="button" data-lang="uk">українська</button></li>
+              <li><button class="dropdown-item" type="button" data-lang="cn">中文 (简体)</button></li>
+              <li><button class="dropdown-item" type="button" data-lang="tw">中文 (繁體)</button></li>
+              <li><button class="dropdown-item" type="button" data-lang="ko">한국어</button></li>
+              <li><button class="dropdown-item" type="button" data-lang="ja">日本語</button></li>
+              <li><button class="dropdown-item" type="button" data-lang="tr">Türkçe</button></li>
+              <li><button class="dropdown-item" type="button" data-lang="de">Deutsch</button></li>
+              <li><button class="dropdown-item" type="button" data-lang="ar">العربية</button></li>
+              <li><button class="dropdown-item" type="button" data-lang="hi">हिन्दी</button></li>
+              <li><button class="dropdown-item" type="button" data-lang="vi">Tiếng Việt</button></li>
+              <li><button class="dropdown-item" type="button" data-lang="tl">Tagalog</button></li>
+            </ul>
+          </div>
+                    
 
           <!-- Theme toggle -->
           <button id="themeToggleBtn" class="btn btn-link p-0" title="{% trans 'Light and Dark Mode' %}" aria-label="{% trans 'Light and Dark Mode' %}">
@@ -167,16 +185,14 @@
             <ul class="dropdown-menu profile-dropdown-menu text-start" aria-labelledby="profileDropdown">
               {% if request.user.is_authenticated %}
                 <li><a class="dropdown-item text-start" href="{% url 'podcasts:profile' %}">{% trans "See Profile" %}</a></li>
+
                 <li>
                   <a class="dropdown-item text-start" href="{% url 'podcasts:replies' %}">
                     {% trans "See Replies" %}
-                    <span class="badge bg-secondary">
-                      {{ unseen_replies_count|default:"0" }}
-                    </span>
+                    <span class="badge bg-secondary">{{ unseen_replies_count|default:"0" }}</span>
                   </a>
                 </li>
-              
-                <!-- ← new “Support Me” trigger: opens #supportModal -->
+
                 <li>
                   <a class="dropdown-item text-start"
                     href="#supportModal"
@@ -185,18 +201,25 @@
                     {% trans "Support Me" %}
                   </a>
                 </li>
-                <!-- Support Ticker link -->
+
                 <li>
-                  <a class="dropdown-item text-start"
-                    href="{% url 'podcasts:support_ticket' %}">
+                  <a class="dropdown-item text-start" href="{% url 'podcasts:support_ticket' %}">
                     {% trans "Support Ticket" %}
                   </a>
                 </li>
-                 <!-- Contribute link -->
-              <!--  <li>
-                  <a class="dropdown-item text-start" href="{% url 'podcasts:contribute' %}">{% trans "Contribute" %}</a>
-                </li>
-              -->
+
+                {# ✅ ADMIN-ONLY: Ticket Notification #}
+                {% if request.user.is_staff or request.user.is_superuser %}
+                  <li>
+                    <a class="dropdown-item text-start" href="{% url 'podcasts:ticket_notifications' %}">
+                      {% trans "Ticket Notification" %}
+                      <span class="badge {% if admin_pending_tickets_count|default:0|add:0 > 0 %}bg-danger{% else %}bg-secondary{% endif %}">
+                        {{ admin_pending_tickets_count|default:"0" }}
+                      </span>
+                    </a>
+                  </li>
+                {% endif %}
+
                 <li>
                   <form id="logout-form" action="{% url 'logout' %}" method="post">
                     {% csrf_token %}
@@ -789,15 +812,30 @@
 
 
   <script>
-    // language selector
-    (function(){
-      const sel = document.getElementById('languageSelect');
-      sel.addEventListener('change', ()=>{
-        document.cookie = "django_language="+sel.value+"; path=/";
-        localStorage.setItem('selectedLanguage', sel.value);
+  // Bootstrap dropdown language selector (themeable)
+  (function(){
+    document.querySelectorAll('[data-lang]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const lang = btn.getAttribute('data-lang');
+        document.cookie = "django_language=" + lang + "; path=/";
+        localStorage.setItem('selectedLanguage', lang);
         location.reload();
       });
-    })();
+    });
+  })();
+</script>
+
+  <script>
+    // language selector
+    (function(){
+    const sel = document.getElementById('languageSelect');
+    if (!sel) return; // <-- critical: don't crash the page
+    sel.addEventListener('change', ()=>{
+      document.cookie = "django_language=" + sel.value + "; path=/";
+      localStorage.setItem('selectedLanguage', sel.value);
+      location.reload();
+    });
+  })();
 
     (function () {
       const html   = document.documentElement;

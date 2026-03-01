@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-19 12:13-0600\n"
+"POT-Creation-Date: 2026-02-28 21:15-0600\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -200,12 +200,12 @@ msgid "Bookmarks"
 msgstr "Mga bookmark"
 
 #: .\podcasts\templates\podcasts\base.html:126
-#: .\podcasts\templates\podcasts\base.html:236
+#: .\podcasts\templates\podcasts\base.html:241
 msgid "Channels"
 msgstr "Mga Channel"
 
 #: .\podcasts\templates\podcasts\base.html:127
-#: .\podcasts\templates\podcasts\base.html:230
+#: .\podcasts\templates\podcasts\base.html:235
 #: .\podcasts\templates\podcasts\channel_detail.html:143
 #: .\podcasts\templates\podcasts\channel_list.html:47
 msgid "Episodes"
@@ -223,140 +223,141 @@ msgstr "Profil"
 msgid "See Profile"
 msgstr "Tingnan ang Profile"
 
-#: .\podcasts\templates\podcasts\base.html:172
+#: .\podcasts\templates\podcasts\base.html:173
 msgid "See Replies"
 msgstr "Tingnan ang mga Sagot"
 
-#: .\podcasts\templates\podcasts\base.html:185
-#: .\podcasts\templates\podcasts\base.html:571
+#: .\podcasts\templates\podcasts\base.html:183
+#: .\podcasts\templates\podcasts\base.html:589
 msgid "Support Me"
 msgstr "Suportahan Mo Ako"
 
-#: .\podcasts\templates\podcasts\base.html:192
+#: .\podcasts\templates\podcasts\base.html:189
 msgid "Support Ticket"
 msgstr "Tiket ng Suporta"
 
 #: .\podcasts\templates\podcasts\base.html:197
-msgid "Contribute"
-msgstr "Magbigay ng kontribusyon"
+#| msgid "Notifications"
+msgid "Ticket Notification"
+msgstr "Pagpapansin ng tiket"
 
-#: .\podcasts\templates\podcasts\base.html:206
+#: .\podcasts\templates\podcasts\base.html:211
 msgid "Sign Out"
 msgstr "Mag-sign Out"
 
-#: .\podcasts\templates\podcasts\base.html:211
+#: .\podcasts\templates\podcasts\base.html:216
 msgid "Sign In"
 msgstr "Mag-sign in"
 
-#: .\podcasts\templates\podcasts\base.html:244
+#: .\podcasts\templates\podcasts\base.html:249
 msgid "Search episodes or channels..."
 msgstr "Maghanap ng mga episode o channel..."
 
-#: .\podcasts\templates\podcasts\base.html:250
+#: .\podcasts\templates\podcasts\base.html:255
 #: .\podcasts\templates\podcasts\channel_detail.html:137
 msgid "Search"
 msgstr "Paghahanap"
 
-#: .\podcasts\templates\podcasts\base.html:266
-#: .\podcasts\templates\podcasts\base.html:460
+#: .\podcasts\templates\podcasts\base.html:271
+#: .\podcasts\templates\podcasts\base.html:478
 msgid "Channel Title"
 msgstr "Pamagat ng Channel"
 
-#: .\podcasts\templates\podcasts\base.html:272
+#: .\podcasts\templates\podcasts\base.html:277
 msgid "Episode Title"
 msgstr "Pamagat ng Episode"
 
-#: .\podcasts\templates\podcasts\base.html:278
+#: .\podcasts\templates\podcasts\base.html:283
 msgid "Episode Description"
 msgstr "Paglalarawan ng Episode"
 
-#: .\podcasts\templates\podcasts\base.html:284
+#: .\podcasts\templates\podcasts\base.html:289
 msgid "Transcript Text"
 msgstr "Transcript Text"
 
-#: .\podcasts\templates\podcasts\base.html:291
-#: .\podcasts\templates\podcasts\base.html:480
+#: .\podcasts\templates\podcasts\base.html:303
+#: .\podcasts\templates\podcasts\base.html:498
 msgid "Language"
 msgstr "Wika"
 
-#: .\podcasts\templates\podcasts\base.html:371
+#: .\podcasts\templates\podcasts\base.html:389
 msgid "Date"
 msgstr "Petsa"
 
-#: .\podcasts\templates\podcasts\base.html:379
+#: .\podcasts\templates\podcasts\base.html:397
 msgid "Anytime"
 msgstr "Kahit kailan"
 
-#: .\podcasts\templates\podcasts\base.html:385
+#: .\podcasts\templates\podcasts\base.html:403
 msgid "Past Day"
 msgstr "Nakaraang Araw"
 
-#: .\podcasts\templates\podcasts\base.html:391
+#: .\podcasts\templates\podcasts\base.html:409
 msgid "Past Week"
 msgstr "Nakaraang Linggo"
 
-#: .\podcasts\templates\podcasts\base.html:397
+#: .\podcasts\templates\podcasts\base.html:415
 msgid "Past Month"
 msgstr "Nakaraang Buwan"
 
-#: .\podcasts\templates\podcasts\base.html:403
+#: .\podcasts\templates\podcasts\base.html:421
 msgid "Past Year"
 msgstr "Nakaraang Taon"
 
-#: .\podcasts\templates\podcasts\base.html:409
+#: .\podcasts\templates\podcasts\base.html:427
 msgid "Past 2 Years"
 msgstr "Nakaraang 2 Taon"
 
-#: .\podcasts\templates\podcasts\base.html:415
+#: .\podcasts\templates\podcasts\base.html:433
 msgid "Past 3 Years"
 msgstr "Nakaraang 3 Taon"
 
-#: .\podcasts\templates\podcasts\base.html:421
+#: .\podcasts\templates\podcasts\base.html:439
 msgid "Past 4 Years"
 msgstr "Nakaraang 4 na Taon"
 
-#: .\podcasts\templates\podcasts\base.html:427
+#: .\podcasts\templates\podcasts\base.html:445
 msgid "Past 5 Years"
 msgstr "Nakaraang 5 Taon"
 
-#: .\podcasts\templates\podcasts\base.html:433
+#: .\podcasts\templates\podcasts\base.html:451
 msgid "Past 10 Years"
 msgstr "Nakaraang 10 Taon"
 
-#: .\podcasts\templates\podcasts\base.html:439
+#: .\podcasts\templates\podcasts\base.html:457
 msgid "Past 15 Years"
 msgstr "Nakaraang 15 Taon"
 
-#: .\podcasts\templates\podcasts\base.html:466
+#: .\podcasts\templates\podcasts\base.html:484
 msgid "Channel Author"
 msgstr "Manunulat ng Channel"
 
-#: .\podcasts\templates\podcasts\base.html:472
+#: .\podcasts\templates\podcasts\base.html:490
 msgid "Channel Summary"
 msgstr "Sumaryo ng Channel"
 
-#: .\podcasts\templates\podcasts\base.html:576
+#: .\podcasts\templates\podcasts\base.html:594
 #: .\podcasts\templates\podcasts\signup.html:173
 #: .\podcasts\templates\podcasts\signup.html:227
-#: .\podcasts\templates\podcasts\support_ticket.html:148
+#: .\podcasts\templates\podcasts\support_ticket.html:95
 #: .\podcasts\templates\socialaccount\signup.html:78
 #: .\podcasts\templates\socialaccount\signup.html:130
 msgid "Close"
 msgstr "Malapit"
 
-#: .\podcasts\templates\podcasts\base.html:649
+#: .\podcasts\templates\podcasts\base.html:667
 #: .\podcasts\templates\podcasts\channel_detail.html:235
 #: .\podcasts\templates\podcasts\episode_detail.html:345
 msgid "Please sign in to complete this action."
 msgstr "Mangyaring mag-sign in upang makumpleto ang aksyon na ito."
 
-#: .\podcasts\templates\podcasts\base.html:651
+#: .\podcasts\templates\podcasts\base.html:669
 #: .\podcasts\templates\podcasts\channel_detail.html:236
 #: .\podcasts\templates\podcasts\episode_detail.html:346
 msgid "Sign in"
 msgstr "Mag-sign in"
 
-#: .\podcasts\templates\podcasts\base.html:658
+#: .\podcasts\templates\podcasts\base.html:676
 #: .\podcasts\templates\podcasts\home.html:111
 msgid ""
 "Our GitHub is temporarily unavailable. Please visit our up-to-date "
@@ -365,29 +366,29 @@ msgstr ""
 "Ang aming GitHub ay pansamantalang hindi magagamit. Mangyaring bisitahin ang"
 " aming up-to-date repository sa GitLab sa halip."
 
-#: .\podcasts\templates\podcasts\base.html:663
+#: .\podcasts\templates\podcasts\base.html:681
 #: .\podcasts\templates\podcasts\home.html:114
 msgid "Open GitLab"
 msgstr "Buksan ang GitLab"
 
-#: .\podcasts\templates\podcasts\base.html:670
+#: .\podcasts\templates\podcasts\base.html:688
 msgid "Contact Me"
 msgstr "Makipag-ugnay sa Akin"
 
-#: .\podcasts\templates\podcasts\base.html:773
+#: .\podcasts\templates\podcasts\base.html:791
 #: .\podcasts\templates\podcasts\home.html:148
 msgid "GitHub temporarily unavailable. Click to see GitLab link."
 msgstr ""
 "GitHub ay pansamantalang hindi magagamit. I-click upang makita ang GitLab "
 "link."
 
-#: .\podcasts\templates\podcasts\base.html:810
-#: .\podcasts\templates\podcasts\base.html:811
+#: .\podcasts\templates\podcasts\base.html:828
+#: .\podcasts\templates\podcasts\base.html:829
 msgid "Switch to light mode"
 msgstr "I-switch sa mode ng liwanag"
 
-#: .\podcasts\templates\podcasts\base.html:815
-#: .\podcasts\templates\podcasts\base.html:816
+#: .\podcasts\templates\podcasts\base.html:833
+#: .\podcasts\templates\podcasts\base.html:834
 msgid "Switch to dark mode"
 msgstr "I-switch sa madilim na mode"
 
@@ -1796,47 +1797,53 @@ msgstr "Mag-submit ng tiket"
 msgid "Your Tickets"
 msgstr "Ang Iyong Mga Tiket"
 
-#: .\podcasts\templates\podcasts\support_ticket.html:94
+#: .\podcasts\templates\podcasts\support_ticket.html:41
+#: .\podcasts\templates\podcasts\ticket_notifications.html:16
 msgid "Ticket #"
 msgstr "Tickets #"
 
-#: .\podcasts\templates\podcasts\support_ticket.html:95
+#: .\podcasts\templates\podcasts\support_ticket.html:42
+#: .\podcasts\templates\podcasts\ticket_notifications.html:18
 msgid "Subject"
 msgstr "Subyekto"
 
-#: .\podcasts\templates\podcasts\support_ticket.html:96
+#: .\podcasts\templates\podcasts\support_ticket.html:43
+#: .\podcasts\templates\podcasts\ticket_notifications.html:19
 msgid "Message"
 msgstr "Mensahe"
 
-#: .\podcasts\templates\podcasts\support_ticket.html:97
+#: .\podcasts\templates\podcasts\support_ticket.html:44
+#: .\podcasts\templates\podcasts\ticket_notifications.html:20
 msgid "Submitted"
 msgstr "I-submit"
 
-#: .\podcasts\templates\podcasts\support_ticket.html:98
+#: .\podcasts\templates\podcasts\support_ticket.html:45
+#: .\podcasts\templates\podcasts\ticket_notifications.html:21
 msgid "Last Reviewed"
 msgstr "Last Reviewed"
 
-#: .\podcasts\templates\podcasts\support_ticket.html:99
+#: .\podcasts\templates\podcasts\support_ticket.html:46
+#: .\podcasts\templates\podcasts\ticket_notifications.html:22
 msgid "Status"
 msgstr "Katayuan"
 
-#: .\podcasts\templates\podcasts\support_ticket.html:125
+#: .\podcasts\templates\podcasts\support_ticket.html:72
 msgid "You haven’t submitted any tickets yet."
 msgstr "Hindi ka pa nag-submit ng anumang mga tiket."
 
-#: .\podcasts\templates\podcasts\support_ticket.html:142
+#: .\podcasts\templates\podcasts\support_ticket.html:89
 msgid "Success"
 msgstr "Katagumpay"
 
-#: .\podcasts\templates\podcasts\support_ticket.html:144
+#: .\podcasts\templates\podcasts\support_ticket.html:91
 msgid "Failure"
 msgstr "Pagtatalo"
 
-#: .\podcasts\templates\podcasts\support_ticket.html:157
+#: .\podcasts\templates\podcasts\support_ticket.html:104
 msgid "Your support ticket has been submitted successfully!"
 msgstr "Ang iyong tiket ng suporta ay matagumpay na na-submit!"
 
-#: .\podcasts\templates\podcasts\support_ticket.html:159
+#: .\podcasts\templates\podcasts\support_ticket.html:106
 msgid ""
 "Your support ticket was unsuccessful, file size is too large, needs to be ≤ "
 "2 MB."
@@ -1844,7 +1851,7 @@ msgstr ""
 "Ang iyong support ticket ay hindi matagumpay, ang laki ng file ay masyadong "
 "malaki, kailangang maging ≤ 2 MB."
 
-#: .\podcasts\templates\podcasts\support_ticket.html:161
+#: .\podcasts\templates\podcasts\support_ticket.html:108
 msgid ""
 "Your support ticket was unsuccessful, file type incorrect, only "
 "(JPG/PNG/GIF) are accepted."
@@ -1852,7 +1859,7 @@ msgstr ""
 "Ang iyong support ticket ay hindi matagumpay, ang uri ng file ay hindi tama,"
 " lamang (JPG/PNG/GIF) ang tinatanggap."
 
-#: .\podcasts\templates\podcasts\support_ticket.html:163
+#: .\podcasts\templates\podcasts\support_ticket.html:110
 msgid ""
 "Your support ticket was unsuccessful, file type incorrect (only JPG/PNG/GIF)"
 " and file size is too large (≤ 2 MB)."
@@ -1860,7 +1867,7 @@ msgstr ""
 "Ang iyong support ticket ay hindi naging matagumpay, hindi tama ang uri ng "
 "file (JPG/PNG/GIF lamang) at ang laki ng file ay masyadong malaki (≤ 2 MB)."
 
-#: .\podcasts\templates\podcasts\support_ticket.html:166
+#: .\podcasts\templates\podcasts\support_ticket.html:113
 #, python-format
 msgid ""
 "You’ve reached your limit of %(limit)s open tickets "
@@ -1870,9 +1877,27 @@ msgstr ""
 "Nakatapos na ang iyong limitasyon ng %(limit)s open tickets "
 "(%(open_count)s/%(limit)s)."
 
-#: .\podcasts\templates\podcasts\support_ticket.html:183
+#: .\podcasts\templates\podcasts\support_ticket.html:130
 msgid "OK"
 msgstr "Okay lang."
+
+#: .\podcasts\templates\podcasts\ticket_notifications.html:6
+#| msgid "Notifications"
+msgid "Ticket Notifications"
+msgstr "Mga pahibalo sa tiket"
+
+#: .\podcasts\templates\podcasts\ticket_notifications.html:9
+msgid "Showing support tickets that are Pending or In Progress."
+msgstr "Ipinapakita ang mga tiket ng suporta na Nagtatagal o Nagtatuloy."
+
+#: .\podcasts\templates\podcasts\ticket_notifications.html:17
+#| msgid "Username"
+msgid "User"
+msgstr "User"
+
+#: .\podcasts\templates\podcasts\ticket_notifications.html:58
+msgid "No pending or in-progress tickets right now."
+msgstr "Walang mga naka-pending o in-progress na tiket sa ngayon."
 
 #: .\podcasts\templates\registration\login.html:20
 msgid "Sign in with Google"
@@ -2053,6 +2078,9 @@ msgstr "I-enter ang OTP"
 #: .\podcasts\templates\two_factor\core\otp.html:9
 msgid "Submit OTP"
 msgstr "Ipadala ang OTP"
+
+#~ msgid "Contribute"
+#~ msgstr "Magbigay ng kontribusyon"
 
 #~ msgid "Results for"
 #~ msgstr "Mga resulta para sa"

@@ -37,6 +37,7 @@ urlpatterns = [
     path('support-ticket/', support_ticket, name='support_ticket'),
     path('search_users/', views.search_users, name='search_users'),
     path('profile/', ProfileView.as_view(), name='profile'),
+    path("staff/ticket-notifications/", views.ticket_notifications, name="ticket_notifications"),
     path('profile_edit/', ProfileUpdateView.as_view(), name='profile_edit'),
     path('disable_2fa/', SecureDisable2FAView.as_view(), name='disable_2fa'),
     path('channel/<int:channel_id>/toggle_follow/', views.toggle_follow, name='toggle_follow'),
