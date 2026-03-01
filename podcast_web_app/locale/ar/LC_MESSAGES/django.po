@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-19 12:13-0600\n"
+"POT-Creation-Date: 2026-02-28 21:15-0600\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -193,12 +193,12 @@ msgid "Bookmarks"
 msgstr "الإشارات المرجعية"
 
 #: .\podcasts\templates\podcasts\base.html:126
-#: .\podcasts\templates\podcasts\base.html:236
+#: .\podcasts\templates\podcasts\base.html:241
 msgid "Channels"
 msgstr "القنوات"
 
 #: .\podcasts\templates\podcasts\base.html:127
-#: .\podcasts\templates\podcasts\base.html:230
+#: .\podcasts\templates\podcasts\base.html:235
 #: .\podcasts\templates\podcasts\channel_detail.html:143
 #: .\podcasts\templates\podcasts\channel_list.html:47
 msgid "Episodes"
@@ -216,140 +216,141 @@ msgstr "الملف الشخصي"
 msgid "See Profile"
 msgstr "عرض الملف الشخصي"
 
-#: .\podcasts\templates\podcasts\base.html:172
+#: .\podcasts\templates\podcasts\base.html:173
 msgid "See Replies"
 msgstr "عرض الردود"
 
-#: .\podcasts\templates\podcasts\base.html:185
-#: .\podcasts\templates\podcasts\base.html:571
+#: .\podcasts\templates\podcasts\base.html:183
+#: .\podcasts\templates\podcasts\base.html:589
 msgid "Support Me"
 msgstr "ادعمني"
 
-#: .\podcasts\templates\podcasts\base.html:192
+#: .\podcasts\templates\podcasts\base.html:189
 msgid "Support Ticket"
 msgstr "تذكرة الدعم"
 
 #: .\podcasts\templates\podcasts\base.html:197
-msgid "Contribute"
-msgstr "المساهمة"
+#| msgid "Notifications"
+msgid "Ticket Notification"
+msgstr "إعلان التذاكر"
 
-#: .\podcasts\templates\podcasts\base.html:206
+#: .\podcasts\templates\podcasts\base.html:211
 msgid "Sign Out"
 msgstr "تسجيل الخروج"
 
-#: .\podcasts\templates\podcasts\base.html:211
+#: .\podcasts\templates\podcasts\base.html:216
 msgid "Sign In"
 msgstr "تسجيل الدخول"
 
-#: .\podcasts\templates\podcasts\base.html:244
+#: .\podcasts\templates\podcasts\base.html:249
 msgid "Search episodes or channels..."
 msgstr "البحث في الحلقات أو القنوات..."
 
-#: .\podcasts\templates\podcasts\base.html:250
+#: .\podcasts\templates\podcasts\base.html:255
 #: .\podcasts\templates\podcasts\channel_detail.html:137
 msgid "Search"
 msgstr "بحث"
 
-#: .\podcasts\templates\podcasts\base.html:266
-#: .\podcasts\templates\podcasts\base.html:460
+#: .\podcasts\templates\podcasts\base.html:271
+#: .\podcasts\templates\podcasts\base.html:478
 msgid "Channel Title"
 msgstr "عنوان القناة"
 
-#: .\podcasts\templates\podcasts\base.html:272
+#: .\podcasts\templates\podcasts\base.html:277
 msgid "Episode Title"
 msgstr "الحلقة عنوان"
 
-#: .\podcasts\templates\podcasts\base.html:278
+#: .\podcasts\templates\podcasts\base.html:283
 msgid "Episode Description"
 msgstr "وصف الحلقة"
 
-#: .\podcasts\templates\podcasts\base.html:284
+#: .\podcasts\templates\podcasts\base.html:289
 msgid "Transcript Text"
 msgstr "نص النص"
 
-#: .\podcasts\templates\podcasts\base.html:291
-#: .\podcasts\templates\podcasts\base.html:480
+#: .\podcasts\templates\podcasts\base.html:303
+#: .\podcasts\templates\podcasts\base.html:498
 msgid "Language"
 msgstr "اللغة"
 
-#: .\podcasts\templates\podcasts\base.html:371
+#: .\podcasts\templates\podcasts\base.html:389
 msgid "Date"
 msgstr "التاريخ"
 
-#: .\podcasts\templates\podcasts\base.html:379
+#: .\podcasts\templates\podcasts\base.html:397
 msgid "Anytime"
 msgstr "في أي وقت"
 
-#: .\podcasts\templates\podcasts\base.html:385
+#: .\podcasts\templates\podcasts\base.html:403
 msgid "Past Day"
 msgstr "اليوم الماضي"
 
-#: .\podcasts\templates\podcasts\base.html:391
+#: .\podcasts\templates\podcasts\base.html:409
 msgid "Past Week"
 msgstr "الأسبوع الماضي"
 
-#: .\podcasts\templates\podcasts\base.html:397
+#: .\podcasts\templates\podcasts\base.html:415
 msgid "Past Month"
 msgstr "الشهر الماضي"
 
-#: .\podcasts\templates\podcasts\base.html:403
+#: .\podcasts\templates\podcasts\base.html:421
 msgid "Past Year"
 msgstr "العام الماضي"
 
-#: .\podcasts\templates\podcasts\base.html:409
+#: .\podcasts\templates\podcasts\base.html:427
 msgid "Past 2 Years"
 msgstr "العامان الماضي"
 
-#: .\podcasts\templates\podcasts\base.html:415
+#: .\podcasts\templates\podcasts\base.html:433
 msgid "Past 3 Years"
 msgstr "الثلاث سنوات الماضية"
 
-#: .\podcasts\templates\podcasts\base.html:421
+#: .\podcasts\templates\podcasts\base.html:439
 msgid "Past 4 Years"
 msgstr "السنوات الماضية"
 
-#: .\podcasts\templates\podcasts\base.html:427
+#: .\podcasts\templates\podcasts\base.html:445
 msgid "Past 5 Years"
 msgstr "الخمس سنوات لسنوات"
 
-#: .\podcasts\templates\podcasts\base.html:433
+#: .\podcasts\templates\podcasts\base.html:451
 msgid "Past 10 Years"
 msgstr "السنوات العشر العشر"
 
-#: .\podcasts\templates\podcasts\base.html:439
+#: .\podcasts\templates\podcasts\base.html:457
 msgid "Past 15 Years"
 msgstr "السنوات الخمس عشرة الماضية"
 
-#: .\podcasts\templates\podcasts\base.html:466
+#: .\podcasts\templates\podcasts\base.html:484
 msgid "Channel Author"
 msgstr "مصدر القناة"
 
-#: .\podcasts\templates\podcasts\base.html:472
+#: .\podcasts\templates\podcasts\base.html:490
 msgid "Channel Summary"
 msgstr "خلاصة القناة"
 
-#: .\podcasts\templates\podcasts\base.html:576
+#: .\podcasts\templates\podcasts\base.html:594
 #: .\podcasts\templates\podcasts\signup.html:173
 #: .\podcasts\templates\podcasts\signup.html:227
-#: .\podcasts\templates\podcasts\support_ticket.html:148
+#: .\podcasts\templates\podcasts\support_ticket.html:95
 #: .\podcasts\templates\socialaccount\signup.html:78
 #: .\podcasts\templates\socialaccount\signup.html:130
 msgid "Close"
 msgstr "إغلاق"
 
-#: .\podcasts\templates\podcasts\base.html:649
+#: .\podcasts\templates\podcasts\base.html:667
 #: .\podcasts\templates\podcasts\channel_detail.html:235
 #: .\podcasts\templates\podcasts\episode_detail.html:345
 msgid "Please sign in to complete this action."
 msgstr "من فضلك تسجيل الدخول لإكمال هذا الإجراء."
 
-#: .\podcasts\templates\podcasts\base.html:651
+#: .\podcasts\templates\podcasts\base.html:669
 #: .\podcasts\templates\podcasts\channel_detail.html:236
 #: .\podcasts\templates\podcasts\episode_detail.html:346
 msgid "Sign in"
 msgstr "تسجيل الدخول"
 
-#: .\podcasts\templates\podcasts\base.html:658
+#: .\podcasts\templates\podcasts\base.html:676
 #: .\podcasts\templates\podcasts\home.html:111
 msgid ""
 "Our GitHub is temporarily unavailable. Please visit our up-to-date "
@@ -358,27 +359,27 @@ msgstr ""
 "إن GitHub غير متوفر مؤقتاً، يرجى زيارة مستودعنا الحديث على GitLab بدلاً من "
 "ذلك."
 
-#: .\podcasts\templates\podcasts\base.html:663
+#: .\podcasts\templates\podcasts\base.html:681
 #: .\podcasts\templates\podcasts\home.html:114
 msgid "Open GitLab"
 msgstr "افتح GitLab"
 
-#: .\podcasts\templates\podcasts\base.html:670
+#: .\podcasts\templates\podcasts\base.html:688
 msgid "Contact Me"
 msgstr "اتصل بي"
 
-#: .\podcasts\templates\podcasts\base.html:773
+#: .\podcasts\templates\podcasts\base.html:791
 #: .\podcasts\templates\podcasts\home.html:148
 msgid "GitHub temporarily unavailable. Click to see GitLab link."
 msgstr "GitHub غير متوفر مؤقتاً. انقر لنرى رابط GitLab."
 
-#: .\podcasts\templates\podcasts\base.html:810
-#: .\podcasts\templates\podcasts\base.html:811
+#: .\podcasts\templates\podcasts\base.html:828
+#: .\podcasts\templates\podcasts\base.html:829
 msgid "Switch to light mode"
 msgstr "انقل إلى وضع الضوء"
 
-#: .\podcasts\templates\podcasts\base.html:815
-#: .\podcasts\templates\podcasts\base.html:816
+#: .\podcasts\templates\podcasts\base.html:833
+#: .\podcasts\templates\podcasts\base.html:834
 msgid "Switch to dark mode"
 msgstr "انقل إلى الوضع المظلم"
 
@@ -1786,54 +1787,60 @@ msgstr "إرسال التذكرة"
 msgid "Your Tickets"
 msgstr "تذاكرك"
 
-#: .\podcasts\templates\podcasts\support_ticket.html:94
+#: .\podcasts\templates\podcasts\support_ticket.html:41
+#: .\podcasts\templates\podcasts\ticket_notifications.html:16
 msgid "Ticket #"
 msgstr "تذكرة #"
 
-#: .\podcasts\templates\podcasts\support_ticket.html:95
+#: .\podcasts\templates\podcasts\support_ticket.html:42
+#: .\podcasts\templates\podcasts\ticket_notifications.html:18
 msgid "Subject"
 msgstr "الموضوع"
 
-#: .\podcasts\templates\podcasts\support_ticket.html:96
+#: .\podcasts\templates\podcasts\support_ticket.html:43
+#: .\podcasts\templates\podcasts\ticket_notifications.html:19
 msgid "Message"
 msgstr "الرسالة"
 
-#: .\podcasts\templates\podcasts\support_ticket.html:97
+#: .\podcasts\templates\podcasts\support_ticket.html:44
+#: .\podcasts\templates\podcasts\ticket_notifications.html:20
 msgid "Submitted"
 msgstr "تم تقديمها"
 
-#: .\podcasts\templates\podcasts\support_ticket.html:98
+#: .\podcasts\templates\podcasts\support_ticket.html:45
+#: .\podcasts\templates\podcasts\ticket_notifications.html:21
 msgid "Last Reviewed"
 msgstr "المراجعة الأخيرة"
 
-#: .\podcasts\templates\podcasts\support_ticket.html:99
+#: .\podcasts\templates\podcasts\support_ticket.html:46
+#: .\podcasts\templates\podcasts\ticket_notifications.html:22
 msgid "Status"
 msgstr "الحالة"
 
-#: .\podcasts\templates\podcasts\support_ticket.html:125
+#: .\podcasts\templates\podcasts\support_ticket.html:72
 msgid "You haven’t submitted any tickets yet."
 msgstr "لم تقم بتقديم أي تذاكر بعد"
 
-#: .\podcasts\templates\podcasts\support_ticket.html:142
+#: .\podcasts\templates\podcasts\support_ticket.html:89
 msgid "Success"
 msgstr "النجاح"
 
-#: .\podcasts\templates\podcasts\support_ticket.html:144
+#: .\podcasts\templates\podcasts\support_ticket.html:91
 msgid "Failure"
 msgstr "الفشل"
 
-#: .\podcasts\templates\podcasts\support_ticket.html:157
+#: .\podcasts\templates\podcasts\support_ticket.html:104
 msgid "Your support ticket has been submitted successfully!"
 msgstr "لقد تم تقديم تذكرة الدعم الخاصة بك بنجاح!"
 
-#: .\podcasts\templates\podcasts\support_ticket.html:159
+#: .\podcasts\templates\podcasts\support_ticket.html:106
 msgid ""
 "Your support ticket was unsuccessful, file size is too large, needs to be ≤ "
 "2 MB."
 msgstr ""
 "تذكرة الدعم الخاصة بك لم تنجح، حجم الملف كبير جدا، يجب أن يكون ≤ 2 MB."
 
-#: .\podcasts\templates\podcasts\support_ticket.html:161
+#: .\podcasts\templates\podcasts\support_ticket.html:108
 msgid ""
 "Your support ticket was unsuccessful, file type incorrect, only "
 "(JPG/PNG/GIF) are accepted."
@@ -1841,7 +1848,7 @@ msgstr ""
 "تذكرة الدعم الخاصة بك لم تنجح، نوع الملف غير صحيح، فقط (JPG/PNG/GIF) يتم "
 "قبولها."
 
-#: .\podcasts\templates\podcasts\support_ticket.html:163
+#: .\podcasts\templates\podcasts\support_ticket.html:110
 msgid ""
 "Your support ticket was unsuccessful, file type incorrect (only JPG/PNG/GIF)"
 " and file size is too large (≤ 2 MB)."
@@ -1849,7 +1856,7 @@ msgstr ""
 "كانت تذكرة الدعم الخاصة بك غير ناجحة، ونوع الملف غير صحيح (JPG/PNG/GIF فقط) "
 "وحجم الملف كبير جدا (≤ 2 MB)."
 
-#: .\podcasts\templates\podcasts\support_ticket.html:166
+#: .\podcasts\templates\podcasts\support_ticket.html:113
 #, python-format
 msgid ""
 "You’ve reached your limit of %(limit)s open tickets "
@@ -1859,9 +1866,27 @@ msgstr ""
 "لقد وصلت إلى حد التذاكر المفتوحة %(limit)s (%(open_count)s/%(limit)s). يرجى "
 "الانتظار حتى يتم إكمال واحدة أو إلغاءها قبل فتح واحدة جديدة."
 
-#: .\podcasts\templates\podcasts\support_ticket.html:183
+#: .\podcasts\templates\podcasts\support_ticket.html:130
 msgid "OK"
 msgstr "حسناً"
+
+#: .\podcasts\templates\podcasts\ticket_notifications.html:6
+#| msgid "Notifications"
+msgid "Ticket Notifications"
+msgstr "إعلانات التذاكر"
+
+#: .\podcasts\templates\podcasts\ticket_notifications.html:9
+msgid "Showing support tickets that are Pending or In Progress."
+msgstr "عرض تذاكر الدعم التي تنتظر أو في التقدم."
+
+#: .\podcasts\templates\podcasts\ticket_notifications.html:17
+#| msgid "Username"
+msgid "User"
+msgstr "المستخدم"
+
+#: .\podcasts\templates\podcasts\ticket_notifications.html:58
+msgid "No pending or in-progress tickets right now."
+msgstr "لا تذاكر متعلقة أو مستمرة حالياً"
 
 #: .\podcasts\templates\registration\login.html:20
 msgid "Sign in with Google"
@@ -2039,6 +2064,9 @@ msgstr "إدخال OTP"
 #: .\podcasts\templates\two_factor\core\otp.html:9
 msgid "Submit OTP"
 msgstr "إرسال البيانات الخارجيّة"
+
+#~ msgid "Contribute"
+#~ msgstr "المساهمة"
 
 #~ msgid "Results for"
 #~ msgstr "نتائج لـ"

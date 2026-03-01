@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-19 12:13-0600\n"
+"POT-Creation-Date: 2026-02-28 21:15-0600\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -193,12 +193,12 @@ msgid "Bookmarks"
 msgstr "Marcas de libros"
 
 #: .\podcasts\templates\podcasts\base.html:126
-#: .\podcasts\templates\podcasts\base.html:236
+#: .\podcasts\templates\podcasts\base.html:241
 msgid "Channels"
 msgstr "Canales"
 
 #: .\podcasts\templates\podcasts\base.html:127
-#: .\podcasts\templates\podcasts\base.html:230
+#: .\podcasts\templates\podcasts\base.html:235
 #: .\podcasts\templates\podcasts\channel_detail.html:143
 #: .\podcasts\templates\podcasts\channel_list.html:47
 msgid "Episodes"
@@ -216,140 +216,141 @@ msgstr "Profiles"
 msgid "See Profile"
 msgstr "Véase el perfil"
 
-#: .\podcasts\templates\podcasts\base.html:172
+#: .\podcasts\templates\podcasts\base.html:173
 msgid "See Replies"
 msgstr "Ver respuestas"
 
-#: .\podcasts\templates\podcasts\base.html:185
-#: .\podcasts\templates\podcasts\base.html:571
+#: .\podcasts\templates\podcasts\base.html:183
+#: .\podcasts\templates\podcasts\base.html:589
 msgid "Support Me"
 msgstr "Ayúdame"
 
-#: .\podcasts\templates\podcasts\base.html:192
+#: .\podcasts\templates\podcasts\base.html:189
 msgid "Support Ticket"
 msgstr "El boleto de apoyo"
 
 #: .\podcasts\templates\podcasts\base.html:197
-msgid "Contribute"
-msgstr "Contribuir"
+#| msgid "Notifications"
+msgid "Ticket Notification"
+msgstr "Notificación de billetes"
 
-#: .\podcasts\templates\podcasts\base.html:206
+#: .\podcasts\templates\podcasts\base.html:211
 msgid "Sign Out"
 msgstr "Suscribirse"
 
-#: .\podcasts\templates\podcasts\base.html:211
+#: .\podcasts\templates\podcasts\base.html:216
 msgid "Sign In"
 msgstr "Regístrese"
 
-#: .\podcasts\templates\podcasts\base.html:244
+#: .\podcasts\templates\podcasts\base.html:249
 msgid "Search episodes or channels..."
 msgstr "Buscar episodios o canales..."
 
-#: .\podcasts\templates\podcasts\base.html:250
+#: .\podcasts\templates\podcasts\base.html:255
 #: .\podcasts\templates\podcasts\channel_detail.html:137
 msgid "Search"
 msgstr "Buscar"
 
-#: .\podcasts\templates\podcasts\base.html:266
-#: .\podcasts\templates\podcasts\base.html:460
+#: .\podcasts\templates\podcasts\base.html:271
+#: .\podcasts\templates\podcasts\base.html:478
 msgid "Channel Title"
 msgstr "Título del Canal"
 
-#: .\podcasts\templates\podcasts\base.html:272
+#: .\podcasts\templates\podcasts\base.html:277
 msgid "Episode Title"
 msgstr "Título del Episodio"
 
-#: .\podcasts\templates\podcasts\base.html:278
+#: .\podcasts\templates\podcasts\base.html:283
 msgid "Episode Description"
 msgstr "Descripción del Episodio"
 
-#: .\podcasts\templates\podcasts\base.html:284
+#: .\podcasts\templates\podcasts\base.html:289
 msgid "Transcript Text"
 msgstr "Texto de la Transcripción"
 
-#: .\podcasts\templates\podcasts\base.html:291
-#: .\podcasts\templates\podcasts\base.html:480
+#: .\podcasts\templates\podcasts\base.html:303
+#: .\podcasts\templates\podcasts\base.html:498
 msgid "Language"
 msgstr "Idioma"
 
-#: .\podcasts\templates\podcasts\base.html:371
+#: .\podcasts\templates\podcasts\base.html:389
 msgid "Date"
 msgstr "Fecha"
 
-#: .\podcasts\templates\podcasts\base.html:379
+#: .\podcasts\templates\podcasts\base.html:397
 msgid "Anytime"
 msgstr "En cualquier momento"
 
-#: .\podcasts\templates\podcasts\base.html:385
+#: .\podcasts\templates\podcasts\base.html:403
 msgid "Past Day"
 msgstr "Día Pasado"
 
-#: .\podcasts\templates\podcasts\base.html:391
+#: .\podcasts\templates\podcasts\base.html:409
 msgid "Past Week"
 msgstr "La Semana Pasada"
 
-#: .\podcasts\templates\podcasts\base.html:397
+#: .\podcasts\templates\podcasts\base.html:415
 msgid "Past Month"
 msgstr "El Mes Pasado"
 
-#: .\podcasts\templates\podcasts\base.html:403
+#: .\podcasts\templates\podcasts\base.html:421
 msgid "Past Year"
 msgstr "El Año Pasado"
 
-#: .\podcasts\templates\podcasts\base.html:409
+#: .\podcasts\templates\podcasts\base.html:427
 msgid "Past 2 Years"
 msgstr "Últimos 2 Años"
 
-#: .\podcasts\templates\podcasts\base.html:415
+#: .\podcasts\templates\podcasts\base.html:433
 msgid "Past 3 Years"
 msgstr "Últimos 3 Años"
 
-#: .\podcasts\templates\podcasts\base.html:421
+#: .\podcasts\templates\podcasts\base.html:439
 msgid "Past 4 Years"
 msgstr "Últimos 4 Años"
 
-#: .\podcasts\templates\podcasts\base.html:427
+#: .\podcasts\templates\podcasts\base.html:445
 msgid "Past 5 Years"
 msgstr "Últimos 5 Años"
 
-#: .\podcasts\templates\podcasts\base.html:433
+#: .\podcasts\templates\podcasts\base.html:451
 msgid "Past 10 Years"
 msgstr "Últimos 10 Años"
 
-#: .\podcasts\templates\podcasts\base.html:439
+#: .\podcasts\templates\podcasts\base.html:457
 msgid "Past 15 Years"
 msgstr "Últimos 15 Años"
 
-#: .\podcasts\templates\podcasts\base.html:466
+#: .\podcasts\templates\podcasts\base.html:484
 msgid "Channel Author"
 msgstr "Autor del canal"
 
-#: .\podcasts\templates\podcasts\base.html:472
+#: .\podcasts\templates\podcasts\base.html:490
 msgid "Channel Summary"
 msgstr "Resumen del canal"
 
-#: .\podcasts\templates\podcasts\base.html:576
+#: .\podcasts\templates\podcasts\base.html:594
 #: .\podcasts\templates\podcasts\signup.html:173
 #: .\podcasts\templates\podcasts\signup.html:227
-#: .\podcasts\templates\podcasts\support_ticket.html:148
+#: .\podcasts\templates\podcasts\support_ticket.html:95
 #: .\podcasts\templates\socialaccount\signup.html:78
 #: .\podcasts\templates\socialaccount\signup.html:130
 msgid "Close"
 msgstr "Muy cerca."
 
-#: .\podcasts\templates\podcasts\base.html:649
+#: .\podcasts\templates\podcasts\base.html:667
 #: .\podcasts\templates\podcasts\channel_detail.html:235
 #: .\podcasts\templates\podcasts\episode_detail.html:345
 msgid "Please sign in to complete this action."
 msgstr "Por favor, inicie la sesión para completar esta acción."
 
-#: .\podcasts\templates\podcasts\base.html:651
+#: .\podcasts\templates\podcasts\base.html:669
 #: .\podcasts\templates\podcasts\channel_detail.html:236
 #: .\podcasts\templates\podcasts\episode_detail.html:346
 msgid "Sign in"
 msgstr "Regístrese"
 
-#: .\podcasts\templates\podcasts\base.html:658
+#: .\podcasts\templates\podcasts\base.html:676
 #: .\podcasts\templates\podcasts\home.html:111
 msgid ""
 "Our GitHub is temporarily unavailable. Please visit our up-to-date "
@@ -358,29 +359,29 @@ msgstr ""
 "Nuestro GitHub no está disponible temporalmente. Por favor visite nuestro "
 "repositorio actualizado en GitLab en su lugar."
 
-#: .\podcasts\templates\podcasts\base.html:663
+#: .\podcasts\templates\podcasts\base.html:681
 #: .\podcasts\templates\podcasts\home.html:114
 msgid "Open GitLab"
 msgstr "Abre GitLab"
 
-#: .\podcasts\templates\podcasts\base.html:670
+#: .\podcasts\templates\podcasts\base.html:688
 msgid "Contact Me"
 msgstr "Póngase en contacto conmigo"
 
-#: .\podcasts\templates\podcasts\base.html:773
+#: .\podcasts\templates\podcasts\base.html:791
 #: .\podcasts\templates\podcasts\home.html:148
 msgid "GitHub temporarily unavailable. Click to see GitLab link."
 msgstr ""
 "GitHub no está disponible temporalmente. Haga clic para ver el enlace de "
 "GitLab."
 
-#: .\podcasts\templates\podcasts\base.html:810
-#: .\podcasts\templates\podcasts\base.html:811
+#: .\podcasts\templates\podcasts\base.html:828
+#: .\podcasts\templates\podcasts\base.html:829
 msgid "Switch to light mode"
 msgstr "Cambiar al modo de luz"
 
-#: .\podcasts\templates\podcasts\base.html:815
-#: .\podcasts\templates\podcasts\base.html:816
+#: .\podcasts\templates\podcasts\base.html:833
+#: .\podcasts\templates\podcasts\base.html:834
 msgid "Switch to dark mode"
 msgstr "Cambiar al modo oscuro"
 
@@ -1780,47 +1781,53 @@ msgstr "Envíe el boleto"
 msgid "Your Tickets"
 msgstr "Sus entradas"
 
-#: .\podcasts\templates\podcasts\support_ticket.html:94
+#: .\podcasts\templates\podcasts\support_ticket.html:41
+#: .\podcasts\templates\podcasts\ticket_notifications.html:16
 msgid "Ticket #"
 msgstr "El billete #"
 
-#: .\podcasts\templates\podcasts\support_ticket.html:95
+#: .\podcasts\templates\podcasts\support_ticket.html:42
+#: .\podcasts\templates\podcasts\ticket_notifications.html:18
 msgid "Subject"
 msgstr "Subyecto"
 
-#: .\podcasts\templates\podcasts\support_ticket.html:96
+#: .\podcasts\templates\podcasts\support_ticket.html:43
+#: .\podcasts\templates\podcasts\ticket_notifications.html:19
 msgid "Message"
 msgstr "Mensaje"
 
-#: .\podcasts\templates\podcasts\support_ticket.html:97
+#: .\podcasts\templates\podcasts\support_ticket.html:44
+#: .\podcasts\templates\podcasts\ticket_notifications.html:20
 msgid "Submitted"
 msgstr "Enviado"
 
-#: .\podcasts\templates\podcasts\support_ticket.html:98
+#: .\podcasts\templates\podcasts\support_ticket.html:45
+#: .\podcasts\templates\podcasts\ticket_notifications.html:21
 msgid "Last Reviewed"
 msgstr "Última revisión"
 
-#: .\podcasts\templates\podcasts\support_ticket.html:99
+#: .\podcasts\templates\podcasts\support_ticket.html:46
+#: .\podcasts\templates\podcasts\ticket_notifications.html:22
 msgid "Status"
 msgstr "El estado"
 
-#: .\podcasts\templates\podcasts\support_ticket.html:125
+#: .\podcasts\templates\podcasts\support_ticket.html:72
 msgid "You haven’t submitted any tickets yet."
 msgstr "Todavía no ha presentado ninguna entrada."
 
-#: .\podcasts\templates\podcasts\support_ticket.html:142
+#: .\podcasts\templates\podcasts\support_ticket.html:89
 msgid "Success"
 msgstr "El éxito"
 
-#: .\podcasts\templates\podcasts\support_ticket.html:144
+#: .\podcasts\templates\podcasts\support_ticket.html:91
 msgid "Failure"
 msgstr "El fracaso"
 
-#: .\podcasts\templates\podcasts\support_ticket.html:157
+#: .\podcasts\templates\podcasts\support_ticket.html:104
 msgid "Your support ticket has been submitted successfully!"
 msgstr "¡Su boleto de apoyo ha sido presentado con éxito!"
 
-#: .\podcasts\templates\podcasts\support_ticket.html:159
+#: .\podcasts\templates\podcasts\support_ticket.html:106
 msgid ""
 "Your support ticket was unsuccessful, file size is too large, needs to be ≤ "
 "2 MB."
@@ -1828,7 +1835,7 @@ msgstr ""
 "Su boleto de soporte no tuvo éxito, el tamaño del archivo es demasiado "
 "grande, debe ser ≤ 2 MB."
 
-#: .\podcasts\templates\podcasts\support_ticket.html:161
+#: .\podcasts\templates\podcasts\support_ticket.html:108
 msgid ""
 "Your support ticket was unsuccessful, file type incorrect, only "
 "(JPG/PNG/GIF) are accepted."
@@ -1836,7 +1843,7 @@ msgstr ""
 "Su boleto de soporte no tuvo éxito, tipo de archivo incorrecto, sólo "
 "(JPG/PNG/GIF) son aceptados."
 
-#: .\podcasts\templates\podcasts\support_ticket.html:163
+#: .\podcasts\templates\podcasts\support_ticket.html:110
 msgid ""
 "Your support ticket was unsuccessful, file type incorrect (only JPG/PNG/GIF)"
 " and file size is too large (≤ 2 MB)."
@@ -1844,7 +1851,7 @@ msgstr ""
 "Su boleto de soporte no tuvo éxito, el tipo de archivo no es correcto (solo "
 "JPG/PNG/GIF) y el tamaño del archivo es demasiado grande (≤ 2 MB)."
 
-#: .\podcasts\templates\podcasts\support_ticket.html:166
+#: .\podcasts\templates\podcasts\support_ticket.html:113
 #, python-format
 msgid ""
 "You’ve reached your limit of %(limit)s open tickets "
@@ -1855,9 +1862,27 @@ msgstr ""
 "(%(open_count)s/%(limit)s). Por favor espere a que una se complete o cancele"
 " antes de abrir una nueva."
 
-#: .\podcasts\templates\podcasts\support_ticket.html:183
+#: .\podcasts\templates\podcasts\support_ticket.html:130
 msgid "OK"
 msgstr "Está bien."
+
+#: .\podcasts\templates\podcasts\ticket_notifications.html:6
+#| msgid "Notifications"
+msgid "Ticket Notifications"
+msgstr "Notificaciones de entradas"
+
+#: .\podcasts\templates\podcasts\ticket_notifications.html:9
+msgid "Showing support tickets that are Pending or In Progress."
+msgstr "Muestra entradas de apoyo que están pendientes o en curso."
+
+#: .\podcasts\templates\podcasts\ticket_notifications.html:17
+#| msgid "Username"
+msgid "User"
+msgstr "Usuario"
+
+#: .\podcasts\templates\podcasts\ticket_notifications.html:58
+msgid "No pending or in-progress tickets right now."
+msgstr "No hay entradas pendientes o en curso en este momento."
 
 #: .\podcasts\templates\registration\login.html:20
 msgid "Sign in with Google"
@@ -2038,6 +2063,9 @@ msgstr "Introducir el OTP"
 #: .\podcasts\templates\two_factor\core\otp.html:9
 msgid "Submit OTP"
 msgstr "Envía el OTP"
+
+#~ msgid "Contribute"
+#~ msgstr "Contribuir"
 
 #~ msgid "Results for"
 #~ msgstr "Resultados para"

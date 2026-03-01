@@ -16,7 +16,6 @@ from django.utils.timesince import timesince
 from django.utils.translation import gettext as _
 from django.utils.translation import gettext_lazy as _lazy
 from .forms import CustomUserCreationForm
-from .models import CustomUser
 from allauth.account.models import EmailAddress
 from django.conf import settings
 import logging, time
@@ -62,7 +61,7 @@ from two_factor.views.core import LoginView as TwoFactorLoginView
 
 from django.contrib.auth.views import LoginView
 from django.contrib.postgres.search import SearchVector, SearchQuery as PgSearchQuery, SearchRank, TrigramSimilarity
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.views.decorators.http import require_POST, require_GET, require_http_methods
 
 from podcasts.search.documents import EpisodeDocument, TranscriptDocument, EpisodeTranslationsDocument
@@ -4301,6 +4300,20 @@ def support_ticket(request):
         'error_code': error_code,
         'open_count': open_count,
         'limit':      limit,
+    })
+
+def is_admin_user(user):
+    return user.is_authenticated and (user.is_staff or user.is_superuser)
+
+@login_required
+@user_passes_test(is_admin_user)
+def ticket_notifications(request):
+    tickets = SupportTicket.objects.filter(
+        status__in=["pending", "in_progress"]
+    ).order_by("-submission_date")
+
+    return render(request, "podcasts/ticket_notifications.html", {
+        "tickets": tickets,
     })
 
 @login_required

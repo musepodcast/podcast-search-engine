@@ -89,6 +89,7 @@ TEMPLATES = [
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
                 "podcasts.context_processors.unseen_replies",
+                "podcasts.context_processors.admin_ticket_counts",
                 "django.template.context_processors.i18n",
             ],
         },

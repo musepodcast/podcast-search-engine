@@ -642,6 +642,28 @@ Create Account button uses theme tokens
   cursor: pointer !important;
 }
 
+/* Make top language dropdown items match your themed dropdown */
+.lang-dropdown .dropdown-item {
+  background-color: var(--lang-btn-bg) !important;
+  color: var(--lang-option-text) !important;
+}
+.lang-dropdown .dropdown-item:hover,
+.lang-dropdown .dropdown-item:focus {
+  background-color: var(--lang-hover-bg) !important;
+  color: var(--lang-option-text) !important;
+}
+
+/* Re-enable planet icon for the top header language dropdown */
+#languageSelectBtn.lang-select-btn.dropdown-toggle {
+  background-image: url("images/language-planet.svg") !important;
+  background-repeat: no-repeat !important;
+  background-position: right var(--icon-right-gap) center !important;
+  background-size: var(--icon-size) !important;
+
+  /* keep the right padding space for the icon */
+  padding-right: calc(var(--icon-size) + var(--icon-right-gap) + var(--text-icon-gap)) !important;
+}
+
 /* =========================================================
    PROFILE MENU (match Language dropdown)
    ========================================================= */

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-19 12:13-0600\n"
+"POT-Creation-Date: 2026-02-28 21:15-0600\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -196,12 +196,12 @@ msgid "Bookmarks"
 msgstr "Bookmarks"
 
 #: .\podcasts\templates\podcasts\base.html:126
-#: .\podcasts\templates\podcasts\base.html:236
+#: .\podcasts\templates\podcasts\base.html:241
 msgid "Channels"
 msgstr "Kênh"
 
 #: .\podcasts\templates\podcasts\base.html:127
-#: .\podcasts\templates\podcasts\base.html:230
+#: .\podcasts\templates\podcasts\base.html:235
 #: .\podcasts\templates\podcasts\channel_detail.html:143
 #: .\podcasts\templates\podcasts\channel_list.html:47
 msgid "Episodes"
@@ -219,140 +219,141 @@ msgstr "Profile"
 msgid "See Profile"
 msgstr "Xem hồ sơ"
 
-#: .\podcasts\templates\podcasts\base.html:172
+#: .\podcasts\templates\podcasts\base.html:173
 msgid "See Replies"
 msgstr "Xem Câu trả lời"
 
-#: .\podcasts\templates\podcasts\base.html:185
-#: .\podcasts\templates\podcasts\base.html:571
+#: .\podcasts\templates\podcasts\base.html:183
+#: .\podcasts\templates\podcasts\base.html:589
 msgid "Support Me"
 msgstr "Hãy hỗ trợ tôi"
 
-#: .\podcasts\templates\podcasts\base.html:192
+#: .\podcasts\templates\podcasts\base.html:189
 msgid "Support Ticket"
 msgstr "Vé hỗ trợ"
 
 #: .\podcasts\templates\podcasts\base.html:197
-msgid "Contribute"
-msgstr "Tham gia"
+#| msgid "Notifications"
+msgid "Ticket Notification"
+msgstr "Thông báo vé"
 
-#: .\podcasts\templates\podcasts\base.html:206
+#: .\podcasts\templates\podcasts\base.html:211
 msgid "Sign Out"
 msgstr "Đăng ký"
 
-#: .\podcasts\templates\podcasts\base.html:211
+#: .\podcasts\templates\podcasts\base.html:216
 msgid "Sign In"
 msgstr "Đăng nhập"
 
-#: .\podcasts\templates\podcasts\base.html:244
+#: .\podcasts\templates\podcasts\base.html:249
 msgid "Search episodes or channels..."
 msgstr "Tìm kiếm tập phim hoặc kênh..."
 
-#: .\podcasts\templates\podcasts\base.html:250
+#: .\podcasts\templates\podcasts\base.html:255
 #: .\podcasts\templates\podcasts\channel_detail.html:137
 msgid "Search"
 msgstr "Tìm kiếm"
 
-#: .\podcasts\templates\podcasts\base.html:266
-#: .\podcasts\templates\podcasts\base.html:460
+#: .\podcasts\templates\podcasts\base.html:271
+#: .\podcasts\templates\podcasts\base.html:478
 msgid "Channel Title"
 msgstr "Tiêu đề kênh"
 
-#: .\podcasts\templates\podcasts\base.html:272
+#: .\podcasts\templates\podcasts\base.html:277
 msgid "Episode Title"
 msgstr "Tiêu đề tập phim"
 
-#: .\podcasts\templates\podcasts\base.html:278
+#: .\podcasts\templates\podcasts\base.html:283
 msgid "Episode Description"
 msgstr "Mô tả tập phim"
 
-#: .\podcasts\templates\podcasts\base.html:284
+#: .\podcasts\templates\podcasts\base.html:289
 msgid "Transcript Text"
 msgstr "Văn bản bản ghi chép"
 
-#: .\podcasts\templates\podcasts\base.html:291
-#: .\podcasts\templates\podcasts\base.html:480
+#: .\podcasts\templates\podcasts\base.html:303
+#: .\podcasts\templates\podcasts\base.html:498
 msgid "Language"
 msgstr "Ngôn ngữ"
 
-#: .\podcasts\templates\podcasts\base.html:371
+#: .\podcasts\templates\podcasts\base.html:389
 msgid "Date"
 msgstr "Ngày"
 
-#: .\podcasts\templates\podcasts\base.html:379
+#: .\podcasts\templates\podcasts\base.html:397
 msgid "Anytime"
 msgstr "Bất cứ lúc nào"
 
-#: .\podcasts\templates\podcasts\base.html:385
+#: .\podcasts\templates\podcasts\base.html:403
 msgid "Past Day"
 msgstr "Ngày qua"
 
-#: .\podcasts\templates\podcasts\base.html:391
+#: .\podcasts\templates\podcasts\base.html:409
 msgid "Past Week"
 msgstr "Tuần qua"
 
-#: .\podcasts\templates\podcasts\base.html:397
+#: .\podcasts\templates\podcasts\base.html:415
 msgid "Past Month"
 msgstr "Tháng qua"
 
-#: .\podcasts\templates\podcasts\base.html:403
+#: .\podcasts\templates\podcasts\base.html:421
 msgid "Past Year"
 msgstr "Năm qua"
 
-#: .\podcasts\templates\podcasts\base.html:409
+#: .\podcasts\templates\podcasts\base.html:427
 msgid "Past 2 Years"
 msgstr "2 năm qua"
 
-#: .\podcasts\templates\podcasts\base.html:415
+#: .\podcasts\templates\podcasts\base.html:433
 msgid "Past 3 Years"
 msgstr "3 năm qua"
 
-#: .\podcasts\templates\podcasts\base.html:421
+#: .\podcasts\templates\podcasts\base.html:439
 msgid "Past 4 Years"
 msgstr "4 năm qua"
 
-#: .\podcasts\templates\podcasts\base.html:427
+#: .\podcasts\templates\podcasts\base.html:445
 msgid "Past 5 Years"
 msgstr "5 năm qua"
 
-#: .\podcasts\templates\podcasts\base.html:433
+#: .\podcasts\templates\podcasts\base.html:451
 msgid "Past 10 Years"
 msgstr "10 năm qua"
 
-#: .\podcasts\templates\podcasts\base.html:439
+#: .\podcasts\templates\podcasts\base.html:457
 msgid "Past 15 Years"
 msgstr "15 năm qua"
 
-#: .\podcasts\templates\podcasts\base.html:466
+#: .\podcasts\templates\podcasts\base.html:484
 msgid "Channel Author"
 msgstr "Tác giả kênh"
 
-#: .\podcasts\templates\podcasts\base.html:472
+#: .\podcasts\templates\podcasts\base.html:490
 msgid "Channel Summary"
 msgstr "Khót tóm tắt kênh"
 
-#: .\podcasts\templates\podcasts\base.html:576
+#: .\podcasts\templates\podcasts\base.html:594
 #: .\podcasts\templates\podcasts\signup.html:173
 #: .\podcasts\templates\podcasts\signup.html:227
-#: .\podcasts\templates\podcasts\support_ticket.html:148
+#: .\podcasts\templates\podcasts\support_ticket.html:95
 #: .\podcasts\templates\socialaccount\signup.html:78
 #: .\podcasts\templates\socialaccount\signup.html:130
 msgid "Close"
 msgstr "Gần"
 
-#: .\podcasts\templates\podcasts\base.html:649
+#: .\podcasts\templates\podcasts\base.html:667
 #: .\podcasts\templates\podcasts\channel_detail.html:235
 #: .\podcasts\templates\podcasts\episode_detail.html:345
 msgid "Please sign in to complete this action."
 msgstr "Vui lòng đăng nhập để hoàn thành hành động này."
 
-#: .\podcasts\templates\podcasts\base.html:651
+#: .\podcasts\templates\podcasts\base.html:669
 #: .\podcasts\templates\podcasts\channel_detail.html:236
 #: .\podcasts\templates\podcasts\episode_detail.html:346
 msgid "Sign in"
 msgstr "Đăng nhập"
 
-#: .\podcasts\templates\podcasts\base.html:658
+#: .\podcasts\templates\podcasts\base.html:676
 #: .\podcasts\templates\podcasts\home.html:111
 msgid ""
 "Our GitHub is temporarily unavailable. Please visit our up-to-date "
@@ -361,27 +362,27 @@ msgstr ""
 "GitHub của chúng tôi tạm thời không có sẵn. Xin vui lòng ghé thăm kho lưu "
 "trữ cập nhật của chúng tôi trên GitLab thay vào đó."
 
-#: .\podcasts\templates\podcasts\base.html:663
+#: .\podcasts\templates\podcasts\base.html:681
 #: .\podcasts\templates\podcasts\home.html:114
 msgid "Open GitLab"
 msgstr "Mở GitLab"
 
-#: .\podcasts\templates\podcasts\base.html:670
+#: .\podcasts\templates\podcasts\base.html:688
 msgid "Contact Me"
 msgstr "Liên hệ với tôi"
 
-#: .\podcasts\templates\podcasts\base.html:773
+#: .\podcasts\templates\podcasts\base.html:791
 #: .\podcasts\templates\podcasts\home.html:148
 msgid "GitHub temporarily unavailable. Click to see GitLab link."
 msgstr "GitHub tạm thời không có sẵn. Nhấp vào để xem liên kết GitLab."
 
-#: .\podcasts\templates\podcasts\base.html:810
-#: .\podcasts\templates\podcasts\base.html:811
+#: .\podcasts\templates\podcasts\base.html:828
+#: .\podcasts\templates\podcasts\base.html:829
 msgid "Switch to light mode"
 msgstr "Chuyển sang chế độ ánh sáng"
 
-#: .\podcasts\templates\podcasts\base.html:815
-#: .\podcasts\templates\podcasts\base.html:816
+#: .\podcasts\templates\podcasts\base.html:833
+#: .\podcasts\templates\podcasts\base.html:834
 msgid "Switch to dark mode"
 msgstr "Chuyển sang chế độ tối"
 
@@ -1771,47 +1772,53 @@ msgstr "Đưa vé"
 msgid "Your Tickets"
 msgstr "Vé của bạn"
 
-#: .\podcasts\templates\podcasts\support_ticket.html:94
+#: .\podcasts\templates\podcasts\support_ticket.html:41
+#: .\podcasts\templates\podcasts\ticket_notifications.html:16
 msgid "Ticket #"
 msgstr "Chiếc vé #"
 
-#: .\podcasts\templates\podcasts\support_ticket.html:95
+#: .\podcasts\templates\podcasts\support_ticket.html:42
+#: .\podcasts\templates\podcasts\ticket_notifications.html:18
 msgid "Subject"
 msgstr "Chủ đề"
 
-#: .\podcasts\templates\podcasts\support_ticket.html:96
+#: .\podcasts\templates\podcasts\support_ticket.html:43
+#: .\podcasts\templates\podcasts\ticket_notifications.html:19
 msgid "Message"
 msgstr "Thông điệp"
 
-#: .\podcasts\templates\podcasts\support_ticket.html:97
+#: .\podcasts\templates\podcasts\support_ticket.html:44
+#: .\podcasts\templates\podcasts\ticket_notifications.html:20
 msgid "Submitted"
 msgstr "Được đệ trình"
 
-#: .\podcasts\templates\podcasts\support_ticket.html:98
+#: .\podcasts\templates\podcasts\support_ticket.html:45
+#: .\podcasts\templates\podcasts\ticket_notifications.html:21
 msgid "Last Reviewed"
 msgstr "Lần cuối cùng được xem xét"
 
-#: .\podcasts\templates\podcasts\support_ticket.html:99
+#: .\podcasts\templates\podcasts\support_ticket.html:46
+#: .\podcasts\templates\podcasts\ticket_notifications.html:22
 msgid "Status"
 msgstr "Tình trạng"
 
-#: .\podcasts\templates\podcasts\support_ticket.html:125
+#: .\podcasts\templates\podcasts\support_ticket.html:72
 msgid "You haven’t submitted any tickets yet."
 msgstr "Anh chưa nộp vé nào."
 
-#: .\podcasts\templates\podcasts\support_ticket.html:142
+#: .\podcasts\templates\podcasts\support_ticket.html:89
 msgid "Success"
 msgstr "Thành công"
 
-#: .\podcasts\templates\podcasts\support_ticket.html:144
+#: .\podcasts\templates\podcasts\support_ticket.html:91
 msgid "Failure"
 msgstr "Thất bại"
 
-#: .\podcasts\templates\podcasts\support_ticket.html:157
+#: .\podcasts\templates\podcasts\support_ticket.html:104
 msgid "Your support ticket has been submitted successfully!"
 msgstr "Vé hỗ trợ của bạn đã được gửi thành công!"
 
-#: .\podcasts\templates\podcasts\support_ticket.html:159
+#: .\podcasts\templates\podcasts\support_ticket.html:106
 msgid ""
 "Your support ticket was unsuccessful, file size is too large, needs to be ≤ "
 "2 MB."
@@ -1819,7 +1826,7 @@ msgstr ""
 "Vé hỗ trợ của bạn đã không thành công, kích thước tập tin quá lớn, cần phải "
 "là ≤ 2 MB."
 
-#: .\podcasts\templates\podcasts\support_ticket.html:161
+#: .\podcasts\templates\podcasts\support_ticket.html:108
 msgid ""
 "Your support ticket was unsuccessful, file type incorrect, only "
 "(JPG/PNG/GIF) are accepted."
@@ -1827,7 +1834,7 @@ msgstr ""
 "Vé hỗ trợ của bạn đã không thành công, kiểu tệp không chính xác, chỉ "
 "(JPG/PNG/GIF) được chấp nhận."
 
-#: .\podcasts\templates\podcasts\support_ticket.html:163
+#: .\podcasts\templates\podcasts\support_ticket.html:110
 msgid ""
 "Your support ticket was unsuccessful, file type incorrect (only JPG/PNG/GIF)"
 " and file size is too large (≤ 2 MB)."
@@ -1835,7 +1842,7 @@ msgstr ""
 "Vé hỗ trợ của bạn đã không thành công, kiểu tệp không chính xác (chỉ "
 "JPG/PNG/GIF) và kích thước tệp quá lớn (≤ 2 MB)."
 
-#: .\podcasts\templates\podcasts\support_ticket.html:166
+#: .\podcasts\templates\podcasts\support_ticket.html:113
 #, python-format
 msgid ""
 "You’ve reached your limit of %(limit)s open tickets "
@@ -1845,9 +1852,27 @@ msgstr ""
 "Bạn đã đạt đến giới hạn của bạn của các vé mở %(limit)s "
 "(%(open_count)s/%(limit)s)."
 
-#: .\podcasts\templates\podcasts\support_ticket.html:183
+#: .\podcasts\templates\podcasts\support_ticket.html:130
 msgid "OK"
 msgstr "Được rồi."
+
+#: .\podcasts\templates\podcasts\ticket_notifications.html:6
+#| msgid "Notifications"
+msgid "Ticket Notifications"
+msgstr "Thông báo vé"
+
+#: .\podcasts\templates\podcasts\ticket_notifications.html:9
+msgid "Showing support tickets that are Pending or In Progress."
+msgstr "Khả năng hiển thị vé hỗ trợ đang chờ hoặc đang tiến hành."
+
+#: .\podcasts\templates\podcasts\ticket_notifications.html:17
+#| msgid "Username"
+msgid "User"
+msgstr "Người dùng"
+
+#: .\podcasts\templates\podcasts\ticket_notifications.html:58
+msgid "No pending or in-progress tickets right now."
+msgstr "Không có vé chờ đợi hoặc đang được tiến hành ngay bây giờ."
 
 #: .\podcasts\templates\registration\login.html:20
 msgid "Sign in with Google"
@@ -2027,6 +2052,9 @@ msgstr "Nhập OTP"
 #: .\podcasts\templates\two_factor\core\otp.html:9
 msgid "Submit OTP"
 msgstr "Gửi OTP"
+
+#~ msgid "Contribute"
+#~ msgstr "Tham gia"
 
 #~ msgid "Results for"
 #~ msgstr "Kết quả cho"

@@ -1,0 +1,73 @@
+{% extends "podcasts/base.html" %}
+{% load i18n %}
+
+{% block content %}
+<div class="container my-4 flex-grow-1 support-ticket-page">
+  <h1 class="mb-4">{% trans "Ticket Notifications" %}</h1>
+
+  <p class="text-muted mb-3">
+    {% trans "Showing support tickets that are Pending or In Progress." %}
+  </p>
+
+  <div class="table-responsive bubble">
+    <table class="table support-table">
+      <thead>
+        <tr>
+          <th>{% trans "Ticket #" %}</th>
+          <th>{% trans "User" %}</th>
+          <th>{% trans "Subject" %}</th>
+          <th>{% trans "Message" %}</th>
+          <th>{% trans "Submitted" %}</th>
+          <th>{% trans "Last Reviewed" %}</th>
+          <th>{% trans "Status" %}</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {% for ticket in tickets %}
+          <tr>
+            <td>{{ ticket.ticket_number }}</td>
+            <td style="max-width:18ch;">
+              <span class="d-inline-block text-truncate" style="max-width:18ch;"
+                    data-bs-toggle="tooltip" title="{{ ticket.user.username|escape }}">
+                {{ ticket.user.username }}
+              </span>
+            </td>
+
+            <td style="max-width:25ch;">
+              <span class="d-inline-block text-truncate" style="max-width:25ch;"
+                    data-bs-toggle="tooltip" title="{{ ticket.subject|escape }}">
+                {{ ticket.subject }}
+              </span>
+            </td>
+
+            <td style="max-width:30ch;">
+              <span class="d-inline-block text-truncate" style="max-width:30ch;"
+                    data-bs-toggle="tooltip" title="{{ ticket.message|escape }}">
+                {{ ticket.message }}
+              </span>
+            </td>
+
+            <td>{{ ticket.submission_date|date:"Y-m-d H:i" }}</td>
+            <td>{{ ticket.last_reviewed_date|date:"Y-m-d H:i"|default:"—" }}</td>
+            <td>{{ ticket.get_status_display }}</td>
+          </tr>
+        {% empty %}
+          <tr>
+            <td colspan="7" class="text-center">
+              {% trans "No pending or in-progress tickets right now." %}
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function(){
+    Array.from(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+         .forEach(el => new bootstrap.Tooltip(el));
+  });
+</script>
+{% endblock %}
