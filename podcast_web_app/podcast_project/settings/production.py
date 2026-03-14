@@ -43,8 +43,10 @@ ALLOWED_HOSTS = [
     "musepodcast.com",
     "www.musepodcast.com",
     "host.docker.internal",
-    "192.168.10.108",
+    "127.0.0.1",
+    "localhost",
 ]
+
 
 ELASTICSEARCH_DSL = {
     "default": {
@@ -125,7 +127,7 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 # Right after your other security settings:
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 USE_X_FORWARDED_HOST = True
-SECURE_SSL_REDIRECT = True
+SECURE_SSL_REDIRECT = False
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 
