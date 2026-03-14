@@ -42,8 +42,8 @@ DEBUG = False
 ALLOWED_HOSTS = [
     "musepodcast.com",
     "www.musepodcast.com",
-    "192.168.1.228",
     "host.docker.internal",
+    "192.168.10.108",
 ]
 
 ELASTICSEARCH_DSL = {
