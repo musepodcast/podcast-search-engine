@@ -131,3 +131,10 @@ SECURE_SSL_REDIRECT = False
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 
+CSRF_TRUSTED_ORIGINS = [
+    "https://musepodcast.com",
+    "https://www.musepodcast.com",
+]
+
+ACCOUNT_DEFAULT_HTTP_PROTOCOL = "https"
+
