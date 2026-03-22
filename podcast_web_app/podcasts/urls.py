@@ -47,6 +47,7 @@ urlpatterns = [
     path("channel/<str:sanitized_channel_title>/<str:sanitized_episode_title>/download.json", views.episode_download_json_file, name="episode_download_json"),
     path("<str:sanitized_channel_title>/<str:sanitized_episode_title>/download.json",     views.episode_download_json_file, name="episode_download_json_alt"),
     path('episode/<int:episode_id>/update_episode_rating/', views.update_episode_rating, name='update_episode_rating'),
+    path('episode/<int:episode_id>/assistant_chat/', views.episode_assistant_chat, name='episode_assistant_chat'),
     path('episode/<int:episode_id>/post_comment/', views.post_comment, name='post_comment'),
     path('episode/<int:episode_id>/comments/', views.get_comments, name='get_comments'),
     path('episode/<int:episode_id>/share_ping/', views.episode_share_ping, name='episode_share_ping'),

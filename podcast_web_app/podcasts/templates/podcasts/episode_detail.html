@@ -351,6 +351,66 @@
   <span>{% trans "Copied to clipboard" %}</span>
 </div>
 
+{% if merged_segments %}
+{% blocktrans asvar muse_intro %}Hi, I'm Muse. Ask me about this episode. I only answer from the transcript.{% endblocktrans %}
+<div id="episode-assistant-root" data-episode-id="{{ post_episode_id }}">
+  <button
+    id="episode-assistant-launcher"
+    type="button"
+    title="{% trans 'Ask about this episode' %}"
+    aria-label="{% trans 'Open episode assistant' %}">
+    <i class="fa-solid fa-robot" aria-hidden="true"></i>
+  </button>
+
+  <section
+    id="episode-assistant-panel"
+    class="assistant-hidden"
+    aria-label="{% trans 'Episode assistant' %}">
+    <div class="assistant-header">
+      <div>
+        <strong>{% trans "Episode Assistant" %}</strong>
+        <div class="assistant-subtitle">{% trans "Ask about this transcript" %}</div>
+      </div>
+      <div class="assistant-actions">
+        <button
+          id="episode-assistant-minimize"
+          class="assistant-icon-btn"
+          type="button"
+          aria-label="{% trans 'Minimize assistant' %}">
+          <i class="fa-solid fa-minus" aria-hidden="true"></i>
+        </button>
+        <button
+          id="episode-assistant-close"
+          class="assistant-icon-btn"
+          type="button"
+          aria-label="{% trans 'Close assistant' %}">
+          <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+        </button>
+      </div>
+    </div>
+
+    <div id="episode-assistant-messages" class="assistant-messages">
+      <div class="assistant-message assistant-message--assistant">{{ muse_intro }}</div>
+    </div>
+
+    <form id="episode-assistant-form" class="assistant-form">
+      <textarea
+        id="episode-assistant-input"
+        rows="1"
+        maxlength="500"
+        placeholder="{% trans 'Ask a question about this episode...' %}"
+        aria-label="{% trans 'Ask a question about this episode' %}"></textarea>
+      <button
+        id="episode-assistant-send"
+        type="submit"
+        aria-label="{% trans 'Send question' %}">
+        <i class="fa-solid fa-arrow-up" aria-hidden="true"></i>
+      </button>
+    </form>
+  </section>
+</div>
+{% endif %}
+
 <script>
 (function () {
   // Light & dark palettes (theme-aware)
@@ -1606,6 +1666,172 @@ function showGuestNotice() {
     if ((e.key === 'Enter' || e.key === ' ') && e.target.closest('.is-guest')) {
       e.preventDefault();
       showGuestNotice();
+    }
+  });
+})();
+
+// Episode assistant
+(function () {
+  const root = document.getElementById("episode-assistant-root");
+  if (!root) return;
+
+  const episodeId = root.getAttribute("data-episode-id");
+  const launcher = document.getElementById("episode-assistant-launcher");
+  const panel = document.getElementById("episode-assistant-panel");
+  const closeBtn = document.getElementById("episode-assistant-close");
+  const minimizeBtn = document.getElementById("episode-assistant-minimize");
+  const form = document.getElementById("episode-assistant-form");
+  const input = document.getElementById("episode-assistant-input");
+  const messages = document.getElementById("episode-assistant-messages");
+  const sendBtn = document.getElementById("episode-assistant-send");
+  const initialAssistantMessage = "{{ muse_intro|escapejs }}";
+  const thinkingMessage = "{% trans 'Muse is thinking' %}";
+
+  if (!launcher || !panel || !form || !input || !messages || !sendBtn) return;
+
+  function isOpen() {
+    return !panel.classList.contains("assistant-hidden");
+  }
+
+  function setOpen(isOpen) {
+    panel.classList.toggle("assistant-hidden", !isOpen);
+    if (isOpen) {
+      setTimeout(() => input.focus(), 0);
+    }
+  }
+
+  function autoresize() {
+    input.style.height = "auto";
+    input.style.height = Math.min(input.scrollHeight, 120) + "px";
+  }
+
+  function formatSources(sources) {
+    if (!Array.isArray(sources) || !sources.length) return "";
+    const labels = sources
+      .map((item) => item && item.time ? item.time : "")
+      .filter(Boolean);
+    return labels.length ? `Sources: ${labels.join(", ")}` : "";
+  }
+
+  function appendMessage(role, text, sources) {
+    const bubble = document.createElement("div");
+    bubble.className = `assistant-message assistant-message--${role}`;
+    bubble.textContent = text;
+
+    const sourceText = formatSources(sources);
+    if (sourceText && role === "assistant") {
+      const meta = document.createElement("div");
+      meta.className = "assistant-source";
+      meta.textContent = sourceText;
+      bubble.appendChild(meta);
+    }
+
+    messages.appendChild(bubble);
+    messages.scrollTop = messages.scrollHeight;
+  }
+
+  function showThinking() {
+    removeThinking();
+
+    const bubble = document.createElement("div");
+    bubble.className = "assistant-message assistant-message--assistant";
+    bubble.setAttribute("data-thinking", "true");
+    bubble.setAttribute("aria-live", "polite");
+
+    const inner = document.createElement("div");
+    inner.className = "assistant-thinking";
+
+    const label = document.createElement("span");
+    label.className = "assistant-thinking-label";
+    label.textContent = thinkingMessage;
+
+    const dots = document.createElement("span");
+    dots.className = "assistant-thinking-dots";
+    dots.setAttribute("aria-hidden", "true");
+    dots.innerHTML = "<span></span><span></span><span></span>";
+
+    inner.appendChild(label);
+    inner.appendChild(dots);
+    bubble.appendChild(inner);
+    messages.appendChild(bubble);
+    messages.scrollTop = messages.scrollHeight;
+  }
+
+  function removeThinking() {
+    messages.querySelector('[data-thinking="true"]')?.remove();
+  }
+
+  function resetChat() {
+    messages.innerHTML = "";
+    appendMessage("assistant", initialAssistantMessage);
+    input.value = "";
+    autoresize();
+  }
+
+  launcher.addEventListener("click", function () {
+    setOpen(!isOpen());
+  });
+
+  closeBtn?.addEventListener("click", function () {
+    resetChat();
+    setOpen(false);
+  });
+
+  minimizeBtn?.addEventListener("click", function () {
+    setOpen(false);
+  });
+
+  input.addEventListener("input", autoresize);
+  autoresize();
+
+  input.addEventListener("keydown", function (e) {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      form.requestSubmit();
+    }
+  });
+
+  form.addEventListener("submit", async function (e) {
+    e.preventDefault();
+
+    const message = (input.value || "").trim();
+    if (!message) return;
+
+    appendMessage("user", message);
+    input.value = "";
+    autoresize();
+    sendBtn.disabled = true;
+    showThinking();
+
+    try {
+      const response = await fetch(`/episode/${episodeId}/assistant_chat/`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRFToken": csrftoken
+        },
+        body: JSON.stringify({ message })
+      });
+
+      const data = await response.json();
+      removeThinking();
+      if (!response.ok) {
+        appendMessage("assistant", data.error || "{% trans 'The local assistant is unavailable right now.' %}");
+        return;
+      }
+
+      appendMessage(
+        "assistant",
+        data.answer || "{% trans 'No response returned.' %}",
+        data.sources || []
+      );
+    } catch (_) {
+      removeThinking();
+      appendMessage("assistant", "{% trans 'The local assistant is unavailable right now.' %}");
+    } finally {
+      removeThinking();
+      sendBtn.disabled = false;
+      input.focus();
     }
   });
 })();

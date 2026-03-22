@@ -21,6 +21,11 @@ else:
 # Optional: normalize (doesn't fail if it doesn't exist)
 EPISODE_JSON_BASE = EPISODE_JSON_BASE.resolve(strict=False)
 
+OLLAMA_BASE_URL = os.environ.get("OLLAMA_BASE_URL", "http://127.0.0.1:11434")
+OLLAMA_MODEL = os.environ.get("OLLAMA_MODEL", "qwen2.5:7b")
+OLLAMA_TIMEOUT_SECONDS = int(os.environ.get("OLLAMA_TIMEOUT_SECONDS", "60"))
+EPISODE_ASSISTANT_MAX_SEGMENTS = int(os.environ.get("EPISODE_ASSISTANT_MAX_SEGMENTS", "8"))
+
 # Common settings
 DEBUG = False  # default here, override in dev.py
 

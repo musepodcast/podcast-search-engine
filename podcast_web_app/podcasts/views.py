@@ -24,6 +24,7 @@ import re, difflib, unicodedata
 import sys
 import json
 import itertools
+import requests
 from django.http import Http404, HttpResponse, HttpResponseForbidden, JsonResponse, FileResponse
 from django.utils.encoding import iri_to_uri
 from .models import (
@@ -125,6 +126,257 @@ def slug_norm(s: str) -> str:
     s = s.lower()
     s = _slug_non_alnum.sub("_", s)
     return re.sub(r"_+", "_", s).strip("_")
+
+_assistant_token_pattern = re.compile(r"[a-z0-9']+", re.IGNORECASE)
+_assistant_stopwords = {
+    "a", "an", "and", "are", "as", "at", "be", "but", "by", "did", "do", "does",
+    "for", "from", "had", "has", "have", "he", "her", "hers", "him", "his", "how",
+    "i", "if", "in", "into", "is", "it", "its", "me", "my", "of", "on", "or", "our",
+    "she", "that", "the", "their", "them", "there", "they", "this", "to", "was",
+    "were", "what", "when", "where", "who", "why", "with", "would", "you", "your",
+    "episode", "podcast", "transcript", "about", "tell",
+}
+
+def _assistant_tokenize(text: str) -> list[str]:
+    return _assistant_token_pattern.findall((text or "").lower())
+
+def _assistant_filtered_tokens(text: str) -> list[str]:
+    return [
+        tok for tok in _assistant_tokenize(text)
+        if len(tok) > 1 and tok not in _assistant_stopwords
+    ]
+
+def _assistant_transcript_queryset(base_episode, lang_code: str):
+    if lang_code != "en":
+        translated = TranscriptTranslations.objects.filter(
+            episode=base_episode,
+            language__istartswith=lang_code,
+        ).order_by("segment_time")
+        if translated.exists():
+            return translated
+    return Transcript.objects.filter(episode=base_episode).order_by("segment_time")
+
+def _assistant_segment_time(seg) -> str:
+    return (getattr(seg, "segment_time", "") or "").strip()
+
+def _assistant_segment_text(seg) -> str:
+    return (getattr(seg, "segment_text", "") or "").strip()
+
+def _assistant_block_time(block_segments) -> str:
+    if not block_segments:
+        return ""
+
+    start_raw = _assistant_segment_time(block_segments[0])
+    end_raw = _assistant_segment_time(block_segments[-1])
+
+    start = start_raw.split(" - ", 1)[0].strip() if start_raw else ""
+    end = end_raw.rsplit(" - ", 1)[-1].strip() if end_raw else ""
+
+    if start and end and start != end:
+        return f"{start} - {end}"
+    return start or end or start_raw or end_raw
+
+def _assistant_format_context(block_segments) -> str:
+    lines = []
+    for seg in block_segments:
+        seg_time = _assistant_segment_time(seg)
+        seg_text = _assistant_segment_text(seg)
+        speaker = (getattr(seg, "speaker", "") or "").strip()
+        if not seg_text:
+            continue
+        if speaker:
+            lines.append(f"[{seg_time}] {speaker}: {seg_text}")
+        else:
+            lines.append(f"[{seg_time}] {seg_text}")
+    return "\n".join(lines)
+
+def _assistant_score_text(question_tokens: list[str], text: str) -> float:
+    block_tokens = _assistant_filtered_tokens(text)
+    if not block_tokens:
+        return 0.0
+
+    question_unique = list(dict.fromkeys(question_tokens))
+    block_unique = list(dict.fromkeys(block_tokens))
+    block_set = set(block_unique)
+
+    exact_overlap = sum(1 for tok in question_unique if tok in block_set)
+
+    fuzzy_overlap = 0.0
+    for tok in question_unique:
+        if tok in block_set or len(tok) < 4:
+            continue
+        if difflib.get_close_matches(tok, block_unique, n=1, cutoff=0.82):
+            fuzzy_overlap += 0.8
+
+    coverage = exact_overlap / max(1, len(question_unique))
+    question_phrase = " ".join(question_unique)
+    block_phrase = " ".join(block_unique[:160])
+    phrase_ratio = difflib.SequenceMatcher(None, question_phrase, block_phrase).ratio()
+
+    return (exact_overlap * 4.0) + (fuzzy_overlap * 2.0) + (coverage * 3.0) + phrase_ratio
+
+def _assistant_pick_segments(question: str, segments, limit: int):
+    if not segments:
+        return []
+
+    question_tokens = _assistant_filtered_tokens(question)
+    if not question_tokens:
+        question_tokens = _assistant_tokenize(question)
+
+    radius = 1
+    ranked_ranges = []
+
+    for idx in range(len(segments)):
+        start = max(0, idx - radius)
+        end = min(len(segments), idx + radius + 1)
+        neighborhood = segments[start:end]
+        neighborhood_text = " ".join(_assistant_segment_text(seg) for seg in neighborhood)
+        score = _assistant_score_text(question_tokens, neighborhood_text)
+        ranked_ranges.append({
+            "start": start,
+            "end": end - 1,
+            "score": score,
+        })
+
+    ranked_ranges.sort(key=lambda item: (item["score"], -item["start"]), reverse=True)
+
+    selected_ranges = []
+    for item in ranked_ranges:
+        if item["score"] <= 0 and selected_ranges:
+            break
+
+        overlaps_existing = any(
+            not (item["end"] < current["start"] - 1 or item["start"] > current["end"] + 1)
+            for current in selected_ranges
+        )
+        if overlaps_existing:
+            continue
+
+        selected_ranges.append(item)
+        if len(selected_ranges) >= limit:
+            break
+
+    if not selected_ranges:
+        fallback_end = min(len(segments), max(1, limit))
+        selected_ranges = [{"start": 0, "end": fallback_end - 1, "score": 0.0}]
+
+    selected_ranges.sort(key=lambda item: item["start"])
+
+    merged_ranges = []
+    for item in selected_ranges:
+        if not merged_ranges or item["start"] > merged_ranges[-1]["end"] + 1:
+            merged_ranges.append(item.copy())
+            continue
+        merged_ranges[-1]["end"] = max(merged_ranges[-1]["end"], item["end"])
+        merged_ranges[-1]["score"] = max(merged_ranges[-1]["score"], item["score"])
+
+    blocks = []
+    for item in merged_ranges:
+        block_segments = segments[item["start"]:item["end"] + 1]
+        context = _assistant_format_context(block_segments)
+        if not context:
+            continue
+        blocks.append({
+            "time": _assistant_block_time(block_segments),
+            "speaker": "",
+            "text": " ".join(_assistant_segment_text(seg) for seg in block_segments if _assistant_segment_text(seg)),
+            "context": context,
+            "score": item["score"],
+        })
+
+    return blocks
+
+@require_POST
+def episode_assistant_chat(request, episode_id):
+    try:
+        payload = json.loads(request.body.decode("utf-8"))
+    except (TypeError, ValueError, json.JSONDecodeError):
+        return JsonResponse({"error": "Invalid JSON payload."}, status=400)
+
+    question = (payload.get("message") or "").strip()
+    if not question:
+        return JsonResponse({"error": "Message is required."}, status=400)
+
+    if len(question) > 500:
+        return JsonResponse({"error": "Message is too long."}, status=400)
+
+    base_episode = get_object_or_404(Episode.objects.select_related("channel"), pk=episode_id)
+    lang_code = canon_lang(get_selected_language(request) or "en")
+    segments = list(_assistant_transcript_queryset(base_episode, lang_code))
+
+    if not segments:
+        return JsonResponse({"error": "No transcript available for this episode."}, status=404)
+
+    selected_segments = _assistant_pick_segments(
+        question=question,
+        segments=segments,
+        limit=max(1, settings.EPISODE_ASSISTANT_MAX_SEGMENTS),
+    )
+
+    if not selected_segments:
+        return JsonResponse({"error": "No transcript available for this episode."}, status=404)
+
+    transcript_context = "\n\n".join(
+        f"Context block [{item['time']}]\n{item['context']}"
+        for item in selected_segments
+    )
+
+    system_prompt = (
+        "You are an assistant for a podcast episode page. "
+        "Answer only from the provided transcript context. "
+        "If the answer is not supported by the transcript context, say you cannot find it in this episode transcript. "
+        "Use the names and facts exactly as they appear in the transcript context. "
+        "Keep the answer concise and mention timestamps when useful."
+    )
+
+    user_prompt = (
+        f"Episode title: {base_episode.episode_title}\n"
+        f"Channel: {base_episode.channel.channel_title}\n\n"
+        f"Transcript context:\n{transcript_context}\n\n"
+        f"Question: {question}"
+    )
+
+    try:
+        response = requests.post(
+            f"{settings.OLLAMA_BASE_URL.rstrip('/')}/api/chat",
+            json={
+                "model": settings.OLLAMA_MODEL,
+                "stream": False,
+                "messages": [
+                    {"role": "system", "content": system_prompt},
+                    {"role": "user", "content": user_prompt},
+                ],
+                "options": {
+                    "temperature": 0.2,
+                },
+            },
+            timeout=settings.OLLAMA_TIMEOUT_SECONDS,
+        )
+        if not response.ok:
+            try:
+                error_data = response.json()
+                error_message = error_data.get("error") or "Local AI model is unavailable right now."
+            except ValueError:
+                error_message = "Local AI model is unavailable right now."
+            return JsonResponse({"error": error_message}, status=503)
+        data = response.json()
+    except (requests.RequestException, ValueError):
+        return JsonResponse(
+            {"error": "Local AI model is unavailable right now."},
+            status=503,
+        )
+
+    answer = (data.get("message") or {}).get("content", "").strip()
+    if not answer:
+        answer = "I could not generate an answer from this episode transcript."
+
+    return JsonResponse({
+        "answer": answer,
+        "sources": [
+            {"time": item["time"], "speaker": item["speaker"]}
+            for item in selected_segments[:3]
+        ],
+    })
 
 @require_POST
 def episode_share_ping(request, episode_id):

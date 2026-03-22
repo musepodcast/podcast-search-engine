@@ -230,6 +230,260 @@ input[type="text"]::placeholder { color: var(--muted-color); }
   filter: var(--favicon-filter);
 }
 
+/* =========================================================
+   EPISODE ASSISTANT
+   ========================================================= */
+
+#episode-assistant-root {
+  --assistant-launcher-bottom: 68px;
+  --assistant-panel-bottom: 154px;
+  --assistant-launcher-bg: linear-gradient(135deg, #1f6feb, #0ab8a2);
+  --assistant-header-bg: linear-gradient(135deg, #1558a6, #0e9e8e);
+  --assistant-panel-bg:
+    linear-gradient(180deg, rgba(232, 247, 247, 0.96), rgba(245, 251, 255, 0.98));
+  --assistant-panel-border: rgba(22, 88, 166, 0.14);
+  --assistant-panel-shadow: 0 20px 50px rgba(22, 58, 92, 0.18);
+  --assistant-body-bg:
+    radial-gradient(circle at top right, rgba(10, 184, 162, 0.14), transparent 34%),
+    linear-gradient(180deg, rgba(31, 111, 235, 0.07), rgba(255, 255, 255, 0.22) 24%, transparent 48%);
+  --assistant-body-text: #143047;
+  --assistant-muted-text: #33556d;
+  --assistant-assistant-bubble-bg: rgba(10, 184, 162, 0.18);
+  --assistant-user-bubble-bg: rgba(31, 111, 235, 0.16);
+  --assistant-bubble-text: #10283d;
+  --assistant-input-bg: rgba(255, 255, 255, 0.88);
+  --assistant-input-border: rgba(21, 88, 166, 0.18);
+  --assistant-input-placeholder: #557086;
+}
+
+:root[data-theme="dark"] #episode-assistant-root {
+  --assistant-launcher-bg: linear-gradient(135deg, #0d5bd3, #0f9f8f);
+  --assistant-header-bg: linear-gradient(135deg, #0a3768, #0a7468);
+  --assistant-panel-bg:
+    linear-gradient(180deg, rgba(13, 20, 30, 0.97), rgba(18, 29, 41, 0.98));
+  --assistant-panel-border: rgba(131, 167, 255, 0.16);
+  --assistant-panel-shadow: 0 22px 54px rgba(0, 0, 0, 0.42);
+  --assistant-body-bg:
+    radial-gradient(circle at top right, rgba(6, 214, 160, 0.12), transparent 32%),
+    linear-gradient(180deg, rgba(131, 167, 255, 0.08), transparent 24%);
+  --assistant-body-text: #e8f1f8;
+  --assistant-muted-text: #b7cadd;
+  --assistant-assistant-bubble-bg: rgba(6, 214, 160, 0.16);
+  --assistant-user-bubble-bg: rgba(131, 167, 255, 0.16);
+  --assistant-bubble-text: #edf6ff;
+  --assistant-input-bg: rgba(255, 255, 255, 0.04);
+  --assistant-input-border: rgba(131, 167, 255, 0.16);
+  --assistant-input-placeholder: #9db5c8;
+}
+
+#episode-assistant-launcher {
+  position: fixed;
+  right: 20px;
+  bottom: var(--assistant-launcher-bottom);
+  width: 58px;
+  height: 58px;
+  border: 0;
+  border-radius: 999px;
+  z-index: 1400;
+  color: #fff;
+  background: var(--assistant-launcher-bg);
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.22);
+}
+
+#episode-assistant-panel {
+  position: fixed;
+  right: 20px;
+  bottom: var(--assistant-panel-bottom);
+  width: min(380px, calc(100vw - 24px));
+  height: min(520px, calc(100vh - 120px));
+  z-index: 1400;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  color: var(--assistant-body-text);
+  border: 1px solid var(--assistant-panel-border);
+  border-radius: 18px;
+  background: var(--assistant-panel-bg);
+  box-shadow: var(--assistant-panel-shadow);
+}
+
+.assistant-hidden {
+  display: none !important;
+}
+
+.assistant-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 14px;
+  color: #fff;
+  background: var(--assistant-header-bg);
+}
+
+.assistant-subtitle {
+  margin-top: 2px;
+  font-size: 0.82rem;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.assistant-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.assistant-icon-btn {
+  width: 32px;
+  height: 32px;
+  border: 0;
+  border-radius: 999px;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.assistant-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 14px;
+  color: var(--assistant-body-text);
+  background: var(--assistant-body-bg);
+}
+
+.assistant-message {
+  max-width: 88%;
+  margin-bottom: 10px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  line-height: 1.4;
+  white-space: pre-wrap;
+  word-break: break-word;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+}
+
+.assistant-message--assistant {
+  color: var(--assistant-bubble-text);
+  background: var(--assistant-assistant-bubble-bg);
+}
+
+.assistant-message--user {
+  margin-left: auto;
+  color: var(--assistant-bubble-text);
+  background: var(--assistant-user-bubble-bg);
+}
+
+.assistant-source {
+  margin-top: 6px;
+  font-size: 0.78rem;
+  color: var(--assistant-muted-text);
+  opacity: 1;
+}
+
+.assistant-thinking {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.assistant-thinking-label {
+  font-size: 0.92rem;
+}
+
+.assistant-thinking-dots {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.assistant-thinking-dots span {
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: currentColor;
+  opacity: 0.32;
+  animation: assistant-thinking-pulse 1.2s infinite ease-in-out;
+}
+
+.assistant-thinking-dots span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.assistant-thinking-dots span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes assistant-thinking-pulse {
+  0%, 80%, 100% {
+    opacity: 0.28;
+    transform: translateY(0);
+  }
+  40% {
+    opacity: 0.95;
+    transform: translateY(-1px);
+  }
+}
+
+.assistant-form {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  padding: 12px;
+  border-top: 1px solid rgba(127, 127, 127, 0.14);
+  background: transparent;
+}
+
+#episode-assistant-input {
+  flex: 1;
+  min-height: 42px;
+  max-height: 120px;
+  padding: 10px 12px;
+  border: 1px solid var(--assistant-input-border);
+  border-radius: 12px;
+  background: var(--assistant-input-bg);
+  color: var(--assistant-body-text);
+  resize: none;
+  overflow-y: auto;
+}
+
+#episode-assistant-input::placeholder {
+  color: var(--assistant-input-placeholder);
+  opacity: 1;
+}
+
+#episode-assistant-send {
+  width: 42px;
+  height: 42px;
+  border: 0;
+  border-radius: 999px;
+  color: #fff;
+  background: var(--assistant-launcher-bg);
+}
+
+#episode-assistant-send:disabled,
+.assistant-icon-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+@media (max-width: 640px) {
+  #episode-assistant-root {
+    --assistant-launcher-bottom: 64px;
+    --assistant-panel-bottom: 146px;
+  }
+
+  #episode-assistant-launcher {
+    right: 14px;
+    bottom: var(--assistant-launcher-bottom);
+  }
+
+  #episode-assistant-panel {
+    right: 12px;
+    bottom: var(--assistant-panel-bottom);
+    width: calc(100vw - 24px);
+    height: min(72vh, 520px);
+  }
+}
+
 .favicon-icon {
   width: 10px; height: 20px;
   border-radius: 50%;
