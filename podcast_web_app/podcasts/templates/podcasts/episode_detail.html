@@ -352,15 +352,21 @@
 </div>
 
 {% if merged_segments %}
-{% blocktrans asvar muse_intro %}Hi, I'm Muse. Ask me about this episode. I only answer from the transcript.{% endblocktrans %}
-<div id="episode-assistant-root" data-episode-id="{{ post_episode_id }}">
+<div
+  id="episode-assistant-root"
+  data-episode-id="{{ post_episode_id }}"
+  data-authenticated="{{ request.user.is_authenticated|yesno:'true,false' }}">
+  {% blocktrans asvar muse_intro %}Hi, I'm Muse. Ask me about this episode. I only answer from the transcript.{% endblocktrans %}
   <button
     id="episode-assistant-launcher"
     type="button"
-    title="{% trans 'Ask about this episode' %}"
-    aria-label="{% trans 'Open episode assistant' %}">
+    class="{% if not request.user.is_authenticated %}is-guest guest-dim{% endif %}"
+    title="{% if request.user.is_authenticated %}{% trans 'Ask about this episode' %}{% else %}{% trans 'Sign in to use Muse' %}{% endif %}"
+    aria-label="{% if request.user.is_authenticated %}{% trans 'Open episode assistant' %}{% else %}{% trans 'Sign in to use Muse' %}{% endif %}">
     <i class="fa-solid fa-robot" aria-hidden="true"></i>
   </button>
+
+  {% if request.user.is_authenticated %}
 
   <section
     id="episode-assistant-panel"
@@ -408,6 +414,7 @@
       </button>
     </form>
   </section>
+  {% endif %}
 </div>
 {% endif %}
 
@@ -1676,6 +1683,7 @@ function showGuestNotice() {
   if (!root) return;
 
   const episodeId = root.getAttribute("data-episode-id");
+  const authed = root.getAttribute("data-authenticated") === "true";
   const launcher = document.getElementById("episode-assistant-launcher");
   const panel = document.getElementById("episode-assistant-panel");
   const closeBtn = document.getElementById("episode-assistant-close");
@@ -1687,7 +1695,17 @@ function showGuestNotice() {
   const initialAssistantMessage = "{{ muse_intro|escapejs }}";
   const thinkingMessage = "{% trans 'Muse is thinking' %}";
 
-  if (!launcher || !panel || !form || !input || !messages || !sendBtn) return;
+  if (!launcher) return;
+
+  if (!authed) {
+    launcher.addEventListener("click", function (e) {
+      e.preventDefault();
+      showGuestNotice();
+    });
+    return;
+  }
+
+  if (!panel || !form || !input || !messages || !sendBtn) return;
 
   function isOpen() {
     return !panel.classList.contains("assistant-hidden");

@@ -234,6 +234,34 @@ class ChannelSearchQuery(models.Model):
         return f"[{self.channel.channel_title}] {self.query} by {who}"
 
 
+class EpisodeAssistantQuery(models.Model):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        null=True, blank=True,
+        on_delete=models.SET_NULL
+    )
+    episode = models.ForeignKey('Episode', on_delete=models.CASCADE, related_name='assistant_queries')
+    query = models.CharField(max_length=500)
+    language = models.CharField(max_length=16, blank=True, null=True)
+    model_name = models.CharField(max_length=100, blank=True, null=True)
+    ip_address = models.GenericIPAddressField(null=True, blank=True)
+    count = models.PositiveIntegerField(default=1)
+    first_asked = models.DateTimeField(auto_now_add=True)
+    last_asked = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        indexes = [
+            models.Index(fields=['episode', 'query']),
+            models.Index(fields=['-last_asked']),
+        ]
+        verbose_name = 'Episode Assistant Query'
+        verbose_name_plural = 'Episode Assistant Queries'
+
+    def __str__(self):
+        who = self.user.username if self.user_id else "guest"
+        return f"[{self.episode.episode_title}] {self.query} by {who}"
+
+
 class Transcript(models.Model):
     episode = models.ForeignKey(
         Episode,

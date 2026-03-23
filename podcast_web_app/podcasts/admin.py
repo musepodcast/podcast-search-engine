@@ -9,7 +9,7 @@ from .models import (
     Chapter, CustomUser, ChannelVisit,
     EpisodeVisit, SearchQuery, ChannelInteraction, 
     EpisodeInteraction, Comment, Reply, 
-    SupportTicket, SupportTicketAttachment, ChannelSearchQuery,
+    SupportTicket, SupportTicketAttachment, ChannelSearchQuery, EpisodeAssistantQuery,
     EpisodeDownload, EpisodeShare
 )
 from django.utils import timezone
@@ -205,6 +205,18 @@ class ChannelSearchQueryAdmin(admin.ModelAdmin):
     list_display = ('channel', 'query', 'who', 'count', 'last_searched', 'language', 'ip_address')
     list_filter  = ('channel', 'language')
     search_fields = ('query', 'user__username', 'channel__channel_title', 'ip_address')
+
+    @admin.display(description='User')
+    def who(self, obj):
+        return obj.user.username if obj.user_id else 'guest'
+
+@admin.register(EpisodeAssistantQuery)
+class EpisodeAssistantQueryAdmin(admin.ModelAdmin):
+    list_display = ('episode', 'query', 'who', 'count', 'last_asked', 'language', 'model_name', 'ip_address')
+    list_filter = ('user', 'language', 'model_name', 'episode__channel')
+    search_fields = ('query', 'user__username', 'episode__episode_title', 'ip_address')
+    autocomplete_fields = ('user', 'episode')
+    ordering = ('-last_asked',)
 
     @admin.display(description='User')
     def who(self, obj):
