@@ -34,7 +34,7 @@ from .models import (
     Chapter, ChapterTranslations,
     SearchQuery, ChannelInteraction, EpisodeInteraction,
     Comment, CommentReaction, Reply,
-    SupportTicket, SupportTicketAttachment, ChannelSearchQuery,
+    SupportTicket, SupportTicketAttachment, ChannelSearchQuery, EpisodeAssistantQuery,
     EpisodeDownload, EpisodeShare
 
 )
@@ -288,6 +288,9 @@ def _assistant_pick_segments(question: str, segments, limit: int):
 
 @require_POST
 def episode_assistant_chat(request, episode_id):
+    if not request.user.is_authenticated:
+        return JsonResponse({"error": "Please sign in to use Muse."}, status=403)
+
     try:
         payload = json.loads(request.body.decode("utf-8"))
     except (TypeError, ValueError, json.JSONDecodeError):
@@ -302,10 +305,27 @@ def episode_assistant_chat(request, episode_id):
 
     base_episode = get_object_or_404(Episode.objects.select_related("channel"), pk=episode_id)
     lang_code = canon_lang(get_selected_language(request) or "en")
+    ip_address = request.META.get('HTTP_X_FORWARDED_FOR', '').split(',')[0].strip() or request.META.get('REMOTE_ADDR')
     segments = list(_assistant_transcript_queryset(base_episode, lang_code))
 
     if not segments:
         return JsonResponse({"error": "No transcript available for this episode."}, status=404)
+
+    assistant_query, created = EpisodeAssistantQuery.objects.get_or_create(
+        user=request.user,
+        episode=base_episode,
+        query=question,
+        language=lang_code,
+        model_name=settings.OLLAMA_MODEL,
+        defaults={'ip_address': ip_address}
+    )
+    if not created:
+        EpisodeAssistantQuery.objects.filter(pk=assistant_query.pk).update(
+            count=F('count') + 1,
+            last_asked=timezone.now(),
+            ip_address=ip_address,
+            model_name=settings.OLLAMA_MODEL,
+        )
 
     selected_segments = _assistant_pick_segments(
         question=question,
