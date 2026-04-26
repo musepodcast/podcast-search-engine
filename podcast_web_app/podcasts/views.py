@@ -3296,6 +3296,108 @@ class SearchResultsView(LoginRequiredMixin, ListView):
             page_ids = list(qs_ids)
 
             return paginator, page_obj, page_ids
+
+        def _paginate_ordered_ids(ordered_ids):
+            """
+            Paginate an already-ranked list of IDs without letting the DB reorder it.
+            """
+            total = len(ordered_ids)
+            paginator = Paginator(range(total), page_size)
+            page_obj = paginator.get_page(page)
+            return paginator, page_obj, ordered_ids[start:end]
+
+        def _combined_ranked_ids(candidate_ids, selected_fields, transcript_ids=None, cap=1000):
+            """
+            Shared ranking for combined searches across title/channel/description/transcript.
+            Scores are intentionally field-weighted so stronger fields win ties.
+            """
+            candidate_ids = list(dict.fromkeys(eid for eid in candidate_ids if eid in allowed_episode_ids))
+            if not candidate_ids:
+                return []
+
+            terms = [term.lower() for term in q.split() if term]
+            phrase = q.lower()
+            transcript_ids = set(transcript_ids or [])
+
+            def _score_text(text, exact_score, all_score, partial_score):
+                text = (text or "").lower()
+                if not text:
+                    return 0
+                if phrase and phrase in text:
+                    return exact_score
+                if terms:
+                    matches = sum(1 for term in terms if term in text)
+                    if matches == len(terms):
+                        return all_score
+                    if matches:
+                        return matches * partial_score
+                return 0
+
+            score_by_id = {}
+            pub_by_id = {}
+            rows = (
+                Episode.objects
+                .filter(id__in=candidate_ids)
+                .select_related("channel")
+                .values("id", "episode_title", "description", "publication_date", "channel__channel_title")
+            )
+
+            for row in rows:
+                eid = row["id"]
+                score = 0
+                if "episode_title" in selected_fields:
+                    score += _score_text(row.get("episode_title"), 100, 70, 20)
+                if "channel_title" in selected_fields:
+                    score += _score_text(row.get("channel__channel_title"), 80, 55, 16)
+                if "description" in selected_fields or "episode_description" in selected_fields:
+                    score += _score_text(row.get("description"), 50, 35, 10)
+                if eid in transcript_ids:
+                    score += 8
+
+                score_by_id[eid] = score
+                pub = row.get("publication_date")
+                pub_by_id[eid] = pub.timestamp() if pub else 0
+
+            if selected_fields & transcript_selectors and transcript_ids:
+                candidate_transcript_ids = [eid for eid in candidate_ids if eid in transcript_ids]
+                if candidate_transcript_ids:
+                    exact_ids = set(
+                        Transcript.objects
+                        .filter(episode_id__in=candidate_transcript_ids, segment_text__icontains=q)
+                        .values_list("episode_id", flat=True)
+                        .distinct()
+                    )
+                    for eid in exact_ids:
+                        score_by_id[eid] = max(score_by_id.get(eid, 0), 0) + 40
+
+                    if terms:
+                        term_hits = {eid: 0 for eid in candidate_transcript_ids}
+                        for term in terms:
+                            hit_ids = (
+                                Transcript.objects
+                                .filter(episode_id__in=candidate_transcript_ids, segment_text__icontains=term)
+                                .values_list("episode_id", flat=True)
+                                .distinct()
+                            )
+                            for eid in hit_ids:
+                                term_hits[eid] = term_hits.get(eid, 0) + 1
+
+                        for eid, matches in term_hits.items():
+                            if not matches:
+                                continue
+                            if matches == len(terms):
+                                score_by_id[eid] = score_by_id.get(eid, 0) + 28
+                            else:
+                                score_by_id[eid] = score_by_id.get(eid, 0) + (matches * 8)
+
+            ranked = [
+                eid for eid, score in sorted(
+                    score_by_id.items(),
+                    key=lambda item: (-item[1], -pub_by_id.get(item[0], 0), item[0]),
+                )
+                if score > 0
+            ]
+            return ranked[:cap]
         #HERE
         def _fetch_page_items_with_stats(page_ids):
             """
@@ -3476,20 +3578,51 @@ class SearchResultsView(LoginRequiredMixin, ListView):
         if search_type == 'channels':
             allowed_channel_ids = _channel_allowed_ids_by_language()
             wants = self.request.GET.getlist('search_in')
-            filters = []
-            if 'channel_title' in wants:
-                filters.append(Q(channel_title__icontains=q))
+            channel_search_fields = []
+            if 'channel_title' in wants or not wants:
+                channel_search_fields.append(('channel_title', 100, 70, 20))
             if 'channel_author' in wants:
-                filters.append(Q(channel_author__icontains=q))
+                channel_search_fields.append(('channel_author', 80, 55, 16))
             if 'channel_summary' in wants:
-                filters.append(Q(channel_summary__icontains=q))
+                channel_search_fields.append(('channel_summary', 50, 35, 10))
+
+            terms = [term for term in q.split() if term]
+            filter_q = Q()
+            score_expr = Value(0, output_field=IntegerField())
+
+            for field, exact_score, all_score, partial_score in channel_search_fields:
+                field_exact_q = Q(**{f"{field}__icontains": q})
+                filter_q |= field_exact_q
+
+                field_all_q = Q()
+                partial_expr = Value(0, output_field=IntegerField())
+                for term in terms:
+                    term_q = Q(**{f"{field}__icontains": term})
+                    filter_q |= term_q
+                    field_all_q &= term_q
+                    partial_expr = partial_expr + Case(
+                        When(term_q, then=Value(partial_score)),
+                        default=Value(0),
+                        output_field=IntegerField(),
+                    )
+
+                if len(terms) > 1:
+                    score_expr = score_expr + Case(
+                        When(field_exact_q, then=Value(exact_score)),
+                        When(field_all_q, then=Value(all_score)),
+                        default=partial_expr,
+                        output_field=IntegerField(),
+                    )
+                else:
+                    score_expr = score_expr + Case(
+                        When(field_exact_q, then=Value(exact_score)),
+                        default=partial_expr,
+                        output_field=IntegerField(),
+                    )
 
             chans = Channel.objects.all().filter(id__in=allowed_channel_ids)
-            if filters:
-                combined = filters.pop()
-                for f in filters:
-                    combined |= f
-                chans = chans.filter(combined)
+            if filter_q:
+                chans = chans.filter(filter_q)
             else:
                 chans = chans.filter(channel_title__icontains=q)
 
@@ -3534,7 +3667,8 @@ class SearchResultsView(LoginRequiredMixin, ListView):
                     'id', 'channel_title', 'channel_author', 'channel_summary',
                     'channel_image_url', 'sanitized_channel_title'
                 )
-                .order_by('channel_title', 'id')
+                .annotate(search_score=score_expr)
+                .order_by('-search_score', 'channel_title', 'id')
             )
 
             paginator = Paginator(chans, page_size)
@@ -3551,21 +3685,22 @@ class SearchResultsView(LoginRequiredMixin, ListView):
             days = int(date_filter)
             window = (timezone.timedelta(hours=24) if days == 24 else timezone.timedelta(days=days))
         
-        # Build eligible episode ids for date filtering in TranscriptDocument (ES can't join)
+        # Build eligible episode ids for date filtering in TranscriptDocument (ES can't join).
+        # Keep this as None when there is no date window. For broad searches, sending
+        # every allowed episode ID as a terms filter can exceed Elasticsearch's
+        # index.max_terms_count limit.
         eligible_episode_ids = None
 
-        base_eligible_qs = (
-            Episode.objects
-            .filter(id__in=allowed_episode_ids)
-            .exclude(channel__sanitized_channel_title__isnull=True)
-            .exclude(channel__sanitized_channel_title='')
-        )
-
         if window:
-            base_eligible_qs = base_eligible_qs.filter(publication_date__gte=timezone.now() - window)
+            base_eligible_qs = (
+                Episode.objects
+                .filter(id__in=allowed_episode_ids)
+                .exclude(channel__sanitized_channel_title__isnull=True)
+                .exclude(channel__sanitized_channel_title='')
+                .filter(publication_date__gte=timezone.now() - window)
+            )
 
-        # Always set it when transcript searching (keeps counts consistent)
-        eligible_episode_ids = list(base_eligible_qs.values_list("id", flat=True))
+            eligible_episode_ids = list(base_eligible_qs.values_list("id", flat=True))
 
 
         # Selected UI fields
@@ -3807,9 +3942,101 @@ class SearchResultsView(LoginRequiredMixin, ListView):
                     .values_list('id', flat=True)
             )
 
+        def _ranked_db_ids_for_db_only_fields(sel_set, cap=1000):
+            """
+            Rank DB-backed fields like ES title search:
+            exact phrase, all words, then partial matches by word count.
+            """
+            search_fields = []
+            if 'channel_title' in sel_set:
+                search_fields.append('channel__channel_title')
+            if 'description' in sel_set or 'episode_description' in sel_set:
+                search_fields.append('description')
+
+            if not search_fields:
+                self._last_db_ids_total = 0
+                return []
+
+            base_qs = (
+                Episode.objects
+                .filter(id__in=allowed_episode_ids)
+                .exclude(channel__sanitized_channel_title__isnull=True)
+                .exclude(channel__sanitized_channel_title='')
+            )
+            if window:
+                base_qs = base_qs.filter(publication_date__gte=timezone.now() - window)
+
+            terms = [term for term in q.split() if term]
+            out_ids = []
+            seen_ids = set()
+
+            def _any_field_contains(term):
+                field_q = Q()
+                for field in search_fields:
+                    field_q |= Q(**{f"{field}__icontains": term})
+                return field_q
+
+            def _append(ids):
+                for eid in ids:
+                    if eid not in seen_ids:
+                        seen_ids.add(eid)
+                        out_ids.append(eid)
+
+            def _score_expression():
+                score = Value(0, output_field=IntegerField())
+                for term in terms:
+                    score = score + Case(
+                        When(_any_field_contains(term), then=Value(1)),
+                        default=Value(0),
+                        output_field=IntegerField(),
+                    )
+                return score
+
+            if terms:
+                scored_qs = base_qs.annotate(_match_score=_score_expression())
+                self._last_db_ids_total = scored_qs.filter(_match_score__gte=1).count()
+            else:
+                self._last_db_ids_total = base_qs.filter(_any_field_contains(q)).count()
+
+            if len(terms) > 1:
+                phrase_q = _any_field_contains(q)
+                _append(
+                    base_qs.filter(phrase_q)
+                    .order_by('-publication_date', '-id')
+                    .values_list('id', flat=True)[:cap]
+                )
+
+                if len(out_ids) < cap:
+                    all_terms_q = Q()
+                    for term in terms:
+                        all_terms_q &= _any_field_contains(term)
+                    _append(
+                        base_qs.filter(all_terms_q)
+                        .order_by('-publication_date', '-id')
+                        .values_list('id', flat=True)[:cap]
+                    )
+
+                for min_match in range(len(terms) - 1, 0, -1):
+                    if len(out_ids) >= cap:
+                        break
+                    _append(
+                        base_qs.annotate(_match_score=_score_expression())
+                        .filter(_match_score__gte=min_match)
+                        .order_by('-_match_score', '-publication_date', '-id')
+                        .values_list('id', flat=True)[:cap]
+                    )
+            else:
+                _append(
+                    base_qs.filter(_any_field_contains(q))
+                    .order_by('-publication_date', '-id')
+                    .values_list('id', flat=True)[:cap]
+                )
+
+            return out_ids[:cap]
+
 
         # -------- EpisodeDocument ES helper (titles/translations/etc) --------
-        def _episode_es_ids_for_selected_fields(sel_set):
+        def _episode_es_ids_for_selected_fields(sel_set, restrict_episode_ids=None, fetch_ranked_ids=True):
             """
             Returns a set of master Episode IDs that match selected ES fields, respecting language.
             - English => search EpisodeDocument (masters)
@@ -3835,27 +4062,114 @@ class SearchResultsView(LoginRequiredMixin, ListView):
             wants_en = _lang_wants_english(selected_langs)
             non_en = _lang_non_english(selected_langs)
 
-            out_ids = set()
+            title_terms = [term for term in q.split() if term]
+            use_phrase_first = len(title_terms) > 1
+            es_id_fetch_cap = 1000
+            out_ids = []
+            seen_ids = set()
+            total_matches = 0
+            restrict_episode_ids = list(restrict_episode_ids or [])
+            restrict_too_large = len(restrict_episode_ids) > 65000
+
+            def _append_ranked(ids):
+                for eid in ids:
+                    if eid in allowed_episode_ids and eid not in seen_ids:
+                        seen_ids.add(eid)
+                        out_ids.append(eid)
+
+            def _hit_total(resp):
+                total = getattr(getattr(resp, "hits", None), "total", 0)
+                if hasattr(total, "value"):
+                    return int(total.value or 0)
+                if isinstance(total, dict):
+                    return int(total.get("value") or 0)
+                return int(total or 0)
 
             # ---- Masters (English/untranslated) ----
             if wants_en and fields_master:
                 es = EpisodeDocument.search()
                 if window:
                     es = es.filter("range", publication_date={"gte": timezone.now() - window})
+                if restrict_episode_ids and not restrict_too_large:
+                    es = es.filter("ids", values=[str(eid) for eid in restrict_episode_ids])
 
-                broad_q = ES_Q("multi_match", query=q, fields=fields_master, type="best_fields", operator="or")
+                all_terms_q = ES_Q("multi_match", query=q, fields=fields_master, type="best_fields", operator="and")
                 phrase_q = ES_Q("multi_match", query=q, fields=fields_master, type="phrase")
 
-                es = es.query(
-                    "function_score",
-                    query=broad_q,
-                    functions=[{"filter": phrase_q, "weight": 10}],
-                    boost_mode="sum",
-                    score_mode="sum",
-                ).extra(size=10000)
+                try:
+                    search = es
+                    count_q = ES_Q(
+                        "multi_match",
+                        query=q,
+                        fields=fields_master,
+                        type="best_fields",
+                        operator="or",
+                        minimum_should_match="1",
+                    )
+                    count_resp = (
+                        search.query(count_q)
+                        .source(False)
+                        .extra(size=0, track_total_hits=True)
+                        .params(request_timeout=5)
+                        .execute()
+                    )
+                    total_matches += _hit_total(count_resp)
 
-                resp = es.execute()
-                out_ids |= {int(hit.meta.id) for hit in resp}
+                    if fetch_ranked_ids and use_phrase_first:
+                        phrase_search = (
+                            search.query(phrase_q)
+                            .source(False)
+                            .extra(size=es_id_fetch_cap, track_total_hits=False)
+                            .params(request_timeout=5)
+                        )
+                        phrase_resp = phrase_search.execute()
+                        _append_ranked(int(hit.meta.id) for hit in phrase_resp)
+
+                    if fetch_ranked_ids and use_phrase_first:
+                        all_terms_search = (
+                            search.query(
+                                "function_score",
+                                query=all_terms_q,
+                                functions=[{"filter": phrase_q, "weight": 10}],
+                                boost_mode="sum",
+                                score_mode="sum",
+                            )
+                            .source(False)
+                            .extra(size=es_id_fetch_cap, track_total_hits=False)
+                            .params(request_timeout=5)
+                        )
+                        all_terms_resp = all_terms_search.execute()
+                        _append_ranked(int(hit.meta.id) for hit in all_terms_resp)
+
+                    if fetch_ranked_ids:
+                        min_match_levels = range(len(title_terms) - 1, 0, -1) if use_phrase_first else (1,)
+                        for min_match in min_match_levels:
+                            if len(out_ids) >= es_id_fetch_cap:
+                                break
+                            partial_q = ES_Q(
+                                "multi_match",
+                                query=q,
+                                fields=fields_master,
+                                type="best_fields",
+                                operator="or",
+                                minimum_should_match=str(min_match),
+                            )
+                            partial_search = (
+                                search.query(
+                                    "function_score",
+                                    query=partial_q,
+                                    functions=[{"filter": phrase_q, "weight": 10}],
+                                    boost_mode="sum",
+                                    score_mode="sum",
+                                )
+                                .source(False)
+                                .extra(size=es_id_fetch_cap, track_total_hits=False)
+                                .params(request_timeout=5)
+                            )
+                            partial_resp = partial_search.execute()
+                            _append_ranked(int(hit.meta.id) for hit in partial_resp)
+                except Exception:
+                    pass
 
             # ---- Translations (Portuguese, etc) ----
             if non_en and fields_transl:
@@ -3864,23 +4178,94 @@ class SearchResultsView(LoginRequiredMixin, ListView):
 
                 if window:
                     tes = tes.filter("range", publication_date={"gte": timezone.now() - window})
+                if restrict_episode_ids and not restrict_too_large:
+                    tes = tes.filter("terms", episode_id=restrict_episode_ids)
 
-                broad_q = ES_Q("multi_match", query=q, fields=fields_transl, type="best_fields", operator="or")
+                all_terms_q = ES_Q("multi_match", query=q, fields=fields_transl, type="best_fields", operator="and")
                 phrase_q = ES_Q("multi_match", query=q, fields=fields_transl, type="phrase")
 
-                tes = tes.query(
-                    "function_score",
-                    query=broad_q,
-                    functions=[{"filter": phrase_q, "weight": 10}],
-                    boost_mode="sum",
-                    score_mode="sum",
-                ).extra(size=10000)
+                try:
+                    search = tes
+                    count_q = ES_Q(
+                        "multi_match",
+                        query=q,
+                        fields=fields_transl,
+                        type="best_fields",
+                        operator="or",
+                        minimum_should_match="1",
+                    )
+                    count_search = (
+                        search.query(count_q)
+                        .source(False)
+                        .extra(size=0, track_total_hits=True)
+                        .params(request_timeout=5)
+                    )
+                    count_search.aggs.bucket("uniq_eps", "cardinality", field="episode_id")
+                    count_resp = count_search.execute()
+                    try:
+                        total_matches += int(count_resp.aggregations.uniq_eps.value or 0)
+                    except Exception:
+                        total_matches += _hit_total(count_resp)
 
-                tresp = tes.execute()
-                # EpisodeTranslationsDocument has episode_id field that is the master episode id
-                out_ids |= {int(hit.episode_id) for hit in tresp}
+                    if fetch_ranked_ids and use_phrase_first:
+                        phrase_search = (
+                            search.query(phrase_q)
+                            .source(["episode_id"])
+                            .extra(size=es_id_fetch_cap, track_total_hits=False)
+                            .params(request_timeout=5)
+                        )
+                        phrase_resp = phrase_search.execute()
+                        _append_ranked(int(hit.episode_id) for hit in phrase_resp)
 
-            return out_ids & allowed_episode_ids
+                    if fetch_ranked_ids and use_phrase_first:
+                        all_terms_search = (
+                            search.query(
+                                "function_score",
+                                query=all_terms_q,
+                                functions=[{"filter": phrase_q, "weight": 10}],
+                                boost_mode="sum",
+                                score_mode="sum",
+                            )
+                            .source(["episode_id"])
+                            .extra(size=es_id_fetch_cap, track_total_hits=False)
+                            .params(request_timeout=5)
+                        )
+                        all_terms_resp = all_terms_search.execute()
+                        _append_ranked(int(hit.episode_id) for hit in all_terms_resp)
+
+                    if fetch_ranked_ids:
+                        min_match_levels = range(len(title_terms) - 1, 0, -1) if use_phrase_first else (1,)
+                        for min_match in min_match_levels:
+                            if len(out_ids) >= es_id_fetch_cap:
+                                break
+                            partial_q = ES_Q(
+                                "multi_match",
+                                query=q,
+                                fields=fields_transl,
+                                type="best_fields",
+                                operator="or",
+                                minimum_should_match=str(min_match),
+                            )
+                            partial_search = (
+                                search.query(
+                                    "function_score",
+                                    query=partial_q,
+                                    functions=[{"filter": phrase_q, "weight": 10}],
+                                    boost_mode="sum",
+                                    score_mode="sum",
+                                )
+                                .source(["episode_id"])
+                                .extra(size=es_id_fetch_cap, track_total_hits=False)
+                                .params(request_timeout=5)
+                            )
+                            partial_resp = partial_search.execute()
+                            # EpisodeTranslationsDocument has episode_id field that is the master episode id
+                            _append_ranked(int(hit.episode_id) for hit in partial_resp)
+                except Exception:
+                    pass
+
+            self._last_es_ids_total = total_matches or len(out_ids)
+            return out_ids
 
 
 
@@ -3890,6 +4275,14 @@ class SearchResultsView(LoginRequiredMixin, ListView):
         if selected in transcript_only_sets:
             total_unique, page_ids_scores = _transcript_page_episode_ids_with_total(start, page_size)
             page_ids = [eid for eid, _ in page_ids_scores]
+            transcript_display_cap = 1000
+            if start >= transcript_display_cap:
+                page_ids = []
+                page_ids_scores = []
+            elif end > transcript_display_cap:
+                keep = max(transcript_display_cap - start, 0)
+                page_ids = page_ids[:keep]
+                page_ids_scores = page_ids_scores[:keep]
 
             episode_qs = self._with_episode_stats(
                 Episode.objects.filter(id__in=page_ids).filter(id__in=allowed_episode_ids)
@@ -3959,7 +4352,8 @@ class SearchResultsView(LoginRequiredMixin, ListView):
                 page_list = page_list_tr
 
 
-            paginator = Paginator(range(total_unique), page_size)
+            self._total_display_items = total_unique
+            paginator = Paginator(range(min(total_unique, transcript_display_cap)), page_size)
             try:
                 page_obj = paginator.page(page)
             except EmptyPage:
@@ -3976,19 +4370,22 @@ class SearchResultsView(LoginRequiredMixin, ListView):
             selected_es = (selected - transcript_selectors - DB_ONLY)
             es_ids = _episode_es_ids_for_selected_fields(selected_es)
 
-            TRANSCRIPT_UNION_CAP = 10000  # start smaller; tune later (500-1500)
+            TRANSCRIPT_UNION_CAP = 1000
             try:
                 transcript_ids = _transcript_ids_for_union_fast(TRANSCRIPT_UNION_CAP)
             except (ConnectionTimeout, ReadTimeoutError, Exception):
                 transcript_ids = set()   # degrade gracefully instead of 500 error
 
-            all_ids = list((db_ids | es_ids | transcript_ids) & allowed_episode_ids)
+            all_ids = _combined_ranked_ids(
+                list(db_ids) + list(es_ids) + list(transcript_ids),
+                selected,
+                transcript_ids=transcript_ids,
+            )
 
             base_qs = (
                 Episode.objects.filter(id__in=all_ids)
                 .exclude(channel__sanitized_channel_title__isnull=True)
                 .exclude(channel__sanitized_channel_title='')
-                .order_by("-publication_date", "-id")
             )
             if window:
                 base_qs = base_qs.filter(publication_date__gte=timezone.now() - window)
@@ -3996,7 +4393,8 @@ class SearchResultsView(LoginRequiredMixin, ListView):
             # ✅ store expanded total for the UI (see helper below)
             self._set_total_display_from_base_qs(base_qs, selected_langs)
 
-            paginator, page_obj, page_ids = _paginate_ids_fast(base_qs, order_by=("-publication_date", "-id"))
+            valid_ids = set(base_qs.values_list("id", flat=True))
+            paginator, page_obj, page_ids = _paginate_ordered_ids([eid for eid in all_ids if eid in valid_ids])
             page_list = _fetch_page_items_with_stats(page_ids)
             self._decorate_items_for_episode_links(page_list, selected_langs)
             return paginator, page_obj, page_list, page_obj.has_other_pages()
@@ -4007,8 +4405,9 @@ class SearchResultsView(LoginRequiredMixin, ListView):
         # 5) DB-only searches (channel_title/description only)
         # ============================================================
         if selected and selected.issubset(DB_ONLY):
-            ep_ids = _db_ids_for_db_only_fields(selected)
-            ep_ids = set(ep_ids) & allowed_episode_ids
+            all_ids = _ranked_db_ids_for_db_only_fields(selected)
+            ep_ids = all_ids
+            
 
             all_ids = list(ep_ids)  # ✅ define all_ids here
 
@@ -4023,7 +4422,9 @@ class SearchResultsView(LoginRequiredMixin, ListView):
 
             self._set_total_display_from_base_qs(base_qs, selected_langs)  # ✅ ADD
 
-            paginator, page_obj, page_ids = _paginate_ids_fast(base_qs)
+            self._total_display_items = getattr(self, "_last_db_ids_total", len(all_ids))
+            valid_ids = set(base_qs.values_list("id", flat=True))
+            paginator, page_obj, page_ids = _paginate_ordered_ids([eid for eid in all_ids if eid in valid_ids])
             page_list = _fetch_page_items_with_stats(page_ids)
             self._decorate_items_for_episode_links(page_list, selected_langs)
             return paginator, page_obj, page_list, page_obj.has_other_pages()
@@ -4039,8 +4440,17 @@ class SearchResultsView(LoginRequiredMixin, ListView):
         if selected & DB_ONLY:
             db_ids = _db_ids_for_db_only_fields(selected & DB_ONLY)
             es_ids = _episode_es_ids_for_selected_fields(selected - DB_ONLY)
+            es_total = getattr(self, "_last_es_ids_total", len(es_ids))
+            overlap_total = 0
+            if db_ids and len(db_ids) <= 65000:
+                _episode_es_ids_for_selected_fields(
+                    selected - DB_ONLY,
+                    restrict_episode_ids=db_ids,
+                    fetch_ranked_ids=False,
+                )
+                overlap_total = getattr(self, "_last_es_ids_total", 0)
 
-            all_ids = list(set(db_ids | es_ids) & allowed_episode_ids)
+            all_ids = _combined_ranked_ids(list(db_ids) + list(es_ids), selected)
 
             base_qs = Episode.objects.filter(id__in=all_ids)
             base_qs = base_qs.exclude(channel__sanitized_channel_title__isnull=True).exclude(channel__sanitized_channel_title='')
@@ -4048,9 +4458,10 @@ class SearchResultsView(LoginRequiredMixin, ListView):
             if window:
                 base_qs = base_qs.filter(publication_date__gte=timezone.now() - window)
 
-            self._set_total_display_from_base_qs(base_qs, selected_langs)  # ✅ ADD
+            self._total_display_items = max(base_qs.count(), len(db_ids) + es_total - overlap_total)
 
-            paginator, page_obj, page_ids = _paginate_ids_fast(base_qs)
+            valid_ids = set(base_qs.values_list("id", flat=True))
+            paginator, page_obj, page_ids = _paginate_ordered_ids([eid for eid in all_ids if eid in valid_ids])
             page_list = _fetch_page_items_with_stats(page_ids)
             self._decorate_items_for_episode_links(page_list, selected_langs)
             return paginator, page_obj, page_list, page_obj.has_other_pages()
@@ -4061,12 +4472,12 @@ class SearchResultsView(LoginRequiredMixin, ListView):
         # ============================================================
         # ES-only searches
         es_ids = _episode_es_ids_for_selected_fields(selected)
-        es_ids = set(es_ids) & allowed_episode_ids
+        es_total = getattr(self, "_last_es_ids_total", len(es_ids))
         all_ids = list(es_ids)
 
         if not all_ids:
             es_ids = _episode_es_ids_for_selected_fields({'episode_title'})
-            es_ids = set(es_ids) & allowed_episode_ids
+            es_total = getattr(self, "_last_es_ids_total", len(es_ids))
             all_ids = list(es_ids)
 
         base_qs = Episode.objects.filter(id__in=all_ids) \
@@ -4076,9 +4487,10 @@ class SearchResultsView(LoginRequiredMixin, ListView):
         if window:
             base_qs = base_qs.filter(publication_date__gte=timezone.now() - window)
 
-        self._set_total_display_from_base_qs(base_qs, selected_langs)  # ✅ ADD
+        self._total_display_items = es_total
 
-        paginator, page_obj, page_ids = _paginate_ids_fast(base_qs)
+        valid_ids = set(base_qs.values_list("id", flat=True))
+        paginator, page_obj, page_ids = _paginate_ordered_ids([eid for eid in all_ids if eid in valid_ids])
         page_list = _fetch_page_items_with_stats(page_ids)
         self._decorate_items_for_episode_links(page_list, selected_langs)
         return paginator, page_obj, page_list, page_obj.has_other_pages()
