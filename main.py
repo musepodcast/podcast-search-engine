@@ -222,6 +222,15 @@ def convert_to_5min_wav_chunks(input_path, output_dir, chunk_length_ms=5*60*1000
 
 
 # A helper function to split long texts and then average the embeddings.
+def is_fatal_cuda_error(error) -> bool:
+    return "device-side assert triggered" in str(error).lower()
+
+
+def restart_on_fatal_cuda(error, context: str):
+    if is_fatal_cuda_error(error):
+        restart_self(f"FATAL CUDA device-side assert triggered during {context}")
+
+
 def get_embedding(model, text, max_tokens=256):
     # Ensure the text is non-empty and strip whitespace.
     if not text or not text.strip():
@@ -275,6 +284,7 @@ def get_embedding(model, text, max_tokens=256):
                     logging.info(f"Computed embedding for chunk (len {len(chunk)} characters) in {elapsed:.3f} seconds")
                     embeddings.append(embedding)
                 except Exception as e:
+                    restart_on_fatal_cuda(e, "embedding chunk encode")
                     logging.error(f"Failed to compute embedding for chunk: {chunk}", exc_info=True)
             if embeddings:
                 return torch.stack(embeddings, dim=0).mean(dim=0)
@@ -291,6 +301,7 @@ def get_embedding(model, text, max_tokens=256):
                 logging.info(f"Computed embedding for text in {elapsed:.3f} seconds")
                 return embedding
             except Exception as e:
+                restart_on_fatal_cuda(e, "embedding text encode")
                 logging.error("Failed to compute embedding for text", exc_info=True)
                 return None
     else:
@@ -304,6 +315,7 @@ def get_embedding(model, text, max_tokens=256):
             logging.info(f"Computed embedding for text (no tokenizer) in {elapsed:.3f} seconds")
             return embedding
         except Exception as e:
+            restart_on_fatal_cuda(e, "embedding text encode without tokenizer")
             logging.error("Failed to compute embedding for text (no tokenizer)", exc_info=True)
             return None
 
@@ -914,6 +926,20 @@ def youtube_video_id(url: str) -> str | None:
     except Exception:
         return None
 
+def youtube_live_skip_reason(yt: dict | None) -> str | None:
+    """
+    Return a reason when a YouTube video is not ready for processing yet.
+    Completed livestream VODs usually report live_status='was_live' and are allowed.
+    """
+    if not yt:
+        return None
+
+    live_status = str(yt.get("live_status") or "").strip().lower()
+    if yt.get("is_live") is True or live_status in {"is_live", "is_upcoming", "post_live"}:
+        return live_status or "is_live"
+
+    return None
+
 def youtube_channel_id_from_feed_url(feed_url: str) -> str | None:
     # e.g. https://www.youtube.com/feeds/videos.xml?channel_id=UCxxxx
     try:
@@ -1368,7 +1394,8 @@ def cached_get_embedding(model, text, max_tokens=256):
     else:
         logging.info("Cache miss for text; computing embedding.")
         embedding = get_embedding(model, text, max_tokens)
-        _embedding_cache[text] = embedding
+        if embedding is not None:
+            _embedding_cache[text] = embedding
         return embedding
 
 
@@ -1382,12 +1409,16 @@ def compute_similarity(model, text1, text2):
         # Get (possibly averaged) embeddings for each text using the cache.
         emb1 = cached_get_embedding(model, text1, max_tokens=256)
         emb2 = cached_get_embedding(model, text2, max_tokens=256)
+        if emb1 is None or emb2 is None:
+            logging.warning("Skipping similarity because one or both embeddings are unavailable.")
+            return 0.0
         # Normalize and compute cosine similarity.
         emb1 = F.normalize(emb1, p=2, dim=0)
         emb2 = F.normalize(emb2, p=2, dim=0)
         similarity = torch.dot(emb1, emb2).item()
         return similarity
     except Exception as e:
+        restart_on_fatal_cuda(e, "similarity computation")
         logging.error(f"Error computing similarity: {e}", exc_info=True)
         return 0.0
 
@@ -1401,6 +1432,9 @@ def is_title_unique(new_title, chapters, model, similarity_threshold=0.6):
             return True
 
         new_emb = get_embedding(model, new_title, max_tokens=256)
+        if new_emb is None:
+            logging.warning("Skipping uniqueness check because title embedding is unavailable.")
+            return False
         new_emb = F.normalize(new_emb, p=2, dim=0)
 
         # Cache the embeddings for existing chapter titles.
@@ -1415,6 +1449,7 @@ def is_title_unique(new_title, chapters, model, similarity_threshold=0.6):
         logging.debug(f"Max similarity of '{new_title}' with existing titles: {max_sim}")
         return max_sim < similarity_threshold
     except Exception as e:
+        restart_on_fatal_cuda(e, "title uniqueness check")
         logging.error(f"Error in uniqueness check: {e}", exc_info=True)
         return False
 
@@ -1733,6 +1768,7 @@ def generate_chapter_title(segment_text, config=None):
                 truncation=True,                 # ← IMPORTANT
             )[0]['summary_text']
         except Exception as e:
+            restart_on_fatal_cuda(e, "chapter summarization")
             logging.warning(f"Summarizer failed, using extractive fallback: {e}")
             raw = ""
 
@@ -2069,6 +2105,15 @@ def process_entry(entry, channel_transcript_dir, download_dir, channel_title, pi
         # 2) Only NOW pay for yt-dlp metadata (because we know it’s not processed)
         if is_youtube:
             yt = yt_dlp_info(link)  # can be slow; we avoided it for already-processed entries
+            live_skip_reason = youtube_live_skip_reason(yt)
+            if live_skip_reason:
+                title = (yt.get("title") if yt else None) or entry.get("title") or link
+                logging.info(
+                    f"(YouTube) Skipping live/unready episode for now "
+                    f"(status={live_skip_reason}): {title}"
+                )
+                return None, pipeline
+
             if yt and yt.get("id"):
                 vid = yt["id"]  # may be same as URL id; ok if it’s more canonical
                 guid = f"yt:video:{vid}"

@@ -109,20 +109,27 @@ def _make_session() -> requests.Session:
 
 _SESSION = _make_session()
 
+NON_RETRYABLE_HTTP_STATUS = {400, 401, 403, 404, 410, 451}
+
 
 def _headers_for_url(audio_url: str) -> dict:
     """
     Many podcast CDNs (including Acast/Sphinx) will 403 default python clients.
     These headers make the request look like a normal browser fetch.
     """
-    host = urllib.parse.urlparse(audio_url).netloc.lower()
+    parsed = urllib.parse.urlparse(audio_url)
+    host = parsed.netloc.lower()
+    url_l = (audio_url or "").lower()
+    is_spreaker = "spreaker.com" in host or "spreaker.com" in url_l
+    is_podtrac = "podtrac.com" in host or "podtrac.com" in url_l
 
     headers = {
         "User-Agent": (
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:146.0) "
-            "Gecko/20100101 Firefox/146.0"
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+            "AppleWebKit/537.36 (KHTML, like Gecko) "
+            "Chrome/125.0.0.0 Safari/537.36"
         ),
-        "Accept": "*/*",
+        "Accept": "audio/*,*/*;q=0.9",
         "Accept-Language": "en-US,en;q=0.9",
         "Connection": "keep-alive",
     }
@@ -132,10 +139,31 @@ def _headers_for_url(audio_url: str) -> dict:
         headers["Referer"] = "https://play.acast.com/"
         headers["Origin"] = "https://play.acast.com"
 
-    # Often helps CDNs serve the file without extra checks
-    headers["Range"] = "bytes=0-"
+    if is_spreaker or is_podtrac:
+        headers["Referer"] = "https://www.spreaker.com/"
+        headers["Origin"] = "https://www.spreaker.com"
+    else:
+        # Often helps CDNs serve the file without extra checks, but Spreaker/Podtrac
+        # can reject scripted range requests even when a normal browser download works.
+        headers["Range"] = "bytes=0-"
 
     return headers
+
+
+def _retry_without_range_on_forbidden(resp, headers: dict, audio_url: str):
+    if resp.status_code != 403 or "Range" not in headers:
+        return resp
+
+    retry_headers = dict(headers)
+    retry_headers.pop("Range", None)
+    logging.info(f"Retrying HTTP 403 once without Range header: {audio_url}")
+    return _SESSION.get(
+        audio_url,
+        stream=True,
+        headers=retry_headers,
+        timeout=(10, 300),
+        allow_redirects=True,
+    )
 
 
 # ----------------------------- YouTube Support -----------------------------
@@ -344,17 +372,18 @@ def download_audio(entry, download_dir=DATABASE_ROOT / "podcasts", filename=None
                 timeout=(10, 300),
                 allow_redirects=True,
             )
+            resp = _retry_without_range_on_forbidden(resp, headers, audio_url)
 
-            # If forbidden, log useful diagnostics
-            if resp.status_code == 403:
+            # Permanent/client-side failures are not fixed by retrying the same URL.
+            if resp.status_code in NON_RETRYABLE_HTTP_STATUS:
                 preview = ""
                 try:
                     preview = (resp.text or "")[:250]
                 except Exception:
                     preview = "<unable to decode body>"
-                logging.error(f"403 Forbidden downloading {audio_url}")
-                logging.error(f"403 response preview: {preview!r}")
-                raise requests.HTTPError("403 Forbidden", response=resp)
+                logging.error(f"Non-retryable HTTP {resp.status_code} downloading {audio_url}")
+                logging.error(f"HTTP {resp.status_code} response preview: {preview!r}")
+                return None
 
             resp.raise_for_status()
 
